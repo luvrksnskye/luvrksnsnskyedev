@@ -305,9 +305,9 @@ class ContactManager {
 
    async sendEmail() {
     try {
-       
-        const RAILWAY_URL = 'RAILWAY_URL_PLACEHOLDER';
-        
+
+        const RAILWAY_URL = 'https://your-railway-url.up.railway.app';
+
         const response = await fetch(`${RAILWAY_URL}/api/contact`, {
             method: 'POST',
             headers: {
