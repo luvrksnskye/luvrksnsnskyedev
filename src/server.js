@@ -54,13 +54,16 @@ app.use('/api/contact', limiter);
 // 📧 Email transporter
 const createTransporter = () => {
   return nodemailer.createTransport({
-    service: 'icloud',
+    host: "smtp.mail.me.com",
+    port: 587,
+    secure: false, // TLS starts after connection, hopefully....
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS
     }
   });
 };
+
 
 // 🩺 Health check
 app.get('/api/health', (req, res) => {
