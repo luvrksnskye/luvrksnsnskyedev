@@ -177,8 +177,6 @@ class ContactManager {
     }
 
     async addSkyeMessage(text) {
-        soundManager?.play('imessageReceived', 0.4);
-
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message skye-message';
         
@@ -209,12 +207,14 @@ class ContactManager {
         textSpan.textContent = text;
         bubbleDiv.appendChild(textSpan);
 
-        soundManager?.play('imessageSendFromUser', 0.3);
+        // Play received sound when message appears
+        soundManager?.play('imessageReceived', 0.4);
         this.scrollToBottom();
     }
 
     addUserMessage(text) {
-        soundManager?.play('imessageSent', 0.5);
+        // Play send sound immediately when user sends
+        soundManager?.play('imessageSendFromUser', 0.5);
 
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message user-message';
@@ -305,8 +305,8 @@ class ContactManager {
 
    async sendEmail() {
     try {
-
-        const RAILWAY_URL = 'https://railway.com/project/e7d8fea4-7cba-42c7-9644-f28e12b161e3';
+        // Replace this with your actual Railway deployment URL
+        const RAILWAY_URL = 'https://luvrksnsnskyedev-production.up.railway.app';
 
         const response = await fetch(`${RAILWAY_URL}/api/contact`, {
             method: 'POST',
