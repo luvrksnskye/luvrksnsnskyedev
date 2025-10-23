@@ -3,7 +3,6 @@
  * SOUND MANAGER MODULE
  * ============================
  * Handles all audio playback with improved performance and reliability
- * Exports as ES6 module
  */
 
 class SoundManager {
@@ -87,10 +86,12 @@ class SoundManager {
             { name: 'tick', url: 'https://dl.dropbox.com/scl/fi/dxg84w3gsvm3k8zmps0p8/tick.mp3?rlkey=hti8o87g7ys7lbvw99v2dvwrp&st=ypxd4746&dl=0', volume: 0.15 },
             { name: 'knock', url: 'https://dl.dropbox.com/scl/fi/ygh46ndu20a0m3vis3rro/nock.mp3?rlkey=nbxly84tj0fwhqru6522k4zr1&st=l859xlqi&dl=0', volume: 0.5 },
             { name: 'scroll', url: 'https://dl.dropbox.com/scl/fi/4fnq8v4gwcmvintzcxs14/scrollwheel.mp3?rlkey=esn9jqop484qslzf61xx63vxf&st=xrcdalwt&dl=0', volume: 0.3 },
-            { name: 'message', url: 'https://dl.dropbox.com/scl/fi/vcpr6tl07v2rz8oknw80t/imessage.mp3?rlkey=pvi98kh5s6tjr0c0qsjw68txx&st=tve9hdg4&dl=0', volume: 0.5 },
             { name: 'command', url: 'https://dl.dropbox.com/scl/fi/hllkh10a15nmn164sqcaa/command-press.mp3?rlkey=qg1zeiw8660976fh90xz7fdnk&st=3hipm1h3&dl=0', volume: 0.6 },
             { name: 'takeout', url: 'https://dl.dropbox.com/scl/fi/gdqg9391zbn53vmnc2ni7/takeout-click.mp3?rlkey=ks36mtqtvw5sswzi6iehc9qlu&st=v6a1o8u6&dl=0', volume: 0.4 },
-            { name: 'twitter', url: 'https://dl.dropbox.com/scl/fi/r5v7ms475it79xvpyv9h4/twitter-sound-2.mp3?rlkey=80zp1bymh50qvg5r53rtcwpp9&st=f975ufhw&dl=0', volume: 0.3 }
+            { name: 'twitter', url: 'https://dl.dropbox.com/scl/fi/r5v7ms475it79xvpyv9h4/twitter-sound-2.mp3?rlkey=80zp1bymh50qvg5r53rtcwpp9&st=f975ufhw&dl=0', volume: 0.3 },
+            { name: 'imessageSent', url: 'https://dl.dropbox.com/scl/fi/2tbcofnd9zff0bpbtmdy0/imessage-sent.mp3?rlkey=xqy6xf6i5q2d0kuqaus63lq10&st=hb5ofwgu&dl=0', volume: 0.5 },
+            { name: 'imessageReceived', url: 'https://dl.dropbox.com/scl/fi/l4o481tt7m40dbmxnsy7h/imessage-received.mp3?rlkey=6xrpxywp68n3mfuxv7fxam7v6&st=3ggg1ik8&dl=0', volume: 0.5 },
+            { name: 'imessageSendFromUser', url: 'https://dl.dropbox.com/scl/fi/vcpr6tl07v2rz8oknw80t/imessage-send-from-user.mp3?rlkey=pvi98kh5s6tjr0c0qsjw68txx&st=qsy1uaf9&dl=0', volume: 0.5 }
         ];
 
         soundList.forEach(({ name, url, volume }) => {

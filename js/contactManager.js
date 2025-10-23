@@ -177,7 +177,7 @@ class ContactManager {
     }
 
     async addSkyeMessage(text) {
-        soundManager?.play('message', 0.4);
+        soundManager?.play('imessageReceived', 0.4);
 
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message skye-message';
@@ -209,12 +209,12 @@ class ContactManager {
         textSpan.textContent = text;
         bubbleDiv.appendChild(textSpan);
 
-        soundManager?.play('message', 0.3);
+        soundManager?.play('imessageSendFromUser', 0.3);
         this.scrollToBottom();
     }
 
     addUserMessage(text) {
-        soundManager?.play('message', 0.5);
+        soundManager?.play('imessageSent', 0.5);
 
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message user-message';
