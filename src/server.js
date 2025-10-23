@@ -13,7 +13,7 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-// Enhanced CORS with debugging
+// CORS configuration
 app.use(cors({
   origin: [
     'https://luvrksnsnskyedev.neocities.org',
@@ -21,31 +21,24 @@ app.use(cors({
     'http://localhost:3000',
     'http://localhost:5500'
   ],
-  credentials: true,
-  methods: ['GET', 'POST', 'OPTIONS']
+  credentials: true
 }));
-
-// Log CORS requests
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path} - Origin: ${req.headers.origin}`);
-  next();
-});
 
 app.use(express.json());
 
-// Rate limiting - more generous for contact forms
+// Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // limit each IP to 10 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 10,
   message: {
     error: 'Too many contact attempts from this IP, please try again later.'
   }
 });
 app.use('/api/contact', limiter);
 
-// Email configuration
+// FIXED: Email configuration - use createTransport (not createTransporter)
 const createTransporter = () => {
-  return nodemailer.createTransporter({
+  return nodemailer.createTransport({
     service: 'icloud',
     auth: {
       user: process.env.EMAIL_USER,
@@ -78,6 +71,7 @@ app.post('/api/contact', async (req, res) => {
     // Validate required fields
     if (!email || !username || !topic || !message) {
       return res.status(400).json({ 
+        success: false,
         error: 'All fields are required' 
       });
     }
@@ -86,6 +80,7 @@ app.post('/api/contact', async (req, res) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ 
+        success: false,
         error: 'Please provide a valid email address' 
       });
     }
@@ -93,18 +88,21 @@ app.post('/api/contact', async (req, res) => {
     // Validate lengths
     if (username.trim().length < 2) {
       return res.status(400).json({ 
+        success: false,
         error: 'Name should be at least 2 characters long' 
       });
     }
 
     if (topic.trim().length < 3) {
       return res.status(400).json({ 
+        success: false,
         error: 'Topic should be at least 3 characters long' 
       });
     }
 
     if (message.trim().length < 10) {
       return res.status(400).json({ 
+        success: false,
         error: 'Message should be at least 10 characters long' 
       });
     }
@@ -221,5 +219,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Skye Contact API running on port ${PORT}`);
   console.log(`📧 Email service: ${process.env.EMAIL_USER ? 'Configured' : 'Not configured'}`);
-  console.log(`🌐 CORS enabled for: https://luvrksnskye.github.io`);
 });
