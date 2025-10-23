@@ -36,7 +36,6 @@ const limiter = rateLimit({
 });
 app.use('/api/contact', limiter);
 
-// FIXED: Email configuration - use createTransport (not createTransporter)
 const createTransporter = () => {
   return nodemailer.createTransport({
     service: 'icloud',
