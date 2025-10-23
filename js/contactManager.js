@@ -305,7 +305,7 @@ class ContactManager {
 
    async sendEmail() {
     try {
-        // Replace this with your actual Railway deployment URL
+        // Hey so, if you are using my code as reference, remember to change the URL to your own server!
         const RAILWAY_URL = 'https://luvrksnsnskyedev-production.up.railway.app';
 
         const response = await fetch(`${RAILWAY_URL}/api/contact`, {
