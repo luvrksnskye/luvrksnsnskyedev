@@ -54,15 +54,19 @@ app.use('/api/contact', limiter);
 // 📧 Email transporter
 const createTransporter = () => {
   return nodemailer.createTransport({
-    host: "smtp.mail.me.com",
-    port: 587,
-    secure: false, // TLS starts after connection, hopefully....
+    service: 'gmail',
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS
     }
   });
 };
+
+// ✅ Prueba la conexión 
+const transporter = createTransporter();
+transporter.verify()
+  .then(() => console.log("✅ Gmail SMTP verified successfully"))
+  .catch(err => console.error("❌ Gmail SMTP error:", err));
 
 
 // 🩺 Health check
