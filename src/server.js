@@ -17,7 +17,7 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-// 🌐 CORS configuration
+// 🌐 CORS configuration bleeeh
 app.use(cors({
   origin: [
     'https://luvrksnskye.github.io',
