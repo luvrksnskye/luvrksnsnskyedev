@@ -51,7 +51,7 @@ app.use('/api/contact', limiter);
 
 // 📧 Email transporter for iCloud
 const createTransporter = () => {
-  return nodemailer.createTransporter({
+  return createTransport({
     host: 'smtp.mail.me.com',
     port: 587,
     secure: false, // Use STARTTLS
