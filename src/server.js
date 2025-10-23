@@ -7,6 +7,8 @@ const helmet = require('helmet');
 const path = require('path');
 
 const app = express();
+app.set('trust proxy', 1); 
+
 
 
 // guys i fucking hate javascript sometimes and its ecosystem but here we are, backend in js lol, let's go
