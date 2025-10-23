@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const nodemailer = require('nodemailer');
+const { createTransport } = require('nodemailer');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
@@ -56,8 +56,8 @@ const createTransporter = () => {
     port: 587,
     secure: false, // Use STARTTLS
     auth: {
-      user: process.env.EMAIL_USER, // My iCloud email
-      pass: process.env.EMAIL_PASS  // My app-specific password
+      user: process.env.EMAIL_USER, 
+      pass: process.env.EMAIL_PASS  
     },
     tls: {
       rejectUnauthorized: true
@@ -121,7 +121,7 @@ app.post('/api/contact', async (req, res) => {
     // ✨ Email content
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER, // Send to yourself
+      to: process.env.EMAIL_USER, // Send to me
       replyTo: email, // User's email for easy replies
       subject: `🌙 Portfolio Contact: ${topic}`,
       html: `
@@ -220,3 +220,5 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`📧 Email service: ${process.env.EMAIL_USER ? 'Configured' : 'Not configured'}`);
   console.log(`🌐 CORS enabled for production sites`);
 });
+
+//im so fucking tired lol
