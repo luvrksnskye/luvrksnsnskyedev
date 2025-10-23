@@ -165,7 +165,7 @@ Today, when I'm not working or sleeping all day after studying, you can usually 
             const timeString = now.toLocaleTimeString('en-US', { 
                 hour: '2-digit', 
                 minute: '2-digit',
-                timeZone: 'America/Los_Angeles'
+                timeZone: 'America/Caracas'
             });
             timeElement.textContent = timeString;
         }
