@@ -9,19 +9,17 @@ const path = require('path');
 const app = express();
 app.set('trust proxy', 1); 
 
-
-
-// guys i fucking hate javascript sometimes and its ecosystem but here we are, backend in js lol, let's go
 // 🛡️ Security middleware
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-// 🌐 CORS configuration bleeeh
+// 🌐 CORS configuration
 app.use(cors({
   origin: [
     'https://luvrksnskye.github.io',
     'https://luvrksnsnskyedev.neocities.org',
+    'https://luvrksnsnskyedev-production.up.railway.app',
     'http://localhost:3000',
     'http://localhost:5500'
   ],
@@ -51,23 +49,27 @@ const limiter = rateLimit({
 });
 app.use('/api/contact', limiter);
 
-// 📧 Email transporter
+// 📧 Email transporter for iCloud
 const createTransporter = () => {
-  return nodemailer.createTransport({
-    service: 'gmail',
+  return nodemailer.createTransporter({
+    host: 'smtp.mail.me.com',
+    port: 587,
+    secure: false, // Use STARTTLS
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
+      user: process.env.EMAIL_USER, // My iCloud email
+      pass: process.env.EMAIL_PASS  // My app-specific password
+    },
+    tls: {
+      rejectUnauthorized: true
     }
   });
 };
 
-// ✅ Prueba la conexión 
+// ✅ Test the connection
 const transporter = createTransporter();
 transporter.verify()
-  .then(() => console.log("✅ Gmail SMTP verified successfully"))
-  .catch(err => console.error("❌ Gmail SMTP error:", err));
-
+  .then(() => console.log("✅ iCloud SMTP verified successfully"))
+  .catch(err => console.error("❌ iCloud SMTP error:", err));
 
 // 🩺 Health check
 app.get('/api/health', (req, res) => {
@@ -112,15 +114,15 @@ app.post('/api/contact', async (req, res) => {
       return res.status(400).json({ error: 'Message should be at least 10 characters long' });
     }
 
-    // 📮 Create transporter and verify
+    // 🔮 Create transporter and verify
     const transporter = createTransporter();
     await transporter.verify();
 
     // ✨ Email content
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
-      replyTo: email,
+      to: process.env.EMAIL_USER, // Send to yourself
+      replyTo: email, // User's email for easy replies
       subject: `🌙 Portfolio Contact: ${topic}`,
       html: `
         <html>
@@ -199,7 +201,7 @@ Sent from Skye's portfolio website at ${new Date().toLocaleString()}
   }
 });
 
-// 🌍 Root endpoint
+// 🌐 Root endpoint
 app.get('/', (req, res) => {
   res.json({
     message: 'Skye Portfolio Contact API',
@@ -216,5 +218,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Skye Contact API running on port ${PORT}`);
   console.log(`📧 Email service: ${process.env.EMAIL_USER ? 'Configured' : 'Not configured'}`);
-  console.log(`🌐 CORS enabled for: https://luvrksnskye.github.io`);
+  console.log(`🌐 CORS enabled for production sites`);
 });
