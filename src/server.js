@@ -12,6 +12,8 @@ const app = express();
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
+
+// Enhanced CORS with debugging
 app.use(cors({
   origin: [
     'https://luvrksnsnskyedev.neocities.org',
@@ -19,8 +21,16 @@ app.use(cors({
     'http://localhost:3000',
     'http://localhost:5500'
   ],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS']
 }));
+
+// Log CORS requests
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path} - Origin: ${req.headers.origin}`);
+  next();
+});
+
 app.use(express.json());
 
 // Rate limiting - more generous for contact forms
@@ -173,6 +183,7 @@ Sent from Skye's portfolio website at ${new Date().toLocaleString()}
     console.log('Email sent successfully to:', process.env.EMAIL_USER);
 
     res.status(200).json({ 
+      success: true,
       message: 'Thank you! Your message has been sent successfully.' 
     });
 
@@ -188,6 +199,7 @@ Sent from Skye's portfolio website at ${new Date().toLocaleString()}
     }
 
     res.status(500).json({ 
+      success: false,
       error: errorMessage 
     });
   }
@@ -209,4 +221,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Skye Contact API running on port ${PORT}`);
   console.log(`📧 Email service: ${process.env.EMAIL_USER ? 'Configured' : 'Not configured'}`);
+  console.log(`🌐 CORS enabled for: https://luvrksnskye.github.io`);
 });
