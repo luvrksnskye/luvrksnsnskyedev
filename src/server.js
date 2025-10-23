@@ -8,24 +8,30 @@ const path = require('path');
 
 const app = express();
 
-// Security middleware
+
+// guys i fucking hate javascript sometimes and its ecosystem but here we are, backend in js lol, let's go
+// 🛡️ Security middleware
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-// Enhanced CORS with debugging
+// 🌐 CORS configuration
 app.use(cors({
   origin: [
-    'https://luvrksnsnskyedev.neocities.org',
     'https://luvrksnskye.github.io',
+    'https://luvrksnsnskyedev.neocities.org',
     'http://localhost:3000',
     'http://localhost:5500'
   ],
   credentials: true,
-  methods: ['GET', 'POST', 'OPTIONS']
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Log CORS requests
+// ✅ Respond to preflight requests
+app.options('*', cors());
+
+// 🪶 Log all incoming requests
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path} - Origin: ${req.headers.origin}`);
   next();
@@ -33,7 +39,7 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-// Rate limiting - more generous for contact forms
+// ⚙️ Rate limiting for contact form
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 10, // limit each IP to 10 requests per windowMs
@@ -43,9 +49,9 @@ const limiter = rateLimit({
 });
 app.use('/api/contact', limiter);
 
-// Email configuration
+// 📧 Email transporter
 const createTransporter = () => {
-  return nodemailer.createTransporter({
+  return nodemailer.createTransport({
     service: 'icloud',
     auth: {
       user: process.env.EMAIL_USER,
@@ -54,16 +60,16 @@ const createTransporter = () => {
   });
 };
 
-// Health check endpoint
+// 🩺 Health check
 app.get('/api/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'OK', 
+  res.status(200).json({
+    status: 'OK',
     service: 'Skye Contact API',
     timestamp: new Date().toISOString()
   });
 });
 
-// Contact endpoint
+// 💌 Contact form endpoint
 app.post('/api/contact', async (req, res) => {
   console.log('Contact form submission received:', {
     email: req.body.email,
@@ -75,91 +81,78 @@ app.post('/api/contact', async (req, res) => {
   try {
     const { email, username, topic, message } = req.body;
 
-    // Validate required fields
+    // 🧩 Validation
     if (!email || !username || !topic || !message) {
-      return res.status(400).json({ 
-        error: 'All fields are required' 
-      });
+      return res.status(400).json({ error: 'All fields are required' });
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return res.status(400).json({ 
-        error: 'Please provide a valid email address' 
-      });
+      return res.status(400).json({ error: 'Please provide a valid email address' });
     }
 
-    // Validate lengths
     if (username.trim().length < 2) {
-      return res.status(400).json({ 
-        error: 'Name should be at least 2 characters long' 
-      });
+      return res.status(400).json({ error: 'Name should be at least 2 characters long' });
     }
 
     if (topic.trim().length < 3) {
-      return res.status(400).json({ 
-        error: 'Topic should be at least 3 characters long' 
-      });
+      return res.status(400).json({ error: 'Topic should be at least 3 characters long' });
     }
 
     if (message.trim().length < 10) {
-      return res.status(400).json({ 
-        error: 'Message should be at least 10 characters long' 
-      });
+      return res.status(400).json({ error: 'Message should be at least 10 characters long' });
     }
 
+    // 📮 Create transporter and verify
     const transporter = createTransporter();
+    await transporter.verify();
 
-    // Email content
+    // ✨ Email content
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
       replyTo: email,
       subject: `🌙 Portfolio Contact: ${topic}`,
       html: `
-        <!DOCTYPE html>
         <html>
-        <head>
-          <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-            .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
-            .field { margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #667eea; }
-            .field-label { font-weight: bold; color: #667eea; margin-bottom: 5px; }
-            .message-content { background: white; padding: 20px; border-radius: 8px; border: 1px solid #e1e1e1; }
-            .footer { text-align: center; margin-top: 30px; padding: 20px; color: #666; font-size: 14px; }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="header">
-              <h1>✨ New Portfolio Contact</h1>
-              <p>Someone reached out through your website!</p>
-            </div>
-            <div class="content">
-              <div class="field">
-                <div class="field-label">👤 From</div>
-                <div>${username} (${email})</div>
+          <head>
+            <style>
+              body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+              .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+              .field { margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #667eea; }
+              .field-label { font-weight: bold; color: #667eea; margin-bottom: 5px; }
+              .message-content { background: white; padding: 20px; border-radius: 8px; border: 1px solid #e1e1e1; }
+              .footer { text-align: center; margin-top: 30px; padding: 20px; color: #666; font-size: 14px; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>✨ New Portfolio Contact</h1>
+                <p>Someone reached out through your website!</p>
               </div>
-              
-              <div class="field">
-                <div class="field-label">💬 Topic</div>
-                <div>${topic}</div>
+              <div class="content">
+                <div class="field">
+                  <div class="field-label">👤 From</div>
+                  <div>${username} (${email})</div>
+                </div>
+                <div class="field">
+                  <div class="field-label">💬 Topic</div>
+                  <div>${topic}</div>
+                </div>
+                <div class="field">
+                  <div class="field-label">📝 Message</div>
+                  <div class="message-content">${message.replace(/\n/g, '<br>')}</div>
+                </div>
               </div>
-              
-              <div class="field">
-                <div class="field-label">📝 Message</div>
-                <div class="message-content">${message.replace(/\n/g, '<br>')}</div>
+              <div class="footer">
+                <p>This message was sent from your portfolio contact form at ${new Date().toLocaleString()}</p>
+                <p>💖 Skye's Portfolio System</p>
               </div>
             </div>
-            <div class="footer">
-              <p>This message was sent from your portfolio contact form at ${new Date().toLocaleString()}</p>
-              <p>💖 Skye's Portfolio System</p>
-            </div>
-          </div>
-        </body>
+          </body>
         </html>
       `,
       text: `
@@ -174,40 +167,32 @@ Sent from Skye's portfolio website at ${new Date().toLocaleString()}
       `
     };
 
-    // Verify transporter configuration
-    await transporter.verify();
-
-    // Send email
+    // 📤 Send email
     await transporter.sendMail(mailOptions);
-    
     console.log('Email sent successfully to:', process.env.EMAIL_USER);
 
-    res.status(200).json({ 
+    res.status(200).json({
       success: true,
-      message: 'Thank you! Your message has been sent successfully.' 
+      message: 'Thank you! Your message has been sent successfully.'
     });
 
   } catch (error) {
     console.error('Error sending email:', error);
-    
-    let errorMessage = 'Failed to send email. Please try again later.';
-    
-    if (error.code === 'EAUTH') {
-      errorMessage = 'Email configuration error. Please check your email settings.';
-    } else if (error.code === 'ECONNECTION') {
-      errorMessage = 'Cannot connect to email service. Please try again later.';
-    }
 
-    res.status(500).json({ 
+    let errorMessage = 'Failed to send email. Please try again later.';
+    if (error.code === 'EAUTH') errorMessage = 'Email configuration error. Please check your email settings.';
+    else if (error.code === 'ECONNECTION') errorMessage = 'Cannot connect to email service. Please try again later.';
+
+    res.status(500).json({
       success: false,
-      error: errorMessage 
+      error: errorMessage
     });
   }
 });
 
-// Root endpoint
+// 🌍 Root endpoint
 app.get('/', (req, res) => {
-  res.json({ 
+  res.json({
     message: 'Skye Portfolio Contact API',
     endpoints: {
       health: '/api/health',
@@ -217,6 +202,7 @@ app.get('/', (req, res) => {
   });
 });
 
+// 🚀 Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Skye Contact API running on port ${PORT}`);
