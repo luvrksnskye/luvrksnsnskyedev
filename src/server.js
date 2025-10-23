@@ -22,7 +22,6 @@ app.use(cors({
   origin: [
     'https://luvrksnskye.github.io',
     'https://luvrksnsnskyedev.neocities.org',
-    'https://luvrksnsnskyedev-production.up.railway.app', 
     'http://localhost:3000',
     'http://localhost:5500'
   ],
