@@ -12,16 +12,16 @@ class LanguagesManager {
     constructor() {
         this.initialized = false;
         this.languages = [
-            { name: 'JavaScript', icon: '/src/assets/javascript-icon.png', level: 'Expert', proficiency: 95 },
-            { name: 'HTML/CSS', icon: '/src/assets/html-css-icon.png', level: 'Expert', proficiency: 98 },
-            { name: 'React', icon: '/src/assets/react-icon.png', level: 'Advanced', proficiency: 90 },
-            { name: 'Gdscript', icon: '/src/assets/gdscript-icon.svg', level: 'Intermediate', proficiency: 50 },
-            { name: 'Typescript', icon: '/src/assets/typescript-icon.png', level: 'Intermediate', proficiency: 65 },
-            { name: 'Bash', icon: '/src/assets/bash-icon.svg', level: 'Expert', proficiency: 98 },
-            { name: 'Tailwind CSS', icon: '/src/assets/tailwind-icon.png', level: 'Expert', proficiency: 92 },
-            { name: 'Vue.js', icon: '/src/assets/vue-icon.png', level: 'Intermediate', proficiency: 70 },
-            { name: 'Next.js', icon: '/src/assets/nextjs-icon.png', level: 'Advanced', proficiency: 88 },
-            { name: 'Python', icon: '/src/assets/python-icon.png', level: 'Advanced', proficiency: 80 }
+            { name: 'JavaScript', icon: 'assets/javascript-icon.png', level: 'Expert', proficiency: 95 },
+            { name: 'HTML/CSS', icon: 'assets/html-css-icon.png', level: 'Expert', proficiency: 98 },
+            { name: 'React', icon: 'assets/react-icon.png', level: 'Advanced', proficiency: 90 },
+            { name: 'Gdscript', icon: 'assets/gdscript-icon.svg', level: 'Intermediate', proficiency: 50 },
+            { name: 'Typescript', icon: 'assets/typescript-icon.png', level: 'Intermediate', proficiency: 65 },
+            { name: 'Bash', icon: 'assets/bash-icon.svg', level: 'Expert', proficiency: 98 },
+            { name: 'Tailwind CSS', icon: 'assets/tailwind-icon.png', level: 'Expert', proficiency: 92 },
+            { name: 'Vue.js', icon: 'assets/vue-icon.png', level: 'Intermediate', proficiency: 70 },
+            { name: 'Next.js', icon: 'assets/nextjs-icon.png', level: 'Advanced', proficiency: 88 },
+            { name: 'Python', icon: 'assets/python-icon.png', level: 'Advanced', proficiency: 80 }
         ];
 
         if (document.readyState === 'loading') {

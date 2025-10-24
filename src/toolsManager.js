@@ -12,18 +12,18 @@ class ToolsManager {
     constructor() {
         this.initialized = false;
         this.tools = [
-            { name: 'Figma', image: '/src/assets/figma-icon.png', description: 'My primary design tool for creating interfaces, prototypes, and collaborative design work. Perfect for UI/UX design and design systems.' },
-            { name: 'Github', image: '/src/assets/github-icon.png', description: 'Organization and documentation hub for all my projects, ideas, and workflows. Keeping everything structured and accessible.' },
-            { name: 'VS Code', image: '/src/assets/vscode-icon.png', description: 'The code editor where I bring designs to life with HTML, CSS, and JavaScript. My daily development environment.' },
-            { name: 'Firealpaca', image: '/src/assets/firealpaca-icon.png', description: 'Digital painting software for creating illustrations, concept art, and animations with a focus on a user-friendly interface.' },
-            { name: 'Godot', image: '/src/assets/godot-icon.png', description: 'Game engine for developing interactive experiences and game prototypes. Building immersive worlds and mechanics.' },
-            { name: 'Ghostty', image: '/src/assets/ghostty-icon.png', description: 'bla bla bla.' },
-            { name: 'After Effects', image: '/src/assets/aftereffects-icon.png', description: 'Motion graphics and animation software for creating engaging video content and UI animations.' },
-            { name: 'Aseprite', image: '/src/assets/aseprite-icon.png', description: 'Pixel art tool for creating 2D animations and sprites with a focus on frame-by-frame animation.' },
-            { name: 'Git', image: '/src/assets/git-icon.svg', description: 'Version control system for tracking changes in code and collaborating with others.' },
-            { name: 'Debian', image: '/src/assets/debian-icon.png', description: 'Operating system that provides a flexible and powerful environment for development and customization.' },
-            { name: 'Notion', image: '/src/assets/notion-icon.png', description: 'All-in-one workspace for note-taking, project management, and collaboration.' },
-            { name: 'Obsidian', image: '/src/assets/obsidian-icon.png', description: 'Knowledge base that works on local Markdown files. It is highly customizable, allowing users to link notes together, visualize connections with a graph view, and extend its functionality with a wide variety of plugins. I love this software so much!' }
+            { name: 'Figma', image: 'assets/figma-icon.png', description: 'My primary design tool for creating interfaces, prototypes, and collaborative design work. Perfect for UI/UX design and design systems.' },
+            { name: 'Github', image: 'assets/github-icon.png', description: 'Organization and documentation hub for all my projects, ideas, and workflows. Keeping everything structured and accessible.' },
+            { name: 'VS Code', image: 'assets/vscode-icon.png', description: 'The code editor where I bring designs to life with HTML, CSS, and JavaScript. My daily development environment.' },
+            { name: 'Firealpaca', image: 'assets/firealpaca-icon.png', description: 'Digital painting software for creating illustrations, concept art, and animations with a focus on a user-friendly interface.' },
+            { name: 'Godot', image: 'assets/godot-icon.png', description: 'Game engine for developing interactive experiences and game prototypes. Building immersive worlds and mechanics.' },
+            { name: 'Ghostty', image: 'assets/ghostty-icon.png', description: 'bla bla bla.' },
+            { name: 'After Effects', image: 'assets/aftereffects-icon.png', description: 'Motion graphics and animation software for creating engaging video content and UI animations.' },
+            { name: 'Aseprite', image: 'assets/aseprite-icon.png', description: 'Pixel art tool for creating 2D animations and sprites with a focus on frame-by-frame animation.' },
+            { name: 'Git', image: 'assets/git-icon.svg', description: 'Version control system for tracking changes in code and collaborating with others.' },
+            { name: 'Debian', image: 'assets/debian-icon.png', description: 'Operating system that provides a flexible and powerful environment for development and customization.' },
+            { name: 'Notion', image: 'assets/notion-icon.png', description: 'All-in-one workspace for note-taking, project management, and collaboration.' },
+            { name: 'Obsidian', image: 'assets/obsidian-icon.png', description: 'Knowledge base that works on local Markdown files. It is highly customizable, allowing users to link notes together, visualize connections with a graph view, and extend its functionality with a wide variety of plugins. I love this software so much!' }
         ];
 
         this.activeCard = null;
