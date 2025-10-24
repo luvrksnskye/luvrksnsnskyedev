@@ -1,12 +1,9 @@
-// test-email.js
-// This script tests your iCloud email configuration
-
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 console.log('🔍 Testing iCloud Email Configuration...\n');
 
-// Display your configuration (hiding password)
+// Display my configuration (hiding password)
 console.log('Configuration:');
 console.log('Email:', process.env.ICLOUD_EMAIL);
 console.log('Password:', process.env.ICLOUD_APP_PASSWORD ? 
