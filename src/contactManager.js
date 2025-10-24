@@ -308,11 +308,8 @@ class ContactManager {
             // IMPORTANT: Update this URL based on your environment
             
             // For local development:
-            const BACKEND_URL = 'http://localhost:3000';
-            
-            // For production (Railway, Heroku, etc.):
-            // const BACKEND_URL = 'https://your-app.railway.app';
-            // const BACKEND_URL = 'https://your-app.herokuapp.com';
+            const BACKEND_URL = 'https://anxietypancakes-production.up.railway.app';
+
 
             const response = await fetch(`${BACKEND_URL}/api/contact`, {
                 method: 'POST',
