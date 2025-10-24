@@ -8,7 +8,18 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+    origin: [
+        'https://luvrksnsnskyedev.space',
+        'http://localhost:5500', // For local development wiiii
+        'http://127.0.0.1:5500'  // Alternative localhost
+    ],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
