@@ -78,20 +78,20 @@ class SoundManager {
 
     initializeSounds() {
         const soundList = [
-            { name: 'intro', url: 'assets/sfx/intro.mp3', volume: 0.5 },
-            { name: 'notification', url: 'assets/sfx/notification.mp3', volume: 0.6 },
-            { name: 'click', url: 'assets/sfx/click.mp3', volume: 0.4 },
-            { name: 'menuClick', url: 'assets/sfx/menuClick.mp3', volume: 0.4 },
-            { name: 'hover', url: 'assets/sfx/hover.mp3', volume: 0.2 },
-            { name: 'tick', url: 'assets/sfx/tick.mp3', volume: 0.15 },
-            { name: 'knock', url: 'assets/sfx/knock.mp3', volume: 0.5 },
-            { name: 'scroll', url: 'assets/sfx/scroll.mp3', volume: 0.3 },
-            { name: 'command', url: 'assets/sfx/command.mp3', volume: 0.6 },
-            { name: 'takeout', url: 'assets/sfx/takeout.mp3', volume: 0.4 },
-            { name: 'twitter', url: 'assets/sfx/twitter.mp3', volume: 0.3 },
-            { name: 'imessageSent', url: 'assets/sfx/imessage-sent.mp3', volume: 0.5 },
-            { name: 'imessageReceived', url: 'assets/sfx/imessage-received.mp3', volume: 0.5 },
-            { name: 'imessageSendFromUser', url: 'assets/sfx/imessage-send-from-user.mp3', volume: 0.5 }
+            { name: 'intro', url: '/src/assets/sfx/intro.mp3', volume: 0.5 },
+            { name: 'notification', url: '/src/assets/sfx/notification.mp3', volume: 0.6 },
+            { name: 'click', url: '/src/assets/sfx/click.mp3', volume: 0.4 },
+            { name: 'menuClick', url: '/src/assets/sfx/menuClick.mp3', volume: 0.4 },
+            { name: 'hover', url: '/src/assets/sfx/hover.mp3', volume: 0.2 },
+            { name: 'tick', url: '/src/assets/sfx/tick.mp3', volume: 0.15 },
+            { name: 'knock', url: '/src/assets/sfx/knock.mp3', volume: 0.5 },
+            { name: 'scroll', url: '/src/assets/sfx/scroll.mp3', volume: 0.3 },
+            { name: 'command', url: '/src/assets/sfx/command.mp3', volume: 0.6 },
+            { name: 'takeout', url: '/src/assets/sfx/takeout.mp3', volume: 0.4 },
+            { name: 'twitter', url: '/src/assets/sfx/twitter.mp3', volume: 0.3 },
+            { name: 'imessageSent', url: '/src/assets/sfx/imessage-sent.mp3', volume: 0.5 },
+            { name: 'imessageReceived', url: '/src/assets/sfx/imessage-received.mp3', volume: 0.5 },
+            { name: 'imessageSendFromUser', url: '/src/assets/sfx/imessage-send-from-user.mp3', volume: 0.5 }
         ];
 
         soundList.forEach(({ name, url, volume }) => {
