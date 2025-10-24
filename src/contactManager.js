@@ -89,13 +89,13 @@ class ContactManager {
 
         this.skyeMessageSounds = [
             { sound: 'imessageReceived', volume: 0.4 },
-            { sound: 'notification', volume: 0.3 },
-            { sound: 'pop', volume: 0.35 }
+            { sound: 'imessageSent', volume: 0.3 },
+            { sound: 'imessageReceived', volume: 0.35 }
         ];
 
         this.userMessageSounds = [
             { sound: 'imessageSendFromUser', volume: 0.5 },
-            { sound: 'pop', volume: 0.4 }
+            { sound: 'imessageReceived', volume: 0.4 }
         ];
 
         this.conversationSteps = [
@@ -504,7 +504,7 @@ class ContactManager {
 
             if (response.ok) {
                 await this.addSkyeMessage("Message sent successfully! ✨ I'll get back to you soon!");
-                soundManager?.play('notification', 0.6);
+                soundManager?.play('imessageSent', 0.6);
             } else {
                 await this.addSkyeMessage(`Oops! ${data.error || 'Something went wrong.'} Could you try again or email me directly at luvrksnskyejourney@icloud.com? 💙`);
                 soundManager?.play('knock', 0.4);
