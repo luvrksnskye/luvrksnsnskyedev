@@ -303,36 +303,42 @@ class ContactManager {
         this.sendButton.style.opacity = hasText ? '1' : '0.5';
     }
 
-   async sendEmail() {
-    try {
-        // Hey so, if you are using my code as reference, remember to put your actual Railway deployment URL here
-        const RAILWAY_URL = 'https://luvrksnsnskyedev-production.up.railway.app';
+    async sendEmail() {
+        try {
+            // IMPORTANT: Update this URL based on your environment
+            
+            // For local development:
+            const BACKEND_URL = 'http://localhost:3000';
+            
+            // For production (Railway, Heroku, etc.):
+            // const BACKEND_URL = 'https://your-app.railway.app';
+            // const BACKEND_URL = 'https://your-app.herokuapp.com';
 
-        const response = await fetch(`${RAILWAY_URL}/api/contact`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(this.userResponses)
-        });
+            const response = await fetch(`${BACKEND_URL}/api/contact`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(this.userResponses)
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (response.ok) {
-            await this.addSkyeMessage("Message sent successfully! ✨ I'll get back to you soon!");
-            soundManager?.play('notification', 0.6);
-        } else {
-            await this.addSkyeMessage(`Oops! ${data.error || 'Something went wrong.'} Could you try again or email me directly at luvrksnskyejourney@icloud.com? 💔`);
+            if (response.ok) {
+                await this.addSkyeMessage("Message sent successfully! ✨ I'll get back to you soon!");
+                soundManager?.play('notification', 0.6);
+            } else {
+                await this.addSkyeMessage(`Oops! ${data.error || 'Something went wrong.'} Could you try again or email me directly at luvrksnskyejourney@icloud.com? 💙`);
+                soundManager?.play('knock', 0.4);
+            }
+        } catch (error) {
+            console.error('Error sending email:', error);
+            await this.addSkyeMessage("Hmm, there was a connection issue. Please email me directly at luvrksnskyejourney@icloud.com! 💌");
             soundManager?.play('knock', 0.4);
         }
-    } catch (error) {
-        console.error('Error sending email:', error);
-        await this.addSkyeMessage("Hmm, there was a connection issue. Please email me directly at luvrksnskyejourney@icloud.com! 💌");
-        soundManager?.play('knock', 0.4);
-    }
 
-    this.currentStep++;
-}
+        this.currentStep++;
+    }
 
     scrollToBottom() {
         requestAnimationFrame(() => {
