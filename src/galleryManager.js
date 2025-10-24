@@ -10,34 +10,34 @@ class GalleryManager {
     constructor() {
         this.galleries = {
             everything: [
-                'assets/gallery/orlando.png',
-                'assets/gallery/roses.png',
-                'assets/gallery/chinatown.png',
-                'assets/gallery/museum.png',
-                'assets/gallery/chicago.png'
+                '/src/assets/gallery/orlando.png',
+                '/src/assets/gallery/roses.png',
+                '/src/assets/gallery/chinatown.png',
+                '/src/assets/gallery/museum.png',
+                '/src/assets/gallery/chicago.png'
             ],
             places: [
-                'assets/gallery/plaza.png',
-                'assets/gallery/dino-museum.png',
-                'assets/gallery/winter.png',
-                'assets/gallery/fireworks.png',
-                'assets/gallery/fish.png'
+                '/src/assets/gallery/plaza.png',
+                '/src/assets/gallery/dino-museum.png',
+                '/src/assets/gallery/winter.png',
+                '/src/assets/gallery/fireworks.png',
+                '/src/assets/gallery/fish.png'
             ],
             heart: [
-                'assets/gallery/sunny.jpg',
-                'assets/gallery/cutie-sunny.jpg',
-                'assets/gallery/cute-sunny.jpg',
-                'assets/gallery/strawberries-sunny.jpg'
+                '/src/assets/gallery/sunny.jpg',
+                '/src/assets/gallery/cutie-sunny.jpg',
+                '/src/assets/gallery/cute-sunny.jpg',
+                '/src/assets/gallery/strawberries-sunny.jpg'
             ],
             cat: [
-                'assets/gallery/midnight-travel.png',
-                'assets/gallery/cute-girl.png',
-                'assets/gallery/sleepy-baby.png',
-                'assets/gallery/midnight.png',
-                'assets/gallery/idk.png',
-                'assets/gallery/silly-girl.png',
-                'assets/gallery/her-little-face.png',
-                'assets/gallery/sleepy-girl.png'
+                '/src/assets/gallery/midnight-travel.png',
+                '/src/assets/gallery/cute-girl.png',
+                '/src/assets/gallery/sleepy-baby.png',
+                '/src/assets/gallery/midnight.png',
+                '/src/assets/gallery/idk.png',
+                '/src/assets/gallery/silly-girl.png',
+                '/src/assets/gallery/her-little-face.png',
+                '/src/assets/gallery/sleepy-girl.png'
             ]
         };
         
