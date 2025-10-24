@@ -9,7 +9,7 @@
 
 @font-face {
     font-family: 'SpAlterna-Regular';
-    src: url('assets/SpAlterna-Regular.otf') format('opentype');
+    src: url('/src/assets/SpAlterna-Regular.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
 }
@@ -308,7 +308,7 @@ nav.show {
     position: relative;
     width: 38px;
     height: 38px;
-    background: url(assets/custom-icon-default@2x.png);
+    background: url(/src/assets/custom-icon-default@2x.png);
     background-size: cover;
     border-radius: 8px;
     z-index: 1;
