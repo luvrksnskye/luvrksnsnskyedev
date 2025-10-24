@@ -78,20 +78,20 @@ class SoundManager {
 
     initializeSounds() {
         const soundList = [
-            { name: 'intro', url: 'https://dl.dropbox.com/scl/fi/ks0yjrp1ue9x66r112kf9/intro.mp3?rlkey=sqekry2xna3po0ab1wcluwwm7&st=7b0h3m92&dl=0', volume: 0.5 },
-            { name: 'notification', url: 'https://dl.dropbox.com/scl/fi/gzd79p68f29cw7o5o5ooi/notification.mp3?rlkey=w4f07un5nd209pyw6cb6wk595&st=5j983eff&dl=0', volume: 0.6 },
-            { name: 'click', url: 'https://dl.dropbox.com/scl/fi/540cbknh21pcqglzj2q15/photos-click.mp3?rlkey=yeli4n3k9wflpwecqlwt1wyzq&st=z65jscnn&dl=0', volume: 0.4 },
-            { name: 'menuClick', url: 'https://dl.dropbox.com/scl/fi/a3akgbh8k6jl2hzd9x6rc/photos-menu-click.mp3?rlkey=qpd5q1pbl58o4klgqtsphxz7g&st=eoxnlo4z&dl=0', volume: 0.4 },
-            { name: 'hover', url: 'https://dl.dropbox.com/scl/fi/dxg84w3gsvm3k8zmps0p8/tick.mp3?rlkey=hti8o87g7ys7lbvw99v2dvwrp&st=ypxd4746&dl=0', volume: 0.2 },
-            { name: 'tick', url: 'https://dl.dropbox.com/scl/fi/dxg84w3gsvm3k8zmps0p8/tick.mp3?rlkey=hti8o87g7ys7lbvw99v2dvwrp&st=ypxd4746&dl=0', volume: 0.15 },
-            { name: 'knock', url: 'https://dl.dropbox.com/scl/fi/ygh46ndu20a0m3vis3rro/nock.mp3?rlkey=nbxly84tj0fwhqru6522k4zr1&st=l859xlqi&dl=0', volume: 0.5 },
-            { name: 'scroll', url: 'https://dl.dropbox.com/scl/fi/4fnq8v4gwcmvintzcxs14/scrollwheel.mp3?rlkey=esn9jqop484qslzf61xx63vxf&st=xrcdalwt&dl=0', volume: 0.3 },
-            { name: 'command', url: 'https://dl.dropbox.com/scl/fi/hllkh10a15nmn164sqcaa/command-press.mp3?rlkey=qg1zeiw8660976fh90xz7fdnk&st=3hipm1h3&dl=0', volume: 0.6 },
-            { name: 'takeout', url: 'https://dl.dropbox.com/scl/fi/gdqg9391zbn53vmnc2ni7/takeout-click.mp3?rlkey=ks36mtqtvw5sswzi6iehc9qlu&st=v6a1o8u6&dl=0', volume: 0.4 },
-            { name: 'twitter', url: 'https://dl.dropbox.com/scl/fi/r5v7ms475it79xvpyv9h4/twitter-sound-2.mp3?rlkey=80zp1bymh50qvg5r53rtcwpp9&st=f975ufhw&dl=0', volume: 0.3 },
-            { name: 'imessageSent', url: 'https://dl.dropbox.com/scl/fi/2tbcofnd9zff0bpbtmdy0/imessage-sent.mp3?rlkey=xqy6xf6i5q2d0kuqaus63lq10&st=hb5ofwgu&dl=0', volume: 0.5 },
-            { name: 'imessageReceived', url: 'https://dl.dropbox.com/scl/fi/l4o481tt7m40dbmxnsy7h/imessage-received.mp3?rlkey=6xrpxywp68n3mfuxv7fxam7v6&st=3ggg1ik8&dl=0', volume: 0.5 },
-            { name: 'imessageSendFromUser', url: 'https://dl.dropbox.com/scl/fi/vcpr6tl07v2rz8oknw80t/imessage-send-from-user.mp3?rlkey=pvi98kh5s6tjr0c0qsjw68txx&st=qsy1uaf9&dl=0', volume: 0.5 }
+            { name: 'intro', url: 'assets/sfx/intro.mp3', volume: 0.5 },
+            { name: 'notification', url: 'assets/sfx/notification.mp3', volume: 0.6 },
+            { name: 'click', url: 'assets/sfx/click.mp3', volume: 0.4 },
+            { name: 'menuClick', url: 'assets/sfx/menuClick.mp3', volume: 0.4 },
+            { name: 'hover', url: 'assets/sfx/hover.mp3', volume: 0.2 },
+            { name: 'tick', url: 'assets/sfx/tick.mp3', volume: 0.15 },
+            { name: 'knock', url: 'assets/sfx/knock.mp3', volume: 0.5 },
+            { name: 'scroll', url: 'assets/sfx/scroll.mp3', volume: 0.3 },
+            { name: 'command', url: 'assets/sfx/command.mp3', volume: 0.6 },
+            { name: 'takeout', url: 'assets/sfx/takeout.mp3', volume: 0.4 },
+            { name: 'twitter', url: 'assets/sfx/twitter.mp3', volume: 0.3 },
+            { name: 'imessageSent', url: 'assets/sfx/imessage-sent.mp3', volume: 0.5 },
+            { name: 'imessageReceived', url: 'assets/sfx/imessage-received.mp3', volume: 0.5 },
+            { name: 'imessageSendFromUser', url: 'assets/sfx/imessage-send-from-user.mp3', volume: 0.5 }
         ];
 
         soundList.forEach(({ name, url, volume }) => {
