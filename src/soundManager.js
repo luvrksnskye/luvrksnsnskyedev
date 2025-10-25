@@ -88,7 +88,7 @@ class SoundManager {
             { name: 'scroll', url: '/src/assets/sfx/scroll.mp3', volume: 0.3 },
             { name: 'command', url: '/src/assets/sfx/command.mp3', volume: 0.6 },
             { name: 'takeout', url: '/src/assets/sfx/takeout.mp3', volume: 0.4 },
-            { name: 'twitter', url: '/src/assets/sfx/twitter.mp3', volume: 0.3 },
+            { name: 'twitter', url: '/src/assets/sfx/twitter-sound-2.mp3', volume: 0.3 },
             { name: 'imessageSent', url: '/src/assets/sfx/imessage-sent.mp3', volume: 0.5 },
             { name: 'imessageReceived', url: '/src/assets/sfx/imessage-received.mp3', volume: 0.5 },
             { name: 'imessageSendFromUser', url: '/src/assets/sfx/imessage-send-from-user.mp3', volume: 0.5 }
