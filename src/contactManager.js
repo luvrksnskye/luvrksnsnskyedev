@@ -208,7 +208,6 @@ class ContactManager {
         }
 
         if (this.messageInput) {
-
             this.messageInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -392,7 +391,6 @@ class ContactManager {
     }
 
     addUserMessage(text) {
-
         const randomSound = this.getRandomSound(this.userMessageSounds);
         soundManager?.play(randomSound.sound, randomSound.volume);
 

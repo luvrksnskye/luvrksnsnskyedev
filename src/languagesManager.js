@@ -17,10 +17,13 @@ class LanguagesManager {
             { name: 'React', icon: '/src/assets/react-icon.png', level: 'Advanced', proficiency: 90 },
             { name: 'Gdscript', icon: '/src/assets/gdscript-icon.svg', level: 'Intermediate', proficiency: 50 },
             { name: 'Typescript', icon: '/src/assets/typescript-icon.png', level: 'Intermediate', proficiency: 65 },
+            { name: 'Express', icon: '/src/assets/express-icon.png', level: 'Intermediate', proficiency: 60 },
+            { name: 'NestJS', icon: '/src/assets/NestJS-icon.png', level: 'Intermediate', proficiency: 70 },
             { name: 'Bash', icon: '/src/assets/bash-icon.svg', level: 'Expert', proficiency: 98 },
             { name: 'Tailwind CSS', icon: '/src/assets/tailwind-icon.png', level: 'Expert', proficiency: 92 },
             { name: 'Vue.js', icon: '/src/assets/vue-icon.png', level: 'Intermediate', proficiency: 70 },
             { name: 'Next.js', icon: '/src/assets/nextjs-icon.png', level: 'Advanced', proficiency: 88 },
+            { name: 'Bootstrap', icon: '/src/assets/bootstrap-icon.png', level: 'Advanced', proficiency: 85 },
             { name: 'Python', icon: '/src/assets/python-icon.png', level: 'Advanced', proficiency: 80 }
         ];
 

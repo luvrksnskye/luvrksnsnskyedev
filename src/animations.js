@@ -153,7 +153,7 @@ class AnimationsManager {
             this.injectGlowStyles();
 
             setTimeout(() => {
-                const audio = new Audio('https://dl.dropbox.com/scl/fi/n36lvi8j5jmjuoy9phw13/intro-description-sound.mp3?rlkey=k4bs5o2l2y39b4f4oitz7daxp&st=hpakwszn&dl=0');
+                const audio = new Audio('/src/assets/sfx/intro-description-sound.mp3');
                 audio.volume = 0.7;
                 audio.play().catch(e => console.log('Audio play failed:', e));
             }, 100);
