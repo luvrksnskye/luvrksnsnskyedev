@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Launch - Skyedev Blog</title>
+         <link rel="icon" type="image/x-icon" href="/src/assets/favicon_io/favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+            background: #000;
+            color: #fff;
+        }
+
+        /* Video Background */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            backdrop-filter: blur(40px) saturate(200%);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50px;
+            padding: 8px 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37),
+                        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            animation: fadeInDown 0.8s ease forwards;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-button:hover {
+            color: #fff;
+        }
+
+        .back-arrow {
+            width: 16px;
+            height: 16px;
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
+        }
+
+        /* Main Container */
+        .blog-container {
+            max-width: 900px;
+            margin: 140px auto 80px;
+            padding: 0 40px;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Blog Header */
+        .blog-header {
+            backdrop-filter: blur(40px) saturate(200%);
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            margin-bottom: 24px;
+        }
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .blog-date {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .blog-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .blog-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        /* Featured Image */
+        .featured-image {
+            backdrop-filter: blur(40px) saturate(200%);
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .featured-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Blog Content */
+        .blog-content {
+            backdrop-filter: blur(40px) saturate(200%);
+            background: rgba(0, 0, 0, 0.203);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            padding: 40px;
+        }
+
+        .blog-content h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .blog-content h2:first-child {
+            margin-top: 0;
+        }
+
+        .blog-content h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+
+        .blog-content p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 20px;
+        }
+
+        .blog-content ul, .blog-content ol {
+            margin: 20px 0;
+            padding-left: 24px;
+        }
+
+        .blog-content li {
+            font-size: 16px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 12px;
+        }
+
+        .blog-content strong {
+            font-weight: 700;
+            color: rgb(220, 226, 255);
+        }
+
+        .blog-content a {
+            color: rgb(180, 205, 255);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            border-bottom: 1px solid rgba(180, 205, 255, 0.3);
+        }
+
+        .blog-content a:hover {
+            color: rgb(220, 226, 255);
+            border-bottom-color: rgba(220, 226, 255, 0.6);
+        }
+
+        /* Code Blocks */
+        .blog-content code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 14px;
+            color: rgb(220, 226, 255);
+        }
+
+        .blog-content pre {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 24px 0;
+        }
+
+        .blog-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        /* Quote Blocks */
+        .blog-content blockquote {
+            border-left: 4px solid rgba(180, 205, 255, 0.5);
+            padding-left: 24px;
+            margin: 24px 0;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(180, 205, 255, 0.1);
+            border: 1px solid rgba(180, 205, 255, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .info-box-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: rgb(220, 226, 255);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box-content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Tags */
+        .blog-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tag {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .blog-container {
+                padding: 0 20px;
+                margin-top: 100px;
+            }
+
+            .blog-header,
+            .blog-content {
+                padding: 24px;
+            }
+
+            .blog-title {
+                font-size: 36px;
+            }
+
+            .blog-content h2 {
+                font-size: 28px;
+            }
+
+            .featured-image img {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Audio -->
+    <audio autoplay loop id="bgMusic">
+        <source src="https://dl.dropbox.com/scl/fi/zivu5ljc7ykrcho3n6qer/A-Home-For-Flowers-Tulip.mp3?rlkey=y8rndlzu71ijr8qelmgcfj7h2&st=z5y82p16&dl=0" type="audio/mpeg">
+    </audio>
+
+    <!-- Video Background -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="https://dl.dropbox.com/scl/fi/x6rbh0kx5lkinu5wz473e/columbina-blue-flower-fields-genshin-impact-moewalls-com.mp4?rlkey=1o1y3dorub75rotko9pae21r9&st=lxit5cun&dl=0" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="../../index.html" class="back-button">
+            <svg class="back-arrow" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            Back to Portfolio
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="blog-container">
+        <!-- Blog Header -->
+        <div class="blog-header">
+            <div class="blog-meta">
+                <img src="/src/assets/pfp-photo.jpg" alt="Skye" class="author-avatar">
+                <div class="author-info">
+                    <div class="author-name">Skyedev</div>
+                    <div class="blog-date">October 25, 2024</div>
+                </div>
+            </div>
+            <h1 class="blog-title">Project Launch: Building My New Portfolio</h1>
+            <p class="blog-subtitle">A journey through creating a modern, interactive portfolio website with vanilla JavaScript and beautiful animations.</p>
+        </div>
+
+        <!-- Featured Image -->
+        <div class="featured-image">
+            <img src="/src/assets/blogs_assets/cover-blog-project-launch.JPG" alt="Project Launch">
+        </div>
+
+        <!-- Blog Content -->
+        <div class="blog-content">
+            <h2>Introduction</h2>
+            <p>Welcome to my new portfolio! This isn't my first time building a portfolio website, but it's definitely the most ambitious one yet. As someone who's chronically ill and needs to be mindful of my energy levels, I've learned to pace myself while working on passion projects like this. The combination of frequent medical appointments and managing my health takes up a significant portion of my time, but I'm determined to create something beautiful and functional. </p>
+     &nbsp;
+                                &nbsp;
+                                &nbsp;
+            <p>Honestly, my first portfolio was pretty sick too! I mean, I liked it at the beginning, but then I started to believe that I could do better than that and explore a new style or... continue my style, in a new way. As you can notice, I really love some effects and designs in particular, and this is kinda obvious when we see my other personal website, <a href="https://luvrksknskyejourney.org/" target="_blank" class="website-link"><strong>luvrksknskyejourney↗</strong></a> when we pay attention to the details. I ABSOLUTELY LOVE glassmorphism and the UI of iOS/macOS and other OS like Arch Linux or Debian with Hyprland. I love clean design, but also with some personal touch and color.</p>
+
+            <div class="info-box">
+                <div class="info-box-title">
+                    💡 Project Overview
+                </div>
+                <div class="info-box-content">
+                    A modern, interactive portfolio website built with vanilla JavaScript using a modular architecture. Features smooth animations, dynamic content loading, and interactive elements designed to showcase my work and personality.
+                </div>
+            </div>
+
+            <h2>🎨 Design</h2>
+            <p>The design of this portfolio is inspired by modern UI trends, particularly the beautiful glass morphism aesthetic that's become popular in recent years. I wanted to create something that feels both contemporary and timeless, with careful attention to every detail. At least that's what I try to achieve.</p>
+
+            <h3>Visual Elements</h3>
+            <ul>
+                <li><strong>Glass Morphism:</strong> Translucent panels with backdrop-filter blur effects create depth and visual interest</li>
+                <li><strong>Smooth Animations:</strong> Every interaction is accompanied by carefully crafted transitions and animations</li>
+                <li><strong>Video Background:</strong> A dynamic background that adds movement without being distracting</li>
+                <li><strong>Color Palette:</strong> Subtle gradients and carefully chosen colors that work in harmony</li>
+            </ul>
+
+            <h2> Technical Architecture</h2>
+            <p>One of the things I'm most proud of is the modular architecture I implemented. Instead of writing spaghetti code in a single file (like my first portfolio or like I'm used to lol), I organized everything into separate manager classes that handle specific functionality. Each module has the necessary imports from other modules, exports its class as a singleton, global registration for compatibility, communication methods between modules, and an event system for coordination. Index.js imports and coordinates everything as the main entry point, while core.js is the central coordinator that handles all the managers. The structure is quite simple, but I still had fun creating it for my portfolio. The modules are automatically loaded when I simply include index.js in the main HTML!</p>
+
+            <h3>Core Structure</h3>
+            <p>The project is organized around a central <code>Core</code> that orchestrates all other managers. This approach makes the code more maintainable, testable, and easier to understand. Here's how it's structured:</p>
+
+            <ul>
+                <li><strong>Core:</strong> The brain of the application, coordinating all other managers</li>
+                <li><strong>NavigationManager:</strong> Handles smooth page transitions and routing</li>
+                <li><strong>AnimationsManager:</strong> Controls all animations and visual effects</li>
+                <li><strong>MusicManager/SoundManager:</strong> Manages the audio player and playlist, manages also the sound effects of the UI</li>
+                <li><strong>GalleryManager:</strong> Handles the image gallery with categories</li>
+                <li><strong>ContactManager:</strong> Manages the contact form and messaging</li>
+            </ul>
+
+            <h3>Key Features</h3>
+            <p>The website includes several interactive features that make it more than just a static page:</p>
+
+            <ul>
+                <li> <strong>Music Player:</strong> An integrated audio player with playlist support</li>
+                <li> <strong>Photo Gallery:</strong> A categorized image gallery with smooth transitions</li>
+                <li> <strong>YouTube Integration:</strong> Embedded video with custom controls</li>
+                <li> <strong>iMessage-Style Chat:</strong> A unique contact interface that mimics Apple's iMessage</li>
+                <li> <strong>Dark/Light Mode:</strong> Theme switching with persistent preferences</li>
+                <li> <strong>Interactive Panels:</strong> Hover effects and animations on every element</li>
+            </ul>
+
+            <h2> Development Process</h2>
+            <p>Building this portfolio has been and still is a learning experience. I wanted to challenge myself by using vanilla JavaScript instead of relying on frameworks like React or Vue. This decision taught me a lot about DOM manipulation, event handling, and state management. In fact, almost all the time I love to use vanilla Javascript tbh, it's just so flexible and powerful.</p>
+            <p>Here are some of the development techniques I employed:</p>
+            <ul>
+                <li>Used CSS transforms and opacity for better animation performance</li>
+                <li>Implemented lazy loading for images and media</li>
+                <li>Built a centralized sound manager to coordinate all audio playback</li>
+            </ul>
+
+            <h2>🎯 What's Next</h2>
+            <p>This portfolio is a living project that will continue to evolve. I have several features planned for future updates:</p>
+
+            <ul>
+                <li>📊 <strong>Project Case Studies:</strong> Detailed breakdowns of my work</li>
+                <li>🎮 <strong>Interactive Demos:</strong> Live examples of my code experiments</li>
+                <li>🌍 <strong>Multilingual Support:</strong> Content in English and Spanish maybe...</li>
+            </ul>
+
+            <h2>💭 Personal Thoughts</h2>
+            <p>Creating this portfolio has been more than just a technical exercise—it's been a way to express myself and my journey as a developer. Every animation, every color choice, every interaction has been carefully considered to reflect who I am and what I care about.</p>
+
+            <p>I'm grateful for my boyfriend, who's also a developer and has been incredibly supportive throughout this process. He made the entire backend of this portfolio possible, and his insights have been invaluable. Fr, I think that it's important to have a support system in place, especially when tackling complex projects like this. He is always there for me when I need help or a fresh perspective.</p>
+
+
+            <h2>Thank You</h2>
+            <p>If you've made it this far, thank you for taking the time to read about my journey. I hope this portfolio inspires you in some way, whether you're a fellow developer, a potential friend, or just someone who appreciates good design.</p>
+
+            <p>Feel free to explore the rest of the site, check out my work, and don't hesitate to reach out if you'd like to connect. The code for this portfolio is open source, so if you want to use any part of it for your own projects, please do! I believe in sharing knowledge and helping others grow. Soon I will upload the complete code to GitHub, so stay tuned with that!</p>
+
+        </div>
+    </div>
+
+    <script>
+        // Set background music volume to 20%
+        window.addEventListener('DOMContentLoaded', function() {
+            const bgMusic = document.getElementById('bgMusic');
+            if (bgMusic) {
+                bgMusic.volume = 0.2;
+                
+                // Intento de reproducción automática
+                bgMusic.play().catch(function(error) {
+                    console.log('Autoplay bloqueado por el navegador. Se reproducirá al interactuar con la página.');
+                    
+                    // Reproducir al primer clic del usuario
+                    document.body.addEventListener('click', function() {
+                        bgMusic.play();
+                    }, { once: true });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

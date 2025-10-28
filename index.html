@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyedev</title>
+    <meta name="description" content="Skye's portfolio lol">
+     <link rel="icon" type="image/x-icon" href="/src/assets/favicon_io/favicon.ico">
+<!-- Facebook Meta Tags -->
+<meta property="og:url" content="https://luvrksnsnskyedev.space/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Skyedev">
+<meta property="og:description" content="Skye's portfolio lol">
+<meta property="og:image" content="/src/assets/meta.png">
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="https://luvrksnsnskyedev.space/">
+<meta property="twitter:url" content="https://luvrksnsnskyedev.space/">
+<meta name="twitter:title" content="Skyedev">
+<meta name="twitter:description" content="Skye's portfolio lol">
+<meta name="twitter:image" content="/src/assets/meta.png">
+    <link rel="stylesheet" href="/src/css/styles.css">
+    <link rel="stylesheet" href="/src/css/responsive.css">
+    <script src="https://iframe.chat/scripts/main.min.js"></script>
+
+</head>
+
+<body>
+
+  <!-- SVG Filters -->
+  <svg style="display:none;">
+        <filter id="displacementFilter">
+            <feImage href="data:image/png;base64,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" 
+                    preserveAspectRatio="none" />
+
+            <feDisplacementMap in="SourceGraphic"
+                in2="turbulence"    
+                            scale="200" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
+
+
+    <!-- Video Background -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="https://dl.dropbox.com/scl/fi/ht8vvjjnms3odia8o0udr/bg.mp4?rlkey=6o9t3zf60f0k3ilirkm6xkpgj&st=mwvnyd9e&dl=0" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="mainNav">
+        <ul class="nav-menu">
+            <div class="nav-indicator-bg"></div>
+            <li class="nav-item">
+                <a href="#" class="nav-link active" data-page="home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="about">About</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="work">Work</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-page="contact">Contact</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Intro Screen -->
+    <div class="intro-screen" id="introScreen">
+        <div class="hero">
+            <h1 id="heroTitle">SKYE JOURNEY</h1>
+            
+            <div class="notifications-container">
+                <div class="notification">
+                    <div class="card"></div>
+                    <div class="icon"></div>
+                    <div class="content">
+                        <div class="header">
+                            <div class="title">Skye</div>
+                            <div class="time">9:41 AM</div>
+                        </div>
+                        <div class="message">Trying to craft beautiful digital experiences</div>
+                    </div>
+                </div>
+                
+                <div class="notification">
+                    <div class="card"></div>
+                    <div class="icon"></div>
+                    <div class="content">
+                        <div class="header">
+                            <div class="title">Skye</div>
+                            <div class="time">9:41 AM</div>
+                        </div>
+                        <div class="message">With attention to detail and passion for innovation</div>
+                    </div>
+                </div>
+                
+                <div class="notification">
+                    <div class="card"></div>
+                    <div class="icon"></div>
+                    <div class="content">
+                        <div class="header">
+                            <div class="title">Skye</div>
+                            <div class="time">9:41 AM</div>
+                        </div>
+                        <div class="message">Studying design for web and game development</div>
+                    </div>
+                </div>
+            </div>
+            
+          <button class="cta-button" id="startButton">Start</button>
+
+<script>
+const clickSoundUrl = 'https://dl.dropbox.com/scl/fi/kyolk2xpiinjup0o96s5c/command-press.mp3?rlkey=i5rd4cajqgguuldfhxl90cjm0&st=854pyd5h&dl=0';
+
+document.addEventListener('click', (e) => {
+ 
+  if (e.target.closest('#startButton')) {
+    try {
+      const clickSound = new Audio(clickSoundUrl);
+      clickSound.volume = 0.9;
+      clickSound.play().catch(() => {}); 
+    } catch (err) {
+      console.error('Error playing sound:', err);
+    }
+  }
+}, true); 
+</script>
+
+
+        </div>
+    </div>
+
+    <!-- Main Screen (Home) -->
+    <div class="main-screen" id="homeScreen">
+        <div class="header-panel">
+            <h1 class="main-title">Skye is building <span class="highlight">ideas</span></h1>
+            <p class="main-subtitle">Inspired by great minds</p>
+        </div>
+
+        <div class="content-grid">
+            <!-- Left Column - Quotes -->
+            <div class="quotes-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Inspiration</h2>
+                    <p class="panel-subtitle">Design philosophies</p>
+                </div>
+                
+                <div class="quotes-container">
+                    <div class="quote-card">
+                        <p class="quote-text">"Design is not just what it looks like and feels like. Design is how it works."</p>
+                        <p class="quote-author">- Steve Jobs</p>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <p class="quote-text">"Simplicity is the ultimate sophistication."</p>
+                        <p class="quote-author">- Leonardo da Vinci</p>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <p class="quote-text">"Good design is obvious. Great design is transparent."</p>
+                        <p class="quote-author">- Joe Sparano</p>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <p class="quote-text">"The details are not the details. They make the design."</p>
+                        <p class="quote-author">- Charles Eames</p>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <p class="quote-text">"Design creates culture. Culture shapes values. Values determine the future."</p>
+                        <p class="quote-author">- Robert L. Peters</p>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <p class="quote-text">"Innovation distinguishes between a leader and a follower."</p>
+                        <p class="quote-author">- Steve Jobs</p>
+                    </div>
+
+                    <div class="highlights-description">
+                                <p>Hey there! I'm so glad that you're here. I hope you find inspiration and joy in the ideas we share together. You're more than welcome to explore and engage with the content! I'll be here to guide you along the way, and probably I will eventually add a interactive chat in the <strong>"Contact section"</strong>, so you and more people will be able to connect and share your thoughts. This portfolio is a <strong>work in progress</strong>, so expect updates and new features over time! Also, feel free to reach out if you have any questions or suggestions. Remember to click everywhere! I love making everything very interactive and enjoyable for you.</p>
+                                  &nbsp;
+                                <p>Feel free to take my code if you want and need it. I really don't mind as long as it's helping someone. If you find any bugs or have suggestions, please let me know! And of course, if my portfolio inspires you in any way, I'd love to hear about it and see what you can create with that.</p>
+                                      &nbsp;
+                                <p>I really don't expect this to get so many attention, but here we are. I really enjoy making this kind of stuff, so I hope you enjoy it as well. Remember to always keep learning and growing, and never be afraid to take risks and try new things. The world needs more creative minds like yours. Thank you for visiting my portfolio, and I hope to connect with you soon! ^^</p>
+          </div>
+           
+                </div>
+          
+            </div>
+
+            <!-- Right Column -->
+            <div class="right-column">
+                <!-- Tools Panel -->
+                <div class="tools-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Tools & Software</h2>
+                        <p class="panel-subtitle">My creative toolkit</p>
+                    </div>
+                    
+                    <div class="tools-grid-container">
+                        <div class="tools-scroll" id="toolsScroll">
+                            <!-- Tool cards will be generated by toolsManager.js -->
+                        </div>
+                        
+                        <div class="tool-description" id="toolDescription">
+                            <p class="tool-description-text" id="toolDescriptionText"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Languages Panel -->
+                <div class="languages-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Languages & Frameworks</h2>
+                        <p class="panel-subtitle">Frontend development</p>
+                    </div>
+                    
+                    <div class="languages-container" id="languagesContainer">
+                        <!-- Language cards will be generated by languagesManager.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Screen (section two) -->
+    <div class="about-screen" id="aboutScreen">
+        <div class="header-panel">
+            <h1 class="main-title">About <span class="highlight">Skye</span></h1>
+            <p class="main-subtitle">Getting to know me better</p>
+        </div>
+
+        <div class="about-content">
+            <!-- Left Column -->
+            <div class="about-left-column">
+                <!-- Profile Section -->
+                <div class="about-panel profile-card">
+                    <div class="about-panel-header">
+                        <h2 class="about-panel-title">Profile</h2>
+                        <p class="about-panel-subtitle">Who I am</p>
+                    </div>
+                    
+                    <div class="about-panel-content" id="profileContainer">
+                        <!-- Profile content will be generated by aboutManager.js -->
+                    </div>
+                </div>
+
+                <!-- Location Section -->
+                <div class="about-panel location-card">
+                    <div class="about-panel-header">
+                        <h2 class="about-panel-title">Location</h2>
+                        <p class="about-panel-subtitle">Where I'm based</p>
+                    </div>
+                    
+                    <div class="about-panel-content" id="locationContainer">
+                        <!-- Location content will be generated by aboutManager.js -->
+                    </div>
+                </div>
+
+                <!-- Interests Section -->
+                <div class="about-panel">
+                    <div class="about-panel-header">
+                        <h2 class="about-panel-title">Interests</h2>
+                        <p class="about-panel-subtitle">What I love doing</p>
+                    </div>
+                    
+                    <div class="about-panel-content">
+                        <div class="interests-container" id="interestsContainer">
+                            <!-- Interest cards will be generated by aboutManager.js -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="about-right-column">
+                <!-- Highlights Section -->
+                <div class="highlights-section">
+                    <div class="highlights-header">
+                        <div class="highlights-hint">
+                            <img src="/src/assets/arrow.svg" alt="Arrow" class="hint-arrow">
+                            <span class="hint-text">click and look around...</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Medium Panels Section -->
+                   <div class="about-panel medium-panels-section">
+    <div class="about-panel-header">
+        <h2 class="about-panel-title">Highlights</h2>
+    </div>
+
+    <div class="about-panel-content">
+        <div class="medium-panels-grid">
+            <!-- Panel 1 - Twitter -->
+            <div class="medium-panel twitter-panel" id="mediumPanel1">
+                <div class="twitter-color-overlay"></div>
+                <div class="twitter-icon-container">
+                    <img src="/src/assets/twitter-icon-min.png" alt="Twitter" class="twitter-icon">
+                                    </div>
+                                    <div class="twitter-content">
+                                        <div class="tweet-text">
+                                            <div class="tweet-header">
+                                                <img src="/src/assets/pfp-twt.jpg" alt="Skye" class="tweet-profile-pic">
+                                                <div class="tweet-user-info">
+                                                    <span class="tweet-name">Skye</span>
+                                                    <span class="tweet-username">@LuvrksnSkye</span>
+                                                </div>
+                                            </div>
+                                            <p>spending 6 hours perfecting a button animation that nobody will notice because I have my priorities straight 😌✨</p>
+                                        </div>
+                                        <button class="twitter-button">
+                                            <span>Read my tweets</span>
+                                            <img src="/src/assets/arrow-angle.svg" alt="arrow" class="button-arrow">
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Panel 2 - Apple Music -->
+                                <div class="medium-panel music-panel" id="mediumPanel2">
+                                    <div class="music-color-overlay"></div>
+                                    <div class="music-icon-container">
+                                        <img src="/src/assets/apple-music-icon.png" alt="Apple Music" class="music-icon">
+                                    </div>
+                                    <div class="music-content">
+                                        <div class="music-info">
+                                            <img src="/src/assets/tunic-apple_music.jpg" alt="Album Cover" class="album-cover">
+                                            <div class="track-info">
+                                                <div class="track-title">From Far Shores</div>
+                                                <div class="track-artist">Lifeformed & Janice Kwan</div>
+                                            </div>
+                                        </div>
+                                        <div class="music-controls">
+                                            <button class="control-btn volume-btn" id="volumeBtn">
+                                                <img src="/src/assets/volume_on.svg" alt="Volume On" class="volume-on-icon">
+                                                <img src="/src/assets/volume-off.svg" alt="Volume Off" class="volume-off-icon">
+                                            </button>
+                                            <button class="control-btn" id="prevBtn">
+                                                <img src="/src/assets/Rewind.svg" alt="Previous">
+                                            </button>
+                                            <button class="control-btn play-btn" id="playBtn">
+                                                <img src="/src/assets/play-icon-1.svg" alt="Play" class="play-icon">
+                                                <img src="/src/assets/Pause.svg" alt="Pause" class="pause-icon">
+                                            </button>
+                                            <button class="control-btn" id="nextBtn">
+                                                <img src="/src/assets/Fast Fwd.svg" alt="Next">
+                                            </button>
+                                            <button class="control-btn playlist-btn" id="playlistBtn">
+                                                <img src="/src/assets/playlist-icon.svg" alt="Playlist">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Panel 3 - Photos Gallery -->
+                                <div class="medium-panel photos-panel" id="mediumPanel3">
+                                    <div class="photos-color-overlay"></div>
+                                    <div class="photos-icon-container">
+                                        <img src="/src/assets/Photos-min.webp" alt="Photos" class="photos-icon">
+                                    </div>
+                                    <div class="photos-content">
+                                        <div class="gallery-image-container">
+                                            <img src="" alt="Gallery" class="gallery-image" id="galleryImage">
+                                        </div>
+                                        <nav class="gallery-nav" id="galleryNav">
+                                            <ul class="gallery-nav-menu">
+                                                <div class="gallery-nav-indicator"></div>
+                                                <li class="gallery-nav-item">
+                                                    <button class="gallery-nav-btn active" data-category="everything">
+                                                        <img src="/src/assets/everything-icon.svg" alt="Everything">
+                                                    </button>
+                                                </li>
+                                                <li class="gallery-nav-item">
+                                                    <button class="gallery-nav-btn" data-category="places">
+                                                        <img src="/src/assets/places-icon.svg" alt="Places">
+                                                    </button>
+                                                </li>
+                                                <li class="gallery-nav-item">
+                                                    <button class="gallery-nav-btn" data-category="heart">
+                                                        <img src="/src/assets/heart-icon.svg" alt="Favorites">
+                                                    </button>
+                                                </li>
+                                                <li class="gallery-nav-item">
+                                                    <button class="gallery-nav-btn" data-category="cat">
+                                                        <img src="/src/assets/cat-icon.svg" alt="Cats">
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                                
+                                <!-- YouTube Panel (Panel 4) -->
+                                <div class="medium-panel youtube-panel" id="youtubePanel">
+                                    <div class="youtube-color-overlay"></div>
+                                    <div class="youtube-icon-container">
+                                        <img src="/src/assets/yt-icon.png" alt="YouTube" class="youtube-icon">
+                                    </div>
+                                    <div class="youtube-content">
+                                        <div class="youtube-video-container">
+                                            <iframe 
+                                                id="youtubeIframe"src="https://www.youtube.com/embed/UrO0_OWuf6c?si=TjuSvX6Sz0HP-oOw&amp;controls=0&enablejsapi=1"  
+                                                title="YouTube video player" 
+                                                frameborder="0" 
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                                referrerpolicy="strict-origin-when-cross-origin" 
+                                                allowfullscreen>
+                                            </iframe>
+                                        </div>
+                                        <div class="music-controls">
+                                            <button class="control-btn volume-btn" id="youtubeVolumeBtn">
+                                                <img src="/src/assets/volume_on.svg" alt="Volume On" class="volume-on-icon">
+                                                <img src="/src/assets/volume-off.svg" alt="Volume Off" class="volume-off-icon">
+                                            </button>
+                                            <button class="control-btn" id="youtubePrevBtn">
+                                                <img src="/src/assets/Rewind.svg" alt="Previous">
+                                            </button>
+                                            <button class="control-btn play-btn" id="youtubePlayBtn">
+                                                <img src="/src/assets/play-icon-1.svg" alt="Play" class="play-icon">
+                                                <img src="/src/assets/Pause.svg" alt="Pause" class="pause-icon">
+                                            </button>
+                                            <button class="control-btn" id="youtubeNextBtn">
+                                                <img src="/src/assets/Fast Fwd.svg" alt="Next">
+                                            </button>
+                                            <button class="control-btn playlist-btn" id="youtubePlaylistBtn">
+                                                <img src="/src/assets/playlist-icon.svg" alt="Playlist">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Cute Text Below Highlights -->
+                            <div class="highlights-description">
+                                <p>If you already know me, you may also see that I am the creator of <a href="https://luvrksknskyejourney.org/" target="_blank" class="website-link"><strong>luvrksknskyejourney↗</strong></a>! I find it quite funny to create things to express myself. A few months ago, I tried to make a portfolio on my GitHub,  but you know, time passes, so we need new things. So I made this, or at least I'm trying. Sometimes the most beautiful things are the ones we create with love and care, like a gentle whisper in the digital world.</p>
+                                &nbsp;
+                                &nbsp;
+                                &nbsp;
+                                <p>I'm not even sure if I will work with other people (which I wish to!), but for the moment, I just work along with my cute boyfriend, who is also a developer! The only difference between him and me is that he is definitely more professional. So I'm likely behind him, helping him with some designs or anything else. I know this is supposed to be about me, and more like my portfolio, but I also like to talk about him all the time and his incredible work.</p>
+                                  &nbsp;
+                                &nbsp;
+                                &nbsp;
+                                <p>If you want to see more about him, you can check his <a href="https://github.com/RegreDanger" target="_blank"> <strong>GitHub↗</strong></a> or... his violently-coolest <a href="https://regredanger.neocities.org/" target="_blank"> <strong>Website↗</strong></a>  that I also made for him! He is so cool tho, also such a nerdy,  but a cutie pie. I love him!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Panel -->
+                <div class="personal-panel">
+                    <div class="about-panel">
+                        <div class="about-panel-header">
+                            <h2 class="about-panel-title">Language Proficiency</h2>
+                            <p class="about-panel-subtitle">Info about my language skills</p>
+                        </div>
+                        
+                        <div class="about-panel-content">
+                            
+                            <div class="personal-thoughts">
+                                <p>I have native fluency in both <b>English</b> and <b>Spanish (Caribbean)</b>, and can speak in conversational <b>French/Français</b>, currently still learning. I also speak <b>Italian</b> and <b>German</b>, but at a very, very pre-school proficiency! ^^</p>
+                                &nbsp;
+                                &nbsp;
+                                &nbsp;
+                                <p>I wasn't always confident in my language skills, but with practice and exposure, I've grown more comfortable communicating in different languages. I used to have voice problems, but I've worked hard to improve my pronunciation and fluency in Speech-Language Therapy when I was young. Sometimes I still struggle with certain sounds or phrases, but I keep pushing myself to improve since I became an English teacher for children.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Contact Screen (add before the closing </body> tag) -->
+<div class="contact-screen" id="contactScreen">
+    <div class="header-panel">
+        <h1 class="main-title">Get in <span class="highlight">Touch</span></h1>
+        <p class="main-subtitle">Let's chat! I'd love to hear from you</p>
+    </div>
+
+    <div class="contact-content">
+        <div class="imessage-container" id="contactContainer">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="chat-header-avatar" style="background-image: url('https://dl.dropbox.com/scl/fi/nrgsz0vtcnwgd9msz1nzh/puppy.JPG?rlkey=jen8najj04sih3gw2pxeymq35&st=hvyte78j&dl=0');"></div>
+                <div class="chat-header-info">
+                    <div class="chat-header-name">Skye</div>
+                    <div class="chat-header-status">
+                        <span class="status-dot"></span>
+                        <span>Online now</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Container -->
+            <div class="messages-container" id="messagesContainer">
+                <!-- Messages will be dynamically added here -->
+            </div>
+
+            <!-- Input Container -->
+            <div class="input-container" id="inputContainer">
+                <div class="message-input-wrapper">
+                    <input 
+                        type="text" 
+                        class="message-input" 
+                        id="messageInput" 
+                        placeholder="Type your message..."
+                        autocomplete="off"
+                    >
+                </div>
+                <button class="send-button" id="sendButton">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+  
+        <!-- Center Column -->
+        <div class="center-column">
+           
+            
+            <div class="blog-panel">
+            <div class="panel-header">
+                <h2 class="panel-title">Blog & Updates</h2>
+                <p class="panel-subtitle">Latest posts and announcements</p>
+            </div>
+            
+            <div class="blog-entries-container">
+                <!-- Blog Entry-->
+                <div class="blog-entry">
+                    <div class="blog-entry-header">
+                        <div class="blog-entry-avatar" style="background-image: url('src/assets/pfp-photo.jpg');"></div>
+                        <div class="blog-entry-user">
+                            <div class="blog-entry-name">Skyedev</div>
+                            <div class="blog-entry-username">@LuvrksnSkye</div>
+                        </div>
+                    </div>
+                    <h3 class="blog-entry-title">Project Launch</h3>
+                    <p class="blog-entry-description">It's not my first time doing a portfolio, but I'm excited for this tbh, and I can't wait to share it with you. My progress is slow as someone who is chronically ill and must be mindful of my energy levels, but also, being almost all the time into medical stuff take a lot of my time. However, I'm determined to make it work! You can click <a href="src/blogs/project_launch.html"><strong>here</strong></a> to see my progress and the full blog about it.</p>
+                    <img src="src/assets/blogs_assets/cover-blog-project-launch.JPG" alt="Blog entry" class="blog-entry-image">
+                    <div class="blog-entry-date">October 25</div>
+               </div>
+                </div>
+            </div>
+
+
+             <!-- Contact Info Panel -->
+            <div class="contact-info-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Contact</h2>
+                    <p class="panel-subtitle">Ways to reach me</p>
+                </div>
+                
+                <div class="contact-links-container">
+                    <a href="mailto:luvrksnskyejourney@icloud.com" class="contact-link">
+                        <img src="src/assets/email-icon.svg" alt="Email" class="contact-icon">
+                        <span class="contact-text">luvrksnskyejourney@icloud.com</span>
+                    </a>
+                    
+                    <a href="https://github.com/luvrksnskye" target="_blank" class="contact-link">
+                        <img src="src/assets/github-icon-for-contact.svg" alt="GitHub" class="contact-icon">
+                        <span class="contact-text">@luvrksnskye</span>
+                    </a>
+                    
+                    <a href="https://x.com/LuvrksnSkye" target="_blank" class="contact-link">
+                        <img src="src/assets/twitter-icon.svg" alt="Twitter" class="contact-icon">
+                        <span class="contact-text">@LuvrksnSkye</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Column: Chat Embed -->
+        <div class="chat-embed-container">
+            <iframe src="https://iframe.chat/embed?chat=16672563" id="chattable"></iframe>
+        </div>
+    </div>
+</div>
+
+       <!-- ========================================
+                    SISTEMA MODULAR JS
+         ======================================== -->
+ <script type="module" src="/src/index.js"></script>
+ <script>
+    chattable.initialize({
+        stylesheet: "/src/css/chattable.css"
+    });
+</script>
+</body>
+</html>

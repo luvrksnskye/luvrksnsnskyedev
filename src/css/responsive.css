@@ -1,0 +1,718 @@
+/* ============================
+   MOBILE RESPONSIVE STYLES
+   ============================ */
+
+/* iPhone Safe Area Support */
+@supports (padding: max(0px)) {
+    body {
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+    
+    nav {
+        padding-left: max(8px, env(safe-area-inset-left));
+        padding-right: max(8px, env(safe-area-inset-right));
+        padding-bottom: max(8px, env(safe-area-inset-bottom));
+    }
+    
+    .main-screen,
+    .about-screen,
+    .contact-screen {
+        padding-bottom: max(100px, calc(100px + env(safe-area-inset-bottom)));
+    }
+}
+
+/* Tablet and below (1024px) */
+@media screen and (max-width: 1024px) {
+    .content-grid,
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .chat-embed-container {
+        height: 500px;
+    }
+
+    .medium-panels-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .photos-panel {
+        min-height: 400px;
+    }
+}
+
+/* Mobile (768px and below) */
+@media screen and (max-width: 768px) {
+    /* Navigation - Move to bottom */
+    nav {
+        top: auto;
+        bottom: 20px;
+        padding: 6px;
+        width: calc(100% - 40px);
+        max-width: 500px;
+        /* iPhone notch support */
+        bottom: max(20px, env(safe-area-inset-bottom, 20px));
+    }
+    
+    .nav-menu {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .nav-link {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+
+    /* Hero Section */
+    .hero h1 {
+        font-size: 48px;
+        letter-spacing: -1px;
+        min-height: 60px;
+    }
+
+    /* Main Title */
+    .main-title {
+        font-size: 36px;
+        letter-spacing: -0.5px;
+    }
+
+    .main-subtitle {
+        font-size: 16px;
+    }
+
+    /* All Screen Padding */
+    .main-screen,
+    .about-screen,
+    .contact-screen {
+        padding: 80px 20px 100px; /* Add bottom padding for nav bar */
+    }
+
+    /* Header Panel */
+    .header-panel {
+        margin-bottom: 16px;
+    }
+
+    /* Panels */
+    .quotes-panel,
+    .tools-panel,
+    .languages-panel {
+        height: auto;
+        min-height: 500px;
+    }
+
+    .panel-header,
+    .about-panel-header {
+        padding: 20px 20px 16px;
+    }
+
+    .panel-title,
+    .about-panel-title {
+        font-size: 20px;
+    }
+
+    .panel-subtitle,
+    .about-panel-subtitle {
+        font-size: 13px;
+    }
+
+    .quotes-container,
+    .tools-grid-container,
+    .languages-container,
+    .about-panel-content {
+        padding: 20px;
+    }
+
+    /* Languages Grid */
+    .languages-container {
+        grid-template-columns: 1fr;
+    }
+
+    /* Tools */
+    .tools-scroll {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .tool-card {
+        min-width: 120px;
+        height: 120px;
+    }
+
+    .tool-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    /* Interests */
+    .interests-container {
+        grid-template-columns: 1fr;
+    }
+
+    /* Profile Stats */
+    .profile-stats {
+        grid-template-columns: 1fr;
+    }
+
+    /* Medium Panels */
+    .medium-panels-section {
+        height: auto;
+    }
+
+    .medium-panels-grid {
+        gap: 12px;
+    }
+
+    .medium-panel {
+        min-height: 220px;
+        padding: 16px;
+    }
+
+    /* Photos Panel */
+    .photos-panel {
+        min-height: 350px;
+        grid-row: span 1;
+    }
+
+    .gallery-nav {
+        top: auto;
+        bottom: 80px;
+    }
+
+    /* YouTube Panel */
+    .youtube-panel {
+        min-height: 300px;
+    }
+
+    /* Music Panel */
+    .album-cover {
+        width: 80px;
+        height: 80px;
+    }
+
+    /* Twitter Panel */
+    .tweet-text p {
+        font-size: 13px;
+    }
+
+    /* Contact Screen */
+    .imessage-container,
+    .chat-embed-container {
+        height: 500px;
+    }
+
+    .blog-entry-image {
+        height: 150px;
+    }
+
+    /* Notifications */
+    .notifications-container {
+        max-width: 90%;
+    }
+
+    .notification {
+        height: auto;
+        min-height: 64px;
+        padding: 12px 14px;
+    }
+
+    .notification .message {
+        font-size: 14px;
+    }
+}
+
+/* Small Mobile (480px and below) */
+@media screen and (max-width: 480px) {
+    /* Hero */
+    .hero h1 {
+        font-size: 36px;
+        min-height: 45px;
+    }
+
+    .hero {
+        padding: 0 15px;
+    }
+
+    /* Navigation - Keep horizontal, make more compact, keep at bottom */
+    nav {
+        width: calc(100% - 30px);
+        padding: 4px;
+        bottom: 15px;
+        /* iPhone notch support */
+        bottom: max(15px, env(safe-area-inset-bottom, 15px));
+    }
+
+    .nav-menu {
+        gap: 2px;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .nav-link {
+        padding: 8px 12px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+    }
+
+    .nav-indicator-bg {
+        height: calc(100% - 8px);
+    }
+
+    /* Titles */
+    .main-title {
+        font-size: 28px;
+    }
+
+    .main-subtitle {
+        font-size: 14px;
+    }
+
+    .panel-title,
+    .about-panel-title {
+        font-size: 18px;
+    }
+
+    /* All Screen Padding */
+    .main-screen,
+    .about-screen,
+    .contact-screen {
+        padding: 70px 15px 90px; /* Add bottom padding for nav bar */
+        gap: 16px;
+    }
+
+    /* Panels */
+    .panel-header,
+    .about-panel-header {
+        padding: 16px 16px 12px;
+    }
+
+    .quotes-container,
+    .tools-grid-container,
+    .languages-container,
+    .about-panel-content {
+        padding: 16px;
+    }
+
+    /* Profile */
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-name {
+        font-size: 24px;
+    }
+
+    /* Tools */
+    .tool-card {
+        min-width: 100px;
+        height: 100px;
+    }
+
+    .tool-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .tool-name {
+        font-size: 12px;
+    }
+
+    /* Medium Panels */
+    .medium-panel {
+        min-height: 200px;
+        padding: 14px;
+    }
+
+    .music-panel,
+    .twitter-panel,
+    .youtube-panel {
+        min-height: 250px;
+    }
+
+    .photos-panel {
+        min-height: 300px;
+    }
+
+    /* Music Controls */
+    .music-controls {
+        gap: 4px;
+    }
+
+    .control-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .control-btn img {
+        width: 16px;
+        height: 16px;
+    }
+
+    .play-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .play-btn img {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Album Cover */
+    .album-cover {
+        width: 70px;
+        height: 70px;
+    }
+
+    /* Track Info */
+    .track-title {
+        font-size: 14px;
+    }
+
+    .track-artist {
+        font-size: 12px;
+    }
+
+    /* Twitter */
+    .tweet-profile-pic {
+        width: 36px;
+        height: 36px;
+    }
+
+    .tweet-name {
+        font-size: 13px;
+    }
+
+    .tweet-username {
+        font-size: 12px;
+    }
+
+    .tweet-text p {
+        font-size: 12px;
+    }
+
+    .twitter-button {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+
+    /* Icons */
+    .twitter-icon-container,
+    .music-icon-container,
+    .photos-icon-container,
+    .youtube-icon-container {
+        width: 44px;
+        height: 44px;
+        top: 12px;
+        right: 12px;
+    }
+
+    .twitter-icon,
+    .music-icon,
+    .photos-icon,
+    .youtube-icon {
+        width: 26px;
+        height: 26px;
+    }
+
+    /* Contact */
+    .imessage-container,
+    .chat-embed-container {
+        height: 450px;
+    }
+
+    .message-bubble {
+        max-width: 85%;
+        padding: 10px 14px;
+    }
+
+    .message-bubble span {
+        font-size: 14px;
+    }
+
+    .message-avatar {
+        width: 28px;
+        height: 28px;
+    }
+
+    .chat-header-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    /* Blog */
+    .blog-entry {
+        padding: 16px;
+    }
+
+    .blog-entry-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .blog-entry-title {
+        font-size: 16px;
+    }
+
+    .blog-entry-description {
+        font-size: 13px;
+    }
+
+    .blog-entry-image {
+        height: 120px;
+    }
+
+    /* Contact Links */
+    .contact-link {
+        padding: 12px 16px;
+    }
+
+    .contact-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .contact-text {
+        font-size: 14px;
+    }
+
+    /* Notifications */
+    .notification .title,
+    .notification .time,
+    .notification .message {
+        font-size: 14px;
+    }
+
+    .notification .icon {
+        width: 34px;
+        height: 34px;
+    }
+
+    /* CTA Button */
+    .cta-button {
+        padding: 14px 28px;
+        font-size: 15px;
+    }
+
+    /* Gallery Nav */
+    .gallery-nav {
+        bottom: 60px;
+        padding: 4px;
+    }
+
+    .gallery-nav-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .gallery-nav-btn img {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Highlights Description */
+    .highlights-description p,
+    .personal-thoughts p {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+}
+
+/* Extra Small Screens (360px and below) */
+@media screen and (max-width: 360px) {
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .main-title {
+        font-size: 24px;
+    }
+
+    .nav-link {
+        padding: 10px 16px;
+        font-size: 12px;
+    }
+
+    .tool-card {
+        min-width: 90px;
+        height: 90px;
+    }
+
+    .medium-panel {
+        min-height: 180px;
+    }
+}
+
+/* Landscape Mobile Fix */
+@media screen and (max-height: 600px) and (orientation: landscape) {
+    .main-screen,
+    .about-screen,
+    .contact-screen {
+        padding: 60px 20px 80px; /* Add bottom padding for nav */
+    }
+
+    nav {
+        bottom: 10px;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+        margin-bottom: 16px;
+    }
+
+    .notifications-container {
+        margin: 20px auto 0;
+    }
+
+    .notification {
+        height: 56px;
+        min-height: 56px;
+    }
+}
+
+/* Fix for very tall screens */
+@media screen and (min-height: 1200px) {
+    .quotes-panel,
+    .tools-panel,
+    .languages-panel {
+        height: auto;
+        max-height: 1500px;
+    }
+}
+
+/* Ensure scrolling works on all mobile devices */
+@media screen and (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .main-screen,
+    .about-screen,
+    .contact-screen {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Prevent zoom on input focus (iOS) */
+    input,
+    textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* Touch-friendly hover states */
+@media (hover: none) and (pointer: coarse) {
+    .nav-link:hover,
+    .quote-card:hover,
+    .tool-card:hover,
+    .language-card:hover,
+    .interest-card:hover,
+    .medium-panel:hover,
+    .contact-link:hover,
+    .blog-entry:hover {
+        transform: none;
+    }
+
+    .nav-link:active,
+    .quote-card:active,
+    .tool-card:active,
+    .language-card:active,
+    .interest-card:active,
+    .contact-link:active,
+    .blog-entry:active {
+        transform: scale(0.98);
+    }
+}
+
+/* ============================
+   IPHONE SPECIFIC OPTIMIZATIONS
+   ============================ */
+
+/* iPhone 14 Pro Max, 15 Pro Max (430px) */
+@media screen and (max-width: 430px) {
+    nav {
+        max-width: 400px;
+    }
+}
+
+/* iPhone 14 Pro, 15 Pro (393px) */
+@media screen and (max-width: 393px) {
+    .nav-link {
+        padding: 8px 10px;
+        font-size: 10.5px;
+    }
+}
+
+/* iPhone SE (375px) */
+@media screen and (max-width: 375px) {
+    .hero h1 {
+        font-size: 32px;
+    }
+    
+    .nav-link {
+        padding: 8px 9px;
+        font-size: 10px;
+    }
+    
+    .main-title {
+        font-size: 26px;
+    }
+}
+
+/* iPhone 12/13 mini (360px) */
+@media screen and (max-width: 360px) {
+    .nav-link {
+        padding: 7px 8px;
+        font-size: 9.5px;
+    }
+}
+
+/* Fix iOS Safari viewport height bug */
+@supports (-webkit-touch-callout: none) {
+    .main-screen,
+    .about-screen,
+    .contact-screen {
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* Disable iOS text size adjustment */
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Improve iOS scrolling performance */
+@media screen and (max-width: 768px) {
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* iOS PWA Support (when added to home screen) */
+@media all and (display-mode: standalone) {
+    nav {
+        bottom: max(20px, env(safe-area-inset-bottom, 20px));
+    }
+    
+    .main-screen,
+    .about-screen,
+    .contact-screen {
+        padding-top: max(70px, env(safe-area-inset-top, 70px));
+        padding-bottom: max(100px, calc(100px + env(safe-area-inset-bottom)));
+    }
+}
