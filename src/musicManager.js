@@ -14,6 +14,7 @@ class MusicManager {
         this.initialized = false;
         
         this.playlist = [
+            { title: "Queendom", artist: "Aurora", cover: "/src/assets/aurora_apple-music.jpeg", audio: "https://dl.dropbox.com/scl/fi/pzbw12pfjopwm9y38b6ou/AURORA-Queendom.mp3?rlkey=7zrukh111h1wcligjcad16fnr&st=ekvpu2iq&dl=0" },
             { title: "Sunflower", artist: "Post Malone & Swae Lee", cover: "/src/assets/sunflower-apple_music.jpeg", audio: "https://dl.dropbox.com/scl/fi/rr6r3el4l4xuk4tfjw0m4/sunflower.mp3?rlkey=9pxxwbgk86i6bzja79eivnxyo&st=41opl5bd&dl=0" },
             { title: "Self-love", artist: "Metro Boomin & Coi Leray", cover: "/src/assets/self-love-apple_music.jpeg", audio: "https://dl.dropbox.com/scl/fi/zkdozwpg9f9lxrjy88wpv/self-love.mp3?rlkey=3gptmvyua5pfd3or1e8gt0jea&st=j9tr0fv3&dl=0" },
             { title: "Painting", artist: "Sky: Children Of The Light OST", cover: "/src/assets/ost-vol-1.png", audio: "https://dl.dropbox.com/scl/fi/5r9q2tbcyvs72vrc2w18j/Painting.mp3?rlkey=g41eyb32hzjczevnky2utxqvq&st=on8n2uw2&dl=0" },
