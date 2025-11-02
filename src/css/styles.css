@@ -27,6 +27,13 @@ a {
     color: rgb(220, 226, 255);
 }
 
+p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.807);
+    margin: 0;
+}
+
 strong{
     font-weight: 700;
       color: rgb(220, 226, 255);
@@ -2117,7 +2124,6 @@ color: rgb(255, 238, 253);
     overflow-x: hidden;
 }
 
-
 .contact-screen.show {
     opacity: 1;
     transform: scale(1);
@@ -2141,12 +2147,39 @@ color: rgb(255, 238, 253);
     background: rgba(255, 255, 255, 0.3);
 }
 
-.contact-content {
+/* Contact screen specific grid */
+.contact-screen .contact-content {
     display: grid;
     grid-template-columns: 380px 560px 420px;
-    gap: 10px;
+    gap: 16px;
     flex: 1;
     max-height: calc(100vh - 240px);
+}
+
+/* Left Column styling - CONTACT SCREEN ONLY */
+.contact-screen .left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Center Column styling - CONTACT SCREEN ONLY */
+.contact-screen .center-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Right Column styling - CONTACT SCREEN ONLY */
+.contact-screen .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Make blog panel take full width at top - CONTACT SCREEN ONLY */
+.contact-screen .center-column .blog-panel {
+    width: 100%;
 }
 
 /* iMessage Chat Container */
@@ -2162,13 +2195,6 @@ color: rgb(255, 238, 253);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-}
-
-/* Center Column */
-.center-column {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
 }
 
 /* Contact Info Panel */
@@ -2385,7 +2411,7 @@ color: rgb(255, 238, 253);
 
 .chat-embed-container iframe {
     width: 100%;
-    height: 600%;
+    height: 100%;
     border: none;
     border-radius: 24px;
     overflow: hidden;
@@ -2655,4 +2681,209 @@ color: rgb(255, 238, 253);
     color: rgba(255, 255, 255, 0.5);
     font-size: 14px;
     margin-top: 40px;
+}
+
+/* ============================
+   CONTACT SCREEN - ADDITIONAL PANELS
+   ============================ */
+
+/* Availability Panel */
+.availability-panel {
+    backdrop-filter: blur(40px) saturate(200%);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+}
+
+.availability-panel .panel-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.availability-content {
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.availability-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(34, 197, 94, 0.1);
+    border-radius: 16px;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.availability-indicator {
+    width: 12px;
+    height: 12px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    flex-shrink: 0;
+}
+
+.availability-status-text {
+    font-size: 15px;
+    color: #22c55e;
+    font-weight: 600;
+}
+
+.availability-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.availability-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    transition: all 0.3s ease;
+}
+
+.availability-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateX(4px);
+}
+
+.availability-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.availability-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.availability-text strong {
+    color: rgb(220, 226, 255);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Response Time Note */
+.response-note {
+    padding: 16px 20px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 14px;
+    margin-top: 8px;
+}
+
+.response-note p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(147, 197, 253, 1);
+    margin: 0;
+}
+
+/* Guidelines Panel */
+.guidelines-panel {
+    backdrop-filter: blur(40px) saturate(200%);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+}
+
+.guidelines-panel .panel-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.guidelines-content {
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.guidelines-intro {
+    padding: 18px 22px;
+    background: rgba(167, 139, 250, 0.1);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    border-radius: 16px;
+}
+
+.guidelines-intro p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(221, 214, 254, 1);
+    margin: 0;
+}
+
+.guidelines-intro p strong {
+    color: rgb(220, 226, 255);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.guideline-card {
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.guideline-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.guideline-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.guideline-emoji {
+    font-size: 18px;
+}
+
+.guideline-description {
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+}
+
+/* Fun Footer Note */
+.guidelines-footer {
+    padding: 16px 20px;
+    background: rgba(236, 72, 153, 0.1);
+    border: 1px solid rgba(236, 72, 153, 0.2);
+    border-radius: 14px;
+    text-align: center;
+}
+
+.guidelines-footer p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(251, 207, 232, 1);
+    margin: 0;
 }

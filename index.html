@@ -473,7 +473,7 @@ document.addEventListener('click', (e) => {
     </div>
 
 
-    <!-- Contact Screen (add before the closing </body> tag) -->
+  <!-- Contact Screen -->
 <div class="contact-screen" id="contactScreen">
     <div class="header-panel">
         <h1 class="main-title">Get in <span class="highlight">Touch</span></h1>
@@ -481,73 +481,46 @@ document.addEventListener('click', (e) => {
     </div>
 
     <div class="contact-content">
-        <div class="imessage-container" id="contactContainer">
-            <!-- Chat Header -->
-            <div class="chat-header">
-                <div class="chat-header-avatar" style="background-image: url('https://dl.dropbox.com/scl/fi/nrgsz0vtcnwgd9msz1nzh/puppy.JPG?rlkey=jen8najj04sih3gw2pxeymq35&st=hvyte78j&dl=0');"></div>
-                <div class="chat-header-info">
-                    <div class="chat-header-name">Skye</div>
-                    <div class="chat-header-status">
-                        <span class="status-dot"></span>
-                        <span>Online now</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Messages Container -->
-            <div class="messages-container" id="messagesContainer">
-                <!-- Messages will be dynamically added here -->
-            </div>
-
-            <!-- Input Container -->
-            <div class="input-container" id="inputContainer">
-                <div class="message-input-wrapper">
-                    <input 
-                        type="text" 
-                        class="message-input" 
-                        id="messageInput" 
-                        placeholder="Type your message..."
-                        autocomplete="off"
-                    >
-                </div>
-                <button class="send-button" id="sendButton">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-  
-        <!-- Center Column -->
-        <div class="center-column">
-           
-            
-            <div class="blog-panel">
-            <div class="panel-header">
-                <h2 class="panel-title">Blog & Updates</h2>
-                <p class="panel-subtitle">Latest posts and announcements</p>
-            </div>
-            
-            <div class="blog-entries-container">
-                <!-- Blog Entry-->
-                <div class="blog-entry">
-                    <div class="blog-entry-header">
-                        <div class="blog-entry-avatar" style="background-image: url('src/assets/pfp-photo.jpg');"></div>
-                        <div class="blog-entry-user">
-                            <div class="blog-entry-name">Skyedev</div>
-                            <div class="blog-entry-username">@LuvrksnSkye</div>
+        <!-- Left Column: iMessage Chat + Contact Info -->
+        <div class="left-column">
+            <div class="imessage-container" id="contactContainer">
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="chat-header-avatar" style="background-image: url('https://dl.dropbox.com/scl/fi/nrgsz0vtcnwgd9msz1nzh/puppy.JPG?rlkey=jen8najj04sih3gw2pxeymq35&st=hvyte78j&dl=0');"></div>
+                    <div class="chat-header-info">
+                        <div class="chat-header-name">Skye</div>
+                        <div class="chat-header-status">
+                            <span class="status-dot"></span>
+                            <span>Online now</span>
                         </div>
                     </div>
-                    <h3 class="blog-entry-title">Project Launch</h3>
-                    <p class="blog-entry-description">It's not my first time doing a portfolio, but I'm excited for this tbh, and I can't wait to share it with you. My progress is slow as someone who is chronically ill and must be mindful of my energy levels, but also, being almost all the time into medical stuff take a lot of my time. However, I'm determined to make it work! You can click <a href="src/blogs/project_launch.html"><strong>here</strong></a> to see my progress and the full blog about it.</p>
-                    <img src="src/assets/blogs_assets/cover-blog-project-launch.JPG" alt="Blog entry" class="blog-entry-image">
-                    <div class="blog-entry-date">October 25</div>
-               </div>
+                </div>
+
+                <!-- Messages Container -->
+                <div class="messages-container" id="messagesContainer">
+                    <!-- Messages will be dynamically added here -->
+                </div>
+
+                <!-- Input Container -->
+                <div class="input-container" id="inputContainer">
+                    <div class="message-input-wrapper">
+                        <input 
+                            type="text" 
+                            class="message-input" 
+                            id="messageInput" 
+                            placeholder="Type your message..."
+                            autocomplete="off"
+                        >
+                    </div>
+                    <button class="send-button" id="sendButton">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
 
-
-             <!-- Contact Info Panel -->
+            <!-- Contact Info Panel (Below iMessage) -->
             <div class="contact-info-panel">
                 <div class="panel-header">
                     <h2 class="panel-title">Contact</h2>
@@ -572,10 +545,142 @@ document.addEventListener('click', (e) => {
                 </div>
             </div>
         </div>
+
+        <!-- Center Column: Blog + Availability -->
+        <div class="center-column">
+            <!-- Blog Panel (Top Center) -->
+            <div class="blog-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Blog & Updates</h2>
+                    <p class="panel-subtitle">Latest posts and announcements</p>
+                </div>
+                
+                <div class="blog-entries-container">
+                    <!-- Blog Entry-->
+                    <div class="blog-entry">
+                        <div class="blog-entry-header">
+                            <div class="blog-entry-avatar" style="background-image: url('src/assets/pfp-photo.jpg');"></div>
+                            <div class="blog-entry-user">
+                                <div class="blog-entry-name">Skyedev</div>
+                                <div class="blog-entry-username">@LuvrksnSkye</div>
+                            </div>
+                        </div>
+                        <h3 class="blog-entry-title">Project Launch</h3>
+                        <p class="blog-entry-description">It's not my first time doing a portfolio, but I'm excited for this tbh, and I can't wait to share it with you. My progress is slow as someone who is chronically ill and must be mindful of my energy levels, but also, being almost all the time into medical stuff take a lot of my time. However, I'm determined to make it work! You can click <a href="src/blogs/project_launch.html"><strong>here</strong></a> to see my progress and the full blog about it.</p>
+                        <img src="src/assets/blogs_assets/cover-blog-project-launch.JPG" alt="Blog entry" class="blog-entry-image">
+                        <div class="blog-entry-date">October 25</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Availability Panel (Bottom Center) -->
+            <div class="availability-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Availability</h2>
+                    <p class="panel-subtitle">What I'm open to</p>
+                </div>
+                
+                <div class="availability-content">
+                    <div class="availability-status">
+                        <div class="availability-indicator"></div>
+                        <span class="availability-status-text">Open for opportunities</span>
+                    </div>
+                    
+                    <div class="availability-list">
+                        <div class="availability-item">
+                            <svg class="availability-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: rgb(34, 197, 94);"/>
+                            </svg>
+                            <div class="availability-text">
+                                <strong>Internships</strong> - Looking for learning opportunities in frontend development
+                            </div>
+                        </div>
+                        
+                        <div class="availability-item">
+                            <svg class="availability-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: rgb(34, 197, 94);"/>
+                            </svg>
+                            <div class="availability-text">
+                                <strong>Code Help</strong> - Happy to assist with HTML, CSS, JavaScript questions
+                            </div>
+                        </div>
+                        
+                        <div class="availability-item">
+                            <svg class="availability-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: rgb(34, 197, 94);"/>
+                            </svg>
+                            <div class="availability-text">
+                                <strong>Collaborations</strong> - Open to creative projects and learning together
+                            </div>
+                        </div>
+                        
+                        <div class="availability-item">
+                            <svg class="availability-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: rgb(34, 197, 94);"/>
+                            </svg>
+                            <div class="availability-text">
+                              <p><strong>Mentorship</strong> - Always eager to learn from experienced developers</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="response-note">
+                        <p><strong>Note:</strong> I may take a bit longer to respond due to health considerations, but I read every message and will get back to you! 💙</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         
-        <!-- Right Column: Chat Embed -->
-        <div class="chat-embed-container">
-            <iframe src="https://iframe.chat/embed?chat=16672563" id="chattable"></iframe>
+        <!-- Right Column: Chat Embed + Guidelines -->
+        <div class="right-column">
+            <!-- Chat Embed -->
+            <div class="chat-embed-container">
+                <iframe src="https://iframe.chat/embed?chat=16672563" id="chattable"></iframe>
+            </div>
+
+            <!-- Guidelines Panel (Below Chat Embed) -->
+            <div class="guidelines-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Just So You Know!</h2>
+                    <p class="panel-subtitle">A friendly heads up</p>
+                </div>
+                
+                <div class="guidelines-content">
+                    <div class="guidelines-intro">
+                        <p><strong>Hey there!</strong> Just to be clear - I'm not selling any services or doing freelance work. I'm just a student who loves coding and is happy to help out.</p>
+                    </div>
+                    
+                    <div class="guideline-card">
+                        <h3 class="guideline-title">
+                            <span class="guideline-emoji">✨</span>
+                            Free to Help
+                        </h3>
+                        <p class="guideline-description">
+                            Got a question? Need help with your code? Just want to bounce ideas around? I'm here for it!
+                        </p>
+                    </div>
+                    
+                    <div class="guideline-card">
+                        <h3 class="guideline-title">
+                            <span class="guideline-emoji">🌷</span>
+                            Love Collaborating
+                        </h3>
+                        <p class="guideline-description">
+                            If you have a fun project or idea, I'd love to be part of it! Learning by doing is my favorite.
+                        </p>
+                    </div>
+                    
+                    <div class="guideline-card">
+                        <h3 class="guideline-title">
+                            <span class="guideline-emoji">🌸</span>
+                            Always Learning
+                        </h3>
+                        <p class="guideline-description">
+                            I'm still learning and growing!
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
