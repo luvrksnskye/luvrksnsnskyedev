@@ -1,0 +1,105 @@
+[gd_scene load_steps=15 format=3 uid="uid://dy8ag3xcjdrgl"]
+
+[ext_resource type="Texture2D" uid="uid://baarff5qo0g1f" path="res://assets/characters/makomi.png" id="1_p5w5x"]
+[ext_resource type="Texture2D" uid="uid://5xqygswxwtj5" path="res://assets/ui/love-sheet.png" id="2_f7hnw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3wbas"]
+atlas = ExtResource("1_p5w5x")
+region = Rect2(31, 32, 31, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kpxdq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3wbas")
+}],
+"loop": true,
+"name": &"sit",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i2x41"]
+size = Vector2(20, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kpxdq"]
+atlas = ExtResource("2_f7hnw")
+region = Rect2(0, 0, 32, 23)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i2x41"]
+atlas = ExtResource("2_f7hnw")
+region = Rect2(32, 0, 32, 23)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yb15u"]
+atlas = ExtResource("2_f7hnw")
+region = Rect2(64, 0, 32, 23)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_om1pj"]
+atlas = ExtResource("2_f7hnw")
+region = Rect2(96, 0, 32, 23)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pcmiq"]
+atlas = ExtResource("2_f7hnw")
+region = Rect2(128, 0, 32, 23)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wgacn"]
+atlas = ExtResource("2_f7hnw")
+region = Rect2(160, 0, 32, 23)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ij5s1"]
+atlas = ExtResource("2_f7hnw")
+region = Rect2(192, 0, 32, 23)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lwrqj"]
+atlas = ExtResource("2_f7hnw")
+region = Rect2(224, 0, 32, 23)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yb15u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kpxdq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i2x41")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yb15u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_om1pj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pcmiq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wgacn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ij5s1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lwrqj")
+}],
+"loop": true,
+"name": &"love",
+"speed": 4.0
+}]
+
+[node name="MAKOMI" type="CharacterBody2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-2, 0)
+sprite_frames = SubResource("SpriteFrames_kpxdq")
+animation = &"sit"
+frame_progress = 0.6466954
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, 12)
+shape = SubResource("RectangleShape2D_i2x41")
+
+[node name="Makomi_Emotions" type="AnimatedSprite2D" parent="."]
+position = Vector2(-3, -24)
+sprite_frames = SubResource("SpriteFrames_yb15u")
+animation = &"love"
+autoplay = "love"
+frame_progress = 0.70726997
