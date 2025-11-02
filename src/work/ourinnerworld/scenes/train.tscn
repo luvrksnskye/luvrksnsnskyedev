@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=4 uid="uid://bj3fggwm2s0f"]
+[gd_scene load_steps=45 format=4 uid="uid://bj3fggwm2s0f"]
 
 [ext_resource type="Texture2D" uid="uid://bq4rq7pa70iea" path="res://assets/tilesets/DW_traininterior.png" id="1_2eoy7"]
 [ext_resource type="Texture2D" uid="uid://ccw2ymttb6km6" path="res://assets/bg/traing_bg.png" id="2_wec4s"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dbu3nhjymm7wd" path="res://scenes/balloon.tscn" id="11_f6hb7"]
 [ext_resource type="PackedScene" uid="uid://yha8bll82en0" path="res://scenes/skye.tscn" id="13_bbvoe"]
 [ext_resource type="Script" uid="uid://853stqn3ibvf" path="res://scripts/skye.gd" id="14_1kvv8"]
+[ext_resource type="Script" uid="uid://0ruu4hormuji" path="res://scripts/sounds_and_music.gd" id="14_r2kyi"]
 [ext_resource type="PackedScene" uid="uid://dy8ag3xcjdrgl" path="res://scenes/makomi.tscn" id="15_risb3"]
 [ext_resource type="Script" uid="uid://bpkxt5h0uq72n" path="res://scripts/makomi.gd" id="16_5wkan"]
 [ext_resource type="Script" uid="uid://xgyp8lq3fmw8" path="res://scripts/them.gd" id="17_5wkan"]
@@ -691,29 +692,6 @@ collision_base_size = 128.0
 visibility_rect = Rect2(-500, -200, 200, 200)
 process_material = SubResource("ParticleProcessMaterial_wec4s")
 
-[node name="Ambience" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("6_2eoy7")
-volume_db = -28.311
-autoplay = true
-parameters/looping = true
-
-[node name="Sfx" type="AudioStreamPlayer" parent="Ambience"]
-stream = ExtResource("9_f6hb7")
-volume_db = -38.81
-autoplay = true
-parameters/looping = true
-script = ExtResource("9_qbmep")
-
-[node name="MinuteTimer" type="Timer" parent="Ambience"]
-wait_time = 10.0
-autostart = true
-
-[node name="bgm" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("9_3ri2e")
-volume_db = 0.36
-autoplay = true
-parameters/looping = true
-
 [node name="SKYE" parent="." instance=ExtResource("13_bbvoe")]
 z_index = 10
 position = Vector2(1133, 52)
@@ -745,3 +723,29 @@ position = Vector2(329, 170)
 
 [node name="ExampleBalloon" parent="Node2D" instance=ExtResource("11_f6hb7")]
 layer = 500
+
+[node name="music" type="Node2D" parent="."]
+script = ExtResource("14_r2kyi")
+
+[node name="Sfx" type="AudioStreamPlayer" parent="music"]
+stream = ExtResource("9_f6hb7")
+volume_db = -38.81
+autoplay = true
+parameters/looping = true
+script = ExtResource("9_qbmep")
+
+[node name="MinuteTimer" type="Timer" parent="music"]
+wait_time = 10.0
+autostart = true
+
+[node name="Ambience" type="AudioStreamPlayer" parent="music"]
+stream = ExtResource("6_2eoy7")
+volume_db = -28.311
+autoplay = true
+parameters/looping = true
+
+[node name="bgm" type="AudioStreamPlayer" parent="music"]
+stream = ExtResource("9_3ri2e")
+volume_db = 0.36
+autoplay = true
+parameters/looping = true
