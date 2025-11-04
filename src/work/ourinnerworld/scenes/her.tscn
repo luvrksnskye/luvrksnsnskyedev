@@ -1,13 +1,14 @@
-[gd_scene load_steps=18 format=4 uid="uid://bvjii51s7sipn"]
+[gd_scene load_steps=25 format=4 uid="uid://bvjii51s7sipn"]
 
 [ext_resource type="Texture2D" uid="uid://do7w5bi5rms11" path="res://assets/bg/!NH_bedhoard.png" id="1_lwl7x"]
 [ext_resource type="Script" uid="uid://drfjsqnfsl0jh" path="res://scripts/movement.gd" id="1_rgohs"]
-[ext_resource type="AudioStream" uid="uid://dph2nf2xoda1r" path="res://music/nhsus_outside.ogg" id="1_y8ilm"]
+[ext_resource type="AudioStream" uid="uid://bg421c4rsy646" path="res://music/nhsus_outside.ogg" id="1_y8ilm"]
 [ext_resource type="PackedScene" uid="uid://cw2jln7ua3mfs" path="res://scenes/Player.tscn" id="3_gjb2v"]
 [ext_resource type="Texture2D" uid="uid://bq4rq7pa70iea" path="res://assets/tilesets/DW_traininterior.png" id="4_132yv"]
 [ext_resource type="PackedScene" uid="uid://dbu3nhjymm7wd" path="res://scenes/balloon.tscn" id="5_1gruc"]
 [ext_resource type="Script" uid="uid://bd1ua5sb22snc" path="res://scripts/her.gd" id="7_0xtj6"]
 [ext_resource type="Texture2D" uid="uid://uhs3p7jav7gf" path="res://assets/characters/DW_unknown.png" id="8_r8qhe"]
+[ext_resource type="Shader" uid="uid://bl0xqdcy3tj2p" path="res://assets/styles/grayscale.gdshader" id="9_kjnmu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rgohs"]
 texture = ExtResource("4_132yv")
@@ -19,6 +20,10 @@ texture = ExtResource("4_132yv")
 [sub_resource type="TileSet" id="TileSet_1gruc"]
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_rgohs")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kjnmu"]
+shader = ExtResource("9_kjnmu")
+shader_parameter/grayscale_amount = 1.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1gruc"]
 size = Vector2(91.25, 20)
@@ -92,6 +97,30 @@ _data = {
 &"camera_up": SubResource("Animation_0xtj6")
 }
 
+[sub_resource type="Curve" id="Curve_kjnmu"]
+_data = [Vector2(0, 0.8455533), 0.0, 0.0, 0, 0, Vector2(0.5779569, 0.61314774), -0.7233945, -0.7233945, 0, 0, Vector2(1, 0), -2.71123, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_33hiq"]
+curve = SubResource("Curve_kjnmu")
+
+[sub_resource type="Gradient" id="Gradient_3l61x"]
+offsets = PackedFloat32Array(0.49710146, 0.5304348)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_88iny"]
+gradient = SubResource("Gradient_3l61x")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_kjnmu"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(500, 1, 1)
+gravity = Vector3(45, 98, 0)
+scale_max = 4.0
+color_initial_ramp = SubResource("GradientTexture1D_88iny")
+alpha_curve = SubResource("CurveTexture_33hiq")
+turbulence_enabled = true
+
 [node name="HerStory" type="Node2D"]
 position = Vector2(-17, 55)
 script = ExtResource("1_rgohs")
@@ -106,6 +135,7 @@ tile_set = SubResource("TileSet_1gruc")
 position = Vector2(-40, 13)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+material = SubResource("ShaderMaterial_kjnmu")
 position = Vector2(350.5, 333.43756)
 scale = Vector2(0.98777175, 0.98760206)
 texture = ExtResource("1_lwl7x")
@@ -123,7 +153,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="bg" type="AudioStreamPlayer" parent="sfx&music"]
 stream = ExtResource("1_y8ilm")
-volume_db = -11.632
+volume_db = -41.053
 autoplay = true
 parameters/looping = true
 
@@ -135,6 +165,7 @@ z_index = 4
 position = Vector2(75, 567)
 
 [node name="ExampleBalloon" parent="." instance=ExtResource("5_1gruc")]
+visible = false
 
 [node name="Her" type="Area2D" parent="."]
 script = ExtResource("7_0xtj6")
@@ -152,5 +183,12 @@ animation = &"default_unknown"
 libraries = {
 &"": SubResource("AnimationLibrary_r8qhe")
 }
+
+[node name="SnowParticles" type="GPUParticles2D" parent="."]
+position = Vector2(362, 212)
+amount = 200
+lifetime = 10.0
+preprocess = 30.0
+process_material = SubResource("ParticleProcessMaterial_kjnmu")
 
 [connection signal="animation_finished" from="AnimationPlayer" to="Her" method="_on_animation_player_animation_finished"]
