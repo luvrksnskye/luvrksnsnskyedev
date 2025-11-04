@@ -1,6 +1,7 @@
-[gd_scene load_steps=45 format=4 uid="uid://bj3fggwm2s0f"]
+[gd_scene load_steps=53 format=4 uid="uid://bj3fggwm2s0f"]
 
 [ext_resource type="Texture2D" uid="uid://bq4rq7pa70iea" path="res://assets/tilesets/DW_traininterior.png" id="1_2eoy7"]
+[ext_resource type="Script" uid="uid://cd6nypnktahgt" path="res://scripts/intro.gd" id="1_txwux"]
 [ext_resource type="Texture2D" uid="uid://ccw2ymttb6km6" path="res://assets/bg/traing_bg.png" id="2_wec4s"]
 [ext_resource type="Script" uid="uid://doryjjl56ytug" path="res://scripts/parallax_background_train.gd" id="3_g7hjf"]
 [ext_resource type="PackedScene" uid="uid://cw2jln7ua3mfs" path="res://scenes/Player.tscn" id="3_uungi"]
@@ -18,6 +19,9 @@
 [ext_resource type="PackedScene" uid="uid://dy8ag3xcjdrgl" path="res://scenes/makomi.tscn" id="15_risb3"]
 [ext_resource type="Script" uid="uid://bpkxt5h0uq72n" path="res://scripts/makomi.gd" id="16_5wkan"]
 [ext_resource type="Script" uid="uid://xgyp8lq3fmw8" path="res://scripts/them.gd" id="17_5wkan"]
+[ext_resource type="PackedScene" uid="uid://cnojpcsa0s6nt" path="res://scenes/MainMenu.tscn" id="19_d8wpw"]
+[ext_resource type="Script" uid="uid://dp4cn1qly8al4" path="res://scripts/cat.gd" id="21_12qeo"]
+[ext_resource type="AudioStream" uid="uid://bhtjg5ve3s5li" path="res://music/SE_Cat_Meow.ogg" id="22_lmhll"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a1485"]
 texture = ExtResource("1_2eoy7")
@@ -323,8 +327,97 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r2kyi"]
 size = Vector2(25, 90)
 
+[sub_resource type="Animation" id="Animation_12qeo"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player/Camera2D:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -800)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CinematicAnimationPlayer/UI/Logo:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CinematicAnimationPlayer/UI/Logo:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_txwux"]
+resource_name = "intro_cinematic"
+length = 9.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player/Camera2D:offset")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(3.8333333, 8.933333),
+"transitions": PackedFloat32Array(2.143547, 2.4622889),
+"update": 0,
+"values": [Vector2(0, -800), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CinematicAnimationPlayer/UI/Logo:modulate")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 7.733333, 8.766666),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.38170326, 0.38170323, 0.38170323, 1), Color(0, 0, 0, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CinematicAnimationPlayer/UI/Logo:visible")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 8.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lmhll"]
+_data = {
+&"RESET": SubResource("Animation_12qeo"),
+&"intro_cinematic": SubResource("Animation_txwux")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_txwux"]
+size = Vector2(62.5, 54)
+
 [node name="TRAIN_INSIDE" type="Node2D"]
 position = Vector2(-27, 106)
+script = ExtResource("1_txwux")
 metadata/_edit_vertical_guides_ = [-28.0]
 
 [node name="TileMap" type="TileMap" parent="."]
@@ -357,6 +450,14 @@ texture = ExtResource("2_wec4s")
 position = Vector2(636, 65)
 scale = Vector2(0.312317, 0.350126)
 texture = ExtResource("5_ti6s8")
+
+[node name="ColorRect" type="ColorRect" parent="TileMap/ParallaxBackground/ParallaxLayer"]
+z_index = -35
+offset_left = -1461.0
+offset_top = -3543.0
+offset_right = 3016.0
+offset_bottom = 888.0
+color = Color(0, 0, 0, 1)
 
 [node name="Train" type="TileMapLayer" parent="."]
 z_index = 1
@@ -677,10 +778,11 @@ position = Vector2(314, 56)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(-2, 28)
+offset = Vector2(0, -800)
 limit_left = 0
 limit_top = 0
 limit_right = 1380
-limit_bottom = 288
+limit_bottom = 330
 script = ExtResource("4_a1485")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="Player/Camera2D"]
@@ -691,6 +793,9 @@ texture = SubResource("GradientTexture2D_2eoy7")
 collision_base_size = 128.0
 visibility_rect = Rect2(-500, -200, 200, 200)
 process_material = SubResource("ParticleProcessMaterial_wec4s")
+
+[node name="ExampleBalloon" parent="Player/Camera2D" instance=ExtResource("11_f6hb7")]
+layer = 500
 
 [node name="SKYE" parent="." instance=ExtResource("13_bbvoe")]
 z_index = 10
@@ -718,12 +823,6 @@ z_index = 2000
 position = Vector2(767, 117)
 shape = SubResource("RectangleShape2D_r2kyi")
 
-[node name="Node2D" type="Node2D" parent="."]
-position = Vector2(329, 170)
-
-[node name="ExampleBalloon" parent="Node2D" instance=ExtResource("11_f6hb7")]
-layer = 500
-
 [node name="music" type="Node2D" parent="."]
 script = ExtResource("14_r2kyi")
 
@@ -749,3 +848,39 @@ stream = ExtResource("9_3ri2e")
 volume_db = 0.36
 autoplay = true
 parameters/looping = true
+
+[node name="CinematicAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_lmhll")
+}
+
+[node name="UI" type="CanvasLayer" parent="CinematicAnimationPlayer"]
+follow_viewport_enabled = true
+
+[node name="Logo" parent="CinematicAnimationPlayer/UI" instance=ExtResource("19_d8wpw")]
+anchors_preset = -1
+anchor_left = -0.038000003
+anchor_top = -2.0246913
+anchor_right = 1.065625
+anchor_bottom = -1.9231112
+offset_left = 16.320002
+offset_top = 6.1035156e-05
+offset_right = 16.0
+offset_bottom = 584.176
+grow_vertical = 1
+size_flags_vertical = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="Area2D2" type="Area2D" parent="."]
+script = ExtResource("21_12qeo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D2"]
+z_index = 6
+position = Vector2(408, 75)
+shape = SubResource("RectangleShape2D_txwux")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Area2D2"]
+stream = ExtResource("22_lmhll")
+volume_db = 8.895
+
+[connection signal="animation_finished" from="CinematicAnimationPlayer" to="." method="_on_cinematic_finished"]

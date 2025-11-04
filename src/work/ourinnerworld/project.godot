@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="ourinnerworld"
-run/main_scene="uid://bj3fggwm2s0f"
+run/main_scene="uid://bvjii51s7sipn"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 boot_splash/fullsize=false
 boot_splash/use_filter=false
-config/icon="res://icon.svg"
+config/icon="uid://cry1m1gr88opy"
 
 [autoload]
 
@@ -42,7 +42,7 @@ theme/custom_font="uid://bmbupgmrbwkn2"
 
 [internationalization]
 
-locale/translations_pot_files=PackedStringArray("res://assets/dialogues/makomi&skye.dialogue")
+locale/translations_pot_files=PackedStringArray("res://assets/dialogues/makomi&skye.dialogue", "res://assets/dialogues/cat_I.dialogue", "res://assets/dialogues/cat_II.dialogue", "res://assets/dialogues/cat_III.dialogue", "res://assets/dialogues/peaceafterall.dialogue", "res://assets/dialogues/conversation.dialogue")
 
 [rendering]
 

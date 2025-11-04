@@ -45,7 +45,6 @@ var mutation_cooldown: Timer = Timer.new()
 @onready var talk_sound_3: AudioStreamPlayer = $"talk-sound3"
 @onready var talk_sound_4: AudioStreamPlayer = $"talk-sound4"
 @onready var talk_sound_5: AudioStreamPlayer = $"talk-sound5"
-@onready var indicator: TextureRect = $Balloon/Indicator
 @onready var responses_menu: DialogueResponsesMenu = %ResponsesMenu
 
 var talk_sounds: Array[AudioStreamPlayer] = []
@@ -175,9 +174,10 @@ func apply_dialogue_line() -> void:
 	balloon.grab_focus()
 
 	var is_narration = dialogue_line.character.to_upper() == "NONE"
+	var is_mystery = dialogue_line.character == "???"
 	
 	character_label.visible = not dialogue_line.character.is_empty() and not is_narration
-	portrait.visible = not is_narration
+	portrait.visible = not is_narration and not is_mystery
 	
 	var character_container = balloon.get_node("MarginContainer2")
 	var portrait_container = balloon.get_node("MarginContainer3")
@@ -185,7 +185,7 @@ func apply_dialogue_line() -> void:
 	if character_container:
 		character_container.visible = not is_narration
 	if portrait_container:
-		portrait_container.visible = not is_narration
+		portrait_container.visible = not is_narration and not is_mystery
 	
 	if not is_narration:
 		character_label.text = tr(dialogue_line.character, "dialogue")
@@ -289,6 +289,12 @@ func _reset_sound_system():
 	current_sound_index = 0
 	last_sound_time = 0.0
 	
+	# Ajustar pitch base según el personaje
+	if dialogue_line.character == "???":
+		base_pitch = 0.75  # Más grave pero suave para personaje misterioso
+	else:
+		base_pitch = 1.0  # Normal para otros personajes
+	
 	for sound in talk_sounds:
 		if sound.playing:
 			sound.stop()
@@ -296,6 +302,11 @@ func _reset_sound_system():
 func _configure_typing_speed():
 	var typing_speed = 0.02  # Slightly faster for better flow
 	sound_interval = 0.03
+	
+	# Velocidad más lenta y suave para "???"
+	if dialogue_line.character == "???":
+		typing_speed = 0.035  # Más lento para efecto pacífico
+		sound_interval = 0.05  # Más espaciado para suavidad
 	
 	if dialogue_label.has_method("set_typing_speed"):
 		dialogue_label.set_typing_speed(typing_speed)
@@ -310,14 +321,25 @@ func _play_smooth_typing_sound():
 	var current_time = Time.get_ticks_msec() / 1000.0
 	
 	if (current_time - last_sound_time) >= sound_interval:
-		# More subtle pitch and volume variations for smoother sound
-		var pitch_offset = randf_range(-pitch_variation, pitch_variation)
+		# Ajustar variación según el personaje
+		var current_pitch_variation = pitch_variation
+		var pitch_range_min = 0.85
+		var pitch_range_max = 1.15
+		var volume_adjustment = 0.0
+		
+		if dialogue_line.character == "???":
+			current_pitch_variation = 0.03  # Muy poca variación para voz suave y uniforme
+			pitch_range_min = 0.72
+			pitch_range_max = 0.78  # Rango muy estrecho para mantener tono pacífico
+			volume_adjustment = -2.0  # Un poco más suave
+		
+		var pitch_offset = randf_range(-current_pitch_variation, current_pitch_variation)
 		var volume_offset = randf_range(-volume_variation, volume_variation)
-		var final_pitch = clamp(base_pitch + pitch_offset, 0.85, 1.15)
+		var final_pitch = clamp(base_pitch + pitch_offset, pitch_range_min, pitch_range_max)
 		
 		var current_audio = talk_sounds[current_sound_index]
 		current_audio.pitch_scale = final_pitch
-		current_audio.volume_db = clamp(-10.0 + volume_offset, -12.0, -8.0)
+		current_audio.volume_db = clamp(-10.0 + volume_offset + volume_adjustment, -14.0, -8.0)
 		
 		# Use a smoother fade in/out for each sound
 		if current_audio.has_method("set_stream_volume"):
@@ -399,8 +421,13 @@ func _on_dialogue_label_spoke(letter: String, letter_index: int, speed: float) -
 	# Skip spaces with reduced volume for smoother flow
 	if letter == " ":
 		var space_audio = talk_sounds[current_sound_index]
-		space_audio.pitch_scale = base_pitch * 0.95
-		space_audio.volume_db = -16.0
+		var space_pitch = base_pitch * 0.95
+		var space_volume = -16.0
+		if dialogue_line.character == "???":
+			space_pitch = base_pitch * 0.99  # Casi sin variación para voz pacífica
+			space_volume = -18.0  # Más suave en los espacios
+		space_audio.pitch_scale = space_pitch
+		space_audio.volume_db = space_volume
 		space_audio.play()
 		current_sound_index = (current_sound_index + 1) % talk_sounds.size()
 		return

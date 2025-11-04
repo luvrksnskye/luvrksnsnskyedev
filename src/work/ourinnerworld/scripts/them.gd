@@ -3,7 +3,7 @@ extends Area2D
 const TRAIN_DIALOGUE = preload("res://assets/dialogues/makomi&skye.dialogue")
 
 var dialogue_triggered = false
-@onready var dialogue_balloon = $"../Node2D/ExampleBalloon"
+@onready var dialogue_balloon = $"../Player/Camera2D/ExampleBalloon"
 @onready var animation_player = $AnimationPlayer
 
 func _ready():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://cw2jln7ua3mfs"]
+[gd_scene load_steps=55 format=3 uid="uid://cw2jln7ua3mfs"]
 
 [ext_resource type="Script" uid="uid://disdo65w2yh0y" path="res://scripts/character_body_2d.gd" id="1_ddoul"]
 [ext_resource type="Texture2D" uid="uid://dps5ronsxkxhf" path="res://assets/player/RAINY-SPRITES.png" id="1_q3lat"]
@@ -57,6 +57,10 @@ region = Rect2(0, 0, 64, 78)
 [sub_resource type="AtlasTexture" id="AtlasTexture_5wa8t"]
 atlas = ExtResource("2_tok1r")
 region = Rect2(128, 0, 64, 78)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_70d11"]
+atlas = ExtResource("1_q3lat")
+region = Rect2(880, 0, 80, 96)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_p7tob"]
 atlas = ExtResource("1_q3lat")
@@ -162,6 +166,14 @@ animations = [{
 }],
 "loop": true,
 "name": &"right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_70d11")
+}],
+"loop": false,
+"name": &"sit_up",
 "speed": 5.0
 }, {
 "frames": [{
@@ -403,7 +415,7 @@ shape = SubResource("RectangleShape2D_6ysni")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_evw08")
-animation = &"idle_down"
+animation = &"sit_up"
 
 [node name="Emotions" type="AnimatedSprite2D" parent="."]
 z_index = 21
