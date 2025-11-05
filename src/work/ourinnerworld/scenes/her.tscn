@@ -153,7 +153,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="bg" type="AudioStreamPlayer" parent="sfx&music"]
 stream = ExtResource("1_y8ilm")
-volume_db = -41.053
+volume_db = -26.685
 autoplay = true
 parameters/looping = true
 
