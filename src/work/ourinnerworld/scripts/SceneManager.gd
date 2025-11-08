@@ -170,14 +170,14 @@ func _free_current_scene() -> void:
 func _instantiate_loading_screen(target_path: String) -> Node:
 	print("🔍 Intentando cargar: ", LOADING_SCENE_PATH)
 	
-	# Verificar si el archivo existe
-	if not FileAccess.file_exists(LOADING_SCENE_PATH):
-		push_error("❌ El archivo no existe: ", LOADING_SCENE_PATH)
+	# ✅ Usar ResourceLoader.exists() en lugar de FileAccess
+	if not ResourceLoader.exists(LOADING_SCENE_PATH):
+		push_error("❌ El recurso no existe o no se pudo encontrar: " + LOADING_SCENE_PATH)
 		return null
 	
 	var loading_scene = load(LOADING_SCENE_PATH)
 	if not loading_scene:
-		push_error("❌ No se pudo cargar la escena: ", LOADING_SCENE_PATH)
+		push_error("❌ No se pudo cargar la escena: " + LOADING_SCENE_PATH)
 		return null
 	
 	print("✅ Escena LoadingScreen cargada, instanciando...")
@@ -189,7 +189,6 @@ func _instantiate_loading_screen(target_path: String) -> Node:
 	
 	print("✅ LoadingScreen instanciado, configurando target_path...")
 	
-	# Configurar el LoadingScreen con la escena objetivo
 	if instance.has_method("set_target_scene"):
 		instance.set_target_scene(target_path)
 		print("✅ Usó método set_target_scene()")
@@ -199,9 +198,8 @@ func _instantiate_loading_screen(target_path: String) -> Node:
 	else:
 		push_error("❌ LoadingScreen no tiene next_scene_path ni set_target_scene()")
 	
-	# Añadir al árbol
 	print("🌳 Añadiendo LoadingScreen al árbol de escenas...")
-	get_tree().get_root().add_child(instance)
+	get_tree().root.add_child(instance)
 	get_tree().current_scene = instance
 	
 	print("✅ LoadingScreen completamente configurado para: ", target_path)
