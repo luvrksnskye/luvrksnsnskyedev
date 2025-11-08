@@ -190,3 +190,4 @@ libraries = {
 autoplay = "intro"
 
 [node name="Root" parent="." instance=ExtResource("4_ow34m")]
+position = Vector2(0, -33)
