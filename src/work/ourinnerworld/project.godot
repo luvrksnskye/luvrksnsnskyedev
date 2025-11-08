@@ -27,12 +27,13 @@ ControlsLock="*res://singletons/ControlsLock.gd"
 
 [display]
 
-window/size/viewport_width=640
 window/size/mode=2
+window/size/initial_position_type=0
 window/size/window_width_override=1280
 window/size/window_height_override=720
-window/stretch/scale=2.06
-window/dpi/allow_hidpi=false
+window/stretch/mode="canvas_items"
+window/stretch/scale=2.48
+window/stretch/scale_mode="integer"
 window/name="ourinnerworld_site"
 
 [editor_plugins]
