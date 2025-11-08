@@ -10,7 +10,7 @@
 [ext_resource type="AudioStream" uid="uid://c3kx4uldx4aww" path="res://music/SE_TRAIN.ogg" id="6_2eoy7"]
 [ext_resource type="Texture2D" uid="uid://s6jwj343yybg" path="res://assets/tilesets/lights-train.png" id="6_f6hb7"]
 [ext_resource type="AudioStream" uid="uid://xqsmt02iurjw" path="res://music/nh_girlheaven.ogg" id="9_3ri2e"]
-[ext_resource type="PackedScene" uid="uid://dbu3nhjymm7wd" path="res://addons/dialogue_manager/example_balloon/example_balloon.tscn" id="9_0504k"]
+[ext_resource type="PackedScene" uid="uid://dbu3nhjymm7wd" path="res://scenes/balloon.tscn" id="9_0504k"]
 [ext_resource type="AudioStream" uid="uid://df6ywmxyxr62d" path="res://music/TRAIN_whistle.ogg" id="9_f6hb7"]
 [ext_resource type="Script" uid="uid://dxjxd4rhrh2o4" path="res://scripts/train_sfx.gd" id="9_qbmep"]
 [ext_resource type="PackedScene" uid="uid://yha8bll82en0" path="res://scenes/skye.tscn" id="13_bbvoe"]
@@ -916,9 +916,9 @@ anchor_top = -2.0246913
 anchor_right = 1.065625
 anchor_bottom = -1.9231112
 offset_left = 16.320002
-offset_top = 6.1035156e-05
+offset_top = -24.0
 offset_right = 16.0
-offset_bottom = 584.176
+offset_bottom = 560.176
 grow_vertical = 1
 size_flags_vertical = 0
 metadata/_edit_use_anchors_ = true
