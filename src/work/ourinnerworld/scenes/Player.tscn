@@ -134,7 +134,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vlldt")
 }],
-"loop": true,
+"loop": false,
 "name": &"idle_sleep",
 "speed": 5.0
 }, {
@@ -415,10 +415,10 @@ shape = SubResource("RectangleShape2D_6ysni")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_evw08")
-animation = &"sit_up"
+animation = &"idle_sleep"
 
 [node name="Emotions" type="AnimatedSprite2D" parent="."]
 z_index = 21
 position = Vector2(-2, -31)
 sprite_frames = SubResource("SpriteFrames_hqjia")
-animation = &"nerves_bubble"
+animation = &"sleep_bubble"

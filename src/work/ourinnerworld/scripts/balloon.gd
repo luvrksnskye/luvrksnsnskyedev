@@ -45,7 +45,8 @@ var mutation_cooldown: Timer = Timer.new()
 @onready var talk_sound_3: AudioStreamPlayer = $"talk-sound3"
 @onready var talk_sound_4: AudioStreamPlayer = $"talk-sound4"
 @onready var talk_sound_5: AudioStreamPlayer = $"talk-sound5"
-@onready var responses_menu: DialogueResponsesMenu = %ResponsesMenu
+@onready var responses_menu = %ResponsesMenu
+
 
 var talk_sounds: Array[AudioStreamPlayer] = []
 var current_sound_index: int = 0

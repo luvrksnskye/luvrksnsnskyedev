@@ -1,0 +1,13 @@
+~ start
+NONE: Do you want to sit down?
+- YES 
+	NONE: It's time to rest your legs.
+	=> sleep_sequence
+	
+- NO 
+	NONE: Maybe later.
+	=> END
+
+~ sleep_sequence
+NONE: Sometimes it is necessary to rest after a long trip.
+=> END

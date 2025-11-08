@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=4 uid="uid://bj3fggwm2s0f"]
+[gd_scene load_steps=58 format=4 uid="uid://bj3fggwm2s0f"]
 
 [ext_resource type="Texture2D" uid="uid://bq4rq7pa70iea" path="res://assets/tilesets/DW_traininterior.png" id="1_2eoy7"]
 [ext_resource type="Script" uid="uid://cd6nypnktahgt" path="res://scripts/intro.gd" id="1_txwux"]
@@ -10,9 +10,9 @@
 [ext_resource type="AudioStream" uid="uid://c3kx4uldx4aww" path="res://music/SE_TRAIN.ogg" id="6_2eoy7"]
 [ext_resource type="Texture2D" uid="uid://s6jwj343yybg" path="res://assets/tilesets/lights-train.png" id="6_f6hb7"]
 [ext_resource type="AudioStream" uid="uid://xqsmt02iurjw" path="res://music/nh_girlheaven.ogg" id="9_3ri2e"]
+[ext_resource type="PackedScene" uid="uid://dbu3nhjymm7wd" path="res://addons/dialogue_manager/example_balloon/example_balloon.tscn" id="9_0504k"]
 [ext_resource type="AudioStream" uid="uid://df6ywmxyxr62d" path="res://music/TRAIN_whistle.ogg" id="9_f6hb7"]
 [ext_resource type="Script" uid="uid://dxjxd4rhrh2o4" path="res://scripts/train_sfx.gd" id="9_qbmep"]
-[ext_resource type="PackedScene" uid="uid://dbu3nhjymm7wd" path="res://scenes/balloon.tscn" id="11_f6hb7"]
 [ext_resource type="PackedScene" uid="uid://yha8bll82en0" path="res://scenes/skye.tscn" id="13_bbvoe"]
 [ext_resource type="Script" uid="uid://853stqn3ibvf" path="res://scripts/skye.gd" id="14_1kvv8"]
 [ext_resource type="Script" uid="uid://0ruu4hormuji" path="res://scripts/sounds_and_music.gd" id="14_r2kyi"]
@@ -22,6 +22,8 @@
 [ext_resource type="PackedScene" uid="uid://cnojpcsa0s6nt" path="res://scenes/MainMenu.tscn" id="19_d8wpw"]
 [ext_resource type="Script" uid="uid://dp4cn1qly8al4" path="res://scripts/cat.gd" id="21_12qeo"]
 [ext_resource type="AudioStream" uid="uid://bhtjg5ve3s5li" path="res://music/SE_Cat_Meow.ogg" id="22_lmhll"]
+[ext_resource type="Script" uid="uid://5d1curkitl6q" path="res://scripts/rest_area.gd" id="23_0504k"]
+[ext_resource type="AudioStream" uid="uid://x3alky7obiyg" path="res://music/meether.ogg" id="24_8vti3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a1485"]
 texture = ExtResource("1_2eoy7")
@@ -415,6 +417,54 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_txwux"]
 size = Vector2(62.5, 54)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lmhll"]
+size = Vector2(47.5, 71.5)
+
+[sub_resource type="Animation" id="Animation_0504k"]
+resource_name = "sleep-animation"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 4.9333334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(136, 44), Vector2(136, 44)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player/AnimatedSprite2D:animation")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [&"idle_sleep", &"idle_sleep"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Player/AnimatedSprite2D:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8vti3"]
+_data = {
+&"sleep-animation": SubResource("Animation_0504k")
+}
+
 [node name="TRAIN_INSIDE" type="Node2D"]
 position = Vector2(-27, 106)
 script = ExtResource("1_txwux")
@@ -774,16 +824,21 @@ height = 1235.0
 
 [node name="Player" parent="." groups=["Player"] instance=ExtResource("3_uungi")]
 z_index = 50
-position = Vector2(314, 56)
+position = Vector2(136, 44)
+
+[node name="AnimatedSprite2D" parent="Player" index="1"]
+position = Vector2(2, 1)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-position = Vector2(-2, 28)
+position = Vector2(-56, 28)
 offset = Vector2(0, -800)
 limit_left = 0
 limit_top = 0
 limit_right = 1380
 limit_bottom = 330
 script = ExtResource("4_a1485")
+
+[node name="ExampleBalloon" parent="Player/Camera2D" instance=ExtResource("9_0504k")]
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="Player/Camera2D"]
 z_index = 20
@@ -793,9 +848,6 @@ texture = SubResource("GradientTexture2D_2eoy7")
 collision_base_size = 128.0
 visibility_rect = Rect2(-500, -200, 200, 200)
 process_material = SubResource("ParticleProcessMaterial_wec4s")
-
-[node name="ExampleBalloon" parent="Player/Camera2D" instance=ExtResource("11_f6hb7")]
-layer = 500
 
 [node name="SKYE" parent="." instance=ExtResource("13_bbvoe")]
 z_index = 10
@@ -828,7 +880,7 @@ script = ExtResource("14_r2kyi")
 
 [node name="Sfx" type="AudioStreamPlayer" parent="music"]
 stream = ExtResource("9_f6hb7")
-volume_db = -38.81
+volume_db = -31.227
 autoplay = true
 parameters/looping = true
 script = ExtResource("9_qbmep")
@@ -883,4 +935,41 @@ shape = SubResource("RectangleShape2D_txwux")
 stream = ExtResource("22_lmhll")
 volume_db = 8.895
 
+[node name="Rest" type="Area2D" parent="."]
+script = ExtResource("23_0504k")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Rest"]
+z_index = 1000
+position = Vector2(137, 72)
+shape = SubResource("RectangleShape2D_lmhll")
+
+[node name="CinematicSleep" type="AnimationPlayer" parent="Rest"]
+root_node = NodePath("../..")
+libraries = {
+&"": SubResource("AnimationLibrary_8vti3")
+}
+
+[node name="music-cinematic" type="AudioStreamPlayer" parent="Rest"]
+stream = ExtResource("24_8vti3")
+volume_db = -26.0
+parameters/looping = true
+
+[node name="Animation_fade" type="CanvasLayer" parent="."]
+
+[node name="FadeRect" type="ColorRect" parent="Animation_fade"]
+visible = false
+anchors_preset = -1
+anchor_left = -0.064
+anchor_top = -0.049000002
+anchor_right = 1.483
+anchor_bottom = 1.289
+offset_left = -89.03999
+offset_top = -120.248
+offset_right = 96.880005
+offset_bottom = -0.2720337
+color = Color(0, 0, 0, 1)
+
 [connection signal="animation_finished" from="CinematicAnimationPlayer" to="." method="_on_cinematic_finished"]
+[connection signal="animation_finished" from="Rest/CinematicSleep" to="Rest" method="_on_cinematic_sleep_animation_finished"]
+
+[editable path="Player"]

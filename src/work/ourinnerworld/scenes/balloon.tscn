@@ -131,15 +131,15 @@ seconds_per_pause_step = 0.1
 [node name="ResponsesMenu" type="VBoxContainer" parent="Balloon" node_paths=PackedStringArray("response_template")]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
+anchors_preset = -1
+anchor_left = 0.68200004
 anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -156.0
-offset_top = 16.5
-offset_right = -44.0
-offset_bottom = 43.5
+anchor_bottom = 0.70000005
+offset_left = 43.20996
+offset_top = 143.0
+offset_right = -34.0
+offset_bottom = 74.39996
 grow_horizontal = 0
 grow_vertical = 2
 size_flags_vertical = 8
@@ -150,6 +150,7 @@ response_template = NodePath("ResponseExample")
 
 [node name="ResponseExample" type="Button" parent="Balloon/ResponsesMenu"]
 layout_mode = 2
+size_flags_vertical = 4
 theme = ExtResource("5_8ukbd")
 theme_type_variation = &"FlatButton"
 text = "Response example"

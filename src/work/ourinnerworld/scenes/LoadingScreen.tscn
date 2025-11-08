@@ -1,7 +1,6 @@
-[gd_scene load_steps=18 format=3 uid="uid://i1nir8yc1d0l"]
+[gd_scene load_steps=17 format=3 uid="uid://i1nir8yc1d0l"]
 
 [ext_resource type="Script" uid="uid://bsprksbo556u1" path="res://scripts/LoadingScreen.gd" id="1_jqyhx"]
-[ext_resource type="PackedScene" uid="uid://gimp1gl0ji4b" path="res://scenes/rain_scene.tscn" id="2_3gg4b"]
 [ext_resource type="Texture2D" uid="uid://7antrnlsvpmc" path="res://assets/ui/LOADING_SCREEN_CAT_RAINY.png" id="2_814mh"]
 [ext_resource type="FontFile" uid="uid://bmbupgmrbwkn2" path="res://assets/fonts/OMORI_GAME2.ttf" id="2_ij0l4"]
 [ext_resource type="Texture2D" uid="uid://ddxe05tre21qx" path="res://assets/ui/Skye.png" id="3_814mh"]
@@ -93,52 +92,54 @@ animations = [{
 }]
 
 [node name="Control" type="Control"]
+z_index = 4096
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -60.0
+offset_bottom = -153.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_jqyhx")
 
-[node name="GPUParticles2D" parent="." instance=ExtResource("2_3gg4b")]
-z_index = 15
-position = Vector2(313, 5)
-amount = 250
-texture = null
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="BlackOverlay" type="ColorRect" parent="."]
-layout_mode = 1
+[node name="BlackOverlay" type="ColorRect" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -246.0
+offset_top = -148.0
+offset_right = 270.0
+offset_bottom = 216.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="LOADING_IMAGE" type="AnimatedSprite2D" parent="BlackOverlay"]
-position = Vector2(328, 158)
+[node name="LOADING_IMAGE" type="AnimatedSprite2D" parent="CanvasLayer/BlackOverlay"]
+position = Vector2(427, 325.00003)
 scale = Vector2(2.64, 2.50847)
 sprite_frames = SubResource("SpriteFrames_27b2i")
 animation = &"loading"
 autoplay = "loading"
-frame_progress = 0.565848
+frame_progress = 0.2504268
 
-[node name="LoadingContainer" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -190.0
-offset_top = -90.0
-offset_right = 190.0
-offset_bottom = 90.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="LoadingContainer" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -118.0
+offset_right = 43.0
+offset_bottom = 14.0
+grow_horizontal = 0
+grow_vertical = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="LoadingContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/LoadingContainer"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -152,12 +153,12 @@ offset_bottom = 66.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="LoadingContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/LoadingContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="LoadingIcon" type="AnimatedSprite2D" parent="LoadingContainer/MarginContainer/HBoxContainer"]
+[node name="LoadingIcon" type="AnimatedSprite2D" parent="CanvasLayer/LoadingContainer/MarginContainer/HBoxContainer"]
 position = Vector2(-27.5, 20.5)
 scale = Vector2(0.301389, 0.279167)
 sprite_frames = SubResource("SpriteFrames_amhhn")
@@ -165,7 +166,7 @@ animation = &"animated_icon"
 autoplay = "animated_icon"
 frame_progress = 0.961693
 
-[node name="LoadingLabel" type="Label" parent="LoadingContainer/MarginContainer/HBoxContainer"]
+[node name="LoadingLabel" type="Label" parent="CanvasLayer/LoadingContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(1, 1, 1, 1)

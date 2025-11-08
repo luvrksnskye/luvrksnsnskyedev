@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://ihylq2uxsd1s"
+path="res://.godot/imported/rest_after.dialogue-149c3b952093a2079405ec5a91e8fdb3.tres"
+
+[deps]
+
+source_file="res://assets/dialogues/rest_after.dialogue"
+dest_files=["res://.godot/imported/rest_after.dialogue-149c3b952093a2079405ec5a91e8fdb3.tres"]
+
+[params]
+
+defaults=true
