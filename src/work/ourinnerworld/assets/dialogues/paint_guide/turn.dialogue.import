@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://crtbg1qdwtmmx"
+path="res://.godot/imported/turn.dialogue-b998b5ff9eb15c97387b2c65534de46d.tres"
+
+[deps]
+
+source_file="res://assets/dialogues/paint_guide/turn.dialogue"
+dest_files=["res://.godot/imported/turn.dialogue-b998b5ff9eb15c97387b2c65534de46d.tres"]
+
+[params]
+
+defaults=true

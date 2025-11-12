@@ -1,0 +1,312 @@
+[gd_scene load_steps=22 format=3 uid="uid://blor36s6vy1rx"]
+
+[ext_resource type="Script" uid="uid://bje8g1kau73ee" path="res://scripts/parallax_background_canvas.gd" id="1_0rucn"]
+[ext_resource type="Texture2D" uid="uid://ccw2ymttb6km6" path="res://assets/bg/traing_bg.png" id="1_emgrw"]
+[ext_resource type="Script" uid="uid://dwwn41o2x3u1m" path="res://scripts/canvas_makomi_INTRO.gd" id="1_l3uwg"]
+[ext_resource type="Texture2D" uid="uid://css3w40ytq5h3" path="res://assets/bg/star_a.png" id="2_vjdvf"]
+[ext_resource type="Texture2D" uid="uid://cl5ae4kovm10b" path="res://assets/ui/canvas.png" id="4_tre8k"]
+[ext_resource type="Theme" uid="uid://ba4s4eln16e7s" path="res://assets/styles/button.tres" id="5_iev8n"]
+[ext_resource type="Script" uid="uid://cdfdrwynmvpjn" path="res://scripts/painter_image.gd" id="5_jxhjo"]
+[ext_resource type="Texture2D" uid="uid://cywg53trb47id" path="res://assets/ui/dialogue_box-nameinput.png" id="6_jxhjo"]
+[ext_resource type="Texture2D" uid="uid://c6p7xunmgl2r4" path="res://assets/ui/dialogue_box_face.png" id="8_bbk8y"]
+[ext_resource type="Script" uid="uid://1phhfmqg50c0" path="res://scripts/help.gd" id="9_1ubji"]
+[ext_resource type="Script" uid="uid://bqfrpac0qqy4p" path="res://scripts/colors_paint.gd" id="9_60gon"]
+[ext_resource type="PackedScene" uid="uid://dbu3nhjymm7wd" path="res://addons/dialogue_manager/example_balloon/example_balloon.tscn" id="10_juvvh"]
+[ext_resource type="AudioStream" uid="uid://dw6tqnd4olfyq" path="res://music/continue.ogg" id="11_uqbd1"]
+[ext_resource type="AudioStream" uid="uid://c6vu6ckd32kvo" path="res://music/neighborhood_spring.ogg" id="12_meqq8"]
+[ext_resource type="Shader" uid="uid://bjx20ff3hipra" path="res://assets/styles/paint.gdshader" id="12_ofuo6"]
+[ext_resource type="AudioStream" uid="uid://d0s1q612e4bj3" path="res://music/painting.wav" id="16_tncq5"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bbk8y"]
+texture = ExtResource("6_jxhjo")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_60gon"]
+texture = ExtResource("6_jxhjo")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_juvvh"]
+texture = ExtResource("6_jxhjo")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uqbd1"]
+texture = ExtResource("8_bbk8y")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l3uwg"]
+shader = ExtResource("12_ofuo6")
+
+[node name="Screen" type="Control"]
+layout_mode = 3
+anchor_left = 0.010000001
+anchor_top = 0.054
+anchor_right = 1.0250001
+anchor_bottom = 1.312
+offset_left = -11.52
+offset_top = -34.992
+offset_right = 0.19995117
+offset_bottom = -0.17602539
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_l3uwg")
+
+[node name="Makomi_Dialogue" type="CanvasLayer" parent="."]
+
+[node name="ExampleBalloon" parent="Makomi_Dialogue" instance=ExtResource("10_juvvh")]
+
+[node name="MainBackground" type="CanvasLayer" parent="."]
+
+[node name="Sprite2D2" type="Sprite2D" parent="MainBackground"]
+z_index = -3
+position = Vector2(289, 189.62503)
+scale = Vector2(2.0375001, 2.1642854)
+texture = ExtResource("1_emgrw")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="MainBackground/Sprite2D2"]
+color = Color(0.8605873, 0.7714949, 0.8039122, 1)
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+layer = 1000
+script = ExtResource("1_0rucn")
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(800, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+position = Vector2(277.99997, 180.00002)
+scale = Vector2(0.4965787, 0.5251889)
+texture = ExtResource("2_vjdvf")
+
+[node name="Canvas" type="CanvasLayer" parent="."]
+layer = 2000
+
+[node name="CANVAS" type="Sprite2D" parent="Canvas"]
+position = Vector2(335, 273)
+scale = Vector2(0.2215, 0.20515)
+texture = ExtResource("4_tre8k")
+
+[node name="PainterImage" type="Sprite2D" parent="Canvas"]
+position = Vector2(339, 223)
+script = ExtResource("5_jxhjo")
+
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 20000
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+z_index = 1000
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -153.0
+offset_top = 16.0
+offset_right = -13.0
+offset_bottom = 52.0
+grow_horizontal = 0
+
+[node name="HELP" type="Button" parent="UI/MarginContainer"]
+texture_filter = 1
+layout_mode = 2
+theme = ExtResource("5_iev8n")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 35
+theme_override_styles/normal = SubResource("StyleBoxTexture_bbk8y")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_60gon")
+theme_override_styles/hover = SubResource("StyleBoxTexture_juvvh")
+text = "ADVICE"
+script = ExtResource("9_1ubji")
+
+[node name="MarginContainer2" type="MarginContainer" parent="UI"]
+offset_left = 7.0
+offset_top = 11.0
+offset_right = 173.0
+offset_bottom = 199.0
+
+[node name="Panel" type="Panel" parent="UI/MarginContainer2"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_uqbd1")
+
+[node name="HSlider" type="HSlider" parent="UI/MarginContainer2/Panel"]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = 148.0
+offset_bottom = 31.0
+
+[node name="Label" type="Label" parent="UI/MarginContainer2/Panel"]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 24.0
+offset_right = 130.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 25
+text = "Brush Size"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="UI/MarginContainer2/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -51.0
+offset_top = -24.0
+offset_right = 67.0
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 5
+script = ExtResource("9_60gon")
+
+[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+color = Color(1, 0.53999996, 0.53999996, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+color = Color(1, 0.6685, 0.49, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+color = Color(1, 1, 0.6366402, 1)
+
+[node name="ColorRect4" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+color = Color(0.80946815, 1, 1, 1)
+
+[node name="ColorRect5" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+color = Color(0.81178766, 0.7172856, 1, 1)
+
+[node name="ColorRect6" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect7" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect8" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect9" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect10" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect11" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect12" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect17" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect18" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect19" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect20" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect22" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect23" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect24" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect25" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect21" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect26" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect27" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect28" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="ColorRect29" type="ColorRect" parent="UI/MarginContainer2/Panel/GridContainer"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 2
+
+[node name="CurrentColorRect" type="ColorRect" parent="UI/MarginContainer2/Panel"]
+material = SubResource("ShaderMaterial_l3uwg")
+custom_minimum_size = Vector2(18, 17)
+layout_mode = 0
+offset_left = 75.0
+offset_top = 47.0
+offset_right = 95.0
+offset_bottom = 67.0
+
+[node name="Sound&Music" type="Node" parent="."]
+
+[node name="music" type="AudioStreamPlayer" parent="Sound&Music"]
+stream = ExtResource("12_meqq8")
+volume_db = -7.526
+autoplay = true
+parameters/looping = true
+
+[node name="sfx" type="AudioStreamPlayer" parent="Sound&Music"]
+stream = ExtResource("11_uqbd1")
+
+[node name="sfx-paint" type="AudioStreamPlayer" parent="Sound&Music"]
+stream = ExtResource("16_tncq5")
+volume_db = -13.447
+
+[connection signal="value_changed" from="UI/MarginContainer2/Panel/HSlider" to="Canvas/PainterImage" method="_on_h_slider_value_changed"]

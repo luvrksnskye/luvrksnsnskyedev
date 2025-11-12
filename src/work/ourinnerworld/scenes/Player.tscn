@@ -421,4 +421,4 @@ animation = &"idle_sleep"
 z_index = 21
 position = Vector2(-2, -31)
 sprite_frames = SubResource("SpriteFrames_hqjia")
-animation = &"sleep_bubble"
+animation = &"silent_bubble"

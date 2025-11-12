@@ -90,7 +90,7 @@ texture = ExtResource("5_enw0g")
 texture = ExtResource("6_pfdox")
 
 [node name="ExampleBalloon" type="CanvasLayer"]
-layer = 100
+layer = 50000
 script = ExtResource("1_36de5")
 
 [node name="Balloon" type="Control" parent="."]
@@ -99,8 +99,10 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 53.0
-offset_right = 8.0
+offset_left = 80.0
+offset_top = -3.0
+offset_right = -40.0
+offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_qq3yp")
@@ -145,10 +147,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 106.5
-offset_top = -229.0
-offset_right = 229.5
-offset_bottom = -113.0
+offset_left = 119.5
+offset_top = -234.0
+offset_right = 242.5
+offset_bottom = -118.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_responses")
@@ -234,16 +236,17 @@ scroll_active = false
 horizontal_alignment = 1
 
 [node name="MarginContainer3" type="MarginContainer" parent="Balloon"]
+visible = false
 layout_mode = 1
-anchors_preset = 3
+anchors_preset = -1
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -180.0
-offset_top = -242.0
+offset_left = -190.0
+offset_top = -252.0
 offset_right = -4.0
-offset_bottom = -99.0
+offset_bottom = -104.0
 grow_horizontal = 0
 grow_vertical = 0
 
@@ -258,8 +261,6 @@ size_flags_horizontal = 4
 [node name="Portrait" type="TextureRect" parent="Balloon/MarginContainer3/PanelContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 4
-stretch_mode = 3
 
 [node name="talk-sound1" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_ef3h0")

@@ -829,6 +829,9 @@ position = Vector2(136, 44)
 [node name="AnimatedSprite2D" parent="Player" index="1"]
 position = Vector2(2, 1)
 
+[node name="Emotions" parent="Player" index="2"]
+position = Vector2(1, -29)
+
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(-8, 44)
 offset = Vector2(0, -800)

@@ -5,7 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://bg421c4rsy646" path="res://music/nhsus_outside.ogg" id="1_y8ilm"]
 [ext_resource type="PackedScene" uid="uid://cw2jln7ua3mfs" path="res://scenes/Player.tscn" id="3_gjb2v"]
 [ext_resource type="Texture2D" uid="uid://bq4rq7pa70iea" path="res://assets/tilesets/DW_traininterior.png" id="4_132yv"]
-[ext_resource type="PackedScene" uid="uid://dbu3nhjymm7wd" path="res://addons/dialogue_manager/example_balloon/example_balloon.tscn" id="5_1gruc"]
+[ext_resource type="PackedScene" uid="uid://dbu3nhjymm7wd" path="res://scenes/balloon.tscn" id="5_1gruc"]
 [ext_resource type="Script" uid="uid://dun57axoarhby" path="res://scripts/camera_default.gd" id="6_33hiq"]
 [ext_resource type="Script" uid="uid://bd1ua5sb22snc" path="res://scripts/her.gd" id="7_0xtj6"]
 [ext_resource type="Texture2D" uid="uid://uhs3p7jav7gf" path="res://assets/characters/DW_unknown.png" id="8_r8qhe"]

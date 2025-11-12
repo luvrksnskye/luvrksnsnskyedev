@@ -138,9 +138,6 @@ func _on_wake_up_animation_finished():
 		last_direction = "down"
 		animated_sprite.play("idle_down")
 
-# ============================================================
-# 👇 AÑADE ESTAS DOS FUNCIONES (necesarias para la cinemática)
-# ============================================================
 
 func play_animation(anim_name: String) -> void:
 	# Reproduce una animación directamente en el AnimatedSprite2D
