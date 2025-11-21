@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://ct5nldow4mljq"
+path="res://.godot/imported/theme_nature.dialogue-72403a33d460a891379f58376fa21d7f.tres"
+
+[deps]
+
+source_file="res://assets/dialogues/challenges/theme_nature.dialogue"
+dest_files=["res://.godot/imported/theme_nature.dialogue-72403a33d460a891379f58376fa21d7f.tres"]
+
+[params]
+
+defaults=true

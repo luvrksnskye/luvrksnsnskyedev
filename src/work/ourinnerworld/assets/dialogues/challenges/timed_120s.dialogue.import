@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://bb6mdhqlylgbc"
+path="res://.godot/imported/timed_120s.dialogue-53bf1a430af60d0b1609637184a0f404.tres"
+
+[deps]
+
+source_file="res://assets/dialogues/challenges/timed_120s.dialogue"
+dest_files=["res://.godot/imported/timed_120s.dialogue-53bf1a430af60d0b1609637184a0f404.tres"]
+
+[params]
+
+defaults=true

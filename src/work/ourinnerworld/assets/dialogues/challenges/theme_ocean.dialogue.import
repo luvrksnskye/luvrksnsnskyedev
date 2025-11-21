@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://brw8ec716c5xk"
+path="res://.godot/imported/theme_ocean.dialogue-d14c077cffc939192fb9932fd62be2bc.tres"
+
+[deps]
+
+source_file="res://assets/dialogues/challenges/theme_ocean.dialogue"
+dest_files=["res://.godot/imported/theme_ocean.dialogue-d14c077cffc939192fb9932fd62be2bc.tres"]
+
+[params]
+
+defaults=true

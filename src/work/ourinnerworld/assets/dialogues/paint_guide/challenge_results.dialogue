@@ -1,0 +1,222 @@
+~ start
+
+if SaveManager.game_data.last_result_rank == "S":
+	=> rank_s
+elif SaveManager.game_data.last_result_rank == "A":
+	=> rank_a
+elif SaveManager.game_data.last_result_rank == "B":
+	=> rank_b
+elif SaveManager.game_data.last_result_rank == "C":
+	=> rank_c
+elif SaveManager.game_data.last_result_rank == "D":
+	=> rank_d
+else:
+	=> rank_f
+
+~ rank_s
+
+% MAKOMI: Oh! [no_portrait]
+% MAKOMI: I can't believe it! [no_portrait]
+% MAKOMI: This is... [no_portrait]
+% MAKOMI: My goodness! [no_portrait]
+% MAKOMI: Look at this! [no_portrait]
+% MAKOMI: Oh my! [no_portrait]
+% MAKOMI: Amazing! [no_portrait]
+% MAKOMI: Incredible! [no_portrait]
+% MAKOMI: Breathtaking! [no_portrait]
+
+% MAKOMI: You absolutely CRUSHED it! Rank S! [no_portrait]
+% MAKOMI: Rank S! You did it! Perfect! [no_portrait]
+% MAKOMI: That's an S rank! The highest possible! [no_portrait]
+% MAKOMI: S rank! I knew you could do it! [no_portrait]
+% MAKOMI: You achieved S rank! That's mastery! [no_portrait]
+% MAKOMI: S rank! This is phenomenal! [no_portrait]
+% MAKOMI: An S rank! You're a true artist! [no_portrait]
+% MAKOMI: S rank! I'm speechless! [no_portrait]
+% MAKOMI: You got S rank! Perfection achieved! [no_portrait]
+% MAKOMI: That's S rank level! Extraordinary! [no_portrait]
+
+MAKOMI: Score: {{ SaveManager.game_data.last_result_score }}% [no_portrait]
+MAKOMI: {{ SaveManager.game_data.last_result_feedback }} [no_portrait]
+
+% MAKOMI: You're a true artist, RAINY! [no_portrait]
+% MAKOMI: RAINY, you're incredible! [no_portrait]
+% MAKOMI: I'm so proud of you, RAINY! [no_portrait]
+% MAKOMI: RAINY, that was beautiful! [no_portrait]
+% MAKOMI: You've outdone yourself, RAINY! [no_portrait]
+% MAKOMI: RAINY, you're amazing! [no_portrait]
+% MAKOMI: This is your best work yet, RAINY! [no_portrait]
+% MAKOMI: RAINY, I'm in awe! [no_portrait]
+% MAKOMI: You're gifted, RAINY! [no_portrait]
+% MAKOMI: RAINY, Skye would be so proud! [no_portrait]
+
+=> end_results
+
+~ rank_a
+
+% MAKOMI: Excellent work! Rank A! [no_portrait]
+% MAKOMI: Rank A! That's fantastic! [no_portrait]
+% MAKOMI: You got an A rank! Wonderful! [no_portrait]
+% MAKOMI: A rank! So impressive! [no_portrait]
+% MAKOMI: That's A rank quality! [no_portrait]
+% MAKOMI: Rank A! You're so talented! [no_portrait]
+% MAKOMI: An A rank! Beautiful! [no_portrait]
+% MAKOMI: You achieved A rank! Lovely! [no_portrait]
+% MAKOMI: Rank A! I'm so happy! [no_portrait]
+% MAKOMI: A rank! You did wonderfully! [no_portrait]
+
+MAKOMI: Score: {{ SaveManager.game_data.last_result_score }}% [no_portrait]
+MAKOMI: {{ SaveManager.game_data.last_result_feedback }} [no_portrait]
+
+% MAKOMI: You've got serious talent! [no_portrait]
+% MAKOMI: Your skills are really showing! [no_portrait]
+% MAKOMI: I'm impressed with your work! [no_portrait]
+% MAKOMI: You're becoming quite skilled! [no_portrait]
+% MAKOMI: That was really well done! [no_portrait]
+% MAKOMI: You're such a good artist! [no_portrait]
+% MAKOMI: Your dedication is paying off! [no_portrait]
+% MAKOMI: I love seeing you succeed! [no_portrait]
+% MAKOMI: You're growing so much! [no_portrait]
+% MAKOMI: Keep this momentum going! [no_portrait]
+
+=> end_results
+
+~ rank_b
+
+% MAKOMI: Good job! Rank B! [no_portrait]
+% MAKOMI: Rank B! Nice work! [no_portrait]
+% MAKOMI: You got B rank! Well done! [no_portrait]
+% MAKOMI: B rank! That's good! [no_portrait]
+% MAKOMI: Rank B! You did well! [no_portrait]
+% MAKOMI: A B rank! Solid work! [no_portrait]
+% MAKOMI: You earned B rank! [no_portrait]
+% MAKOMI: B rank! I'm happy for you! [no_portrait]
+% MAKOMI: That's a B rank! Good! [no_portrait]
+% MAKOMI: Rank B! You're improving! [no_portrait]
+
+MAKOMI: Score: {{ SaveManager.game_data.last_result_score }}% [no_portrait]
+MAKOMI: {{ SaveManager.game_data.last_result_feedback }} [no_portrait]
+
+% MAKOMI: You're improving nicely! [no_portrait]
+% MAKOMI: Your progress is clear! [no_portrait]
+% MAKOMI: You're getting better! [no_portrait]
+% MAKOMI: I can see your growth! [no_portrait]
+% MAKOMI: You're on the right path! [no_portrait]
+% MAKOMI: Keep practicing like this! [no_portrait]
+% MAKOMI: Your efforts are showing! [no_portrait]
+% MAKOMI: You're developing your skills! [no_portrait]
+% MAKOMI: This is good progress! [no_portrait]
+% MAKOMI: You're moving forward! [no_portrait]
+
+=> end_results
+
+~ rank_c
+
+% MAKOMI: Not bad! Rank C! [no_portrait]
+% MAKOMI: Rank C! That's okay! [no_portrait]
+% MAKOMI: You got C rank! [no_portrait]
+% MAKOMI: C rank! A decent attempt! [no_portrait]
+% MAKOMI: Rank C! You tried! [no_portrait]
+% MAKOMI: That's C rank! [no_portrait]
+% MAKOMI: C rank! You can improve! [no_portrait]
+% MAKOMI: You achieved C rank! [no_portrait]
+% MAKOMI: Rank C! Don't worry! [no_portrait]
+% MAKOMI: C rank! It's alright! [no_portrait]
+
+MAKOMI: Score: {{ SaveManager.game_data.last_result_score }}% [no_portrait]
+MAKOMI: {{ SaveManager.game_data.last_result_feedback }} [no_portrait]
+
+% MAKOMI: Keep practicing and you'll get better! [no_portrait]
+% MAKOMI: You're learning! Don't give up! [no_portrait]
+% MAKOMI: Practice makes perfect! [no_portrait]
+% MAKOMI: You'll improve with time! [no_portrait]
+% MAKOMI: Every attempt teaches you something! [no_portrait]
+% MAKOMI: Don't be discouraged! [no_portrait]
+% MAKOMI: You're still growing! [no_portrait]
+% MAKOMI: Keep trying! You can do better! [no_portrait]
+% MAKOMI: This is part of learning! [no_portrait]
+% MAKOMI: I believe you'll improve! [no_portrait]
+
+=> end_results
+
+~ rank_d
+
+% MAKOMI: Rank D - but that's okay! [no_portrait]
+% MAKOMI: D rank... it's alright! [no_portrait]
+% MAKOMI: You got D rank... [no_portrait]
+% MAKOMI: Rank D, but don't worry! [no_portrait]
+% MAKOMI: D rank... we all struggle sometimes! [no_portrait]
+% MAKOMI: That's a D rank... [no_portrait]
+% MAKOMI: Rank D... it happens! [no_portrait]
+% MAKOMI: D rank, but you tried! [no_portrait]
+% MAKOMI: You got D rank... that's tough... [no_portrait]
+% MAKOMI: Rank D... but I'm still proud you tried! [no_portrait]
+
+MAKOMI: Score: {{ SaveManager.game_data.last_result_score }}% [no_portrait]
+MAKOMI: {{ SaveManager.game_data.last_result_feedback }} [no_portrait]
+
+% MAKOMI: Every artist starts somewhere! [no_portrait]
+% MAKOMI: We all have tough challenges! [no_portrait]
+% MAKOMI: Don't let this discourage you! [no_portrait]
+% MAKOMI: This is just one attempt! [no_portrait]
+% MAKOMI: You can learn from this! [no_portrait]
+% MAKOMI: Everyone has off days! [no_portrait]
+% MAKOMI: I'm here to support you! [no_portrait]
+% MAKOMI: Try again when you're ready! [no_portrait]
+% MAKOMI: You'll do better next time! [no_portrait]
+% MAKOMI: Don't be too hard on yourself! [no_portrait]
+
+=> end_results
+
+~ rank_f
+
+% MAKOMI: Hmm... Rank F. [no_portrait]
+% MAKOMI: Oh... that's an F rank... [no_portrait]
+% MAKOMI: Rank F... I see... [no_portrait]
+% MAKOMI: F rank... that's challenging... [no_portrait]
+% MAKOMI: That's... rank F... [no_portrait]
+% MAKOMI: An F rank... [no_portrait]
+% MAKOMI: Rank F... oh dear... [no_portrait]
+% MAKOMI: F rank... hmm... [no_portrait]
+% MAKOMI: That's F rank... [no_portrait]
+% MAKOMI: Rank F... it happens... [no_portrait]
+
+MAKOMI: Score: {{ SaveManager.game_data.last_result_score }}% [no_portrait]
+MAKOMI: {{ SaveManager.game_data.last_result_feedback }} [no_portrait]
+
+% MAKOMI: Want to try again? [no_portrait]
+% MAKOMI: Would you like another attempt? [no_portrait]
+% MAKOMI: Maybe try a different challenge? [no_portrait]
+% MAKOMI: Don't give up... try again? [no_portrait]
+% MAKOMI: Another go might help! [no_portrait]
+% MAKOMI: Practice more and retry? [no_portrait]
+% MAKOMI: Want to give it another shot? [no_portrait]
+% MAKOMI: Should we try something else? [no_portrait]
+% MAKOMI: Maybe start with something easier? [no_portrait]
+% MAKOMI: I know you can do better! Try again? [no_portrait]
+
+=> end_results
+
+~ end_results
+
+% MAKOMI: Want to try another challenge or paint freely? [no_portrait]
+% MAKOMI: What would you like to do next? [no_portrait]
+% MAKOMI: Another challenge or free painting? [no_portrait]
+% MAKOMI: Ready for more, or need a break? [no_portrait]
+% MAKOMI: Should we continue? [no_portrait]
+% MAKOMI: What's next for you? [no_portrait]
+% MAKOMI: Keep going or relax with free paint? [no_portrait]
+% MAKOMI: More challenges or creative freedom? [no_portrait]
+% MAKOMI: Your choice... what next? [no_portrait]
+
+MAKOMI: What sounds good now? [no_portrait]
+- AGAIN => another_challenge
+- PAINT => done
+
+~ another_challenge
+set SaveManager.game_data.next_action = "another"
+=> END
+
+~ done
+set SaveManager.game_data.next_action = "done"
+=> END

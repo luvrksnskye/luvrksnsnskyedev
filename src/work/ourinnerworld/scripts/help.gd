@@ -1,6 +1,6 @@
 extends Button
 
-@onready var sfx: AudioStreamPlayer = $"../../../Sound&Music/sfx"
+@onready var sfx: AudioStreamPlayer = $"../../../Sounds/sfx"
 @onready var dialogue_balloon = $"../../../Makomi_Dialogue/ExampleBalloon"
 
 const PAINT_GUIDE_DIALOGUE = preload("res://assets/dialogues/paint_guide/makomiintro.dialogue")

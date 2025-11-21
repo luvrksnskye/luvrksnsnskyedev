@@ -34,6 +34,7 @@ var mutation_cooldown: Timer = Timer.new()
 @onready var character_label: RichTextLabel = %CharacterLabel
 @onready var portrait: TextureRect = %Portrait
 @onready var dialogue_label: DialogueLabel = %DialogueLabel
+@onready var progress_hand: Sprite2D =  %Progress
 
 @onready var talk_sound_1: AudioStreamPlayer = $"talk-sound1"
 @onready var talk_sound_2: AudioStreamPlayer = $"talk-sound2"
@@ -200,6 +201,10 @@ func _ready() -> void:
 		sound.volume_db = -10.0
 		sound.pitch_scale = 1.0
 	
+	# Ocultar la manita al inicio
+	if progress_hand:
+		progress_hand.hide()
+	
 	_setup_portrait_system()
 	_setup_emotion_system()
 	_setup_color_system()
@@ -298,6 +303,27 @@ func _animate_balloon_close() -> void:
 	is_animating = false
 
 # =========================================================
+# === SISTEMA DE PROGRESS HAND ============================
+# =========================================================
+
+func _show_progress_hand():
+	"""Muestra la manita indicadora cuando el diálogo termina"""
+	if progress_hand:
+		progress_hand.show()
+		# Si la manita tiene una animación, reproducirla
+		if progress_hand.has_method("play"):
+			progress_hand.play()
+		print("✅ Progress hand mostrada")
+
+func _hide_progress_hand():
+	"""Oculta la manita indicadora"""
+	if progress_hand:
+		progress_hand.hide()
+		# Si la manita tiene una animación, detenerla
+		if progress_hand.has_method("stop"):
+			progress_hand.stop()
+
+# =========================================================
 # === DIALOGUE LINE =======================================
 # =========================================================
 func apply_dialogue_line() -> void:
@@ -305,6 +331,9 @@ func apply_dialogue_line() -> void:
 	is_waiting_for_input = false
 	balloon.focus_mode = Control.FOCUS_ALL
 	balloon.grab_focus()
+
+	# Ocultar la manita al inicio de cada línea
+	_hide_progress_hand()
 
 	var is_narration = dialogue_line.character.to_upper() == "NONE"
 	var is_mystery = dialogue_line.character == "???"
@@ -352,6 +381,7 @@ func apply_dialogue_line() -> void:
 	if dialogue_line.responses.size() > 0:
 		balloon.focus_mode = Control.FOCUS_NONE
 		responses_menu.show()
+		# No mostrar la manita cuando hay opciones de respuesta
 	elif dialogue_line.time != "":
 		var time = _calculate_auto_advance_time()
 		await get_tree().create_timer(time).timeout
@@ -360,6 +390,8 @@ func apply_dialogue_line() -> void:
 		is_waiting_for_input = true
 		balloon.focus_mode = Control.FOCUS_ALL
 		balloon.grab_focus()
+		# MOSTRAR LA MANITA cuando se espera input del jugador
+		_show_progress_hand()
 
 # =========================================================
 # === FORMATO DE TEXTO ====================================
@@ -822,6 +854,9 @@ func _handle_punctuation_pause(letter: String):
 		await get_tree().create_timer(pause_time).timeout
 
 func next(next_id: String) -> void:
+	# Ocultar la manita al avanzar
+	_hide_progress_hand()
+	
 	for sound in talk_sounds:
 		if sound.playing:
 			var fade_tween = create_tween()
@@ -896,6 +931,7 @@ func _on_dialogue_label_spoke(letter: String, letter_index: int, speed: float) -
 
 func _exit_tree():
 	_hide_emotion_bubble()
+	_hide_progress_hand()
 	
 	for sound in talk_sounds:
 		if is_instance_valid(sound) and sound.playing:

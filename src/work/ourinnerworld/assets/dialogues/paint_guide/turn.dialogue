@@ -1,7 +1,46 @@
 ~ start
-MAKOMI: ... There. My snowman’s done. Not perfect, but he’s trying. I think that’s enough. [no_portrait]
-AKOMI: I like snowmen. They don’t last forever, but they make the cold feel less lonely for a while. [no_portrait]
-MAKOMI: SKYE used to build them with her bare hands, even when it hurt from the cold. She said it was worth it if they could smile back. [no_portrait]
-MAKOMI: See, RAINY? Painting isn’t about precision. It’s about care. Even the smallest shapes can hold warmth. [no_portrait]
-MAKOMI: Take your time. The world isn’t going anywhere and neither am I. [no_portrait]
+
+MAKOMI: Here's a canvas! Try painting on it with the brush. You can change your brush size in the top left and also change your colors. [no_portrait]
+MAKOMI: If none of the colors I have suit you, you can choose others by clicking on your current color. You can also always redo or undo your progress! [no_portrait]
+MAKOMI: For timed challenges, keep an eye on the timer at the top. For other challenges, just press FINISH when you're done! [no_portrait]
+MAKOMI: Take your time. The world isn't going anywhere and neither am I. [no_portrait]
+MAKOMI: So... what would you like to do for your first painting? [no_portrait]
+
+- PAINT => free_paint_first
+- TASK => challenge_first
+- MENU => explain_challenges
+
+=> END
+
+~ free_paint_first
+
+MAKOMI: Sometimes the best art comes from just letting your creativity flow. [no_portrait]
+MAKOMI: Paint whatever your heart desires. I'll be here when you want to try something new! [no_portrait]
+
+do get_parent().start_free_paint()
+
+=> END
+
+~ challenge_first
+
+MAKOMI: Ooh, eager to test your skills? I like that! [no_portrait]
+MAKOMI: Let me find something fun for you... [no_portrait]
+
+do get_parent().start_random_challenge()
+
+=> END
+
+~ explain_challenges
+
+MAKOMI: Challenges are fun ways to test your creativity! [no_portrait]
+MAKOMI: Some have time limits - you'll see a timer at the top counting down. [no_portrait]
+MAKOMI: Others ask you to follow a specific style, like abstract or minimalist art. [no_portrait]
+MAKOMI: Some limit your color palette, or ask you to use certain brush sizes. [no_portrait]
+MAKOMI: After each challenge, I'll analyze your painting and give you a score! [no_portrait]
+MAKOMI: The better you follow the challenge rules, the higher your rank! [no_portrait]
+MAKOMI: So, ready to start? [no_portrait]
+
+- START => challenge_first
+- PAINT => free_paint_first
+
 => END

@@ -1,8 +1,9 @@
-[gd_scene load_steps=22 format=3 uid="uid://blor36s6vy1rx"]
+[gd_scene load_steps=35 format=3 uid="uid://blor36s6vy1rx"]
 
 [ext_resource type="Script" uid="uid://bje8g1kau73ee" path="res://scripts/parallax_background_canvas.gd" id="1_0rucn"]
 [ext_resource type="Texture2D" uid="uid://ccw2ymttb6km6" path="res://assets/bg/traing_bg.png" id="1_emgrw"]
 [ext_resource type="Script" uid="uid://dwwn41o2x3u1m" path="res://scripts/canvas_makomi_INTRO.gd" id="1_l3uwg"]
+[ext_resource type="PackedScene" uid="uid://dbu3nhjymm7wd" path="res://addons/dialogue_manager/example_balloon/example_balloon.tscn" id="2_tncq5"]
 [ext_resource type="Texture2D" uid="uid://css3w40ytq5h3" path="res://assets/bg/star_a.png" id="2_vjdvf"]
 [ext_resource type="Texture2D" uid="uid://cl5ae4kovm10b" path="res://assets/ui/canvas.png" id="4_tre8k"]
 [ext_resource type="Theme" uid="uid://ba4s4eln16e7s" path="res://assets/styles/button.tres" id="5_iev8n"]
@@ -11,11 +12,29 @@
 [ext_resource type="Texture2D" uid="uid://c6p7xunmgl2r4" path="res://assets/ui/dialogue_box_face.png" id="8_bbk8y"]
 [ext_resource type="Script" uid="uid://1phhfmqg50c0" path="res://scripts/help.gd" id="9_1ubji"]
 [ext_resource type="Script" uid="uid://bqfrpac0qqy4p" path="res://scripts/colors_paint.gd" id="9_60gon"]
-[ext_resource type="PackedScene" uid="uid://dbu3nhjymm7wd" path="res://addons/dialogue_manager/example_balloon/example_balloon.tscn" id="10_juvvh"]
 [ext_resource type="AudioStream" uid="uid://dw6tqnd4olfyq" path="res://music/continue.ogg" id="11_uqbd1"]
-[ext_resource type="AudioStream" uid="uid://c6vu6ckd32kvo" path="res://music/neighborhood_spring.ogg" id="12_meqq8"]
 [ext_resource type="Shader" uid="uid://bjx20ff3hipra" path="res://assets/styles/paint.gdshader" id="12_ofuo6"]
-[ext_resource type="AudioStream" uid="uid://d0s1q612e4bj3" path="res://music/painting.wav" id="16_tncq5"]
+[ext_resource type="Script" uid="uid://bwm2nhbqtqvny" path="res://scripts/clear.gd" id="14_673gn"]
+[ext_resource type="Texture2D" uid="uid://defumxyqn643y" path="res://assets/ui/ShiftKey.png" id="15_1yep8"]
+[ext_resource type="AudioStream" uid="uid://chvfq8l1y84ph" path="res://music/sfx/BA_INK.ogg" id="16_tncq5"]
+[ext_resource type="AudioStream" uid="uid://dpjggo5cdsq76" path="res://music/sfx/SE_chalk_short.ogg" id="18_rgpq6"]
+[ext_resource type="AudioStream" uid="uid://fflxkb71q363" path="res://music/sfx/SE_chalk.ogg" id="19_bgm10"]
+[ext_resource type="AudioStream" uid="uid://cpyevaddneq68" path="res://music/sfx/se_stupid.ogg" id="20_jtvaj"]
+[ext_resource type="Script" uid="uid://c8kmlerc2g5ft" path="res://scenes/music_manager_canvas.gd" id="21_joooq"]
+[ext_resource type="AudioStream" uid="uid://8g610kgsb8oq" path="res://music/sfx/BA_Level_Up.ogg" id="21_kd7kd"]
+[ext_resource type="AudioStream" uid="uid://dg1ov6cf6hjs5" path="res://music/sfx/SE_chirp.ogg" id="21_ur4fy"]
+[ext_resource type="AudioStream" uid="uid://i8ipccllfdoi" path="res://music/sfx/BA_happy_level_2.ogg" id="22_pvt6a"]
+[ext_resource type="AudioStream" uid="uid://g1j2o88hyi74" path="res://music/sfx/se_ticking_warning.mp3" id="23_pvt6a"]
+[ext_resource type="AudioStream" uid="uid://c55vmxwug385y" path="res://music/sfx/se_time.mp3" id="23_y51fs"]
+[ext_resource type="AudioStream" uid="uid://8caat0fm8jit" path="res://music/ow_outskirts.ogg" id="26_1yep8"]
+[ext_resource type="AudioStream" uid="uid://7d2vva72h70b" path="res://music/ow_junkyard.ogg" id="27_7wpjm"]
+[ext_resource type="AudioStream" uid="uid://3gkp6tu0hqe4" path="res://music/ow_town.ogg" id="27_y51fs"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uqbd1"]
+texture = ExtResource("8_bbk8y")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l3uwg"]
+shader = ExtResource("12_ofuo6")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bbk8y"]
 texture = ExtResource("6_jxhjo")
@@ -25,12 +44,6 @@ texture = ExtResource("6_jxhjo")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_juvvh"]
 texture = ExtResource("6_jxhjo")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uqbd1"]
-texture = ExtResource("8_bbk8y")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l3uwg"]
-shader = ExtResource("12_ofuo6")
 
 [node name="Screen" type="Control"]
 layout_mode = 3
@@ -48,7 +61,8 @@ script = ExtResource("1_l3uwg")
 
 [node name="Makomi_Dialogue" type="CanvasLayer" parent="."]
 
-[node name="ExampleBalloon" parent="Makomi_Dialogue" instance=ExtResource("10_juvvh")]
+[node name="ExampleBalloon" parent="Makomi_Dialogue" instance=ExtResource("2_tncq5")]
+visible = false
 
 [node name="MainBackground" type="CanvasLayer" parent="."]
 
@@ -87,29 +101,6 @@ script = ExtResource("5_jxhjo")
 
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 20000
-
-[node name="MarginContainer" type="MarginContainer" parent="UI"]
-z_index = 1000
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -153.0
-offset_top = 16.0
-offset_right = -13.0
-offset_bottom = 52.0
-grow_horizontal = 0
-
-[node name="HELP" type="Button" parent="UI/MarginContainer"]
-texture_filter = 1
-layout_mode = 2
-theme = ExtResource("5_iev8n")
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 35
-theme_override_styles/normal = SubResource("StyleBoxTexture_bbk8y")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_60gon")
-theme_override_styles/hover = SubResource("StyleBoxTexture_juvvh")
-text = "ADVICE"
-script = ExtResource("9_1ubji")
 
 [node name="MarginContainer2" type="MarginContainer" parent="UI"]
 offset_left = 7.0
@@ -293,20 +284,169 @@ offset_left = 75.0
 offset_top = 47.0
 offset_right = 95.0
 offset_bottom = 67.0
+mouse_default_cursor_shape = 2
 
-[node name="Sound&Music" type="Node" parent="."]
+[node name="ColorPicker" type="ColorPicker" parent="UI/MarginContainer2/Panel"]
+visible = false
+layout_mode = 0
+offset_left = 198.0
+offset_top = -9.0
+offset_right = 496.0
+offset_bottom = 275.0
+deferred_mode = true
+picker_shape = 1
+sampler_visible = false
+color_modes_visible = false
+sliders_visible = false
+hex_visible = false
+presets_visible = false
 
-[node name="music" type="AudioStreamPlayer" parent="Sound&Music"]
-stream = ExtResource("12_meqq8")
-volume_db = -7.526
-autoplay = true
-parameters/looping = true
+[node name="VBoxContainer" type="VBoxContainer" parent="UI"]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -169.0
+offset_right = -10.0
+offset_bottom = -53.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+alignment = 1
 
-[node name="sfx" type="AudioStreamPlayer" parent="Sound&Music"]
+[node name="HELP" type="Button" parent="UI/VBoxContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme = ExtResource("5_iev8n")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 35
+theme_override_styles/normal = SubResource("StyleBoxTexture_bbk8y")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_60gon")
+theme_override_styles/hover = SubResource("StyleBoxTexture_juvvh")
+text = "ADVICE"
+script = ExtResource("9_1ubji")
+
+[node name="CLEAR" type="Button" parent="UI/VBoxContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme = ExtResource("5_iev8n")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 35
+theme_override_styles/normal = SubResource("StyleBoxTexture_bbk8y")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_60gon")
+theme_override_styles/hover = SubResource("StyleBoxTexture_juvvh")
+text = "CLEAR
+"
+script = ExtResource("14_673gn")
+
+[node name="FINISH" type="Button" parent="UI/VBoxContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme = ExtResource("5_iev8n")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 35
+theme_override_styles/normal = SubResource("StyleBoxTexture_bbk8y")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_60gon")
+theme_override_styles/hover = SubResource("StyleBoxTexture_juvvh")
+text = "FINISH"
+
+[node name="TimerLabel" type="Label" parent="UI"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -31.0
+offset_top = 4.0
+offset_right = 36.0
+offset_bottom = 44.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 40
+text = "10:20"
+horizontal_alignment = 1
+
+[node name="Control" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -64.0
+offset_right = 60.0
+offset_bottom = -24.0
+grow_vertical = 0
+
+[node name="SHIFT" type="Sprite2D" parent="UI/Control"]
+position = Vector2(-4, 43)
+texture = ExtResource("15_1yep8")
+
+[node name="GO BACK" type="RichTextLabel" parent="UI/Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 4.0
+offset_top = 24.0
+offset_right = 121.0
+offset_bottom = 64.0
+grow_horizontal = 2
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 22
+bbcode_enabled = true
+text = "[outline_size=2][outline_color=black]GO BACK[/outline_color][/outline_size]"
+horizontal_alignment = 1
+
+[node name="Sounds" type="Node" parent="."]
+
+[node name="sfx" type="AudioStreamPlayer" parent="Sounds"]
 stream = ExtResource("11_uqbd1")
 
-[node name="sfx-paint" type="AudioStreamPlayer" parent="Sound&Music"]
+[node name="sfx-eraser" type="AudioStreamPlayer" parent="Sounds"]
 stream = ExtResource("16_tncq5")
-volume_db = -13.447
+volume_db = -14.132
+
+[node name="sfx-strokes-paint" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("18_rgpq6")
+volume_db = -0.684
+
+[node name="sfx-strokes-paint2-large" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("19_bgm10")
+volume_db = -0.684
+
+[node name="sfx-undo-art" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("20_jtvaj")
+volume_db = 0.634
+
+[node name="sfx-click" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("21_ur4fy")
+
+[node name="sfx-challenge-complete" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("21_kd7kd")
+
+[node name="sfx-challenge-start" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("22_pvt6a")
+
+[node name="sfx-timer-warning" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("23_pvt6a")
+
+[node name="sfx-timer-tick" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("23_y51fs")
+
+[node name="Music" type="Node" parent="."]
+script = ExtResource("21_joooq")
+
+[node name="ow_outskirts" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource("26_1yep8")
+
+[node name="ow_junkyard" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource("27_7wpjm")
+
+[node name="town" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource("27_y51fs")
 
 [connection signal="value_changed" from="UI/MarginContainer2/Panel/HSlider" to="Canvas/PainterImage" method="_on_h_slider_value_changed"]
+[connection signal="color_changed" from="UI/MarginContainer2/Panel/ColorPicker" to="UI/MarginContainer2/Panel/GridContainer" method="_on_color_picker_color_changed"]

@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://bepf8j734btjm"
+path="res://.godot/imported/mono_red.dialogue-ecfb459c5111960923db041746b0babb.tres"
+
+[deps]
+
+source_file="res://assets/dialogues/challenges/mono_red.dialogue"
+dest_files=["res://.godot/imported/mono_red.dialogue-ecfb459c5111960923db041746b0babb.tres"]
+
+[params]
+
+defaults=true

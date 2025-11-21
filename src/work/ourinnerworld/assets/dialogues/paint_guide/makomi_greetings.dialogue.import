@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://drgpd2fyqcqjp"
+path="res://.godot/imported/makomi_greetings.dialogue-ad54a507f1563b550035ab5b6484f364.tres"
+
+[deps]
+
+source_file="res://assets/dialogues/paint_guide/makomi_greetings.dialogue"
+dest_files=["res://.godot/imported/makomi_greetings.dialogue-ad54a507f1563b550035ab5b6484f364.tres"]
+
+[params]
+
+defaults=true

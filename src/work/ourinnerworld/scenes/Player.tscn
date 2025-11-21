@@ -7,8 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://bxrk4rgpci6f1" path="res://assets/ui/Sleep-sheet.png" id="4_8g4oa"]
 [ext_resource type="Texture2D" uid="uid://bhomrei5smari" path="res://assets/ui/silent-sheet.png" id="5_6ysni"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_6ysni"]
-size = Vector2(12, 10)
+[sub_resource type="CircleShape2D" id="CircleShape2D_70d11"]
+radius = 13.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hqjia"]
 atlas = ExtResource("1_q3lat")
@@ -410,8 +410,8 @@ animations = [{
 script = ExtResource("1_ddoul")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-1, 13)
-shape = SubResource("RectangleShape2D_6ysni")
+position = Vector2(-1, 4)
+shape = SubResource("CircleShape2D_70d11")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_evw08")

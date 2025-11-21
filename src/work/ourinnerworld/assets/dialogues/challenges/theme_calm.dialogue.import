@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://b4oo4b0m8k418"
+path="res://.godot/imported/theme_calm.dialogue-f634b5e6a1b42250f24e86c7302123a0.tres"
+
+[deps]
+
+source_file="res://assets/dialogues/challenges/theme_calm.dialogue"
+dest_files=["res://.godot/imported/theme_calm.dialogue-f634b5e6a1b42250f24e86c7302123a0.tres"]
+
+[params]
+
+defaults=true

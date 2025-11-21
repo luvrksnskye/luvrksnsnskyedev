@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://st6n7fou7xx"
+path="res://.godot/imported/theme_joy.dialogue-433f22194b3b9396341e963b550172ec.tres"
+
+[deps]
+
+source_file="res://assets/dialogues/challenges/theme_joy.dialogue"
+dest_files=["res://.godot/imported/theme_joy.dialogue-433f22194b3b9396341e963b550172ec.tres"]
+
+[params]
+
+defaults=true

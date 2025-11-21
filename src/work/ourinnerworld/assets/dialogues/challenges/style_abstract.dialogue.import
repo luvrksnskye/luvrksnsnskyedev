@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://bscojsyc1i7se"
+path="res://.godot/imported/style_abstract.dialogue-72bf4e7a6b6992bc66bacfaa306cdc92.tres"
+
+[deps]
+
+source_file="res://assets/dialogues/challenges/style_abstract.dialogue"
+dest_files=["res://.godot/imported/style_abstract.dialogue-72bf4e7a6b6992bc66bacfaa306cdc92.tres"]
+
+[params]
+
+defaults=true

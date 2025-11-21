@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://bhoa1bwb6vb04"
+path="res://.godot/imported/challenge_results.dialogue-b05a319af2e708e6cdc5ab3416d30775.tres"
+
+[deps]
+
+source_file="res://assets/dialogues/paint_guide/challenge_results.dialogue"
+dest_files=["res://.godot/imported/challenge_results.dialogue-b05a319af2e708e6cdc5ab3416d30775.tres"]
+
+[params]
+
+defaults=true
