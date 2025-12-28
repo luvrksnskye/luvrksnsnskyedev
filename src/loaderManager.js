@@ -45,14 +45,28 @@ class LoaderManager {
     init() {
         if (this.initialized) return;
         
+        console.log('🔍 Looking for preloader elements...');
+        
         // Get DOM references (elements already exist in HTML)
         this.loaderContainer = document.getElementById('preloader');
         this.loadingBar = document.getElementById('loadingBar');
         this.loadingNumber = document.getElementById('loadPercent');
         this.audioPrompt = document.getElementById('audioPrompt');
         
+        console.log('📋 Found elements:', {
+            loaderContainer: !!this.loaderContainer,
+            loadingBar: !!this.loadingBar,
+            loadingNumber: !!this.loadingNumber,
+            audioPrompt: !!this.audioPrompt
+        });
+        
         if (!this.loaderContainer) {
-            console.warn('Preloader element not found in HTML');
+            console.error('❌ Preloader element not found in HTML');
+            return;
+        }
+        
+        if (!this.loadingBar || !this.loadingNumber) {
+            console.error('❌ Loading bar or number element not found');
             return;
         }
         
@@ -61,7 +75,7 @@ class LoaderManager {
         this.hideMainContent();
         
         this.initialized = true;
-        console.log('🚀 Loader Manager initialized');
+        console.log('✅ Loader Manager initialized');
     }
 
     /**
@@ -321,15 +335,16 @@ class LoaderManager {
      * Start the loading process
      */
     startLoading() {
+        console.log('⏱️ Starting loading timer for', this.loadingDuration, 'ms');
         this.startTime = Date.now();
         
         // Start preloading resources in background
         this.preloadResources();
         
-        // Animate the loading bar over 1 minute 50 seconds
+        // Animate the loading bar
         this.animateLoadingBar();
         
-        // Complete loading after 1 minute 50 seconds
+        // Complete loading after duration
         setTimeout(() => {
             this.completeLoading();
         }, this.loadingDuration);
@@ -501,14 +516,27 @@ class LoaderManager {
 export const loaderManager = new LoaderManager();
 
 // Initialize on DOM ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
+function initLoader() {
+    try {
+        console.log('🔄 Initializing loader...');
         loaderManager.init();
-        loaderManager.startLoading();
-    });
+        
+        if (loaderManager.initialized) {
+            console.log('🔄 Starting loading process...');
+            loaderManager.startLoading();
+        } else {
+            console.error('❌ Loader failed to initialize - DOM elements not found');
+        }
+    } catch (error) {
+        console.error('❌ Loader initialization error:', error);
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLoader);
 } else {
-    loaderManager.init();
-    loaderManager.startLoading();
+    // DOM already ready, but use setTimeout to ensure all elements are parsed
+    setTimeout(initLoader, 0);
 }
 
 window.loaderManager = loaderManager;
