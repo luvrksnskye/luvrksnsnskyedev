@@ -1,0 +1,3 @@
+[submodule "src/work/ourinnerworld/addons/inventory-system"]
+	path = src/work/ourinnerworld/addons/inventory-system
+	url = https://github.com/expressobits/inventory-system.git
