@@ -1,12 +1,17 @@
-[gd_scene load_steps=83 format=4 uid="uid://dpoy3sd0uwoww"]
+[gd_scene load_steps=88 format=4 uid="uid://dpoy3sd0uwoww"]
 
+[ext_resource type="PackedScene" uid="uid://cqfp2qnbf77uo" path="res://scenes/Hikiko.tscn" id="1_bij2c"]
 [ext_resource type="Texture2D" uid="uid://lxs26mswdtv1" path="res://assets/tilesets/grass_tileset.png" id="1_ejhqo"]
+[ext_resource type="Script" uid="uid://bpqmp6y1mqdl2" path="res://test/debug.gd" id="1_lvx4b"]
 [ext_resource type="Shader" uid="uid://8sjgckildhs" path="res://assets/styles/grass.gdshader" id="1_nrakx"]
+[ext_resource type="PackedScene" uid="uid://dalkrejxpchf" path="res://scenes/Stranger.tscn" id="2_hotow"]
 [ext_resource type="Shader" uid="uid://com156aavemmu" path="res://assets/styles/firefly.gdshader" id="2_uwrit"]
 [ext_resource type="Texture2D" uid="uid://jl4o5b5gh1yq" path="res://assets/tilesets/GrassTexture1.png" id="2_xlwpo"]
-[ext_resource type="PackedScene" uid="uid://cw2jln7ua3mfs" path="res://scenes/Player.tscn" id="3_tqujx"]
+[ext_resource type="PackedScene" uid="uid://cw2jln7ua3mfs" path="res://scenes/Rainy.tscn" id="3_tqujx"]
+[ext_resource type="PackedScene" uid="uid://chfchl1nmjbcy" path="res://scenes/UI/menu_characters.tscn" id="5_6w87y"]
 [ext_resource type="Texture2D" uid="uid://d18c78hltbaqt" path="res://assets/tilesets/NH_spring.png" id="5_dcvy4"]
 [ext_resource type="Texture2D" uid="uid://d2d0frdscwnl" path="res://assets/tilesets/NH_springhouse.png" id="5_fyy05"]
+[ext_resource type="PackedScene" uid="uid://dvgu1pbb6ijum" path="res://scenes/UI/Tag.tscn" id="5_rub5e"]
 [ext_resource type="Texture2D" uid="uid://bxbn0tkxdewwb" path="res://assets/tilesets/NH_bloom_island.png" id="7_d4j3b"]
 [ext_resource type="Texture2D" uid="uid://wryr5smm6vhg" path="res://assets/tilesets/RAINYMAP_IW.png" id="7_pmd5m"]
 [ext_resource type="Texture2D" uid="uid://c20n8sco5r58g" path="res://assets/tilesets/BEACH_IW.png" id="8_wnnnr"]
@@ -688,29 +693,44 @@ animations = [{
 }]
 
 [node name="NEIGHBORHOOD_SPRING" type="Node2D"]
+script = ExtResource("1_lvx4b")
 
-[node name="Player" parent="." instance=ExtResource("3_tqujx")]
+[node name="Stranger" parent="." instance=ExtResource("2_hotow")]
+position = Vector2(250, 88)
+
+[node name="Hikiko" parent="." instance=ExtResource("1_bij2c")]
 z_index = 4
-y_sort_enabled = true
-position = Vector2(1244, 88)
+position = Vector2(251, 136)
+smash_shake_intensity = 15.0
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
+[node name="Rainy" parent="." instance=ExtResource("3_tqujx")]
+z_index = 4
+position = Vector2(252, 113)
+
+[node name="Camera2D" type="Camera2D" parent="Rainy"]
 z_index = 1
 
-[node name="CanvasLayer" type="CanvasLayer" parent="Player/Camera2D"]
-
-[node name="Particles" type="GPUParticles2D" parent="Player/Camera2D/CanvasLayer"]
+[node name="Particles" type="GPUParticles2D" parent="Rainy/Camera2D"]
 modulate = Color(18.892157, 18.892157, 18.892157, 1)
 z_index = 4096
 material = SubResource("ShaderMaterial_1gfve")
-position = Vector2(196, -10)
+position = Vector2(-2013, 185)
 amount = 100
 lifetime = 2.0999999999999996
 visibility_rect = Rect2(-500, -200, 1000, 400)
 process_material = SubResource("ParticleProcessMaterial_jtm2e")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Player/Camera2D/CanvasLayer/Particles"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Rainy/Camera2D/Particles"]
 environment = SubResource("Environment_tnh01")
+
+[node name="PARTY_MENU" type="Node2D" parent="Rainy"]
+position = Vector2(-252, -113)
+
+[node name="Menu_Characters" parent="Rainy/PARTY_MENU" instance=ExtResource("5_6w87y")]
+visible = false
+
+[node name="TagMenu" parent="Rainy/PARTY_MENU" instance=ExtResource("5_rub5e")]
+visible = false
 
 [node name="Map_NH_PARK" type="Node2D" parent="."]
 
@@ -1087,15 +1107,15 @@ z_index = 5
 tile_map_data = PackedByteArray("AAATAAsAAAAMABQAAABIAAsAAAAMABQAAABTAAsAAAAMABQAAACDAAsAAAAMABQAAACQAAsAAAAMABQAAACeAA4AAAAMABQAAAA=")
 tile_set = SubResource("TileSet_bij2c")
 
-[node name="NieghborhoodSFX" type="Node" parent="Settings"]
+[node name="NeighborhoodSFX" type="Node" parent="Settings"]
 
-[node name="cicada" type="AudioStreamPlayer" parent="Settings/NieghborhoodSFX"]
+[node name="cicada" type="AudioStreamPlayer" parent="Settings/NeighborhoodSFX"]
 stream = ExtResource("16_i5o5p")
 volume_db = -35.852
 autoplay = true
 parameters/looping = true
 
-[node name="nightcycle" type="AudioStreamPlayer" parent="Settings/NieghborhoodSFX"]
+[node name="nightcycle" type="AudioStreamPlayer" parent="Settings/NeighborhoodSFX"]
 stream = ExtResource("22_d1lx6")
 volume_db = -15.457
 autoplay = true
@@ -1130,7 +1150,7 @@ position = Vector2(1289, -11)
 sprite_frames = SubResource("SpriteFrames_h68vx")
 animation = &"ACT"
 autoplay = "ACT"
-frame_progress = 0.9452047
+frame_progress = 0.58026963
 
 [node name="MAKOMI" parent="." instance=ExtResource("23_tnh01")]
 z_index = -3

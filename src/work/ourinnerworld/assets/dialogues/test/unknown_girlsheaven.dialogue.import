@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://b8k2lrbblo5dt"
+path="res://.godot/imported/unknown_girlsheaven.dialogue-6c57008965308046e57881272864f02e.tres"
+
+[deps]
+
+source_file="res://assets/dialogues/test/unknown_girlsheaven.dialogue"
+dest_files=["res://.godot/imported/unknown_girlsheaven.dialogue-6c57008965308046e57881272864f02e.tres"]
+
+[params]
+
+defaults=true

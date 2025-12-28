@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://8m7da7xbw3rn"
+path="res://.godot/imported/stranger.dialogue-c9dd84f9de6acc084da207fc503ea3d3.tres"
+
+[deps]
+
+source_file="res://assets/dialogues/test/stranger.dialogue"
+dest_files=["res://.godot/imported/stranger.dialogue-c9dd84f9de6acc084da207fc503ea3d3.tres"]
+
+[params]
+
+defaults=true

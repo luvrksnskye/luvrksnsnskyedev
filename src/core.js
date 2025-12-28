@@ -4,44 +4,17 @@
  * ============================
  * Central hub that coordinates all managers
  * Handles initialization and cross-manager communication
+ * Optimized for lazy loading after preloader
  */
-
-import { soundManager } from './soundManager.js';
-import { animationsManager } from './animations.js';
-import { navigationManager } from './navigation.js';
-import { darkModeManager } from './darkModeManager.js';
-import { aboutManager } from './aboutManager.js';
-import { toolsManager } from './toolsManager.js';
-import { languagesManager } from './languagesManager.js';
-import { musicManager, youtubeManager } from './musicManager.js';
-import { galleryManager, highlightsManager } from './galleryManager.js';
-import { contactManager } from './contactManager.js';
 
 class CoreManager {
     constructor() {
-        this.managers = {
-            sound: soundManager,
-            animations: animationsManager,
-            navigation: navigationManager,
-            darkMode: darkModeManager,
-            about: aboutManager,
-            tools: toolsManager,
-            languages: languagesManager,
-            music: musicManager,
-            youtube: youtubeManager,
-            gallery: galleryManager,
-            highlights: highlightsManager,
-            contact: contactManager
-        };
-
+        this.managers = {};
         this.isInitialized = false;
         this.initPromises = [];
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.init());
-        } else {
-            this.init();
-        }
+        
+        // Don't auto-initialize - wait for preloader to complete
+        // Managers will be loaded when init() is called
     }
 
     /**
@@ -53,6 +26,47 @@ class CoreManager {
         console.log('🚀 Core Manager initializing...');
 
         try {
+            // Dynamically import managers only when needed
+            const [
+                { soundManager },
+                { animationsManager },
+                { navigationManager },
+                { darkModeManager },
+                { aboutManager },
+                { toolsManager },
+                { languagesManager },
+                { musicManager, youtubeManager },
+                { galleryManager, highlightsManager },
+                { contactManager }
+            ] = await Promise.all([
+                import('./soundManager.js'),
+                import('./animations.js'),
+                import('./navigation.js'),
+                import('./darkModeManager.js'),
+                import('./aboutManager.js'),
+                import('./toolsManager.js'),
+                import('./languagesManager.js'),
+                import('./musicManager.js'),
+                import('./galleryManager.js'),
+                import('./contactManager.js')
+            ]);
+
+            // Set managers
+            this.managers = {
+                sound: soundManager,
+                animations: animationsManager,
+                navigation: navigationManager,
+                darkMode: darkModeManager,
+                about: aboutManager,
+                tools: toolsManager,
+                languages: languagesManager,
+                music: musicManager,
+                youtube: youtubeManager,
+                gallery: galleryManager,
+                highlights: highlightsManager,
+                contact: contactManager
+            };
+
             // Phase 1: Critical managers that others depend on
             await this.initializeCritical();
 
@@ -83,12 +97,17 @@ class CoreManager {
         console.log('⚡ Initializing critical managers...');
         
         // Sound manager needs to be ready first
-        if (this.managers.sound && !this.managers.sound.initialized) {
+        if (this.managers.sound) {
+            if (typeof this.managers.sound.init === 'function' && !this.managers.sound.initialized) {
+                this.managers.sound.init();
+            }
             this.managers.sound.preloadAll();
         }
 
         // Animations manager is critical for transitions
-        // Already initialized in its constructor
+        if (this.managers.animations && typeof this.managers.animations.init === 'function') {
+            this.managers.animations.init();
+        }
     }
 
     /**
@@ -97,8 +116,15 @@ class CoreManager {
     async initializeUI() {
         console.log('🎨 Initializing UI managers...');
         
-        // These handle the main interface
-        // Already initialized in their constructors
+        // Navigation
+        if (this.managers.navigation && typeof this.managers.navigation.init === 'function') {
+            this.managers.navigation.init();
+        }
+        
+        // Dark mode
+        if (this.managers.darkMode && typeof this.managers.darkMode.init === 'function') {
+            this.managers.darkMode.init();
+        }
     }
 
     /**
@@ -107,8 +133,19 @@ class CoreManager {
     async initializeContent() {
         console.log('📦 Initializing content managers...');
         
-        // These handle specific content sections
-        // Already initialized in their constructors
+        // Initialize all content managers
+        const contentManagers = ['about', 'tools', 'languages', 'music', 'youtube', 'gallery', 'highlights', 'contact'];
+        
+        contentManagers.forEach(name => {
+            const manager = this.managers[name];
+            if (manager && typeof manager.init === 'function' && !manager.initialized) {
+                try {
+                    manager.init();
+                } catch (error) {
+                    console.warn(`Failed to initialize ${name} manager:`, error);
+                }
+            }
+        });
     }
 
     /**

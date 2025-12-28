@@ -17,14 +17,12 @@ class AnimationsManager {
         this.initialized = false;
         this.INTRO_SEEN_KEY = 'skye_intro_seen';
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.init());
-        } else {
-            this.init();
-        }
+        // Don't auto-initialize - wait for core manager
     }
 
     init() {
+        if (this.initialized) return;
+        
         this.elements = {
             heroTitle: document.getElementById('heroTitle'),
             notifications: document.querySelectorAll('.notification'),

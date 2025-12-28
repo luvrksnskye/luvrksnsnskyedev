@@ -21,12 +21,46 @@
 <meta name="twitter:description" content="Skye's portfolio lol">
 <meta name="twitter:image" content="/src/assets/meta.png">
     <link rel="stylesheet" href="/src/css/styles.css">
+    <link rel="stylesheet" href="/src/css/loader.css">
     <link rel="stylesheet" href="/src/css/responsive.css">
     <script src="https://iframe.chat/scripts/main.min.js"></script>
 
 </head>
 
 <body>
+
+<!-- ========================================
+                PRELOADER SCREEN
+     ======================================== -->
+<div id="preloader">
+    <div class="loader-wrapper">
+        <div id='loader'>
+            <div id='title' class='flex'>
+                <p class='loading-text'>LOADING</p>
+                <div class='therefore'>∴</div>
+                <p class="loading-number"><span id="loadPercent">0</span>%</p>
+            </div>
+            <div id='loading-bar-border'>
+                <div class='loading-bar' id="loadingBar"></div>
+            </div>
+            <div id='warning'>
+                <p>
+                    <span class='exclamation'>!</span>
+                    &nbsp; CAUTION, Do not turn off.
+                </p>
+                <div id='line-cascates'></div>
+            </div>
+            
+            <!-- Audio Prompt -->
+            <div class="audio-prompt" id="audioPrompt">
+                <div class="audio-icon">
+                    <img src="/src/assets/loading-audio.svg" alt="Audio">
+                </div>
+                <p class="audio-text">TAP TO ENABLE SOUND</p>
+            </div>
+        </div>
+    </div>
+</div>
 
   <!-- SVG Filters -->
   <svg style="display:none;">
@@ -527,7 +561,7 @@ document.addEventListener('click', (e) => {
                     <p class="panel-subtitle">Ways to reach me</p>
                 </div>
                 
-                <div class="contact-links-container">
+                   <div class="contact-links-container">
                     <a href="mailto:luvrksnskyejourney@icloud.com" class="contact-link">
                         <img src="src/assets/email-icon.svg" alt="Email" class="contact-icon">
                         <span class="contact-text">luvrksnskyejourney@icloud.com</span>
@@ -631,7 +665,7 @@ document.addEventListener('click', (e) => {
             </div>
         </div>
         
-        <!-- Right Column: Chat Embed + Guidelines -->
+   <!-- Right Column: Chat Embed + Guidelines -->
         <div class="right-column">
             <!-- Chat Embed -->
             <div class="chat-embed-container">
@@ -688,11 +722,6 @@ document.addEventListener('click', (e) => {
        <!-- ========================================
                     SISTEMA MODULAR JS
          ======================================== -->
- <script type="module" src="/src/index.js"></script>
- <script>
-    chattable.initialize({
-        stylesheet: "/src/css/chattable.css"
-    });
-</script>
+    <script type="module" src="/src/index.js"></script>
 </body>
 </html>

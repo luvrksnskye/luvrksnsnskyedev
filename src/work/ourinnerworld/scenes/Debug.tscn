@@ -1,0 +1,29 @@
+[gd_scene load_steps=7 format=3 uid="uid://bk5jwvngl4ra4"]
+
+[ext_resource type="Script" uid="uid://bpqmp6y1mqdl2" path="res://test/debug.gd" id="1_5spvt"]
+[ext_resource type="PackedScene" uid="uid://cw2jln7ua3mfs" path="res://scenes/Rainy.tscn" id="2_c2xgb"]
+[ext_resource type="PackedScene" uid="uid://dvgu1pbb6ijum" path="res://scenes/UI/Tag.tscn" id="3_2u27b"]
+[ext_resource type="PackedScene" uid="uid://cqfp2qnbf77uo" path="res://scenes/Hikiko.tscn" id="3_b1f3y"]
+[ext_resource type="PackedScene" uid="uid://chfchl1nmjbcy" path="res://scenes/UI/menu_characters.tscn" id="4_p2fn5"]
+[ext_resource type="PackedScene" uid="uid://dalkrejxpchf" path="res://scenes/Stranger.tscn" id="6_kerke"]
+
+[node name="Node2D" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_5spvt")
+
+[node name="Rainy" parent="." instance=ExtResource("2_c2xgb")]
+
+[node name="Camera2D" type="Camera2D" parent="Rainy"]
+
+[node name="UI" type="Node2D" parent="Rainy"]
+
+[node name="Tag" parent="Rainy/UI" instance=ExtResource("3_2u27b")]
+visible = false
+
+[node name="Menu_Characters" parent="Rainy/UI" instance=ExtResource("4_p2fn5")]
+visible = false
+
+[node name="Hikiko" parent="." instance=ExtResource("3_b1f3y")]
+position = Vector2(0, -34)
+
+[node name="Stranger" parent="." instance=ExtResource("6_kerke")]

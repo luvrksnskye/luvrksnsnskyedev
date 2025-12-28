@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://cf1iqaos3ihlx"
+path="res://.godot/imported/lost_boy.dialogue-d0465be18909caa46bd9178a1e03fcbe.tres"
+
+[deps]
+
+source_file="res://assets/dialogues/lost_souls/lost_boy.dialogue"
+dest_files=["res://.godot/imported/lost_boy.dialogue-d0465be18909caa46bd9178a1e03fcbe.tres"]
+
+[params]
+
+defaults=true

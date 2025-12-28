@@ -1,0 +1,47 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3 uid="uid://dqxuenamayue3"]
+
+[ext_resource type="Texture2D" uid="uid://dgdyq83ql4ggq" path="res://assets/ui/items/ItemIcons1.png" id="1_7ob4a"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ob4a"]
+atlas = ExtResource("1_7ob4a")
+region = Rect2(212, 106, 106, 106)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xlsim"]
+atlas = ExtResource("1_7ob4a")
+region = Rect2(212, 212, 106, 106)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pedxm"]
+atlas = ExtResource("1_7ob4a")
+region = Rect2(318, 212, 106, 106)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ob4a")
+}],
+"loop": true,
+"name": &"mushroom_wild",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xlsim")
+}],
+"loop": true,
+"name": &"strawberry_wild",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pedxm")
+}],
+"loop": true,
+"name": &"tofu",
+"speed": 5.0
+}]

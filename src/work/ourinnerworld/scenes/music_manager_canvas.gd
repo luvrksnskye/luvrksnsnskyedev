@@ -29,6 +29,9 @@ var is_playing: bool = false
 # INITIALIZATION
 # ============================================
 func _ready() -> void:
+	# Configurar para que ignore la pausa del juego
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
 	# Gather all music tracks
 	_collect_music_tracks()
 	

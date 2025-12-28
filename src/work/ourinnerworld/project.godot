@@ -21,11 +21,15 @@ config/icon="uid://cry1m1gr88opy"
 
 [autoload]
 
+PocketInventory="*res://singletons/PocketInventory.gd"
+PartyManager="*res://singletons/PartyManager.gd"
+SkillsManager="*res://singletons/SkillsManager.gd"
 SaveManager="*res://singletons/SaveManager.gd"
 ChallengeData="*res://singletons/ChallengeData.gd"
 SceneManager="*res://scripts/SceneManager.gd"
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
 ControlsLock="*res://singletons/ControlsLock.gd"
+InputSetup="*res://singletons/InputSetup.gd"
 
 [display]
 
@@ -41,15 +45,32 @@ window/name="ourinnerworld_site"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/TileCropper/plugin.cfg", "res://addons/dialogue_manager/plugin.cfg")
+enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg")
+
+[global_group]
+
+Player=""
 
 [gui]
 
 theme/custom_font="uid://bmbupgmrbwkn2"
 
+[input]
+
+Tag_menu={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":90,"key_label":0,"unicode":122,"location":0,"echo":false,"script":null)
+]
+}
+action_ability={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":82,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+
 [internationalization]
 
-locale/translations_pot_files=PackedStringArray("res://assets/dialogues/makomi&skye.dialogue", "res://assets/dialogues/cat_I.dialogue", "res://assets/dialogues/cat_II.dialogue", "res://assets/dialogues/cat_III.dialogue", "res://assets/dialogues/peaceafterall.dialogue", "res://assets/dialogues/conversation.dialogue", "res://assets/dialogues/rest.dialogue", "res://assets/dialogues/rest_after.dialogue", "res://assets/dialogues/paint_guide/makomiintro.dialogue", "res://assets/dialogues/paint_guide/intro.dialogue", "res://assets/dialogues/paint_guide/turn.dialogue", "res://assets/dialogues/paint_guide/makomi_greetings.dialogue", "res://assets/dialogues/paint_guide/challenge_results.dialogue", "res://assets/dialogues/challenges/timed_30s.dialogue", "res://assets/dialogues/challenges/style_abstract.dialogue", "res://assets/dialogues/challenges/timed_60s.dialogue", "res://assets/dialogues/challenges/timed_120s.dialogue", "res://assets/dialogues/challenges/style_minimalist.dialogue", "res://assets/dialogues/challenges/style_geometric.dialogue", "res://assets/dialogues/challenges/style_impressionist.dialogue", "res://assets/dialogues/challenges/style_pop_art.dialogue", "res://assets/dialogues/challenges/color_warm.dialogue", "res://assets/dialogues/challenges/color_cool.dialogue", "res://assets/dialogues/challenges/color_three.dialogue", "res://assets/dialogues/challenges/mono_red.dialogue", "res://assets/dialogues/challenges/mono_blue.dialogue", "res://assets/dialogues/challenges/mono_bw.dialogue", "res://assets/dialogues/challenges/theme_nature.dialogue", "res://assets/dialogues/challenges/theme_space.dialogue", "res://assets/dialogues/challenges/theme_ocean.dialogue", "res://assets/dialogues/challenges/theme_sunset.dialogue", "res://assets/dialogues/challenges/theme_city.dialogue", "res://assets/dialogues/challenges/theme_joy.dialogue", "res://assets/dialogues/challenges/theme_calm.dialogue", "res://assets/dialogues/challenges/color_rainbow.dialogue")
+locale/translations_pot_files=PackedStringArray("res://assets/dialogues/makomi&skye.dialogue", "res://assets/dialogues/cat_I.dialogue", "res://assets/dialogues/cat_II.dialogue", "res://assets/dialogues/cat_III.dialogue", "res://assets/dialogues/peaceafterall.dialogue", "res://assets/dialogues/conversation.dialogue", "res://assets/dialogues/rest.dialogue", "res://assets/dialogues/rest_after.dialogue", "res://assets/dialogues/paint_guide/makomiintro.dialogue", "res://assets/dialogues/paint_guide/intro.dialogue", "res://assets/dialogues/paint_guide/turn.dialogue", "res://assets/dialogues/paint_guide/makomi_greetings.dialogue", "res://assets/dialogues/paint_guide/challenge_results.dialogue", "res://assets/dialogues/challenges/timed_30s.dialogue", "res://assets/dialogues/challenges/style_abstract.dialogue", "res://assets/dialogues/challenges/timed_60s.dialogue", "res://assets/dialogues/challenges/timed_120s.dialogue", "res://assets/dialogues/challenges/style_minimalist.dialogue", "res://assets/dialogues/challenges/style_geometric.dialogue", "res://assets/dialogues/challenges/style_impressionist.dialogue", "res://assets/dialogues/challenges/style_pop_art.dialogue", "res://assets/dialogues/challenges/color_warm.dialogue", "res://assets/dialogues/challenges/color_cool.dialogue", "res://assets/dialogues/challenges/color_three.dialogue", "res://assets/dialogues/challenges/mono_red.dialogue", "res://assets/dialogues/challenges/mono_blue.dialogue", "res://assets/dialogues/challenges/mono_bw.dialogue", "res://assets/dialogues/challenges/theme_nature.dialogue", "res://assets/dialogues/challenges/theme_space.dialogue", "res://assets/dialogues/challenges/theme_ocean.dialogue", "res://assets/dialogues/challenges/theme_sunset.dialogue", "res://assets/dialogues/challenges/theme_city.dialogue", "res://assets/dialogues/challenges/theme_joy.dialogue", "res://assets/dialogues/challenges/theme_calm.dialogue", "res://assets/dialogues/challenges/color_rainbow.dialogue", "res://assets/dialogues/lost_souls/lost_boy.dialogue", "res://assets/dialogues/test/stranger.dialogue", "res://test/stranger_bench_nh.dialogue", "res://assets/dialogues/test/unknown_girlsheaven.dialogue")
 
 [rendering]
 

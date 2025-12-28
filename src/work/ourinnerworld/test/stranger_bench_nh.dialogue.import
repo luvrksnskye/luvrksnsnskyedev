@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://dgnnj1g7otlbj"
+path="res://.godot/imported/stranger_bench_nh.dialogue-9ec4329ea93a38350fd9a3605d786d8e.tres"
+
+[deps]
+
+source_file="res://test/stranger_bench_nh.dialogue"
+dest_files=["res://.godot/imported/stranger_bench_nh.dialogue-9ec4329ea93a38350fd9a3605d786d8e.tres"]
+
+[params]
+
+defaults=true

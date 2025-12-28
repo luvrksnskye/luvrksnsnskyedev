@@ -1,0 +1,271 @@
+/**
+ * ============================
+ * LOADER STYLES
+ * ============================
+ * Styles for the 2-minute preloading screen
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');
+
+@property --num {
+    syntax: '<integer>';
+    initial-value: 0;
+    inherits: false;
+}
+
+/* Loader Container */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.8s ease-out;
+}
+
+#preloader.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loader-wrapper {
+    width: 80%;
+    max-width: 600px;
+    animation: fadeInLoader 1s ease-in-out;
+}
+
+@keyframes fadeInLoader {
+    0% { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    100% { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* Loader Main */
+#loader {
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+#loader .flex {
+    display: flex;
+    align-items: center;
+}
+
+#loader .loading-text {
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.3rem;
+    font-size: 14px;
+    margin: 0;
+}
+
+#loader .therefore {
+    font-size: 24px;
+    animation: rotate 1s linear infinite;
+    padding: 0 10px;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loader .loading-number {
+    margin-left: auto;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+}
+
+/* Loading Bar */
+#loading-bar-border {
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    border-radius: 3px;
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    width: 100%;
+    margin-top: 10px;
+}
+
+#loading-bar-border .loading-bar {
+    height: 0.6rem;
+    margin: 1px 0;
+    background: linear-gradient(90deg, #ffffff, #888888);
+    width: 0%;
+    transition: width 0.3s ease-out;
+    border-radius: 2px;
+}
+
+/* Warning Section */
+#warning {
+    margin-top: 0.5rem;
+    font-family: 'Orbitron', sans-serif;
+    display: flex;
+    height: auto;
+    font-size: 11px;
+    align-items: flex-start;
+}
+
+#warning > p {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+#warning .exclamation {
+    width: 1rem;
+    height: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    color: black;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+/* Line Cascades Animation */
+#line-cascates {
+    margin-left: auto;
+    display: flex;
+    align-items: flex-end;
+    font-size: 10px;
+    color: #888;
+    white-space: pre-line;
+    text-align: right;
+    max-width: 300px;
+}
+
+@keyframes initText {
+    0% { content: "Initializing system . . ."; }
+    8% { content: "Loading core modules . . ."; }
+    16% { content: "Verifying user permissions . . ."; }
+    24% { content: "Compiling source code . . ."; }
+    32% { content: "Running diagnostics . . ."; }
+    40% { content: "Establishing secure connection . . ."; }
+    48% { content: "Scanning for vulnerabilities . . ."; }
+    56% { content: "Loading user interface . . ."; }
+    64% { content: "Executing startup procedures . . ."; }
+    72% { content: "Initializing database connections . . ."; }
+    80% { content: "Caching resources . . ."; }
+    88% { content: "Optimizing performance . . ."; }
+    96% { content: "Finalizing setup . . ."; }
+    100% { content: "System ready!"; }
+}
+
+#line-cascates::after {
+    content: "Initializing system . . .";
+    animation: initText 120s ease forwards;
+}
+
+/* Audio Prompt */
+.audio-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+.audio-prompt:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.audio-prompt.activated {
+    opacity: 0.4;
+    animation: none;
+    pointer-events: none;
+}
+
+.audio-prompt.activated .audio-text {
+    color: #4ade80;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.audio-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+}
+
+.audio-icon img {
+    width: 100%;
+    height: 100%;
+    filter: brightness(0) invert(1);
+}
+
+.audio-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: white;
+    text-align: center;
+    transition: color 0.3s ease;
+}
+
+/* Main Content Hidden State */
+.main-content-hidden {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .loader-wrapper {
+        width: 90%;
+    }
+    
+    #loader .loading-text {
+        font-size: 12px;
+        letter-spacing: 0.2rem;
+    }
+    
+    #loader .therefore {
+        font-size: 20px;
+    }
+    
+    #loader .loading-number {
+        font-size: 12px;
+    }
+    
+    #warning {
+        font-size: 9px;
+    }
+    
+    #line-cascates {
+        font-size: 8px;
+        max-width: 150px;
+    }
+    
+    .audio-icon {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .audio-text {
+        font-size: 10px;
+    }
+}

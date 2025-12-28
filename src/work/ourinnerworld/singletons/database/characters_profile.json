@@ -1,0 +1,24 @@
+{
+  "character_profile": {
+	"rainy": {
+	  "name": "RAINY",
+	  "description": "You are the DREAMER. Sometimes you seem lost... yet still determined. You don't quite remember what you're looking for, but you know that something important is missing. This world feels familiar, and strange, and warm... but also distant. Where will the current carry you? Back home? But what even is 'home' to you? Whatever the answer is, your journey is only just beginning. The road ahead is long, and only you can decide where it ends.",
+	  "likes": [],
+	  "dislikes": []
+	},
+
+	"hikiko": {
+	  "name": "HIKIKO",
+	  "description": "Hikiko is a child with a CHEERFUL personality and a bright energy that seems to light up every corner of the dream. He is always excited, even when he trips over his own feet. But that doesn't matter: Hikiko always gets back up with a huge smile. Despite being clumsy, he is a loyal, kind companion with a huge heart. He would rather help than fight and finds beauty in the simplest things in the world. As an ally, Hikiko will do everything he can to protect you and cheer you up in difficult moments-especially if you have a sweet snack to share! He is just a kid... but where did he even get that giant toy hammer?",
+	  "likes": [],
+	  "dislikes": []
+	},
+
+	"stranger": {
+	  "name": "STRANGER",
+	  "description": "An odd being... A presence that watches you in unsettling silence, but not with hostility. Stranger seems interested in helping you, even if she does not remember who she used to be or what she lost along the way. She is reserved, gloomy, and serious, but her loyalty to you is undeniable. There is something deeply human about her, even if she tries to hide it-a spark of sensitivity buried under layers of emptiness and pain. Even so, Stranger shows genuine concern for those who live in DREAMWORLD. She pleads for mercy even for those others might call enemies. Her original form terrified you... but she chose a gentler shape for your sake. And even if the souls born here may never truly take form, their cries still echo somewhere in the distance.",
+	  "likes": [],
+	  "dislikes": []
+	}
+  }
+}
