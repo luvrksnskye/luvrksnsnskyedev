@@ -531,3 +531,198 @@
     transform: translateZ(0);
     backface-visibility: hidden;
 }
+
+/* ================================================================== */
+/* ENHANCED GLITCH & SCAN EFFECTS                                      */
+/* ================================================================== */
+
+/* Scanline Layer */
+.sv-scanline-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 101;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 2px,
+        rgba(0, 0, 0, 0.15) 2px,
+        rgba(0, 0, 0, 0.15) 4px
+    );
+    opacity: 0.6;
+}
+
+/* Enhanced Glitch Overlay */
+.sv-glitch-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 1px,
+        rgba(255, 255, 255, 0.02) 1px,
+        rgba(255, 255, 255, 0.02) 2px
+    );
+    pointer-events: none;
+    animation: scanlineScroll 0.1s linear infinite;
+}
+
+@keyframes scanlineScroll {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(4px); }
+}
+
+/* Glitch Distortion Effect */
+.sv-glitch-overlay.active {
+    animation: glitchDistort 0.15s steps(2) infinite;
+}
+
+@keyframes glitchDistort {
+    0% { 
+        clip-path: inset(0 0 85% 0);
+        transform: translateX(0);
+    }
+    25% { 
+        clip-path: inset(15% 0 60% 0);
+        transform: translateX(-2px);
+    }
+    50% { 
+        clip-path: inset(40% 0 30% 0);
+        transform: translateX(2px);
+    }
+    75% { 
+        clip-path: inset(70% 0 5% 0);
+        transform: translateX(-1px);
+    }
+    100% { 
+        clip-path: inset(5% 0 80% 0);
+        transform: translateX(0);
+    }
+}
+
+/* Enhanced Number Flash */
+.sv-flash-number {
+    font-variant-numeric: tabular-nums;
+    will-change: transform, opacity;
+}
+
+@keyframes numberFlashEnhanced {
+    0% { 
+        transform: scale(0.3) translateY(10px); 
+        opacity: 0; 
+        filter: blur(2px);
+    }
+    40% { 
+        transform: scale(1.1) translateY(-2px); 
+        opacity: 1; 
+        filter: blur(0);
+    }
+    100% { 
+        transform: scale(1) translateY(0); 
+        opacity: 0.7; 
+        filter: blur(0);
+    }
+}
+
+/* Panel Glitch Enhanced */
+.sv-scan-panel.glitching::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.03) 50%,
+        transparent 100%
+    );
+    animation: scanPanelLine 0.2s linear infinite;
+}
+
+@keyframes scanPanelLine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Data Corruption Text Effect */
+.sv-data-corrupt {
+    animation: dataCorrupt 0.1s steps(3) infinite;
+}
+
+@keyframes dataCorrupt {
+    0%, 100% { 
+        opacity: 1; 
+        transform: translateX(0);
+    }
+    33% { 
+        opacity: 0.8; 
+        transform: translateX(-1px);
+    }
+    66% { 
+        opacity: 0.9; 
+        transform: translateX(1px);
+    }
+}
+
+/* Noise Texture Overlay */
+.sv-noise-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 102;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+}
+
+/* Cursor Scan Animation */
+.sv-cursor.holding .sv-cursor-ring {
+    animation: cursorScanPulse 0.5s ease-in-out infinite;
+}
+
+@keyframes cursorScanPulse {
+    0%, 100% { 
+        stroke-width: 1;
+        stroke-opacity: 0.6;
+    }
+    50% { 
+        stroke-width: 2;
+        stroke-opacity: 1;
+    }
+}
+
+.sv-scan-active {
+    position: relative;
+    overflow: hidden;
+}
+
+.sv-scan-active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(134, 213, 255, 0.216), 
+        rgba(153, 122, 255, 0.5), 
+        rgba(237, 146, 255, 0.3), 
+          rgba(134, 142, 255, 0.216), 
+        rgba(255, 122, 162, 0.5), 
+        rgba(146, 255, 239, 0.3),
+        transparent);
+    animation: scan-sweep 2s linear infinite;
+    pointer-events: none;
+    z-index: 10;
+}
+
+@keyframes scan-sweep {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
+
+.sv-scan-completed {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none !important;
+}

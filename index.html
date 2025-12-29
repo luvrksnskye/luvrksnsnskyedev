@@ -25,7 +25,11 @@
     <link rel="stylesheet" href="/src/css/work.css">
     <link rel="stylesheet" href="/src/css/responsive.css">
     <script src="https://iframe.chat/scripts/main.min.js"></script>
-
+<script type="module">
+    import { VFX } from "https://esm.sh/@vfx-js/core@0.5.2";
+    window.VFX = VFX;
+    console.log('VFX loaded successfully');
+</script>
 </head>
 
 <body>
