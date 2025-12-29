@@ -1,0 +1,533 @@
+/* STARVORTEX WORK SECTION - OPTIMIZED + KPR-INSPIRED GRID */
+@font-face { font-family: 'SV-Tech'; src: url('/src/starvortex_assets/tech.ttf') format('truetype'); }
+@font-face { font-family: 'SV-Hexaframe'; src: url('/src/starvortex_assets/Hexaframe.woff') format('woff'), url('/src/starvortex_assets/Hexaframe.otf') format('opentype'); }
+
+/* NAV WORK MODE */
+#mainNav.sv-work-mode { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 60px; 
+    transform: none; 
+    border-radius: 0; 
+    backdrop-filter: blur(15px); 
+    background: rgba(0, 0, 0, 0.819); 
+    border: none; 
+    border-bottom: 1px solid rgba(255,255,255,0.15); 
+    padding: 0 25px; 
+    display: flex; 
+    align-items: center; 
+    gap: 20px; 
+    z-index: 1000; 
+}
+#mainNav.sv-work-mode .nav-menu.sv-nav-styled { display: flex; gap: 5px; background: transparent; padding: 0; margin: 0 auto; }
+#mainNav.sv-work-mode .nav-menu.sv-nav-styled .nav-item { margin: 0; }
+#mainNav.sv-work-mode .nav-menu.sv-nav-styled .nav-link { font-family: 'SV-Tech', monospace; font-size: 11px; letter-spacing: 0.15em; color: rgba(255,255,255,0.6); padding: 8px 15px; text-transform: uppercase; }
+#mainNav.sv-work-mode .nav-menu.sv-nav-styled .nav-link:hover, #mainNav.sv-work-mode .nav-menu.sv-nav-styled .nav-link.active { color: white; }
+#mainNav.sv-work-mode .nav-indicator-bg { display: none; }
+
+.sv-back-btn { width: 40px; height: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; background: transparent; border: 1px solid rgba(255,255,255,0.4); border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+.sv-back-btn:hover { border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.1); }
+.sv-back-line { display: block; width: 16px; height: 2px; background: rgba(255,255,255,0.9); }
+.sv-mode-indicator { display: flex; align-items: center; padding: 6px 14px; border: 1px solid rgba(255,255,255,0.4); border-radius: 4px; }
+.sv-mode-txt { font-family: 'SV-Tech', monospace; font-size: 10px; letter-spacing: 0.2em; color: rgba(255,255,255,0.8); }
+
+/* WORK SCREEN - GPU Optimized */
+.sv-work-screen { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    z-index: 200; 
+    opacity: 0; 
+    visibility: hidden; 
+    transition: opacity 0.5s ease-out, visibility 0.5s; 
+    will-change: opacity;
+    contain: layout style paint;
+}
+.sv-work-screen.active { opacity: 1; visibility: visible; }
+
+/* GRID OVERLAY - KPR Style */
+.sv-grid-overlay { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    pointer-events: none; 
+    z-index: 1;
+    will-change: auto;
+}
+.sv-grid-v, .sv-grid-h { 
+    position: absolute; 
+    background: rgba(255,255,255,0.08); 
+}
+.sv-grid-v { width: 1px; height: 100%; top: 0; }
+.sv-v1 { left: 5%; } 
+.sv-v2 { left: 33.333%; } 
+.sv-v3 { left: 66.666%; } 
+.sv-v4 { right: 5%; }
+.sv-grid-h { width: 100%; height: 1px; left: 0; }
+.sv-h1 { top: 60px; } 
+.sv-h2 { top: 50%; } 
+.sv-h3 { bottom: 5%; }
+
+/* CURSOR - Optimized with will-change */
+.sv-cursor { 
+    position: fixed; 
+    pointer-events: none; 
+    z-index: 9999; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    will-change: transform;
+    contain: layout style;
+}
+.sv-cursor-inner { position: relative; width: 120px; height: 120px; }
+.sv-cursor-svg { width: 100%; height: 100%; }
+.sv-cursor-ring { transition: all 0.3s ease-out; }
+.sv-cursor-progress { transition: stroke-dashoffset 0.05s linear; }
+.sv-cursor-arrow { position: absolute; font-size: 14px; color: white; transition: all 0.3s ease-out; opacity: 0; }
+.sv-arrow-left { left: -5px; top: 50%; transform: translateY(-50%); }
+.sv-arrow-right { right: -5px; top: 50%; transform: translateY(-50%); }
+.sv-cursor-hold-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'SV-Tech', monospace; font-size: 12px; letter-spacing: 0.15em; color: white; opacity: 0; transition: opacity 0.2s; }
+.sv-cursor-label { font-family: 'SV-Tech', monospace; font-size: 10px; letter-spacing: 0.15em; color: rgba(255,255,255,0.8); margin-top: 10px; opacity: 0; transition: opacity 0.3s; white-space: nowrap; }
+
+.sv-cursor.near-target .sv-cursor-arrow { opacity: 1; }
+.sv-cursor.near-target .sv-arrow-left { left: 5px; }
+.sv-cursor.near-target .sv-arrow-right { right: 5px; }
+.sv-cursor.near-target .sv-cursor-ring { stroke: white; stroke-width: 2; }
+.sv-cursor.near-target .sv-cursor-label { opacity: 1; }
+.sv-cursor.near-target .sv-cursor-inner { animation: sv-cursor-rotate 8s linear infinite; }
+@keyframes sv-cursor-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.sv-cursor.holding .sv-cursor-hold-text { opacity: 1; }
+.sv-cursor.holding .sv-cursor-label { opacity: 0; }
+.sv-cursor.holding .sv-cursor-inner { animation: none; }
+
+/* SCROLL - Optimized */
+.sv-scroll { 
+    position: absolute; 
+    top: 60px; 
+    left: 0; 
+    width: 100%; 
+    height: calc(100% - 60px); 
+    overflow-y: auto; 
+    overflow-x: hidden; 
+    z-index: 10;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+.sv-scroll::-webkit-scrollbar { width: 3px; }
+.sv-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+.sv-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+
+/* SECTIONS - Optimized animations */
+.sv-section { 
+    position: relative; 
+    width: 100%; 
+    padding: 60px 5%; 
+    opacity: 0; 
+    transform: translateY(20px); 
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out; 
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    will-change: opacity, transform;
+}
+.sv-section.visible { opacity: 1; transform: translateY(0); }
+
+/* HERO */
+.sv-hero { min-height: calc(100vh - 60px); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.sv-circle-wrap { 
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    width: 50vmin; 
+    height: 50vmin; 
+    max-width: 500px; 
+    max-height: 500px; 
+    z-index: 1;
+    will-change: auto;
+}
+.sv-circle-img { width: 100%; height: 100%; object-fit: contain; filter: brightness(0) invert(1); opacity: 1.05; }
+.sv-title { position: relative; z-index: 10; font-family: 'SV-Hexaframe', sans-serif; font-size: clamp(50px, 14vw, 160px); color: white; letter-spacing: 0.02em; margin: 0; text-align: center; min-height: 1.2em; }
+.sv-tagline { position: relative; z-index: 10; font-family: 'SV-Tech', monospace; font-size: 13px; letter-spacing: 0.3em; color: rgba(255,255,255,0.7); text-transform: uppercase; margin: 15px 0 0 0; text-align: center; }
+.sv-label { position: absolute; display: flex; align-items: center; gap: 8px; font-family: 'SV-Tech', monospace; font-size: 10px; letter-spacing: 0.2em; color: rgba(255,255,255,0.7); text-transform: uppercase; z-index: 10; }
+.sv-label-l { top: 100px; left: 5%; }
+.sv-label-r { top: 100px; right: 5%; }
+.sv-dot { font-size: 7px; color: white; }
+.sv-hero-desc { position: absolute; bottom: 80px; left: 5%; max-width: 450px; z-index: 10; }
+.sv-hero-desc p { font-family: 'SV-Tech', monospace; font-size: 11px; line-height: 1.8; color: rgba(255,255,255,0.7); letter-spacing: 0.05em; text-transform: uppercase; margin: 0; }
+.sv-marker { position: absolute; bottom: 40px; left: 5%; font-family: 'SV-Tech', monospace; font-size: 12px; letter-spacing: 0.3em; color: rgba(255,255,255,0.4); z-index: 10; }
+
+/* SCAN SECTION */
+.sv-scan-section { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 100px 5%; }
+.sv-scan-area { position: relative; width: 100%; max-width: 1400px; min-height: 750px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.sv-scan-title { font-family: 'SV-Hexaframe', sans-serif; font-size: clamp(50px, 10vw, 120px); color: white; margin: 0; text-align: center; cursor: none; transition: text-shadow 0.3s ease-out; }
+.sv-scan-title:hover { text-shadow: 0 0 40px rgba(255,255,255,0.3); }
+.sv-scan-subtitle { font-family: 'SV-Tech', monospace; font-size: 12px; letter-spacing: 0.3em; color: rgba(255,255,255,0.5); text-transform: uppercase; margin: 15px 0 0 0; }
+
+/* SCAN ASSETS - Data visualizations */
+.sv-scan-asset { 
+    position: absolute; 
+    opacity: 0; 
+    transform: scale(0.8); 
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out; 
+    pointer-events: none; 
+    z-index: 5;
+    will-change: opacity, transform;
+}
+.sv-scan-asset.visible { opacity: 1; transform: scale(1); }
+
+/* Data assets positions - SKYE */
+.sv-asset-geo { width: 140px; left: 38%; top: 8%; }
+.sv-asset-distance { width: 160px; right: 35%; bottom: 12%; }
+.sv-asset-scans { width: 120px; left: 35%; bottom: 8%; }
+.sv-asset-skye-data { width: 400px; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(0.8); }
+.sv-asset-skye-data.visible { transform: translate(-50%, -50%) scale(1); }
+
+/* Data assets positions - PROJECTS */
+.sv-asset-geo-proj { width: 120px; left: 40%; top: 12%; }
+.sv-asset-scans-proj { width: 100px; right: 38%; bottom: 15%; }
+
+/* DOT PATTERN */
+.sv-dot-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-out;
+    pointer-events: none;
+    z-index: 1;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
+    background-size: 30px 30px;
+}
+.sv-dot-pattern.visible { opacity: 1; }
+
+/* SCAN PANELS - Larger with blur backdrop */
+.sv-scan-panel { 
+    position: absolute; 
+    opacity: 0; 
+    transform: scale(0.9) translateY(20px); 
+    transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1); 
+    pointer-events: none; 
+    z-index: 10;
+    will-change: opacity, transform;
+    contain: layout style;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.sv-scan-panel.revealed { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+.sv-panel-border { display: none; }
+.sv-panel-content { 
+    position: relative; 
+    padding: 24px 28px; 
+    z-index: 1; 
+    background: rgba(0, 0, 0, 0.806); 
+    backdrop-filter: blur(80px);
+    -webkit-backdrop-filter: blur(80px);
+    height: 100%; 
+}
+.sv-panel-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; font-family: 'SV-Tech', monospace; font-size: 11px; letter-spacing: 0.2em; color: rgba(255,255,255,0.7); text-transform: uppercase; }
+.sv-panel-dot { color: white; font-size: 8px; }
+.sv-panel-plus { margin-left: auto; font-size: 14px; color: rgba(255,255,255,0.5); }
+.sv-panel-status { margin-left: auto; padding: 3px 10px; background: rgba(255,255,255,0.15); border-radius: 2px; font-size: 9px; }
+.sv-status-dev { background: rgba(255,200,0,0.2); color: rgba(255,200,0,0.9); }
+
+/* Panel positions - SKYE (LARGER) */
+.sv-panel-tl { top: 3%; left: 3%; width: 340px; height: auto; min-height: 220px; }
+.sv-panel-tr { top: 3%; right: 3%; width: 300px; height: auto; min-height: 280px; }
+.sv-panel-left { top: 30%; left: 3%; width: 360px; height: auto; min-height: 360px; }
+.sv-panel-right { top: 30%; right: 3%; width: 300px; height: auto; min-height: 220px; }
+.sv-panel-br { bottom: 5%; right: 3%; width: 460px; height: auto; min-height: 160px; }
+
+/* Panel positions - PROJECTS (LARGER) */
+.sv-panel-project-1 { top: 3%; left: 3%; width: 520px; height: auto; min-height: 280px; }
+.sv-panel-project-2 { top: 3%; right: 3%; width: 560px; height: auto; min-height: 480px; }
+.sv-panel-project-stats { bottom: 5%; left: 50%; transform: translateX(-50%) scale(0.9) translateY(20px); width: 300px; height: auto; min-height: 140px; }
+.sv-panel-project-stats.revealed { transform: translateX(-50%) scale(1) translateY(0); }
+
+/* Panel content */
+.sv-panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.sv-panel-data { display: flex; flex-direction: column; gap: 2px; }
+.sv-data-label { font-family: 'SV-Tech', monospace; font-size: 9px; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; }
+.sv-data-value { font-family: 'SV-Tech', monospace; font-size: 11px; color: white; letter-spacing: 0.12em; }
+
+/* Biometrics */
+.sv-bio-list { display: flex; flex-direction: column; gap: 6px; }
+.sv-bio-row { display: flex; justify-content: space-between; font-family: 'SV-Tech', monospace; font-size: 10px; text-transform: uppercase; }
+.sv-bio-row span:first-child { color: rgba(255,255,255,0.4); letter-spacing: 0.1em; }
+.sv-bio-row span:last-child { color: white; letter-spacing: 0.12em; }
+
+.sv-tech-list { display: flex; flex-direction: column; gap: 5px; font-family: 'SV-Tech', monospace; font-size: 10px; color: rgba(255,255,255,0.7); letter-spacing: 0.08em; text-transform: uppercase; }
+
+.sv-panel-skills { margin: 8px 0; }
+.sv-skill-item { margin-bottom: 10px; }
+.sv-skill-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.sv-skill-name { font-family: 'SV-Tech', monospace; font-size: 10px; letter-spacing: 0.12em; color: rgba(255,255,255,0.8); text-transform: uppercase; }
+.sv-skill-pct { font-family: 'SV-Tech', monospace; font-size: 10px; color: rgba(255,255,255,0.5); }
+.sv-skill-bar { width: 100%; height: 3px; background: rgba(255,255,255,0.15); position: relative; overflow: hidden; }
+.sv-skill-fill { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    height: 100%; 
+    width: 0; 
+    background: linear-gradient(90deg, rgba(255,255,255,0.6), white); 
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+    will-change: width;
+}
+.sv-skill-fill.animate { width: var(--fill); }
+
+.sv-panel-extra { margin-top: 12px; font-family: 'SV-Tech', monospace; font-size: 9px; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); text-transform: uppercase; display: flex; flex-direction: column; gap: 4px; }
+.sv-panel-bio { font-family: 'SV-Tech', monospace; font-size: 10px; line-height: 1.8; letter-spacing: 0.05em; color: rgba(255,255,255,0.7); text-transform: uppercase; margin: 0; }
+
+/* Project panels */
+.sv-project-title { font-family: 'SV-Hexaframe', sans-serif; font-size: 26px; color: white; margin: 0 0 8px 0; }
+.sv-project-meta { display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; font-family: 'SV-Tech', monospace; font-size: 9px; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; }
+.sv-project-desc { font-family: 'SV-Tech', monospace; font-size: 10px; line-height: 1.7; letter-spacing: 0.04em; color: rgba(255,255,255,0.7); text-transform: uppercase; margin: 0 0 10px 0; }
+.sv-project-desc-long { font-size: 9px; line-height: 1.6; }
+.sv-project-warning { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px; background: rgba(255,100,100,0.1); border-left: 2px solid rgba(255,100,100,0.5); margin-bottom: 10px; }
+.sv-warning-icon { color: rgba(255,100,100,0.8); font-size: 12px; }
+.sv-project-warning span:last-child { font-family: 'SV-Tech', monospace; font-size: 9px; color: rgba(255,100,100,0.8); letter-spacing: 0.05em; text-transform: uppercase; }
+.sv-project-note { font-family: 'SV-Tech', monospace; font-size: 9px; line-height: 1.6; letter-spacing: 0.04em; color: rgba(255,255,255,0.5); text-transform: uppercase; margin: 0 0 12px 0; font-style: italic; }
+.sv-project-link { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); font-family: 'SV-Tech', monospace; font-size: 10px; color: white; text-decoration: none; letter-spacing: 0.15em; text-transform: uppercase; transition: all 0.2s ease-out; margin-bottom: 12px; }
+.sv-project-link:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.5); }
+.sv-project-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.sv-project-tags span { font-family: 'SV-Tech', monospace; font-size: 9px; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; padding: 3px 8px; border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; }
+
+.sv-stats-grid { display: flex; gap: 30px; margin-top: 8px; }
+.sv-stat { display: flex; flex-direction: column; align-items: center; }
+.sv-stat-value { font-family: 'SV-Hexaframe', sans-serif; font-size: 30px; color: white; }
+.sv-stat-label { font-family: 'SV-Tech', monospace; font-size: 9px; color: rgba(255,255,255,0.5); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 4px; }
+
+/* ================================================================== */
+/* KPR-INSPIRED GRID SECTION - Clean, Cinematic, Elegant              */
+/* ================================================================== */
+
+.sv-grid-section { 
+    min-height: auto; 
+    padding: 0; 
+    border-bottom: none;
+}
+
+.sv-content-grid { 
+    display: grid; 
+    gap: 0; 
+    width: 100%;
+    background: transparent;
+}
+
+.sv-grid-3col { 
+    grid-template-columns: 1fr 1fr 1fr; 
+}
+
+.sv-box { 
+    background: transparent; 
+    padding: 60px 50px;
+    position: relative; 
+    overflow: hidden;
+    border: none;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    transition: background 0.4s ease-out;
+}
+
+.sv-box:nth-child(3n) {
+    border-right: none;
+}
+
+.sv-box:hover {
+    background: rgba(255,255,255,0.02);
+}
+
+/* Video boxes - centered content */
+.sv-box-vid { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    min-height: 400px;
+    background: rgba(0,0,0,0.2);
+}
+
+/* Info/Content boxes */
+.sv-box-info, .sv-box-div { 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    min-height: 400px;
+    padding: 80px 60px;
+}
+
+/* Box header - KPR style with dot indicator */
+.sv-box-header { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    margin-bottom: 24px; 
+}
+
+.sv-ch { 
+    font-family: 'SV-Tech', monospace; 
+    font-size: 11px; 
+    letter-spacing: 0.25em; 
+    color: rgba(255,255,255,0.5); 
+    text-transform: uppercase; 
+}
+
+/* Main title - Large, bold, KPR-inspired */
+.sv-box-title { 
+    font-family: 'SV-Hexaframe', sans-serif; 
+    font-size: clamp(32px, 5vw, 56px); 
+    color: white; 
+    margin: 0 0 28px 0;
+    line-height: 1.1;
+    font-weight: 400;
+}
+
+/* Subtitle */
+.sv-box-subtitle { 
+    font-family: 'SV-Hexaframe', sans-serif; 
+    font-size: clamp(22px, 3vw, 32px); 
+    color: white; 
+    margin: 0 0 20px 0;
+    line-height: 1.2;
+}
+
+/* Body text - Clean, readable */
+.sv-box-text { 
+    font-family: 'SV-Tech', monospace; 
+    font-size: 13px; 
+    line-height: 2; 
+    color: rgba(255,255,255,0.7); 
+    letter-spacing: 0.03em; 
+    text-transform: none;
+    margin: 0; 
+    max-width: 520px;
+}
+
+/* Decorative video element */
+.sv-deco-vid { 
+    width: 60%; 
+    max-width: 180px; 
+    opacity: 0.5;
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.sv-box-vid:hover .sv-deco-vid {
+    opacity: 0.7;
+    transform: scale(1.05);
+}
+
+/* ================================================================== */
+/* RESPONSIVE - Optimized breakpoints                                  */
+/* ================================================================== */
+
+@media (max-width: 1200px) {
+    .sv-panel-tl, .sv-panel-tr, .sv-panel-left, .sv-panel-right, .sv-panel-br { 
+        position: relative; 
+        top: auto; 
+        left: auto; 
+        right: auto; 
+        bottom: auto; 
+        width: 100%; 
+        max-width: 480px; 
+        margin: 10px auto; 
+        height: auto; 
+        min-height: auto; 
+    }
+    .sv-panel-project-1, .sv-panel-project-2 { 
+        position: relative; 
+        top: auto; 
+        left: auto; 
+        right: auto; 
+        width: 100%; 
+        max-width: 580px; 
+        margin: 10px auto; 
+        height: auto; 
+    }
+    .sv-panel-project-stats { position: relative; left: auto; transform: none; margin: 10px auto; max-width: 320px; }
+    .sv-panel-project-stats.revealed { transform: none; }
+    .sv-scan-area { min-height: auto; padding: 40px 0; }
+    
+    .sv-box-info, .sv-box-div {
+        padding: 60px 40px;
+    }
+    
+    .sv-scan-asset { display: none; }
+    .sv-dot-pattern { display: none; }
+}
+
+@media (max-width: 1024px) {
+    .sv-grid-3col { 
+        grid-template-columns: 1fr; 
+    }
+    
+    .sv-box {
+        border-right: none;
+        padding: 50px 40px;
+    }
+    
+    .sv-box-vid, .sv-box-info, .sv-box-div { 
+        min-height: 350px; 
+    }
+}
+
+@media (max-width: 768px) {
+    #mainNav.sv-work-mode .nav-menu.sv-nav-styled { display: none; }
+    .sv-mode-indicator { display: none; }
+    .sv-label-l, .sv-label-r { display: none; }
+    .sv-hero-desc { position: relative; bottom: auto; left: auto; max-width: 100%; margin-top: 30px; text-align: center; }
+    .sv-title { font-size: clamp(36px, 12vw, 80px); }
+    .sv-cursor { display: none; }
+    .sv-work-screen { cursor: auto !important; }
+    .sv-scan-title { font-size: clamp(36px, 10vw, 70px); }
+    
+    .sv-box { padding: 40px 25px; }
+    .sv-box-info, .sv-box-div { 
+        padding: 50px 30px;
+        min-height: 300px; 
+    }
+    .sv-box-vid { min-height: 250px; }
+    .sv-box-title { font-size: clamp(28px, 8vw, 40px); }
+    .sv-box-text { font-size: 12px; line-height: 1.9; }
+    
+    .sv-scan-panel { opacity: 1; transform: none; pointer-events: auto; }
+    .sv-scan-panel.revealed { transform: none; }
+}
+
+@media (max-width: 480px) {
+    .sv-section { padding: 30px 4%; }
+    .sv-title { font-size: clamp(28px, 10vw, 60px); }
+    .sv-project-title { font-size: 20px; }
+    
+    .sv-box { padding: 30px 20px; }
+    .sv-box-info, .sv-box-div { padding: 40px 20px; }
+    .sv-box-title { font-size: clamp(24px, 7vw, 32px); }
+    .sv-box-subtitle { font-size: clamp(18px, 5vw, 24px); }
+}
+
+/* ================================================================== */
+/* Performance optimizations                                           */
+/* ================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .sv-section,
+    .sv-scan-panel,
+    .sv-scan-asset,
+    .sv-cursor,
+    .sv-skill-fill {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* GPU acceleration hints for animated elements */
+.sv-deco-vid {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}

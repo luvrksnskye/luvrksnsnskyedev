@@ -37,7 +37,8 @@ class CoreManager {
                 { languagesManager },
                 { musicManager, youtubeManager },
                 { galleryManager, highlightsManager },
-                { contactManager }
+                { contactManager },
+                { workManager }
             ] = await Promise.all([
                 import('./soundManager.js'),
                 import('./animations.js'),
@@ -48,7 +49,8 @@ class CoreManager {
                 import('./languagesManager.js'),
                 import('./musicManager.js'),
                 import('./galleryManager.js'),
-                import('./contactManager.js')
+                import('./contactManager.js'),
+                import('./workManager.js')
             ]);
 
             // Set managers
@@ -64,7 +66,8 @@ class CoreManager {
                 youtube: youtubeManager,
                 gallery: galleryManager,
                 highlights: highlightsManager,
-                contact: contactManager
+                contact: contactManager,
+                work: workManager
             };
 
             // Phase 1: Critical managers that others depend on
@@ -134,7 +137,7 @@ class CoreManager {
         console.log('📦 Initializing content managers...');
         
         // Initialize all content managers
-        const contentManagers = ['about', 'tools', 'languages', 'music', 'youtube', 'gallery', 'highlights', 'contact'];
+        const contentManagers = ['about', 'tools', 'languages', 'music', 'youtube', 'gallery', 'highlights', 'contact', 'work'];
         
         contentManagers.forEach(name => {
             const manager = this.managers[name];
