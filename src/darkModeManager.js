@@ -3,13 +3,14 @@
  * DARK MODE MANAGER MODULE
  * ============================
  * Exports as ES6 module
+ * DEFAULT: Dark Mode
  */
 
 import { soundManager } from './soundManager.js';
 
 class DarkModeManager {
     constructor() {
-        this.isDarkMode = false;
+        this.isDarkMode = true; // Default to dark mode
         this.videoElement = null;
         this.toggleSwitch = null;
         this.initialized = false;
@@ -36,9 +37,10 @@ class DarkModeManager {
         }
 
         this.loadPreference();
+        this.applyInitialTheme();
         this.setupEventListeners();
         this.initialized = true;
-        console.log('✅ Dark Mode Manager module loaded');
+        console.log('✅ Dark Mode Manager module loaded (Default: Dark)');
     }
 
     createToggleSwitch() {
@@ -193,6 +195,22 @@ class DarkModeManager {
         }
     }
 
+    applyInitialTheme() {
+        // Set video source based on current theme
+        if (this.videoElement) {
+            const targetVideo = this.isDarkMode ? this.videos.dark : this.videos.light;
+            if (this.videoElement.src !== targetVideo) {
+                this.videoElement.src = targetVideo;
+                this.videoElement.load();
+            }
+        }
+
+        // Set toggle switch state
+        if (this.toggleSwitch) {
+            this.toggleSwitch.checked = this.isDarkMode;
+        }
+    }
+
     toggleTheme() {
         this.isDarkMode = !this.isDarkMode;
 
@@ -258,7 +276,6 @@ class DarkModeManager {
             localStorage.setItem('skye-theme-preference', this.isDarkMode ? 'dark' : 'light');
         } catch (error) {
             console.warn('Could not save theme preference to localStorage:', error);
-            // Fallback to sessionStorage if localStorage is not available
             try {
                 sessionStorage.setItem('skye-theme-preference', this.isDarkMode ? 'dark' : 'light');
             } catch (e) {
@@ -271,10 +288,8 @@ class DarkModeManager {
         let savedPreference = null;
         
         try {
-            // Try localStorage first
             savedPreference = localStorage.getItem('skye-theme-preference');
             
-            // If not found in localStorage, try sessionStorage
             if (savedPreference === null) {
                 savedPreference = sessionStorage.getItem('skye-theme-preference');
             }
@@ -282,24 +297,19 @@ class DarkModeManager {
             console.warn('Could not load theme preference from storage:', error);
         }
 
-        // Set the theme based on saved preference, default to light if none found
-        if (savedPreference === 'dark') {
+        // Set theme based on saved preference, DEFAULT TO DARK if none found
+        if (savedPreference === 'light') {
+            this.isDarkMode = false;
+        } else if (savedPreference === 'dark') {
             this.isDarkMode = true;
-        } else if (savedPreference === 'light') {
-            this.isDarkMode = false;
         } else {
-            // No saved preference, use default (light)
-            this.isDarkMode = false;
+            // No saved preference - DEFAULT TO DARK MODE
+            this.isDarkMode = true;
         }
 
-        // Update the toggle switch and video
+        // Update the toggle switch
         if (this.toggleSwitch) {
             this.toggleSwitch.checked = this.isDarkMode;
-        }
-
-        // If dark mode is enabled and we have a video element, set the dark video
-        if (this.videoElement && this.isDarkMode) {
-            this.videoElement.src = this.videos.dark;
         }
     }
 
@@ -319,7 +329,6 @@ class DarkModeManager {
         }
     }
 
-    // Method to clear saved preference (useful for debugging)
     clearPreference() {
         try {
             localStorage.removeItem('skye-theme-preference');

@@ -1,16 +1,11 @@
 /**
  * WORK MANAGER - STARVORTEX Section
- * OPTIMIZED VERSION - Better performance, less lag
- * Changes:
- * - requestAnimationFrame for cursor updates
- * - Throttled target detection (50ms)
- * - DOM element caching
- * - Passive event listeners
- * - Transform instead of left/top for cursor
- * - Reduced reflows and repaints
- * - Sistema de escaneo por etapas con VFX y audio sincronizado
- * - Más píxeles en VFX y mejor sincronización de flujo
- * - HTML separated from JS for better loading
+ * OPTIMIZED VERSION v2.0
+ * - Better memory management
+ * - Improved RAF usage with proper cleanup
+ * - Audio pooling for better performance
+ * - Fixed navigation integration
+ * - Smoother exit transitions
  */
 
 class WorkManager {
@@ -29,8 +24,7 @@ class WorkManager {
         this.holdTimer = null;
         this.revealedScans = new Set();
         
-        // Estados del proceso de escaneo
-        this.scanStage = null; // 'voice-before' | 'scanning' | 'voice-after' | 'complete'
+        this.scanStage = null;
         this.scanCompleted = false;
         
         this.scrambleLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%";
@@ -45,7 +39,6 @@ class WorkManager {
             affirmation: '/src/sfx/affirmation-tech.wav',
             textAnim: '/src/sfx/FX_text_animation_loop.mp3',
             rollover: '/src/sfx/UI_menu_text_rollover.mp3',
-            // AUDIOS POR ETAPAS DE ESCANEO
             scanBefore: {
                 skye: '/src/sfx/voice_scan_before.wav',
                 projects: '/src/sfx/voice_scan_before.wav'
@@ -67,7 +60,6 @@ class WorkManager {
             '/src/starvortex_assets/center-circle (3).png'
         ];
         
-        // Performance optimization - cache DOM references
         this.cachedElements = {};
         this.scanTargetsCache = [];
         this.cursorRAF = null;
@@ -76,7 +68,6 @@ class WorkManager {
         this.throttleTimer = null;
         this.textAnimPlayed = false;
         
-        // Sistema de escaneo por etapas
         this.currentScanType = null;
         this.currentVoiceAudio = null;
         this.currentScanAudio = null;
@@ -84,30 +75,52 @@ class WorkManager {
         this.scanElements = [];
         this.vfxActive = false;
         this.isProcessingAudio = false;
+        this.audioPool = new Map();
         
-        // Bind methods to avoid creating new functions
         this.handleMouseMove = this.handleMouseMove.bind(this);
         this.startHold = this.startHold.bind(this);
         this.endHold = this.endHold.bind(this);
+        this.updateCursorRAF = this.updateCursorRAF.bind(this);
     }
     
     init() {
         if (this.initialized) return;
         this.preloadAssets();
         this.setupWorkNavigation();
-        // Precargar VFX
         this.initVFX().catch(() => {});
         this.initialized = true;
+        console.log('✅ Work Manager module loaded');
     }
     
     preloadAssets() {
-        // Preload images with priority
         this.frameImages.forEach(src => { 
             const img = new Image(); 
             img.src = src; 
         });
         const teru = new Image();
         teru.src = '/src/starvortex_assets/teru00-sheet.png';
+        
+        Object.entries(this.audioTracks).forEach(([key, value]) => {
+            if (typeof value === 'string') {
+                this.preloadAudio(value);
+            } else if (typeof value === 'object') {
+                Object.values(value).forEach(url => this.preloadAudio(url));
+            }
+        });
+    }
+    
+    preloadAudio(url) {
+        if (this.audioPool.has(url)) return;
+        const audio = new Audio();
+        audio.preload = 'auto';
+        audio.src = url;
+        this.audioPool.set(url, audio);
+    }
+    
+    getPooledAudio(url, volume = 0.3) {
+        const audio = new Audio(url);
+        audio.volume = volume;
+        return audio;
     }
     
     setupWorkNavigation() {
@@ -124,11 +137,8 @@ class WorkManager {
         if (this.isActive) return;
         this.isActive = true;
         
-        // Clear caches
         this.cachedElements = {};
         this.scanTargetsCache = [];
-        
-        // Reset TODO (sin persistencia)
         this.resetScanState();
         this.revealedScans.clear();
         
@@ -138,8 +148,10 @@ class WorkManager {
         this.showWorkContent();
         this.initCustomCursor();
         
-        setTimeout(() => this.playAmbientAudio(), 500);
-        setTimeout(() => this.startAnimations(), 300);
+        requestAnimationFrame(() => {
+            setTimeout(() => this.playAmbientAudio(), 500);
+            setTimeout(() => this.startAnimations(), 300);
+        });
     }
     
     transformNavigation() {
@@ -173,39 +185,36 @@ class WorkManager {
         
         cursor.style.display = 'block';
         
-        // Cache cursor elements for faster access
         this.cachedElements.cursor = cursor;
         this.cachedElements.cursorLabel = cursor.querySelector('.sv-cursor-label');
         this.cachedElements.cursorHoldText = cursor.querySelector('.sv-cursor-hold-text');
         this.cachedElements.cursorProgress = cursor.querySelector('.sv-cursor-progress');
         
-        // Optimized event listeners with passive flag
         document.addEventListener('mousemove', this.handleMouseMove, { passive: true });
         workScreen?.addEventListener('mousedown', this.startHold);
         document.addEventListener('mouseup', this.endHold);
     }
     
-    // Optimized mouse handling with RAF
     handleMouseMove(e) {
         this.lastMouseX = e.clientX;
         this.lastMouseY = e.clientY;
         
         if (!this.cursorRAF) {
-            this.cursorRAF = requestAnimationFrame(() => {
-                this.updateCursor();
-                this.cursorRAF = null;
-            });
+            this.cursorRAF = requestAnimationFrame(this.updateCursorRAF);
         }
+    }
+    
+    updateCursorRAF() {
+        this.cursorRAF = null;
+        this.updateCursor();
     }
     
     updateCursor() {
         const cursor = this.cachedElements.cursor;
         if (!cursor || !this.isActive) return;
         
-        // Use transform for better performance (GPU accelerated)
-        cursor.style.transform = `translate(${this.lastMouseX - 60}px, ${this.lastMouseY - 60}px)`;
+        cursor.style.transform = `translate3d(${this.lastMouseX - 60}px, ${this.lastMouseY - 60}px, 0)`;
         
-        // Throttle target detection (every 50ms instead of every frame)
         if (!this.throttleTimer) {
             this.throttleTimer = setTimeout(() => {
                 this.detectScanTarget();
@@ -215,12 +224,15 @@ class WorkManager {
     }
     
     detectScanTarget() {
-        // Cache scan targets if needed
+        if (!this.isActive) return;
+        
         if (this.scanTargetsCache.length === 0) {
             this.scanTargetsCache = Array.from(document.querySelectorAll('.sv-scan-target'));
         }
         
         const cursor = this.cachedElements.cursor;
+        if (!cursor) return;
+        
         let nearestTarget = null;
         let nearestDistance = Infinity;
         
@@ -233,10 +245,9 @@ class WorkManager {
             const centerY = rect.top + rect.height * 0.5;
             const dx = this.lastMouseX - centerX;
             const dy = this.lastMouseY - centerY;
-            // Faster than Math.sqrt for comparison
             const distanceSq = dx * dx + dy * dy;
             
-            if (distanceSq < 32400 && distanceSq < nearestDistance) { // 180^2 = 32400
+            if (distanceSq < 32400 && distanceSq < nearestDistance) {
                 nearestTarget = target;
                 nearestDistance = distanceSq;
             }
@@ -246,14 +257,16 @@ class WorkManager {
             if (this.currentScanTarget !== nearestTarget) {
                 this.currentScanTarget = nearestTarget;
                 cursor.classList.add('near-target');
-                this.cachedElements.cursorLabel.textContent = 'CLICK & HOLD';
+                if (this.cachedElements.cursorLabel) {
+                    this.cachedElements.cursorLabel.textContent = 'CLICK & HOLD';
+                }
                 this.playHintSound();
             }
         } else if (!nearestTarget && !this.isHolding) {
             this.currentScanTarget = null;
             cursor.classList.remove('near-target');
-            this.cachedElements.cursorLabel.textContent = '';
-            this.cachedElements.cursorHoldText.textContent = '';
+            if (this.cachedElements.cursorLabel) this.cachedElements.cursorLabel.textContent = '';
+            if (this.cachedElements.cursorHoldText) this.cachedElements.cursorHoldText.textContent = '';
         }
     }
     
@@ -265,7 +278,6 @@ class WorkManager {
         this.scanStage = 'voice-before';
         this.scanCompleted = false;
         
-        // Determinar tipo de escaneo
         const scanId = this.currentScanTarget.dataset.scanId;
         this.currentScanType = scanId;
         
@@ -273,25 +285,17 @@ class WorkManager {
         
         const cursor = this.cachedElements.cursor;
         cursor?.classList.add('holding');
-        this.cachedElements.cursorLabel.textContent = '';
-        this.cachedElements.cursorHoldText.textContent = 'INITIALIZING...';
+        if (this.cachedElements.cursorLabel) this.cachedElements.cursorLabel.textContent = '';
+        if (this.cachedElements.cursorHoldText) this.cachedElements.cursorHoldText.textContent = 'INITIALIZING...';
         
-        console.log('Iniciando proceso de escaneo para:', scanId);
-        
-        // ETAPA 1: Reproducir voz "before" inmediatamente
         this.playVoiceBefore(scanId, () => {
-            console.log('Voz before terminada, iniciando etapa de escaneo');
-            // Cuando termina la voz "before", comenzar etapa 2
             if (this.isHolding && !this.scanCompleted) {
                 this.scanStage = 'scanning';
-                this.cachedElements.cursorHoldText.textContent = 'SCANNING...';
-                
-                // ETAPA 2: Iniciar efecto VFX y audio de escaneo (8 segundos)
+                if (this.cachedElements.cursorHoldText) this.cachedElements.cursorHoldText.textContent = 'SCANNING...';
                 this.startScanProcess(scanId);
             }
         });
         
-        // Iniciar el timer de progreso pero más lento para dar tiempo a las etapas de audio
         this.startHoldProgress();
     }
     
@@ -299,9 +303,8 @@ class WorkManager {
         const progressCircle = this.cachedElements.cursorProgress;
         
         this.holdTimer = setInterval(() => {
-            // Solo incrementar progreso durante la etapa de escaneo
             if (this.scanStage === 'scanning' && !this.scanCompleted) {
-                this.holdProgress += 0.8; // Más lento para dar tiempo al audio
+                this.holdProgress += 0.8;
             }
             
             if (progressCircle) {
@@ -310,41 +313,26 @@ class WorkManager {
             }
             
             if (this.holdProgress >= 100 && this.scanStage === 'scanning') {
-                console.log('Progreso completado');
                 this.completeHold();
             }
         }, 16);
     }
     
     startScanProcess(scanId) {
-        console.log('Iniciando proceso de escaneo VFX + audio para:', scanId);
-        
-        // Iniciar efecto VFX que hará desaparecer el texto
         this.startVFXEffect(this.currentScanTarget, scanId);
         
-        // Iniciar audio de escaneo (8 segundos)
         this.playScanIntro(scanId, () => {
-            console.log('Audio de escaneo terminado - 8 segundos completados');
-            
-            // Detener VFX (el texto ya debería haber desaparecido)
             this.stopVFXEffect();
-            
-            // Asegurar que el texto esté completamente oculto
             this.hideScannedText();
-            
             this.scanStage = 'voice-after';
             
-            // ETAPA 3: Reproducir voz "after" Y mostrar paneles simultáneamente
             this.playVoiceAfter(scanId, () => {
-                console.log('Voz after terminada, completando escaneo totalmente');
                 this.scanStage = 'complete';
                 this.finalizeScan();
             });
             
-            // MOSTRAR PANELES inmediatamente cuando inicia la voz "after"
             if (this.currentScanTarget) {
                 const targetId = this.currentScanTarget.dataset.scanId;
-                console.log('Revelando paneles mientras suena voz after');
                 this.revealScanPanels(targetId);
                 this.playAffirmationSound();
             }
@@ -354,61 +342,46 @@ class WorkManager {
     endHold() {
         if (!this.isHolding) return;
         
-        console.log('Soltando hold, etapa actual:', this.scanStage);
-        
         this.isHolding = false;
         clearInterval(this.holdTimer);
         
         const cursor = this.cachedElements.cursor;
         cursor?.classList.remove('holding');
         
-        // Si no se completó el escaneo, cancelar todo
         if (!this.scanCompleted) {
             this.holdProgress = 0;
-            if (this.cachedElements.cursorProgress) {
-                this.cachedElements.cursorProgress.style.strokeDashoffset = 251;
-            }
-            this.cachedElements.cursorHoldText.textContent = '';
+            if (this.cachedElements.cursorProgress) this.cachedElements.cursorProgress.style.strokeDashoffset = 251;
+            if (this.cachedElements.cursorHoldText) this.cachedElements.cursorHoldText.textContent = '';
             
-            // CANCELAR todo si se suelta antes de completar
             this.stopAllScanAudio();
             this.stopVFXEffect();
             this.scanStage = null;
             
-            if (this.currentScanTarget) {
+            if (this.currentScanTarget && this.cachedElements.cursorLabel) {
                 this.cachedElements.cursorLabel.textContent = 'CLICK & HOLD';
             }
-            
-            console.log('Proceso cancelado por soltar hold');
         }
     }
     
     completeHold() {
-        console.log('Hold completado');
         this.scanCompleted = true;
         clearInterval(this.holdTimer);
         
         const targetId = this.currentScanTarget?.dataset.scanId;
         if (targetId) this.revealedScans.add(targetId);
         
-        // Sonido de escaneo completado
         this.playScanSound();
     }
     
     finalizeScan() {
-        console.log('Finalizando escaneo completamente');
-        
         this.isHolding = false;
         this.scanCompleted = true;
         
         const cursor = this.cachedElements.cursor;
         cursor?.classList.remove('holding', 'near-target');
-        this.cachedElements.cursorHoldText.textContent = '';
-        this.cachedElements.cursorLabel.textContent = '';
-        
-        if (this.cachedElements.cursorProgress) {
-            this.cachedElements.cursorProgress.style.strokeDashoffset = 251;
-        }
+        if (this.cachedElements.cursorHoldText) this.cachedElements.cursorHoldText.textContent = '';
+        if (this.cachedElements.cursorLabel) this.cachedElements.cursorLabel.textContent = '';
+        if (this.cachedElements.cursorProgress) this.cachedElements.cursorProgress.style.strokeDashoffset = 251;
         
         this.currentScanTarget = null;
         this.currentScanType = null;
@@ -419,20 +392,14 @@ class WorkManager {
     hideScannedText() {
         if (!this.currentScanTarget) return;
         
-        // El efecto VFX ya "borró" las letras, solo asegurarnos que estén ocultas
         this.currentScanTarget.style.transition = 'opacity 0.5s ease';
         this.currentScanTarget.style.opacity = '0';
         this.currentScanTarget.style.pointerEvents = 'none';
         
-        // Después de un momento, hacerlo display none
         setTimeout(() => {
-            if (this.currentScanTarget) {
-                this.currentScanTarget.style.display = 'none';
-            }
+            if (this.currentScanTarget) this.currentScanTarget.style.display = 'none';
         }, 500);
     }
-    
-    // ==================== SISTEMA VFX MEJORADO ====================
     
     async initVFX() {
         if (window.VFX || this.scanVFX) return;
@@ -445,10 +412,7 @@ class WorkManager {
             
             const script = document.createElement('script');
             script.type = 'module';
-            script.textContent = `
-                import { VFX } from "https://esm.sh/@vfx-js/core@0.5.2";
-                window.VFX = VFX;
-            `;
+            script.textContent = `import { VFX } from "https://esm.sh/@vfx-js/core@0.5.2"; window.VFX = VFX;`;
             document.head.appendChild(script);
             
             await new Promise((resolve) => {
@@ -456,14 +420,11 @@ class WorkManager {
                     if (window.VFX) {
                         this.scanVFX = new window.VFX();
                         resolve();
-                    } else {
-                        setTimeout(checkVFX, 100);
-                    }
+                    } else setTimeout(checkVFX, 100);
                 };
                 checkVFX();
             });
         } catch (error) {
-            console.warn('VFX library failed to load', error);
             this.scanVFX = null;
         }
     }
@@ -471,40 +432,22 @@ class WorkManager {
     startVFXEffect(element, scanType) {
         if (!element) return;
         
-        console.log('Iniciando efecto VFX con más píxeles');
-        
-        // Detener cualquier efecto previo
         this.stopVFXEffect();
         this.vfxActive = true;
-        
-        // Fallback visual si VFX no está disponible
         element.classList.add('sv-scan-active');
         
-        if (!window.VFX) {
-            console.warn('VFX not available, using fallback');
-            return;
-        }
+        if (!window.VFX) return;
         
         try {
-            if (!this.scanVFX) {
-                this.scanVFX = new window.VFX();
-            }
-            
-            // Crear efecto VFX mejorado con más píxeles
+            if (!this.scanVFX) this.scanVFX = new window.VFX();
             const effect = this.createEnhancedVFXShader(element);
-            if (effect) {
-                this.scanElements.push({ element, effect });
-                console.log('VFX effect started with enhanced pixelation');
-            }
-        } catch (error) {
-            console.warn('Failed to create VFX effect', error);
-        }
+            if (effect) this.scanElements.push({ element, effect });
+        } catch (error) {}
     }
     
     createEnhancedVFXShader(element) {
         if (!this.scanVFX || !element) return null;
         
-        // Shader mejorado con más píxeles y mejor efecto de desaparición
         const shader = `
 precision highp float;
 uniform sampler2D src;
@@ -513,222 +456,40 @@ uniform vec2 offset;
 uniform float time;
 uniform float enterTime;
 uniform float leaveTime;
-
 uniform int mode;
 uniform float layers;
 uniform float speed;
 uniform float delay;
 uniform float width;
 uniform float pixelSize;
-
 #define W width
 #define LAYERS layers
-
-vec4 readTex(vec2 uv) {
-  if (uv.x < 0. || uv.x > 1. || uv.y < 0. || uv.y > 1.) {
-    return vec4(0);
-  }
-  return texture(src, uv);
-}
-
-float hash(vec2 p) {
-  return fract(sin(dot(p, vec2(4859.0, 3985.0))) * 3984.0);
-}
-
-float hash21(vec2 p) {
-    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-}
-
-// COLORES FRIOS - azules, cian, morados más intensos
-vec3 getColdColor(vec2 p, float intensity) {
-    float hue = mod((p.x * 0.3 + p.y * 0.7) * 0.4 + time * 0.1, 1.0);
-    hue = mix(0.50, 0.80, hue); // Más rango de colores fríos
-    float sat = 0.9 + intensity * 0.1;
-    float val = 0.8 + intensity * 0.2;
-    
-    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-    vec3 q = abs(fract(vec3(hue) + K.xyz) * 6.0 - K.www);
-    return val * mix(K.xxx, clamp(q - K.xxx, 0.0, 1.0), sat);
-}
-
-// Función de pixelado mejorada
-vec2 pixelate(vec2 uv, float size) {
-    vec2 grid = vec2(resolution.x / size, resolution.y / size);
-    return floor(uv * grid) / grid;
-}
-
-float sdBox(vec2 p, float r) {
-  vec2 q = abs(p) - r;
-  return min(length(q), max(q.y, q.x));
-}
-
+vec4 readTex(vec2 uv) { if (uv.x < 0. || uv.x > 1. || uv.y < 0. || uv.y > 1.) return vec4(0); return texture(src, uv); }
+float hash(vec2 p) { return fract(sin(dot(p, vec2(4859.0, 3985.0))) * 3984.0); }
+float hash21(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+vec3 getColdColor(vec2 p, float intensity) { float hue = mod((p.x * 0.3 + p.y * 0.7) * 0.4 + time * 0.1, 1.0); hue = mix(0.50, 0.80, hue); float sat = 0.9 + intensity * 0.1; float val = 0.8 + intensity * 0.2; vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0); vec3 q = abs(fract(vec3(hue) + K.xyz) * 6.0 - K.www); return val * mix(K.xxx, clamp(q - K.xxx, 0.0, 1.0), sat); }
+vec2 pixelate(vec2 uv, float size) { vec2 grid = vec2(resolution.x / size, resolution.y / size); return floor(uv * grid) / grid; }
+float sdBox(vec2 p, float r) { vec2 q = abs(p) - r; return min(length(q), max(q.y, q.x)); }
 float dir = 1.0;
-
-float toRangeT(vec2 p, float scale) {
-  float d;
-  
-  if (mode == 0) {
-    d = p.x / (scale * 2.0) + 0.5;
-  }
-  else if (mode == 1) {
-    d = 1.0 - (p.y / (scale * 2.0) + 0.5);
-  }
-  else if (mode == 2) {
-    d = length(p) / scale;
-  }
-  
-  d = dir > 0.0 ? d : (1.0 - d);
-  return d;
-}
-
-vec4 cell(vec2 p, vec2 pi, float scale, float t, float edge, float pixelScale) {
-  vec2 pc = pi + 0.5;
-
-  vec2 uvc = pc / scale;
-  uvc.y /= resolution.y / resolution.x;
-  uvc = uvc * 0.5 + 0.5;
-  
-  // Aplicar pixelado más intenso
-  uvc = pixelate(uvc, pixelSize * pixelScale);
-  
-  if (uvc.x < 0.0 || uvc.x > 1.0 || uvc.y < 0.0 || uvc.y > 1.0) {
-    return vec4(0);
-  }
-  
-  float alpha = smoothstep(0.0, 0.1, texture2D(src, uvc, 3.0).a);
-  
-  // Intensidad basada en el progreso del tiempo
-  float intensity = smoothstep(0.0, 1.0, t);
-  vec4 color = vec4(getColdColor(pc, intensity), 1.0);
-  
-  float x = toRangeT(pi, scale);
-  float n = hash(pi);
-  float anim = smoothstep(W * 3.0, 0.0, abs(x + n * W - t));
-  
-  // Efecto de desaparición más agresivo
-  float disappear = 1.0 - smoothstep(0.3, 1.0, t);
-  color *= anim * disappear;    
-    
-  color *= mix(
-    1.0, 
-    clamp(0.5 / abs(sdBox(p - pc, 0.5)), 0.0, 15.0),
-    edge * pow(anim, 8.0)
-  ); 
-  
-  // Más píxeles dispersos
-  float pixelNoise = hash21(floor(pc * pixelSize * 2.0));
-  color *= (0.7 + 0.6 * pixelNoise);
-  
-  return color * alpha * (0.5 + 0.5 * cos(time * 8.0 + length(pc) * 4.0));
-}
-
-vec4 cellsColor(vec2 p, float scale, float t) {
-  vec2 pi = floor(p);
-  vec2 pf = fract(p);
- 
-  vec2 d = vec2(0, 1);
-
-  vec4 cc = vec4(0);
-  float pixelScale = 1.0 + t * 2.0; // Los píxeles se hacen más grandes con el tiempo
-  
-  cc += cell(p, pi, scale, t, 0.3, pixelScale) * 6.0;
-  cc += cell(p, pi + d.xy, scale, t, 1.2, pixelScale);
-  cc += cell(p, pi - d.xy, scale, t, 1.2, pixelScale);
-  cc += cell(p, pi + d.yx, scale, t, 1.2, pixelScale);
-  cc += cell(p, pi - d.yx, scale, t, 1.2, pixelScale);
-  
-  // Más píxeles en diagonal
-  cc += cell(p, pi + vec2(1,1), scale, t, 0.8, pixelScale);
-  cc += cell(p, pi - vec2(1,1), scale, t, 0.8, pixelScale);
-  cc += cell(p, pi + vec2(1,-1), scale, t, 0.8, pixelScale);
-  cc += cell(p, pi + vec2(-1,1), scale, t, 0.8, pixelScale);
-   
-  return cc / 12.0;
-}
-
-vec4 draw(vec2 uv, vec2 p, float t, float scale) {
-  vec4 c = readTex(uv);
-
-  vec2 pi = floor(p * scale);
-  vec2 pf = fract(p * scale);
-
-  float n = hash(pi);
-  t = t * (1.0 + W * 6.0) - W * 3.0; // Más amplitud en el efecto
-    
-  float x = toRangeT(pi, scale);
-  float a1 = smoothstep(t, t - W, x + n * W);
-  
-  // Desaparición más progresiva del texto original
-  float textDisappear = 1.0 - smoothstep(0.2, 0.8, t);
-  c *= a1 * textDisappear;
-
-  c += cellsColor(p * scale, scale, t) * 2.5; // Más intensidad en los píxeles
-  
-  return c;
-}
-
-void main() {
-  vec2 uv = (gl_FragCoord.xy - offset) / resolution;
-  vec2 p = uv * 2.0 - 1.0;
-  p.y *= resolution.y / resolution.x;
-
-  float t;
-  
-  if (leaveTime > 0.0) {
-    dir = -1.0;
-    t = clamp(leaveTime * speed, 0.0, 1.0);
-  } else {
-    t = clamp((enterTime - delay) * speed, 0.0, 1.0);  
-  }      
-  t = (fract(t * 0.99999) - 0.5) * dir + 0.5;      
-    
-  for (float i = 0.0; i < LAYERS; i++) {
-    float s = cos(i) * 9.0 + 12.0; // Más variedad en las escalas
-    gl_FragColor += draw(uv, p, t, abs(s));
-  }
-  gl_FragColor /= LAYERS;  
-  gl_FragColor *= smoothstep(0.0, 0.02, t);
-}
-`;
+float toRangeT(vec2 p, float scale) { float d; if (mode == 0) d = p.x / (scale * 2.0) + 0.5; else if (mode == 1) d = 1.0 - (p.y / (scale * 2.0) + 0.5); else d = length(p) / scale; return dir > 0.0 ? d : (1.0 - d); }
+vec4 cell(vec2 p, vec2 pi, float scale, float t, float edge, float pixelScale) { vec2 pc = pi + 0.5; vec2 uvc = pc / scale; uvc.y /= resolution.y / resolution.x; uvc = uvc * 0.5 + 0.5; uvc = pixelate(uvc, pixelSize * pixelScale); if (uvc.x < 0.0 || uvc.x > 1.0 || uvc.y < 0.0 || uvc.y > 1.0) return vec4(0); float alpha = smoothstep(0.0, 0.1, texture2D(src, uvc, 3.0).a); float intensity = smoothstep(0.0, 1.0, t); vec4 color = vec4(getColdColor(pc, intensity), 1.0); float x = toRangeT(pi, scale); float n = hash(pi); float anim = smoothstep(W * 3.0, 0.0, abs(x + n * W - t)); float disappear = 1.0 - smoothstep(0.3, 1.0, t); color *= anim * disappear; color *= mix(1.0, clamp(0.5 / abs(sdBox(p - pc, 0.5)), 0.0, 15.0), edge * pow(anim, 8.0)); float pixelNoise = hash21(floor(pc * pixelSize * 2.0)); color *= (0.7 + 0.6 * pixelNoise); return color * alpha * (0.5 + 0.5 * cos(time * 8.0 + length(pc) * 4.0)); }
+vec4 cellsColor(vec2 p, float scale, float t) { vec2 pi = floor(p); vec4 cc = vec4(0); float pixelScale = 1.0 + t * 2.0; cc += cell(p, pi, scale, t, 0.3, pixelScale) * 6.0; cc += cell(p, pi + vec2(0,1), scale, t, 1.2, pixelScale); cc += cell(p, pi - vec2(0,1), scale, t, 1.2, pixelScale); cc += cell(p, pi + vec2(1,0), scale, t, 1.2, pixelScale); cc += cell(p, pi - vec2(1,0), scale, t, 1.2, pixelScale); cc += cell(p, pi + vec2(1,1), scale, t, 0.8, pixelScale); cc += cell(p, pi - vec2(1,1), scale, t, 0.8, pixelScale); cc += cell(p, pi + vec2(1,-1), scale, t, 0.8, pixelScale); cc += cell(p, pi + vec2(-1,1), scale, t, 0.8, pixelScale); return cc / 12.0; }
+vec4 draw(vec2 uv, vec2 p, float t, float scale) { vec4 c = readTex(uv); vec2 pi = floor(p * scale); float n = hash(pi); t = t * (1.0 + W * 6.0) - W * 3.0; float x = toRangeT(pi, scale); float a1 = smoothstep(t, t - W, x + n * W); float textDisappear = 1.0 - smoothstep(0.2, 0.8, t); c *= a1 * textDisappear; c += cellsColor(p * scale, scale, t) * 2.5; return c; }
+void main() { vec2 uv = (gl_FragCoord.xy - offset) / resolution; vec2 p = uv * 2.0 - 1.0; p.y *= resolution.y / resolution.x; float t; if (leaveTime > 0.0) { dir = -1.0; t = clamp(leaveTime * speed, 0.0, 1.0); } else { t = clamp((enterTime - delay) * speed, 0.0, 1.0); } t = (fract(t * 0.99999) - 0.5) * dir + 0.5; for (float i = 0.0; i < LAYERS; i++) { float s = cos(i) * 9.0 + 12.0; gl_FragColor += draw(uv, p, t, abs(s)); } gl_FragColor /= LAYERS; gl_FragColor *= smoothstep(0.0, 0.02, t); }`;
 
         try {
-            const effect = this.scanVFX.add(element, {
-                shader,
-                overflow: 30,
-                uniforms: {
-                    mode: 0,
-                    width: 0.15, // Más estrecho para más píxeles
-                    layers: 4, // Más capas para más densidad
-                    speed: 0.6, // Más lento para mejor sincronización con 8 segundos
-                    delay: 0.05,
-                    pixelSize: 12.0 // Tamaño de píxel más pequeño para más píxeles
-                }
-            });
-            
-            return effect;
-        } catch (error) {
-            console.warn('Failed to create VFX shader', error);
-            return null;
-        }
+            return this.scanVFX.add(element, { shader, overflow: 30, uniforms: { mode: 0, width: 0.15, layers: 4, speed: 0.6, delay: 0.05, pixelSize: 12.0 } });
+        } catch (error) { return null; }
     }
     
     stopVFXEffect() {
-        console.log('Deteniendo efecto VFX mejorado');
         this.vfxActive = false;
-        
-        // Remover efectos VFX
         this.scanElements.forEach(item => {
-            if (item.effect && this.scanVFX) {
-                try {
-                    this.scanVFX.remove(item.element);
-                } catch (e) {}
-            }
+            if (item.effect && this.scanVFX) try { this.scanVFX.remove(item.element); } catch (e) {}
             item.element?.classList.remove('sv-scan-active');
         });
         this.scanElements = [];
     }
-    
-    // ==================== SISTEMA DE AUDIO ====================
     
     resetScanState() {
         this.stopAllScanAudio();
@@ -742,163 +503,54 @@ void main() {
     
     playVoiceBefore(scanType, onEnded = null) {
         this.stopCurrentVoice();
-        
         const audioSrc = this.audioTracks.scanBefore[scanType];
-        if (!audioSrc) {
-            console.warn(`No voice before audio for scan type: ${scanType}`);
-            if (onEnded) onEnded();
-            return;
-        }
-        
+        if (!audioSrc) { if (onEnded) onEnded(); return; }
         try {
-            console.log('Playing voice before:', audioSrc);
-            this.currentVoiceAudio = new Audio(audioSrc);
-            this.currentVoiceAudio.volume = 0.35;
-            this.currentVoiceAudio.onended = () => {
-                console.log('Voice before ended');
-                this.currentVoiceAudio = null;
-                if (onEnded) onEnded();
-            };
-            this.currentVoiceAudio.onerror = (e) => {
-                console.error('Voice before error:', e);
-                this.currentVoiceAudio = null;
-                if (onEnded) onEnded();
-            };
-            this.currentVoiceAudio.play().catch(e => {
-                console.error('Voice before play failed:', e);
-                this.currentVoiceAudio = null;
-                if (onEnded) onEnded();
-            });
-        } catch (e) {
-            console.error('Voice before creation failed', e);
-            this.currentVoiceAudio = null;
-            if (onEnded) onEnded();
-        }
+            this.currentVoiceAudio = this.getPooledAudio(audioSrc, 0.35);
+            this.currentVoiceAudio.onended = () => { this.currentVoiceAudio = null; if (onEnded) onEnded(); };
+            this.currentVoiceAudio.onerror = () => { this.currentVoiceAudio = null; if (onEnded) onEnded(); };
+            this.currentVoiceAudio.play().catch(() => { this.currentVoiceAudio = null; if (onEnded) onEnded(); });
+        } catch (e) { if (onEnded) onEnded(); }
     }
     
     playScanIntro(scanType, onEnded = null) {
         this.stopCurrentScanAudio();
-        
         const audioSrc = this.audioTracks.scanIntro[scanType];
-        if (!audioSrc) {
-            console.warn(`No scan intro audio for scan type: ${scanType}`);
-            if (onEnded) onEnded();
-            return;
-        }
-        
+        if (!audioSrc) { if (onEnded) onEnded(); return; }
         try {
-            console.log('Playing scan intro (8 seconds):', audioSrc);
-            this.currentScanAudio = new Audio(audioSrc);
-            this.currentScanAudio.volume = 0.25;
-            this.currentScanAudio.onended = () => {
-                console.log('Scan intro ended (8 seconds completed)');
-                this.currentScanAudio = null;
-                if (onEnded) onEnded();
-            };
-            this.currentScanAudio.onerror = (e) => {
-                console.error('Scan intro error:', e);
-                this.currentScanAudio = null;
-                if (onEnded) onEnded();
-            };
-            this.currentScanAudio.play().catch(e => {
-                console.error('Scan intro play failed:', e);
-                this.currentScanAudio = null;
-                if (onEnded) onEnded();
-            });
-        } catch (e) {
-            console.error('Scan intro creation failed', e);
-            this.currentScanAudio = null;
-            if (onEnded) onEnded();
-        }
+            this.currentScanAudio = this.getPooledAudio(audioSrc, 0.25);
+            this.currentScanAudio.onended = () => { this.currentScanAudio = null; if (onEnded) onEnded(); };
+            this.currentScanAudio.onerror = () => { this.currentScanAudio = null; if (onEnded) onEnded(); };
+            this.currentScanAudio.play().catch(() => { this.currentScanAudio = null; if (onEnded) onEnded(); });
+        } catch (e) { if (onEnded) onEnded(); }
     }
     
     playVoiceAfter(scanType, onEnded = null) {
         this.stopCurrentVoice();
-        
         const audioSrc = this.audioTracks.scanAfter[scanType];
-        if (!audioSrc) {
-            console.warn(`No voice after audio for scan type: ${scanType}`);
-            if (onEnded) onEnded();
-            return;
-        }
-        
+        if (!audioSrc) { if (onEnded) onEnded(); return; }
         try {
-            console.log('Playing voice after:', audioSrc);
-            // Sin delay - inicia inmediatamente
-            this.currentVoiceAudio = new Audio(audioSrc);
-            this.currentVoiceAudio.volume = 0.4;
-            this.currentVoiceAudio.onended = () => {
-                console.log('Voice after ended');
-                this.currentVoiceAudio = null;
-                if (onEnded) onEnded();
-            };
-            this.currentVoiceAudio.onerror = (e) => {
-                console.error('Voice after error:', e);
-                this.currentVoiceAudio = null;
-                if (onEnded) onEnded();
-            };
-            this.currentVoiceAudio.play().catch(e => {
-                console.error('Voice after play failed:', e);
-                this.currentVoiceAudio = null;
-                if (onEnded) onEnded();
-            });
-        } catch (e) {
-            console.error('Voice after creation failed', e);
-            this.currentVoiceAudio = null;
-            if (onEnded) onEnded();
-        }
+            this.currentVoiceAudio = this.getPooledAudio(audioSrc, 0.4);
+            this.currentVoiceAudio.onended = () => { this.currentVoiceAudio = null; if (onEnded) onEnded(); };
+            this.currentVoiceAudio.onerror = () => { this.currentVoiceAudio = null; if (onEnded) onEnded(); };
+            this.currentVoiceAudio.play().catch(() => { this.currentVoiceAudio = null; if (onEnded) onEnded(); });
+        } catch (e) { if (onEnded) onEnded(); }
     }
     
-    stopCurrentVoice() {
-        if (this.currentVoiceAudio) {
-            try {
-                this.currentVoiceAudio.pause();
-                this.currentVoiceAudio.currentTime = 0;
-                this.currentVoiceAudio.onended = null;
-                this.currentVoiceAudio.onerror = null;
-            } catch (e) {}
-            this.currentVoiceAudio = null;
-        }
-    }
-    
-    stopCurrentScanAudio() {
-        if (this.currentScanAudio) {
-            try {
-                this.currentScanAudio.pause();
-                this.currentScanAudio.currentTime = 0;
-                this.currentScanAudio.onended = null;
-                this.currentScanAudio.onerror = null;
-            } catch (e) {}
-            this.currentScanAudio = null;
-        }
-    }
-    
-    stopAllScanAudio() {
-        this.stopCurrentVoice();
-        this.stopCurrentScanAudio();
-    }
-    
-    // ==================== MÉTODOS EXISTENTES ====================
+    stopCurrentVoice() { if (this.currentVoiceAudio) { try { this.currentVoiceAudio.pause(); this.currentVoiceAudio.currentTime = 0; this.currentVoiceAudio.onended = null; this.currentVoiceAudio.onerror = null; } catch (e) {} this.currentVoiceAudio = null; } }
+    stopCurrentScanAudio() { if (this.currentScanAudio) { try { this.currentScanAudio.pause(); this.currentScanAudio.currentTime = 0; this.currentScanAudio.onended = null; this.currentScanAudio.onerror = null; } catch (e) {} this.currentScanAudio = null; } }
+    stopAllScanAudio() { this.stopCurrentVoice(); this.stopCurrentScanAudio(); }
     
     revealScanPanels(scanId) {
-        console.log('Revealing panels for:', scanId);
-        
         const panels = document.querySelectorAll(`.sv-scan-panel[data-scan-group="${scanId}"]`);
         panels.forEach((panel, index) => {
             setTimeout(() => {
                 panel.classList.add('revealed');
                 this.animatePanelContent(panel);
-                panel.querySelectorAll('.sv-skill-fill').forEach((fill, i) => {
-                    setTimeout(() => fill.classList.add('animate'), i * 100);
-                });
+                panel.querySelectorAll('.sv-skill-fill').forEach((fill, i) => setTimeout(() => fill.classList.add('animate'), i * 100));
             }, index * 200);
         });
-        
-        const assets = document.querySelectorAll(`.sv-scan-asset[data-scan-group="${scanId}"]`);
-        assets.forEach((asset, index) => {
-            setTimeout(() => asset.classList.add('visible'), index * 150);
-        });
-        
+        document.querySelectorAll(`.sv-scan-asset[data-scan-group="${scanId}"]`).forEach((asset, index) => setTimeout(() => asset.classList.add('visible'), index * 150));
         const dotPattern = document.querySelector(`.sv-dot-pattern[data-scan-group="${scanId}"]`);
         if (dotPattern) dotPattern.classList.add('visible');
     }
@@ -908,17 +560,13 @@ void main() {
         panel.querySelectorAll('[data-text]').forEach((el, i) => {
             const text = el.dataset.text;
             const effect = el.dataset.effect;
-            setTimeout(() => {
-                if (effect === 'scramble') this.scramble(el, text);
-                else if (effect === 'type') this.typewriter(el, text);
-            }, i * 80);
+            setTimeout(() => { if (effect === 'scramble') this.scramble(el, text); else if (effect === 'type') this.typewriter(el, text); }, i * 80);
         });
     }
     
     showWorkContent() {
         const workScreen = document.getElementById('sv-work-screen');
         if (!workScreen) return;
-        
         workScreen.style.display = 'block';
         this.setupScrollAnimations();
         requestAnimationFrame(() => workScreen.classList.add('active'));
@@ -927,20 +575,15 @@ void main() {
     setupScrollAnimations() {
         const scroll = document.getElementById('sv-scroll');
         if (!scroll) return;
-        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     this.animateSection(entry.target);
-                    entry.target.querySelectorAll('.sv-deco-vid').forEach(vid => {
-                        vid.currentTime = 0;
-                        vid.play().catch(() => {});
-                    });
+                    entry.target.querySelectorAll('.sv-deco-vid').forEach(vid => { vid.currentTime = 0; vid.play().catch(() => {}); });
                 }
             });
         }, { threshold: 0.15, root: scroll });
-        
         document.querySelectorAll('.sv-section').forEach(s => observer.observe(s));
     }
     
@@ -963,31 +606,16 @@ void main() {
             setTimeout(() => this.scramble(document.getElementById('sv-sub2'), 'ECHO STUDIOS'), 150);
             setTimeout(() => this.typewriter(document.getElementById('sv-text3'), 'DEDICATED TO VIDEO GAME DEVELOPMENT AND INTERACTIVE EXPERIENCES. THIS IS WHERE I, SKYE, CREATE AND INNOVATE!'), 300);
         } else if (id === 'sv-scan-skye' || id === 'sv-scan-projects') {
-            // Animar título con scramble al entrar en vista
             this.playRolloverSound();
             const scrollRevealEl = section.querySelector('.sv-scroll-reveal');
-            if (scrollRevealEl && scrollRevealEl.dataset.scrollText) {
-                setTimeout(() => this.scramble(scrollRevealEl, scrollRevealEl.dataset.scrollText), 100);
-            }
+            if (scrollRevealEl && scrollRevealEl.dataset.scrollText) setTimeout(() => this.scramble(scrollRevealEl, scrollRevealEl.dataset.scrollText), 100);
         } else if (id === 'sv-members') {
             this.playRolloverSound();
             setTimeout(() => this.scramble(document.getElementById('sv-members-label'), 'TEAM ROSTER'), 100);
             setTimeout(() => this.glitchType(document.getElementById('sv-members-title'), 'MEMBERS'), 200);
             setTimeout(() => this.typewriter(document.getElementById('sv-members-subtitle'), 'STARVORTEX CORE TEAM • ACTIVE OPERATIVES'), 400);
-            // Animate member cards
-            const memberCards = document.querySelectorAll('.sv-member-card');
-            memberCards.forEach((card, index) => {
-                setTimeout(() => {
-                    card.classList.add('revealed');
-                }, 600 + (index * 300));
-            });
-            // Animate data panels
-            const dataPanels = document.querySelectorAll('.sv-data-panel');
-            dataPanels.forEach((panel, index) => {
-                setTimeout(() => {
-                    panel.classList.add('revealed');
-                }, 1200 + (index * 200));
-            });
+            document.querySelectorAll('.sv-member-card').forEach((card, index) => setTimeout(() => card.classList.add('revealed'), 600 + (index * 300)));
+            document.querySelectorAll('.sv-data-panel').forEach((panel, index) => setTimeout(() => panel.classList.add('revealed'), 1200 + (index * 200)));
         }
     }
     
@@ -1057,33 +685,21 @@ void main() {
         if (!this.isActive) return;
         this.isActive = false;
         
-        // Limpiar TODO
         this.stopAllScanAudio();
         this.stopVFXEffect();
         
-        if (this.cursorRAF) {
-            cancelAnimationFrame(this.cursorRAF);
-            this.cursorRAF = null;
-        }
-        if (this.throttleTimer) {
-            clearTimeout(this.throttleTimer);
-            this.throttleTimer = null;
-        }
+        if (this.cursorRAF) { cancelAnimationFrame(this.cursorRAF); this.cursorRAF = null; }
+        if (this.throttleTimer) { clearTimeout(this.throttleTimer); this.throttleTimer = null; }
         
         document.removeEventListener('mousemove', this.handleMouseMove);
         document.removeEventListener('mouseup', this.endHold);
         
         this.stopWorkAudio();
-        if (this.frameAnimation) { 
-            clearInterval(this.frameAnimation); 
-            this.frameAnimation = null; 
-        }
+        if (this.frameAnimation) { clearInterval(this.frameAnimation); this.frameAnimation = null; }
         
-        // Hide cursor
         const cursor = document.getElementById('sv-cursor');
         if (cursor) cursor.style.display = 'none';
         
-        // RESETEAR TODO - Sin persistencia
         this.revealedScans.clear();
         this.cachedElements = {};
         this.scanTargetsCache = [];
@@ -1092,12 +708,7 @@ void main() {
         this.currentScanType = null;
         this.resetScanState();
         
-        if (this.scanVFX) {
-            try {
-                this.scanVFX.destroy();
-            } catch (e) {}
-            this.scanVFX = null;
-        }
+        if (this.scanVFX) { try { this.scanVFX.destroy(); } catch (e) {} this.scanVFX = null; }
         
         const nav = document.getElementById('mainNav');
         if (nav) { 
@@ -1108,122 +719,47 @@ void main() {
         }
         
         const ws = document.getElementById('sv-work-screen');
-        if (ws) { 
-            ws.classList.remove('active'); 
-            setTimeout(() => { ws.style.display = 'none'; }, 500); 
-        }
+        if (ws) { ws.classList.remove('active'); setTimeout(() => { ws.style.display = 'none'; }, 500); }
         
         const home = document.getElementById('homeScreen');
-        if (home) { 
-            home.classList.remove('hidden'); 
-            home.classList.add('show'); 
-        }
+        if (home) { home.classList.remove('hidden'); home.classList.add('show'); }
         
-        if (window.app?.navigateTo) {
-            setTimeout(() => window.app.navigateTo('home'), 100);
-        }
+        if (window.navigationManager) window.navigationManager.setActivePage('home');
+        else if (window.app?.navigateTo) setTimeout(() => window.app.navigateTo('home'), 100);
     }
     
-    hideOtherScreens() { 
-        ['homeScreen', 'aboutScreen', 'contactScreen', 'introScreen'].forEach(id => { 
-            const s = document.getElementById(id); 
-            if (s) { s.classList.remove('show'); s.classList.add('hidden'); } 
-        }); 
-    }
-    
-    stopAllAudio() { 
-        if (window.app?.get) { 
-            const mm = window.app.get('music'); 
-            if (mm?.pause) mm.pause(); 
-        } 
-        document.querySelectorAll('audio').forEach(a => { 
-            if (!a.paused) { a.pause(); a.currentTime = 0; } 
-        }); 
-    }
+    hideOtherScreens() { ['homeScreen', 'aboutScreen', 'contactScreen', 'introScreen'].forEach(id => { const s = document.getElementById(id); if (s) { s.classList.remove('show'); s.classList.add('hidden'); } }); }
+    stopAllAudio() { if (window.app?.get) { const mm = window.app.get('music'); if (mm?.pause) mm.pause(); } document.querySelectorAll('audio').forEach(a => { if (!a.paused) { a.pause(); a.currentTime = 0; } }); }
     
     playAmbientAudio() { 
         try { 
-            this.workAudio = new Audio(this.audioTracks.ambient); 
-            this.workAudio.loop = true; 
-            this.workAudio.volume = 0; 
-            this.workAudio.play().then(() => { 
-                let v = 0; 
-                const fade = setInterval(() => { 
-                    v += 0.02; 
-                    this.workAudio.volume = Math.min(0.3, v); 
-                    if (v >= 0.3) clearInterval(fade); 
-                }, 80); 
-            }).catch(() => {}); 
+            this.workAudio = this.getPooledAudio(this.audioTracks.ambient, 0);
+            this.workAudio.loop = true;
+            this.workAudio.play().then(() => { let v = 0; const fade = setInterval(() => { v += 0.02; this.workAudio.volume = Math.min(0.3, v); if (v >= 0.3) clearInterval(fade); }, 80); }).catch(() => {}); 
         } catch (e) {} 
     }
     
-    stopWorkAudio() { 
-        if (this.workAudio) { 
-            let v = this.workAudio.volume; 
-            const fade = setInterval(() => { 
-                v -= 0.03; 
-                this.workAudio.volume = Math.max(0, v); 
-                if (v <= 0) { 
-                    clearInterval(fade); 
-                    this.workAudio.pause(); 
-                    this.workAudio = null; 
-                } 
-            }, 50); 
-        } 
-    }
+    stopWorkAudio() { if (this.workAudio) { let v = this.workAudio.volume; const fade = setInterval(() => { v -= 0.03; this.workAudio.volume = Math.max(0, v); if (v <= 0) { clearInterval(fade); this.workAudio.pause(); this.workAudio = null; } }, 50); } }
     
-    playScanSound() { 
-        this.playSound(this.audioTracks.scan, 0.3);
-    }
-    
-    playClickSound() {
-        this.playSound(this.audioTracks.click, 0.25);
-    }
-    
-    playHintSound() {
-        this.playSound(this.audioTracks.hint, 0.2);
-    }
-    
-    playAffirmationSound() {
-        this.playSound(this.audioTracks.affirmation, 0.3);
-    }
-    
-    playRolloverSound() {
-        this.playSound(this.audioTracks.rollover, 0.15);
-    }
-    
-    playTextAnimSound() {
-        if (this.textAnimPlayed) return;
-        this.textAnimPlayed = true;
-        this.playSound(this.audioTracks.textAnim, 0.2);
-    }
-    
-    playSound(src, volume = 0.25) {
-        try { 
-            const s = new Audio(src); 
-            s.volume = volume; 
-            s.play().catch(() => {}); 
-        } catch (e) {}
-    }
+    playScanSound() { this.playSound(this.audioTracks.scan, 0.3); }
+    playClickSound() { this.playSound(this.audioTracks.click, 0.25); }
+    playHintSound() { this.playSound(this.audioTracks.hint, 0.2); }
+    playAffirmationSound() { this.playSound(this.audioTracks.affirmation, 0.3); }
+    playRolloverSound() { this.playSound(this.audioTracks.rollover, 0.15); }
+    playTextAnimSound() { if (this.textAnimPlayed) return; this.textAnimPlayed = true; this.playSound(this.audioTracks.textAnim, 0.2); }
+    playSound(src, volume = 0.25) { try { const s = this.getPooledAudio(src, volume); s.play().catch(() => {}); } catch (e) {} }
     
     destroy() { 
         this.stopWorkAudio(); 
         this.stopAllScanAudio();
         this.stopVFXEffect();
-        
         if (this.frameAnimation) clearInterval(this.frameAnimation); 
         if (this.cursorRAF) cancelAnimationFrame(this.cursorRAF);
         if (this.throttleTimer) clearTimeout(this.throttleTimer);
         document.removeEventListener('mousemove', this.handleMouseMove);
         document.removeEventListener('mouseup', this.endHold);
-        
-        if (this.scanVFX) {
-            try {
-                this.scanVFX.destroy();
-            } catch (e) {}
-            this.scanVFX = null;
-        }
-        
+        if (this.scanVFX) { try { this.scanVFX.destroy(); } catch (e) {} this.scanVFX = null; }
+        this.audioPool.clear();
         this.isActive = false; 
     }
 }

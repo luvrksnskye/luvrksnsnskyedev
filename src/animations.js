@@ -3,6 +3,7 @@
  * ANIMATIONS MANAGER MODULE
  * ============================
  * Handles all page animations and transitions
+ * Optimized for smooth navigation between Home, About, Work, Contact
  * Exports as ES6 module
  */
 
@@ -16,6 +17,7 @@ class AnimationsManager {
         this.rafCallbacks = new Set();
         this.initialized = false;
         this.INTRO_SEEN_KEY = 'skye_intro_seen';
+        this.pageAnimationStates = new Map(); // Track which pages have been animated
 
         // Don't auto-initialize - wait for core manager
     }
@@ -30,6 +32,7 @@ class AnimationsManager {
             introScreen: document.getElementById('introScreen'),
             mainScreen: document.getElementById('mainScreen'),
             aboutScreen: document.getElementById('aboutScreen'),
+            contactScreen: document.getElementById('contactScreen'),
             mainNav: document.getElementById('mainNav')
         };
 
@@ -439,74 +442,108 @@ class AnimationsManager {
     navigateToPage(pageName) {
         if (this.currentPage === pageName) return;
 
-        this.hideCurrentPage();
+        const previousPage = this.currentPage;
+        this.currentPage = pageName;
 
-        setTimeout(() => {
-            this.showPage(pageName);
-            this.currentPage = pageName;
-        }, 300);
-    }
-
-    hideCurrentPage() {
-        const currentScreen = document.getElementById(`${this.currentPage}Screen`);
-        if (currentScreen) {
-            currentScreen.classList.remove('show');
-        }
-    }
-
-    showPage(pageName) {
-        const targetScreen = document.getElementById(`${pageName}Screen`);
-        if (targetScreen) {
-            targetScreen.classList.add('show');
-            this.triggerPageAnimations(pageName);
-        }
+        // Trigger page-specific animations
+        this.triggerPageAnimations(pageName);
     }
 
     triggerPageAnimations(pageName) {
+        // Check if this page has already been animated during this session
+        const wasAnimated = this.pageAnimationStates.get(pageName);
+
         switch (pageName) {
             case 'about':
-                this.animateAboutPage();
+                this.animateAboutPage(!wasAnimated);
                 break;
             case 'home':
-                this.animateHomePage();
+                this.animateHomePage(!wasAnimated);
                 break;
+            case 'contact':
+                this.animateContactPage(!wasAnimated);
+                break;
+        }
+
+        // Mark page as animated
+        this.pageAnimationStates.set(pageName, true);
+    }
+
+    animateAboutPage(fullAnimation = true) {
+        const profileCards = document.querySelectorAll('.profile-card, #profileContainer');
+        const interestCards = document.querySelectorAll('.interest-card');
+        const locationCard = document.querySelector('.location-card, #locationContainer');
+
+        if (fullAnimation) {
+            // Full entrance animation
+            this.stagger(profileCards, (card) => {
+                card.classList.add('animated');
+                this.slideIn(card, 'up', 50, 600);
+            }, 120);
+
+            setTimeout(() => {
+                this.stagger(interestCards, (card) => {
+                    card.classList.add('animated');
+                    this.scale(card, 0.85, 1, 400);
+                }, 80);
+            }, 350);
+
+            setTimeout(() => {
+                if (locationCard) {
+                    locationCard.classList.add('animated');
+                    this.fadeIn(locationCard, 500);
+                }
+            }, 550);
+        } else {
+            // Quick show (already animated once)
+            profileCards.forEach(card => card.classList.add('animated'));
+            interestCards.forEach(card => card.classList.add('animated'));
+            if (locationCard) locationCard.classList.add('animated');
         }
     }
 
-    animateAboutPage() {
-        const profileCards = document.querySelectorAll('.profile-card');
-        this.stagger(profileCards, (card) => {
-            this.slideIn(card, 'up', 50, 600);
-        }, 120);
+    animateHomePage(fullAnimation = true) {
+        const quoteCards = document.querySelectorAll('.quote-card');
+        const toolCards = document.querySelectorAll('.tool-card');
+        const panels = document.querySelectorAll('.panel');
 
-        setTimeout(() => {
-            const socialLinks = document.querySelectorAll('.social-link');
-            this.stagger(socialLinks, (link) => {
-                this.scale(link, 0.85, 1, 400);
-            }, 80);
-        }, 350);
+        if (fullAnimation) {
+            this.stagger(panels, (panel) => {
+                panel.classList.add('animated');
+                this.fadeIn(panel, 450);
+            }, 60);
 
-        setTimeout(() => {
-            const locationCard = document.querySelector('.location-card');
-            if (locationCard) this.fadeIn(locationCard, 500);
-        }, 550);
+            this.stagger(quoteCards, (card) => {
+                card.classList.add('animated');
+                this.fadeIn(card, 450);
+            }, 90);
+
+            setTimeout(() => {
+                this.stagger(toolCards, (card) => {
+                    card.classList.add('animated');
+                    this.scale(card, 0.92, 1, 350);
+                }, 60);
+            }, 180);
+        } else {
+            panels.forEach(panel => panel.classList.add('animated'));
+            quoteCards.forEach(card => card.classList.add('animated'));
+            toolCards.forEach(card => card.classList.add('animated'));
+        }
     }
 
-    animateHomePage() {
-        const quoteCards = document.querySelectorAll('.quote-card');
-        this.stagger(quoteCards, (card) => {
-            this.fadeIn(card, 450);
-        }, 90);
+    animateContactPage(fullAnimation = true) {
+        const contactContainer = document.querySelector('#contactContainer, .contact-container');
+        const messagesContainer = document.querySelector('#messagesContainer');
 
-        setTimeout(() => {
-            const toolCards = document.querySelectorAll('.tool-card');
-            this.stagger(toolCards, (card) => {
-                this.scale(card, 0.92, 1, 350);
-            }, 60);
-        }, 180);
+        if (contactContainer && fullAnimation) {
+            this.fadeIn(contactContainer, 400);
+        }
+
+        // Contact manager handles its own message animations
     }
 
     fadeIn(element, duration = 300) {
+        if (!element) return;
         element.style.opacity = '0';
         element.style.transition = `opacity ${duration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
 
@@ -518,6 +555,7 @@ class AnimationsManager {
     }
 
     slideIn(element, direction = 'down', distance = 100, duration = 500) {
+        if (!element) return;
         const transforms = {
             up: `translateY(${distance}px)`,
             down: `translateY(-${distance}px)`,
@@ -538,6 +576,7 @@ class AnimationsManager {
     }
 
     scale(element, from = 0.5, to = 1, duration = 300) {
+        if (!element) return;
         element.style.transform = `scale(${from})`;
         element.style.transition = `transform ${duration}ms cubic-bezier(0.34, 1.56, 0.64, 1)`;
 
@@ -549,6 +588,7 @@ class AnimationsManager {
     }
 
     stagger(elements, animationFn, delay = 100) {
+        if (!elements || !elements.length) return;
         elements.forEach((element, index) => {
             setTimeout(() => {
                 requestAnimationFrame(() => {
@@ -559,6 +599,7 @@ class AnimationsManager {
     }
 
     pulse(element, scale = 1.05, duration = 200) {
+        if (!element) return;
         const original = element.style.transform;
         element.style.transition = `transform ${duration}ms ease`;
         element.style.transform = `scale(${scale})`;
@@ -569,6 +610,7 @@ class AnimationsManager {
     }
 
     shake(element, intensity = 10, duration = 500) {
+        if (!element) return;
         element.animate([
             { transform: 'translateX(0)' },
             { transform: `translateX(-${intensity}px)` },
@@ -580,6 +622,11 @@ class AnimationsManager {
             duration,
             easing: 'ease-in-out'
         });
+    }
+
+    // Reset animation states for a fresh experience
+    resetPageAnimations() {
+        this.pageAnimationStates.clear();
     }
 
     // Method to reset intro state (useful for testing)
@@ -595,6 +642,7 @@ class AnimationsManager {
     destroy() {
         this.rafCallbacks.clear();
         this.animationQueue = [];
+        this.pageAnimationStates.clear();
     }
 }
 
