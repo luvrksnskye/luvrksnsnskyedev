@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" fill="none">
+  <!-- Analysis data display -->
+  
+  <!-- Header -->
+  <text x="10" y="20" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="8" letter-spacing="0.15em">ANALYSIS REPORT</text>
+  <line x1="10" y1="28" x2="230" y2="28" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  
+  <!-- Data blocks -->
+  <g>
+    <text x="10" y="50" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">CREATIVITY INDEX</text>
+    <text x="10" y="68" fill="white" font-family="monospace" font-size="18" letter-spacing="0.05em">98.7%</text>
+  </g>
+  
+  <g>
+    <text x="120" y="50" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">TECH PROFICIENCY</text>
+    <text x="120" y="68" fill="white" font-family="monospace" font-size="18" letter-spacing="0.05em">A+</text>
+  </g>
+  
+  <g>
+    <text x="10" y="100" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">PROJECTS ACTIVE</text>
+    <text x="10" y="118" fill="white" font-family="monospace" font-size="18" letter-spacing="0.05em">04</text>
+  </g>
+  
+  <g>
+    <text x="120" y="100" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">HOURS LOGGED</text>
+    <text x="120" y="118" fill="white" font-family="monospace" font-size="18" letter-spacing="0.05em">2.4K</text>
+  </g>
+  
+  <!-- Bottom bar chart -->
+  <text x="10" y="145" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">WEEKLY ACTIVITY</text>
+  <g transform="translate(10, 152)">
+    <rect x="0" y="0" width="15" height="18" fill="rgba(255,255,255,0.6)"/>
+    <rect x="20" y="5" width="15" height="13" fill="rgba(255,255,255,0.5)"/>
+    <rect x="40" y="2" width="15" height="16" fill="rgba(255,255,255,0.7)"/>
+    <rect x="60" y="8" width="15" height="10" fill="rgba(255,255,255,0.4)"/>
+    <rect x="80" y="0" width="15" height="18" fill="white"/>
+    <rect x="100" y="3" width="15" height="15" fill="rgba(255,255,255,0.6)"/>
+    <rect x="120" y="6" width="15" height="12" fill="rgba(255,255,255,0.45)"/>
+  </g>
+</svg>

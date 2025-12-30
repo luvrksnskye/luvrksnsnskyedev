@@ -10,6 +10,7 @@
  * - Reduced reflows and repaints
  * - Sistema de escaneo por etapas con VFX y audio sincronizado
  * - Más píxeles en VFX y mejor sincronización de flujo
+ * - HTML separated from JS for better loading
  */
 
 class WorkManager {
@@ -134,8 +135,8 @@ class WorkManager {
         this.stopAllAudio();
         this.transformNavigation();
         this.hideOtherScreens();
-        this.createWorkContent();
-        this.createCustomCursor();
+        this.showWorkContent();
+        this.initCustomCursor();
         
         setTimeout(() => this.playAmbientAudio(), 500);
         setTimeout(() => this.startAnimations(), 300);
@@ -163,31 +164,14 @@ class WorkManager {
         mainNav.appendChild(modeBox);
     }
     
-    createCustomCursor() {
+    initCustomCursor() {
         const workScreen = document.getElementById('sv-work-screen');
         if (workScreen) workScreen.style.cursor = 'none';
         
-        const cursor = document.createElement('div');
-        cursor.className = 'sv-cursor';
-        cursor.id = 'sv-cursor';
-        cursor.innerHTML = `
-            <div class="sv-cursor-inner">
-                <svg class="sv-cursor-svg" viewBox="0 0 120 120" width="120" height="120">
-                    <circle class="sv-cursor-ring" cx="60" cy="60" r="40" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
-                    <circle class="sv-cursor-ring-inner" cx="60" cy="60" r="32" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="4 4"/>
-                    <circle class="sv-cursor-progress" cx="60" cy="60" r="40" fill="none" stroke="white" stroke-width="2.5" 
-                        stroke-dasharray="251" stroke-dashoffset="251" transform="rotate(-90 60 60)"/>
-                    <line x1="50" y1="60" x2="70" y2="60" stroke="white" stroke-width="1.5"/>
-                    <line x1="60" y1="50" x2="60" y2="70" stroke="white" stroke-width="1.5"/>
-                    <circle cx="60" cy="60" r="3" fill="white"/>
-                </svg>
-                <span class="sv-cursor-arrow sv-arrow-left">◄</span>
-                <span class="sv-cursor-arrow sv-arrow-right">►</span>
-                <span class="sv-cursor-hold-text"></span>
-            </div>
-            <span class="sv-cursor-label"></span>
-        `;
-        document.body.appendChild(cursor);
+        const cursor = document.getElementById('sv-cursor');
+        if (!cursor) return;
+        
+        cursor.style.display = 'block';
         
         // Cache cursor elements for faster access
         this.cachedElements.cursor = cursor;
@@ -898,6 +882,7 @@ void main() {
     
     revealScanPanels(scanId) {
         console.log('Revealing panels for:', scanId);
+        
         const panels = document.querySelectorAll(`.sv-scan-panel[data-scan-group="${scanId}"]`);
         panels.forEach((panel, index) => {
             setTimeout(() => {
@@ -930,198 +915,11 @@ void main() {
         });
     }
     
-    createWorkContent() {
-        const workScreen = document.createElement('div');
-        workScreen.className = 'sv-work-screen';
-        workScreen.id = 'sv-work-screen';
-        workScreen.innerHTML = `
-            <div class="sv-grid-overlay">
-                <div class="sv-grid-v sv-v1"></div>
-                <div class="sv-grid-v sv-v2"></div>
-                <div class="sv-grid-v sv-v3"></div>
-                <div class="sv-grid-v sv-v4"></div>
-                <div class="sv-grid-h sv-h1"></div>
-                <div class="sv-grid-h sv-h2"></div>
-                <div class="sv-grid-h sv-h3"></div>
-            </div>
-            
-            <div class="sv-scroll" id="sv-scroll">
-                <!-- HERO -->
-                <section class="sv-section sv-hero visible" id="sv-hero">
-                    <div class="sv-circle-wrap"><img class="sv-circle-img" id="sv-circle-img" src="${this.frameImages[0]}" alt=""></div>
-                    <div class="sv-label sv-label-l"><span class="sv-dot">■</span><span id="sv-label-l"></span></div>
-                    <div class="sv-label sv-label-r"><span id="sv-label-r"></span><span class="sv-dot">■</span></div>
-                    <h1 class="sv-title" id="sv-title"></h1>
-                    <p class="sv-tagline" id="sv-tagline"></p>
-                    <div class="sv-hero-desc"><p id="sv-desc"></p></div>
-                    <span class="sv-marker">||||</span>
-                </section>
-                
-                <!-- SKYE SCAN -->
-                <section class="sv-section sv-scan-section" id="sv-scan-skye">
-                    <div class="sv-scan-area">
-                        <!-- DOT PATTERN BACKGROUND -->
-                        <div class="sv-dot-pattern" data-scan-group="skye"></div>
-                        
-                        <h2 class="sv-scan-title sv-scan-target" data-scan-id="skye">WHAT I'M INTO?</h2>
-                        <p class="sv-scan-subtitle">CREATIVE • DEVELOPER • CREATOR</p>
-                        
-                        <!-- VISUAL DATA ASSETS - appear on scan -->
-                        <img class="sv-scan-asset sv-asset-geo" src="/src/starvortex_assets/data_geo.webp" alt="" data-scan-group="skye">
-                        <img class="sv-scan-asset sv-asset-distance" src="/src/starvortex_assets/data_distance.webp" alt="" data-scan-group="skye">
-                        <img class="sv-scan-asset sv-asset-scans" src="/src/starvortex_assets/data_scans.webp" alt="" data-scan-group="skye">
-                        <img class="sv-scan-asset sv-asset-skye-data" src="/src/starvortex_assets/skye-data.webp" alt="" data-scan-group="skye">
-                        
-                        <!-- IDENTITY -->
-                        <div class="sv-scan-panel sv-panel-tl" data-scan-group="skye">
-                            <div class="sv-panel-content">
-                                <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// IDENTITY" data-effect="scramble"></span></div>
-                                <div class="sv-panel-grid">
-                                    <div class="sv-panel-data"><span class="sv-data-label" data-text="ALIAS" data-effect="type"></span><span class="sv-data-value" data-text="SKYE" data-effect="scramble"></span></div>
-                                    <div class="sv-panel-data"><span class="sv-data-label" data-text="DESIGNATION" data-effect="type"></span><span class="sv-data-value" data-text="DEV" data-effect="scramble"></span></div>
-                                    <div class="sv-panel-data"><span class="sv-data-label" data-text="DIVISION" data-effect="type"></span><span class="sv-data-value" data-text="ECHO" data-effect="scramble"></span></div>
-                                    <div class="sv-panel-data"><span class="sv-data-label" data-effect="type" data-text="STATUS"></span><span class="sv-data-value" data-text="ACTIVE" data-effect="scramble"></span></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- BIOMETRICS -->
-                        <div class="sv-scan-panel sv-panel-tr" data-scan-group="skye">
-                            <div class="sv-panel-content">
-                                <div class="sv-panel-header"><span class="sv-panel-dot">■ ■</span><span data-text="// BIOMETRICS" data-effect="scramble"></span></div>
-                                <div class="sv-bio-list">
-                                    <div class="sv-bio-row"><span data-text="AGE" data-effect="type"></span><span data-text="20" data-effect="scramble"></span></div>
-                                    <div class="sv-bio-row"><span data-text="LOCATION" data-effect="type"></span><span data-text="VENEZUELA" data-effect="scramble"></span></div>
-                                    <div class="sv-bio-row"><span data-text="LANGUAGES" data-effect="type"></span><span data-text="ES / EN" data-effect="scramble"></span></div>
-                                    <div class="sv-bio-row"><span data-text="GENDER" data-effect="type"></span><span data-text="GENDERFLUID" data-effect="scramble"></span></div>
-                                    <div class="sv-bio-row"><span data-text="PRONOUNS" data-effect="type"></span><span data-text="SHE/THEY" data-effect="scramble"></span></div>
-                                    <div class="sv-bio-row"><span data-text="ALIGNMENT" data-effect="type"></span><span data-text="CHAOTIC GOOD" data-effect="scramble"></span></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- SKILLS -->
-                        <div class="sv-scan-panel sv-panel-left" data-scan-group="skye">
-                            <div class="sv-panel-content">
-                                <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// SKILL MATRIX" data-effect="scramble"></span><span class="sv-panel-plus">+</span></div>
-                                <div class="sv-panel-skills">
-                                    <div class="sv-skill-item"><div class="sv-skill-row"><span class="sv-skill-name" data-text="WEB DEVELOPMENT" data-effect="scramble"></span><span class="sv-skill-pct" data-text="95%" data-effect="type"></span></div><div class="sv-skill-bar"><div class="sv-skill-fill" style="--fill: 95%"></div></div></div>
-                                    <div class="sv-skill-item"><div class="sv-skill-row"><span class="sv-skill-name" data-text="UI/UX DESIGN" data-effect="scramble"></span><span class="sv-skill-pct" data-text="90%" data-effect="type"></span></div><div class="sv-skill-bar"><div class="sv-skill-fill" style="--fill: 90%"></div></div></div>
-                                    <div class="sv-skill-item"><div class="sv-skill-row"><span class="sv-skill-name" data-text="GAME DEVELOPMENT" data-effect="scramble"></span><span class="sv-skill-pct" data-text="75%" data-effect="type"></span></div><div class="sv-skill-bar"><div class="sv-skill-fill" style="--fill: 75%"></div></div></div>
-                                    <div class="sv-skill-item"><div class="sv-skill-row"><span class="sv-skill-name" data-text="DIGITAL ART" data-effect="scramble"></span><span class="sv-skill-pct" data-text="85%" data-effect="type"></span></div><div class="sv-skill-bar"><div class="sv-skill-fill" style="--fill: 85%"></div></div></div>
-                                    <div class="sv-skill-item"><div class="sv-skill-row"><span class="sv-skill-name" data-text="PIXEL ART" data-effect="scramble"></span><span class="sv-skill-pct" data-text="82%" data-effect="type"></span></div><div class="sv-skill-bar"><div class="sv-skill-fill" style="--fill: 82%"></div></div></div>
-                                </div>
-                                <div class="sv-panel-extra">
-                                    <span data-text="++ CYBERSECURITY [KNOWLEDGE]" data-effect="type"></span>
-                                    <span data-text="++ UI/UX SPECIALIST" data-effect="type"></span>
-                                    <span data-text="++ LINUX LOVER (DEBIAN/ARCH)" data-effect="type"></span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- TECH SPECS -->
-                        <div class="sv-scan-panel sv-panel-right" data-scan-group="skye">
-                            <div class="sv-panel-content">
-                                <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// TECH STACK" data-effect="scramble"></span></div>
-                                <div class="sv-tech-list">
-                                    <span data-text="> HTML / CSS / JAVASCRIPT" data-effect="type"></span>
-                                    <span data-text="> REACT / TAILWIND / VITE" data-effect="type"></span>
-                                    <span data-text="> AFFINITY SUITE / FIGMA" data-effect="type"></span>
-                                    <span data-text="> GODOT ENGINE" data-effect="type"></span>
-                                    <span data-text="> GIT / VERSION CONTROL" data-effect="type"></span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- BIO -->
-                        <div class="sv-scan-panel sv-panel-br" data-scan-group="skye">
-                            <div class="sv-panel-content">
-                                <div class="sv-panel-header"><span class="sv-panel-dot">■ ■ ■</span><span data-text="// PROFILE" data-effect="scramble"></span><span class="sv-panel-plus">+</span></div>
-                                <p class="sv-panel-bio" data-text="ART LOVER. PIXEL ARTIST. CAT PERSON. DRAGON ENTHUSIAST. CREATIVE DEV AT ECHO STUDIOS, STARVORTEX. PASSIONATE ABOUT CRAFTING BEAUTIFUL DIGITAL EXPERIENCES WITH ATTENTION TO DETAIL." data-effect="type"></p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                
-                <!-- PROJECTS SCAN -->
-                <section class="sv-section sv-scan-section" id="sv-scan-projects">
-                    <div class="sv-scan-area">
-                        <!-- DOT PATTERN BACKGROUND -->
-                        <div class="sv-dot-pattern" data-scan-group="projects"></div>
-                        
-                        <h2 class="sv-scan-title sv-scan-target" data-scan-id="projects">PERSONAL PROJECTS</h2>
-                        <p class="sv-scan-subtitle">CREATIVE WORKS • INDEPENDENT</p>
-                        
-                        <!-- VISUAL DATA ASSETS -->
-                        <img class="sv-scan-asset sv-asset-geo sv-asset-geo-proj" src="/src/starvortex_assets/data_geo.webp" alt="" data-scan-group="projects">
-                        <img class="sv-scan-asset sv-asset-scans sv-asset-scans-proj" src="/src/starvortex_assets/data_scans.webp" alt="" data-scan-group="projects">
-                        
-                        <!-- SKYE JOURNEY -->
-                        <div class="sv-scan-panel sv-panel-project-1" data-scan-group="projects">
-                            <div class="sv-panel-content">
-                                <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// PROJECT ALPHA" data-effect="scramble"></span><span class="sv-panel-status" data-text="ACTIVE" data-effect="type"></span></div>
-                                <h3 class="sv-project-title" data-text="SKYE JOURNEY" data-effect="scramble"></h3>
-                                <div class="sv-project-meta"><span data-text="TYPE: PERSONAL WEBSITE" data-effect="type"></span><span data-text="STATUS: IN DEVELOPMENT" data-effect="type"></span></div>
-                                <p class="sv-project-desc" data-text="MY PERSONAL SAFE SPACE ON THE INTERNET. A COZY CORNER WHERE I SHARE BEAUTIFUL MOMENTS, THOUGHTS, AND PERSONAL THINGS FROM MY LIFE. DESIGNED TO FEEL WARM, INTIMATE, AND AUTHENTICALLY ME." data-effect="type"></p>
-                                <div class="sv-project-tags"><span data-text="#WEB" data-effect="scramble"></span><span data-text="#PERSONAL" data-effect="scramble"></span><span data-text="#CREATIVE" data-effect="scramble"></span></div>
-                            </div>
-                        </div>
-                        
-                        <!-- OUR INNER WORLD -->
-                        <div class="sv-scan-panel sv-panel-project-2" data-scan-group="projects">
-                            <div class="sv-panel-content">
-                                <div class="sv-panel-header"><span class="sv-panel-dot">■ ■</span><span data-text="// PROJECT BETA" data-effect="scramble"></span><span class="sv-panel-status sv-status-dev" data-text="DEV" data-effect="type"></span></div>
-                                <h3 class="sv-project-title" data-text="OUR INNER WORLD" data-effect="scramble"></h3>
-                                <div class="sv-project-meta">
-                                    <span data-text="TYPE: INDIE VIDEO GAME" data-effect="type"></span>
-                                    <span data-text="ENGINE: GODOT" data-effect="type"></span>
-                                    <span data-text="GENRE: PSYCHOLOGICAL HORROR / RPG" data-effect="type"></span>
-                                </div>
-                                <p class="sv-project-desc sv-project-desc-long" data-text="OURINNERWORLD IS A COMPLETELY DIFFERENT STORY FROM THE ORIGINAL OMORI, WITH NEW CHARACTERS AND A DARK TWIST IN ITS STORY THAT INITIALLY PRESENTS ITSELF WITH A COZY AND ADORABLE ATMOSPHERE. EXPLORING THE WORLDS OF THE DREAMSCAPE, OUR DREAMER WILL BE FORCED TO FACE A TRUTH THEY HAVE BEEN TRYING TO ESCAPE FOR A LONG TIME." data-effect="type"></p>
-                                <div class="sv-project-warning">
-                                    <span class="sv-warning-icon">!</span>
-                                    <span data-text="SENSITIVE TOPICS: SUICIDE, DEATH, MENTAL ILLNESS, PSYCHOLOGICAL HORROR" data-effect="type"></span>
-                                </div>
-                                <p class="sv-project-note" data-text="A GIFT FOR MY BOYFRIEND. PERSONAL PROJECT TO EDUCATE MYSELF IN GAME DEV. WHO KNOWS IF IT WILL EVER GO PUBLIC? FOR NOW, YOU CAN TRY A SMALL BROWSER DEMO. A MYSTERY? HMM..." data-effect="type"></p>
-                                <a href="/src/work/ourinnerworld/index.html" class="sv-project-link" target="_blank">
-                                    <span>> PLAY DEMO</span>
-                                </a>
-                                <div class="sv-project-tags"><span data-text="#GAME" data-effect="scramble"></span><span data-text="#HORROR" data-effect="scramble"></span><span data-text="#INDIE" data-effect="scramble"></span><span data-text="#OMORI" data-effect="scramble"></span><span data-text="#GODOT" data-effect="scramble"></span></div>
-                            </div>
-                        </div>
-                        
-                        <!-- STATS -->
-                        <div class="sv-scan-panel sv-panel-project-stats" data-scan-group="projects">
-                            <div class="sv-panel-content">
-                                <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// STATS" data-effect="scramble"></span></div>
-                                <div class="sv-stats-grid"><div class="sv-stat"><span class="sv-stat-value" data-text="02" data-effect="scramble"></span><span class="sv-stat-label" data-text="ACTIVE" data-effect="type"></span></div><div class="sv-stat"><span class="sv-stat-value" data-text="∞" data-effect="scramble"></span><span class="sv-stat-label" data-text="PASSION" data-effect="type"></span></div></div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                
-                <!-- ABOUT -->
-                <section class="sv-section sv-grid-section" id="sv-sec-1">
-                    <div class="sv-content-grid sv-grid-3col">
-                        <div class="sv-box sv-box-vid"><video class="sv-deco-vid" muted playsinline><source src="/src/starvortex_assets/exp_symbol_mark.webm" type="video/webm"></video></div>
-                        <div class="sv-box sv-box-info"><div class="sv-box-header"><span class="sv-dot">■</span><span class="sv-ch" id="sv-ch1"></span></div><h2 class="sv-box-title" id="sv-title1"></h2><p class="sv-box-text" id="sv-text1"></p></div>
-                        <div class="sv-box sv-box-vid"><video class="sv-deco-vid" muted playsinline><source src="/src/starvortex_assets/exp_symbol_focus.webm" type="video/webm"></video></div>
-                    </div>
-                </section>
-                
-                <!-- DIVISIONS -->
-                <section class="sv-section sv-grid-section" id="sv-sec-2">
-                    <div class="sv-content-grid sv-grid-3col">
-                        <div class="sv-box sv-box-div"><div class="sv-box-header"><span class="sv-dot">■ ■</span><span class="sv-ch" id="sv-ch2"></span></div><h3 class="sv-box-subtitle" id="sv-sub1"></h3><p class="sv-box-text" id="sv-text2"></p></div>
-                        <div class="sv-box sv-box-vid"><video class="sv-deco-vid" muted playsinline><source src="/src/starvortex_assets/exp_symbol_exposition.webm" type="video/webm"></video></div>
-                        <div class="sv-box sv-box-div"><div class="sv-box-header"><span class="sv-dot">■ ■</span><span class="sv-ch" id="sv-ch3"></span></div><h3 class="sv-box-subtitle" id="sv-sub2"></h3><p class="sv-box-text" id="sv-text3"></p></div>
-                    </div>
-                </section>
-                
-            </div>
-        `;
+    showWorkContent() {
+        const workScreen = document.getElementById('sv-work-screen');
+        if (!workScreen) return;
         
-        document.body.appendChild(workScreen);
+        workScreen.style.display = 'block';
         this.setupScrollAnimations();
         requestAnimationFrame(() => workScreen.classList.add('active'));
     }
@@ -1164,6 +962,32 @@ void main() {
             setTimeout(() => this.scramble(document.getElementById('sv-ch3'), 'DIVISION 02'), 100);
             setTimeout(() => this.scramble(document.getElementById('sv-sub2'), 'ECHO STUDIOS'), 150);
             setTimeout(() => this.typewriter(document.getElementById('sv-text3'), 'DEDICATED TO VIDEO GAME DEVELOPMENT AND INTERACTIVE EXPERIENCES. THIS IS WHERE I, SKYE, CREATE AND INNOVATE!'), 300);
+        } else if (id === 'sv-scan-skye' || id === 'sv-scan-projects') {
+            // Animar título con scramble al entrar en vista
+            this.playRolloverSound();
+            const scrollRevealEl = section.querySelector('.sv-scroll-reveal');
+            if (scrollRevealEl && scrollRevealEl.dataset.scrollText) {
+                setTimeout(() => this.scramble(scrollRevealEl, scrollRevealEl.dataset.scrollText), 100);
+            }
+        } else if (id === 'sv-members') {
+            this.playRolloverSound();
+            setTimeout(() => this.scramble(document.getElementById('sv-members-label'), 'TEAM ROSTER'), 100);
+            setTimeout(() => this.glitchType(document.getElementById('sv-members-title'), 'MEMBERS'), 200);
+            setTimeout(() => this.typewriter(document.getElementById('sv-members-subtitle'), 'STARVORTEX CORE TEAM • ACTIVE OPERATIVES'), 400);
+            // Animate member cards
+            const memberCards = document.querySelectorAll('.sv-member-card');
+            memberCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('revealed');
+                }, 600 + (index * 300));
+            });
+            // Animate data panels
+            const dataPanels = document.querySelectorAll('.sv-data-panel');
+            dataPanels.forEach((panel, index) => {
+                setTimeout(() => {
+                    panel.classList.add('revealed');
+                }, 1200 + (index * 200));
+            });
         }
     }
     
@@ -1255,7 +1079,9 @@ void main() {
             this.frameAnimation = null; 
         }
         
-        document.getElementById('sv-cursor')?.remove();
+        // Hide cursor
+        const cursor = document.getElementById('sv-cursor');
+        if (cursor) cursor.style.display = 'none';
         
         // RESETEAR TODO - Sin persistencia
         this.revealedScans.clear();
@@ -1284,7 +1110,7 @@ void main() {
         const ws = document.getElementById('sv-work-screen');
         if (ws) { 
             ws.classList.remove('active'); 
-            setTimeout(() => ws.remove(), 500); 
+            setTimeout(() => { ws.style.display = 'none'; }, 500); 
         }
         
         const home = document.getElementById('homeScreen');
