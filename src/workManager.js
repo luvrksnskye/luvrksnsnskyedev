@@ -1,12 +1,13 @@
 /**
  * WORK MANAGER - STARVORTEX Section
- * OPTIMIZED VERSION v2.1 - WITH VISIONS SECTION
+ * OPTIMIZED VERSION v2.2 - IMPROVED SCROLL ANIMATIONS
  * - Better memory management
  * - Improved RAF usage with proper cleanup
  * - Audio pooling for better performance
  * - Fixed navigation integration
  * - Smoother exit transitions
  * - VISIONS section support
+ * - IMPROVED: Scroll-based text animations trigger when elements are actually visible
  */
 
 class WorkManager {
@@ -81,6 +82,13 @@ class WorkManager {
         this.isProcessingAudio = false;
         this.audioPool = new Map();
         
+        // Track animated elements to prevent re-animation
+        this.animatedElements = new Set();
+        
+        // Observers
+        this.sectionObserver = null;
+        this.titleObserver = null;
+        
         this.handleMouseMove = this.handleMouseMove.bind(this);
         this.startHold = this.startHold.bind(this);
         this.endHold = this.endHold.bind(this);
@@ -143,6 +151,7 @@ class WorkManager {
         
         this.cachedElements = {};
         this.scanTargetsCache = [];
+        this.animatedElements.clear();
         this.resetScanState();
         this.revealedScans.clear();
         
@@ -613,51 +622,187 @@ void main() { vec2 uv = (gl_FragCoord.xy - offset) / resolution; vec2 p = uv * 2
         requestAnimationFrame(() => workScreen.classList.add('active'));
     }
     
+    /**
+     * IMPROVED: Setup scroll animations with better visibility detection
+     * - Sections use threshold 0.15 for general visibility
+     * - Titles use a separate observer with higher threshold (0.5) + rootMargin
+     *   to ensure the text is actually in view when scramble triggers
+     */
     setupScrollAnimations() {
         const scroll = document.getElementById('sv-scroll');
         if (!scroll) return;
-        const observer = new IntersectionObserver((entries) => {
+        
+        // Observer for general section visibility (videos, backgrounds, etc.)
+        this.sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    this.animateSection(entry.target);
-                    entry.target.querySelectorAll('.sv-deco-vid').forEach(vid => { vid.currentTime = 0; vid.play().catch(() => {}); });
+                    // Play videos when section becomes visible
+                    entry.target.querySelectorAll('.sv-deco-vid').forEach(vid => { 
+                        vid.currentTime = 0; 
+                        vid.play().catch(() => {}); 
+                    });
                 }
             });
-        }, { threshold: 0.15, root: scroll });
-        document.querySelectorAll('.sv-section').forEach(s => observer.observe(s));
+        }, { 
+            threshold: 0.1, 
+            root: scroll 
+        });
+        
+        // Observer for text elements - triggers when element is more centered in viewport
+        // Uses rootMargin to create a "trigger zone" in the middle of the viewport
+        this.titleObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const elId = el.id || el.dataset.animId;
+                    
+                    // Check if already animated
+                    if (this.animatedElements.has(elId)) return;
+                    this.animatedElements.add(elId);
+                    
+                    // Trigger the animation for this specific element
+                    this.animateElement(el);
+                }
+            });
+        }, { 
+            threshold: 0.8,  // Element must be 80% visible
+            root: scroll,
+            rootMargin: '-10% 0px -10% 0px'  // Shrink the trigger area to center
+        });
+        
+        // Observe all sections
+        document.querySelectorAll('.sv-section').forEach(s => {
+            this.sectionObserver.observe(s);
+        });
+        
+        // Observe specific text elements that need scroll-triggered animations
+        this.setupTextElementObservers();
     }
     
+    /**
+     * Setup observers for individual text elements
+     */
+    setupTextElementObservers() {
+        // Grid section titles
+        const gridTextElements = [
+            { el: document.getElementById('sv-ch1'), text: 'ABOUT', effect: 'scramble', id: 'sv-ch1' },
+            { el: document.getElementById('sv-title1'), text: 'STARVORTEX', effect: 'scramble', id: 'sv-title1' },
+            { el: document.getElementById('sv-text1'), text: 'A GROWING TECH COLLECTIVE FORMED BY A SMALL, FOCUSED TEAM DEDICATED TO THE DESIGN AND DEVELOPMENT OF MODERN TECHNOLOGICAL SYSTEMS. THE GROUP SPANS MOBILE, DESKTOP, WEB APPLICATIONS, AND VIDEO GAME DEVELOPMENT.', effect: 'typewriter', id: 'sv-text1' },
+            { el: document.getElementById('sv-ch2'), text: 'DIVISION 01', effect: 'scramble', id: 'sv-ch2' },
+            { el: document.getElementById('sv-sub1'), text: 'QUANTUM ANALYTICS', effect: 'scramble', id: 'sv-sub1' },
+            { el: document.getElementById('sv-text2'), text: 'FOCUSED ON DATA ANALYSIS AND ANALYTICAL SOLUTIONS. TRANSFORMING RAW DATA INTO ACTIONABLE INSIGHTS.', effect: 'typewriter', id: 'sv-text2' },
+            { el: document.getElementById('sv-ch3'), text: 'DIVISION 02', effect: 'scramble', id: 'sv-ch3' },
+            { el: document.getElementById('sv-sub2'), text: 'ECHO STUDIOS', effect: 'scramble', id: 'sv-sub2' },
+            { el: document.getElementById('sv-text3'), text: 'DEDICATED TO VIDEO GAME DEVELOPMENT AND INTERACTIVE EXPERIENCES. THIS IS WHERE I, SKYE, CREATE AND INNOVATE!', effect: 'typewriter', id: 'sv-text3' },
+        ];
+        
+        gridTextElements.forEach(item => {
+            if (item.el) {
+                item.el.dataset.animId = item.id;
+                item.el.dataset.animText = item.text;
+                item.el.dataset.animEffect = item.effect;
+                this.titleObserver.observe(item.el);
+            }
+        });
+        
+        // Scan section titles (scroll reveal elements)
+        document.querySelectorAll('.sv-scroll-reveal').forEach(el => {
+            if (el.dataset.scrollText) {
+                el.dataset.animId = el.dataset.scrollText;
+                el.dataset.animText = el.dataset.scrollText;
+                el.dataset.animEffect = 'scramble';
+                this.titleObserver.observe(el);
+            }
+        });
+        
+        // Members section elements
+        const membersLabel = document.getElementById('sv-members-label');
+        const membersTitle = document.getElementById('sv-members-title');
+        const membersSubtitle = document.getElementById('sv-members-subtitle');
+        
+        if (membersLabel) {
+            membersLabel.dataset.animId = 'sv-members-label';
+            membersLabel.dataset.animText = 'TEAM ROSTER';
+            membersLabel.dataset.animEffect = 'scramble';
+            this.titleObserver.observe(membersLabel);
+        }
+        
+        if (membersTitle) {
+            membersTitle.dataset.animId = 'sv-members-title';
+            membersTitle.dataset.animText = 'MEMBERS';
+            membersTitle.dataset.animEffect = 'glitchType';
+            this.titleObserver.observe(membersTitle);
+        }
+        
+        if (membersSubtitle) {
+            membersSubtitle.dataset.animId = 'sv-members-subtitle';
+            membersSubtitle.dataset.animText = 'STARVORTEX CORE TEAM • ACTIVE OPERATIVES';
+            membersSubtitle.dataset.animEffect = 'typewriter';
+            this.titleObserver.observe(membersSubtitle);
+        }
+        
+        // Observe member cards container for revealing cards
+        const membersSection = document.getElementById('sv-members');
+        if (membersSection) {
+            membersSection.dataset.animId = 'sv-members-section';
+            // Use a separate observer for revealing member cards
+            const memberCardsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !this.animatedElements.has('sv-members-cards')) {
+                        this.animatedElements.add('sv-members-cards');
+                        // Reveal member cards with stagger
+                        document.querySelectorAll('.sv-member-card').forEach((card, index) => {
+                            setTimeout(() => card.classList.add('revealed'), 300 + (index * 200));
+                        });
+                        // Reveal data panels
+                        document.querySelectorAll('.sv-data-panel').forEach((panel, index) => {
+                            setTimeout(() => panel.classList.add('revealed'), 800 + (index * 150));
+                        });
+                    }
+                });
+            }, { 
+                threshold: 0.3, 
+                root: document.getElementById('sv-scroll') 
+            });
+            memberCardsObserver.observe(membersSection);
+        }
+    }
+    
+    /**
+     * Animate a single element based on its data attributes
+     */
+    animateElement(el) {
+        if (!el) return;
+        
+        const text = el.dataset.animText;
+        const effect = el.dataset.animEffect;
+        
+        if (!text || !effect) return;
+        
+        this.playRolloverSound();
+        
+        switch (effect) {
+            case 'scramble':
+                this.scramble(el, text);
+                break;
+            case 'typewriter':
+                this.typewriter(el, text);
+                break;
+            case 'glitchType':
+                this.glitchType(el, text);
+                break;
+        }
+    }
+    
+    /**
+     * Legacy method - kept for compatibility but now handled by individual observers
+     */
     animateSection(section) {
+        // This method is now mostly handled by setupTextElementObservers
+        // Keep minimal functionality for edge cases
         if (section.classList.contains('animated')) return;
         section.classList.add('animated');
-        const id = section.id;
-        
-        if (id === 'sv-sec-1') {
-            this.playRolloverSound();
-            setTimeout(() => this.scramble(document.getElementById('sv-ch1'), 'ABOUT'), 100);
-            setTimeout(() => this.scramble(document.getElementById('sv-title1'), 'STARVORTEX'), 200);
-            setTimeout(() => this.typewriter(document.getElementById('sv-text1'), 'A GROWING TECH COLLECTIVE FORMED BY A SMALL, FOCUSED TEAM DEDICATED TO THE DESIGN AND DEVELOPMENT OF MODERN TECHNOLOGICAL SYSTEMS. THE GROUP SPANS MOBILE, DESKTOP, WEB APPLICATIONS, AND VIDEO GAME DEVELOPMENT.'), 400);
-        } else if (id === 'sv-sec-2') {
-            this.playRolloverSound();
-            setTimeout(() => this.scramble(document.getElementById('sv-ch2'), 'DIVISION 01'), 100);
-            setTimeout(() => this.scramble(document.getElementById('sv-sub1'), 'QUANTUM ANALYTICS'), 150);
-            setTimeout(() => this.typewriter(document.getElementById('sv-text2'), 'FOCUSED ON DATA ANALYSIS AND ANALYTICAL SOLUTIONS. TRANSFORMING RAW DATA INTO ACTIONABLE INSIGHTS.'), 300);
-            setTimeout(() => this.scramble(document.getElementById('sv-ch3'), 'DIVISION 02'), 100);
-            setTimeout(() => this.scramble(document.getElementById('sv-sub2'), 'ECHO STUDIOS'), 150);
-            setTimeout(() => this.typewriter(document.getElementById('sv-text3'), 'DEDICATED TO VIDEO GAME DEVELOPMENT AND INTERACTIVE EXPERIENCES. THIS IS WHERE I, SKYE, CREATE AND INNOVATE!'), 300);
-        } else if (id === 'sv-scan-skye' || id === 'sv-scan-projects' || id === 'sv-scan-visions') {
-            this.playRolloverSound();
-            const scrollRevealEl = section.querySelector('.sv-scroll-reveal');
-            if (scrollRevealEl && scrollRevealEl.dataset.scrollText) setTimeout(() => this.scramble(scrollRevealEl, scrollRevealEl.dataset.scrollText), 100);
-        } else if (id === 'sv-members') {
-            this.playRolloverSound();
-            setTimeout(() => this.scramble(document.getElementById('sv-members-label'), 'TEAM ROSTER'), 100);
-            setTimeout(() => this.glitchType(document.getElementById('sv-members-title'), 'MEMBERS'), 200);
-            setTimeout(() => this.typewriter(document.getElementById('sv-members-subtitle'), 'STARVORTEX CORE TEAM • ACTIVE OPERATIVES'), 400);
-            document.querySelectorAll('.sv-member-card').forEach((card, index) => setTimeout(() => card.classList.add('revealed'), 600 + (index * 300)));
-            document.querySelectorAll('.sv-data-panel').forEach((panel, index) => setTimeout(() => panel.classList.add('revealed'), 1200 + (index * 200)));
-        }
     }
     
     startAnimations() {
@@ -729,6 +874,16 @@ void main() { vec2 uv = (gl_FragCoord.xy - offset) / resolution; vec2 p = uv * 2
         this.stopAllScanAudio();
         this.stopVFXEffect();
         
+        // Disconnect observers
+        if (this.sectionObserver) {
+            this.sectionObserver.disconnect();
+            this.sectionObserver = null;
+        }
+        if (this.titleObserver) {
+            this.titleObserver.disconnect();
+            this.titleObserver = null;
+        }
+        
         if (this.cursorRAF) { cancelAnimationFrame(this.cursorRAF); this.cursorRAF = null; }
         if (this.throttleTimer) { clearTimeout(this.throttleTimer); this.throttleTimer = null; }
         
@@ -742,6 +897,7 @@ void main() { vec2 uv = (gl_FragCoord.xy - offset) / resolution; vec2 p = uv * 2
         if (cursor) cursor.style.display = 'none';
         
         this.revealedScans.clear();
+        this.animatedElements.clear();
         this.cachedElements = {};
         this.scanTargetsCache = [];
         this.textAnimPlayed = false;
@@ -831,10 +987,13 @@ void main() { vec2 uv = (gl_FragCoord.xy - offset) / resolution; vec2 p = uv * 2
         if (this.frameAnimation) clearInterval(this.frameAnimation); 
         if (this.cursorRAF) cancelAnimationFrame(this.cursorRAF);
         if (this.throttleTimer) clearTimeout(this.throttleTimer);
+        if (this.sectionObserver) this.sectionObserver.disconnect();
+        if (this.titleObserver) this.titleObserver.disconnect();
         document.removeEventListener('mousemove', this.handleMouseMove);
         document.removeEventListener('mouseup', this.endHold);
         if (this.scanVFX) { try { this.scanVFX.destroy(); } catch (e) {} this.scanVFX = null; }
         this.audioPool.clear();
+        this.animatedElements.clear();
         this.isActive = false; 
     }
 }
