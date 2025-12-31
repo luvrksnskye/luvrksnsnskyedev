@@ -1037,7 +1037,7 @@
     transform: translate(-50%, -50%);
     width: 80%;
     max-width: 800px;
-    opacity: 0.03;
+    opacity: 0.10;
     filter: brightness(0) invert(1);
     pointer-events: none;
     z-index: 0;
@@ -1478,7 +1478,7 @@
 .sv-skill-bar { 
     width: 100%; 
     height: 3px; 
-    background: rgba(255,255,255,0.15); 
+    background: rgba(255, 255, 255, 0.501); 
     position: relative; 
     overflow: hidden; 
 }
@@ -1489,7 +1489,7 @@
     left: 0; 
     height: 100%; 
     width: 0; 
-    background: linear-gradient(90deg, rgba(255,255,255,0.6), white); 
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.764), white); 
     transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
     will-change: width;
 }
