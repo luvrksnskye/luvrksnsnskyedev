@@ -1,6 +1,7 @@
 /* ================================================================== */
 /*                                                                      */
-/*    STARVORTEX WORK SECTION                                            */
+/*    STARVORTEX WORK SECTION - ENHANCED v3.0                          */
+/*    Neo-Militarist Street Futuristic Design                          */
 /*                                                                      */
 /* ================================================================== */
 
@@ -18,6 +19,12 @@
     src: url('/src/starvortex_assets/Hexaframe.woff') format('woff'), 
          url('/src/starvortex_assets/Hexaframe.otf') format('opentype'); 
 }
+
+@font-face { 
+    font-family: 'SV-Sprintura'; 
+    src: url('/src/starvortex_assets/sprintura.otf') format('truetype'); 
+}
+
 
 /* ================================================================== */
 /* 2. NAVEGACIÓN WORK MODE                                            */
@@ -40,6 +47,29 @@
     align-items: center; 
     gap: 10px; 
     z-index: 1000; 
+}
+
+/* Icon in navbar */
+.sv-nav-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 15px;
+    opacity: 0;
+    animation: sv-icon-flicker 0.8s ease-out forwards;
+    animation-delay: 0.2s;
+}
+
+@keyframes sv-icon-flicker {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    15% { opacity: 0; }
+    20% { opacity: 1; }
+    30% { opacity: 0.3; }
+    40% { opacity: 1; }
+    50% { opacity: 0.5; }
+    60% { opacity: 1; }
+    80% { opacity: 0.8; }
+    100% { opacity: 1; }
 }
 
 #mainNav.sv-work-mode .nav-menu.sv-nav-styled { 
@@ -140,7 +170,124 @@
 }
 
 /* ================================================================== */
-/* 4. GRID OVERLAY - KPR Style                                        */
+/* 4. VERTICAL SCROLL NAVIGATION                                      */
+/* ================================================================== */
+
+.sv-scroll-nav {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.sv-scroll-nav-left {
+    left: 20px;
+    right: auto;
+}
+
+.sv-scroll-arrow {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    filter: brightness(0) invert(1);
+}
+
+.sv-scroll-arrow:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.sv-scroll-arrow.inactive {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.sv-scroll-arrow.down {
+    transform: rotate(180deg);
+}
+
+.sv-scroll-arrow.down:hover {
+    transform: rotate(180deg) scale(1.1);
+}
+
+.sv-scroll-arrow.down.inactive {
+    transform: rotate(180deg);
+}
+
+/* Section indicators */
+.sv-section-indicators {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 0;
+}
+
+.sv-section-dot {
+    width: 8px;
+    height: 8px;
+    border: 1px solid rgba(255,255,255,0.4);
+    background: transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.sv-section-dot.active {
+    background: white;
+    border-color: white;
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.sv-section-dot:hover {
+    border-color: white;
+}
+
+/* Horizontal section number indicator */
+.sv-section-number-display {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.sv-section-num {
+    font-family: 'SV-Hexaframe', sans-serif;
+    font-size: 14px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.sv-section-num.active {
+    color: white;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.sv-section-num:hover {
+    color: rgba(255,255,255,0.7);
+}
+
+.sv-section-divider {
+    width: 30px;
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+}
+
+/* ================================================================== */
+/* 5. GRID OVERLAY - KPR Style                                        */
 /* ================================================================== */
 
 .sv-grid-overlay { 
@@ -182,7 +329,7 @@
 .sv-h3 { bottom: 5%; }
 
 /* ================================================================== */
-/* 5. CURSOR PERSONALIZADO - Optimized                                */
+/* 6. CURSOR PERSONALIZADO - Optimized                                */
 /* ================================================================== */
 
 .sv-cursor { 
@@ -303,7 +450,7 @@
 }
 
 /* ================================================================== */
-/* 6. SCROLL CONTAINER - Optimized                                    */
+/* 7. SCROLL CONTAINER - Optimized                                    */
 /* ================================================================== */
 
 .sv-scroll { 
@@ -332,7 +479,7 @@
 }
 
 /* ================================================================== */
-/* 7. SECCIONES GENERALES                                             */
+/* 8. SECCIONES GENERALES                                             */
 /* ================================================================== */
 
 .sv-section { 
@@ -352,7 +499,7 @@
 }
 
 /* ================================================================== */
-/* 8. HERO SECTION                                                    */
+/* 9. HERO SECTION - ENHANCED                                         */
 /* ================================================================== */
 
 .sv-hero { 
@@ -360,9 +507,46 @@
     display: flex; 
     flex-direction: column; 
     align-items: center; 
-    justify-content: center; 
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
 }
 
+/* Fill bar background animation */
+.sv-fill-bar-container {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 300%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.sv-fill-bar {
+    position: absolute;
+    top: 15%;
+    left: 0;
+    width: 100%;
+    height: auto;
+    opacity: 0.08;
+    animation: sv-fill-bar-scroll 20s linear infinite;
+    filter: brightness(0) invert(1);
+}
+
+.sv-fill-bar-2 {
+    top: 60%;
+    animation-delay: -10s;
+    opacity: 0.05;
+}
+
+@keyframes sv-fill-bar-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(33.333%); }
+}
+
+/* Circle wrapper */
 .sv-circle-wrap { 
     position: absolute; 
     top: 50%; 
@@ -384,16 +568,206 @@
     opacity: 1.05; 
 }
 
+/* Title container */
+.sv-title-container {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+/* Main title with flash effect - CENTERED */
 .sv-title { 
     position: relative; 
-    z-index: 10; 
+    z-index: 5; /* MENOR z-index para que los ghosts estén encima */
     font-family: 'SV-Hexaframe', sans-serif; 
     font-size: clamp(50px, 14vw, 160px); 
     color: white; 
     letter-spacing: 0.02em; 
     margin: 0; 
     text-align: center; 
-    min-height: 1.2em; 
+    min-height: 1.2em;
+    opacity: 0;
+    order: 2; /* Center position */
+}
+
+.sv-title.typing {
+    opacity: 1;
+    animation: sv-title-flash 0.15s ease-in-out 3;
+}
+
+@keyframes sv-title-flash {
+    0%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+    50% { opacity: 0.3; text-shadow: none; }
+}
+
+/* Ghost/outline text copies - ENHANCED GLITCH */
+.sv-title-ghost {
+    position: absolute;
+    font-family: 'SV-Hexaframe', sans-serif;
+    font-size: clamp(50px, 14vw, 160px);
+    letter-spacing: 0.02em;
+    color: transparent;
+    /* Stroke MÁS GRUESO y BRILLANTE */
+    -webkit-text-stroke: 2.5px rgba(255,255,255,0.85);
+    pointer-events: none;
+    white-space: nowrap;
+    opacity: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-play-state: paused;
+    z-index: 15; /* ENCIMA del texto normal */
+}
+
+.sv-title-ghost-1 {
+    top: -60px;
+    order: 1;
+    animation: sv-glitch-top 2s infinite; /* Más rápido */
+}
+
+.sv-title-ghost-2 {
+    bottom: -60px;
+    order: 3;
+    animation: sv-glitch-bottom 2s infinite; /* Más rápido */
+    animation-delay: 1s;
+}
+
+.sv-title-ghost-3 {
+    display: none;
+}
+
+/* GLITCH TOP - MÁS INTENSO CON PARPADEO */
+@keyframes sv-glitch-top {
+    0% { 
+        opacity: 0; 
+        transform: translateX(-50%) translateY(0);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    
+    /* Parpadeo rápido inicial */
+    1% {
+        opacity: 1;
+        transform: translateX(calc(-50% - 12px)) translateY(0);
+    }
+    2% {
+        opacity: 0;
+    }
+    3% {
+        opacity: 1;
+        transform: translateX(calc(-50% + 8px)) translateY(0);
+    }
+    
+    /* Glitch visible con clip-path */
+    5%, 12% {
+        opacity: 0.9;
+        transform: translateX(calc(-50% - 10px)) translateY(2px);
+        clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    }
+    
+    14% {
+        opacity: 0;
+    }
+    
+    /* Segundo glitch */
+    20%, 27% {
+        opacity: 0.95;
+        transform: translateX(calc(-50% + 15px)) translateY(-2px);
+        clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    }
+    
+    /* Parpadeo medio */
+    30% {
+        opacity: 1;
+    }
+    31% {
+        opacity: 0;
+    }
+    32% {
+        opacity: 1;
+    }
+    33% {
+        opacity: 0;
+    }
+    
+    /* Glitch final */
+    40%, 45% {
+        opacity: 0.85;
+        transform: translateX(calc(-50% - 8px)) translateY(1px);
+        clip-path: polygon(0 20%, 100% 20%, 100% 80%, 0 80%);
+    }
+    
+    50%, 100% {
+        opacity: 0;
+    }
+}
+
+/* GLITCH BOTTOM - MÁS INTENSO CON PARPADEO */
+@keyframes sv-glitch-bottom {
+    0% { 
+        opacity: 0; 
+        transform: translateX(-50%) translateY(0);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    
+    /* Parpadeo inicial */
+    2% {
+        opacity: 0;
+    }
+    3% {
+        opacity: 1;
+        transform: translateX(calc(-50% + 10px)) translateY(0);
+    }
+    4% {
+        opacity: 0;
+    }
+    
+    /* Glitch visible */
+    8%, 15% {
+        opacity: 0.95;
+        transform: translateX(calc(-50% + 12px)) translateY(-2px);
+        clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+    }
+    
+    17% {
+        opacity: 0;
+    }
+    
+    /* Segundo glitch */
+    25%, 32% {
+        opacity: 0.9;
+        transform: translateX(calc(-50% - 14px)) translateY(2px);
+        clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
+    }
+    
+    /* Parpadeo rápido */
+    35% {
+        opacity: 1;
+        transform: translateX(calc(-50% + 5px)) translateY(0);
+    }
+    36% {
+        opacity: 0;
+    }
+    37% {
+        opacity: 1;
+        transform: translateX(calc(-50% - 5px)) translateY(0);
+    }
+    38% {
+        opacity: 0;
+    }
+    
+    /* Glitch final más largo */
+    45%, 52% {
+        opacity: 0.88;
+        transform: translateX(calc(-50% + 9px)) translateY(-1px);
+        clip-path: polygon(0 30%, 100% 30%, 100% 70%, 0 70%);
+    }
+    
+    55%, 100% {
+        opacity: 0;
+    }
 }
 
 .sv-tagline { 
@@ -466,7 +840,213 @@
 }
 
 /* ================================================================== */
-/* 9. SCAN SECTIONS                                                   */
+/* 10. DECORATIVE ARROWS                                              */
+/* ================================================================== */
+
+.sv-arrow-decor {
+    position: absolute;
+    width: 20px;
+    height: auto;
+    opacity: 0.4;
+    filter: brightness(0) invert(1);
+    pointer-events: none;
+    z-index: 5;
+}
+
+.sv-arrow-decor-tl {
+    top: 120px;
+    left: 8%;
+    transform: rotate(-45deg);
+}
+
+.sv-arrow-decor-tr {
+    top: 120px;
+    right: 8%;
+    transform: rotate(45deg) scaleX(-1);
+}
+
+.sv-arrow-decor-bl {
+    bottom: 120px;
+    left: 8%;
+    transform: rotate(-135deg);
+}
+
+.sv-arrow-decor-br {
+    bottom: 120px;
+    right: 8%;
+    transform: rotate(135deg) scaleX(-1);
+}
+
+/* Expand more info button */
+.sv-expand-btn {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 20;
+    overflow: hidden;
+}
+
+.sv-expand-btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.4);
+}
+
+.sv-expand-btn img {
+    width: 20px;
+    height: auto;
+    filter: brightness(0) invert(1);
+    transition: transform 0.3s ease;
+}
+
+.sv-expand-btn.expanded img {
+    transform: rotate(180deg);
+}
+
+/* Expandable info panel */
+.sv-expandable-panel {
+    position: fixed;
+    top: 60px;
+    right: -400px;
+    width: 380px;
+    height: calc(100% - 60px);
+    background: rgba(0, 0, 0, 0.95);
+    border-left: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(20px);
+    z-index: 90;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    padding: 30px;
+}
+
+.sv-expandable-panel.open {
+    right: 0;
+}
+
+.sv-expandable-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sv-expandable-panel-header span {
+    font-family: 'SV-Tech', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+}
+
+.sv-expandable-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sv-info-block {
+    padding: 20px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+}
+
+.sv-info-block-title {
+    font-family: 'SV-Hexaframe', sans-serif;
+    font-size: 16px;
+    color: white;
+    margin: 0 0 10px 0;
+}
+
+.sv-info-block-text {
+    font-family: 'SV-Tech', monospace;
+    font-size: 10px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.sv-info-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.sv-info-stat {
+    text-align: center;
+    padding: 15px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.sv-info-stat-value {
+    font-family: 'SV-Hexaframe', sans-serif;
+    font-size: 24px;
+    color: white;
+    display: block;
+}
+
+.sv-info-stat-label {
+    font-family: 'SV-Tech', monospace;
+    font-size: 8px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 5px;
+    display: block;
+}
+
+/* ================================================================== */
+/* 11. BANNER DECORATION                                              */
+/* ================================================================== */
+
+.sv-banner-decor {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    opacity: 0.1;
+    filter: brightness(0) invert(1);
+    pointer-events: none;
+}
+
+/* Logo behind fill decoration */
+.sv-logo-behind {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 800px;
+    opacity: 0.03;
+    filter: brightness(0) invert(1);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ================================================================== */
+/* REST OF CSS - SECTIONS, PANELS, ETC.                               */
+/* (Keeping all existing styles from work.css)                        */
+/* ================================================================== */
+
+/* ================================================================== */
+/* 12. SCAN SECTIONS                                                   */
 /* ================================================================== */
 
 .sv-scan-section { 
@@ -603,7 +1183,7 @@
 }
 
 /* ================================================================== */
-/* 10. SCAN PANELS - Base Styles                                      */
+/* 13. SCAN PANELS - Base Styles                                      */
 /* ================================================================== */
 
 .sv-scan-panel { 
@@ -674,7 +1254,7 @@
 }
 
 /* ================================================================== */
-/* 11. PANEL POSITIONS - SKYE Section                                 */
+/* 14. PANEL POSITIONS - SKYE Section                                 */
 /* ================================================================== */
 
 /* Row 1: Identity and Biometrics */
@@ -756,7 +1336,7 @@
 }
 
 /* ================================================================== */
-/* 12. PANEL POSITIONS - PROJECTS Section                             */
+/* 15. PANEL POSITIONS - PROJECTS Section                             */
 /* ================================================================== */
 
 .sv-panel-project-1 { 
@@ -795,7 +1375,7 @@
 }
 
 /* ================================================================== */
-/* 13. PANEL CONTENT STYLES                                           */
+/* 16. PANEL CONTENT STYLES                                           */
 /* ================================================================== */
 
 /* Grid Layout */
@@ -939,7 +1519,7 @@
 }
 
 /* ================================================================== */
-/* 14. PROJECT PANELS                                                 */
+/* 17. PROJECT PANELS                                                 */
 /* ================================================================== */
 
 .sv-project-title { 
@@ -1086,7 +1666,7 @@
 }
 
 /* ================================================================== */
-/* 15. KPR-INSPIRED GRID SECTION                                      */
+/* 18. KPR-INSPIRED GRID SECTION                                      */
 /* ================================================================== */
 
 .sv-grid-section { 
@@ -1223,7 +1803,7 @@
 }
 
 /* ================================================================== */
-/* 16. MEMBERS SECTION                                                */
+/* 19. MEMBERS SECTION                                                */
 /* ================================================================== */
 
 .sv-members-section {
@@ -1269,7 +1849,7 @@
     margin: 0;
 }
 
-/* Members Grid - UPDATED for 4+ members (2x2 layout) */
+/* Members Grid */
 .sv-members-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(380px, 1fr));
@@ -1308,7 +1888,7 @@
 }
 
 /* ================================================================== */
-/* 17. DATA PANELS                                                    */
+/* 20. DATA PANELS                                                    */
 /* ================================================================== */
 
 .sv-data-panels {
@@ -1342,7 +1922,7 @@
 }
 
 /* ================================================================== */
-/* 18. SCAN EFFECTS                                                   */
+/* 21. SCAN EFFECTS                                                   */
 /* ================================================================== */
 
 .sv-scan-active {
@@ -1382,7 +1962,7 @@
 }
 
 /* ================================================================== */
-/* 19. DATA ANIMATIONS                                                */
+/* 22. DATA ANIMATIONS                                                */
 /* ================================================================== */
 
 .sv-data-animate {
@@ -1434,7 +2014,7 @@
 }
 
 /* ================================================================== */
-/* 20. VISIONS SECTION                                                */
+/* 23. VISIONS SECTION                                                */
 /* ================================================================== */
 
 /* Vortex Container */
@@ -1483,7 +2063,7 @@
 }
 
 /* ================================================================== */
-/* 21. VORTEX LOGO ANIMATIONS                                         */
+/* 24. VORTEX LOGO ANIMATIONS                                         */
 /* ================================================================== */
 
 /* Ring Animation */
@@ -1618,7 +2198,7 @@
 }
 
 /* ================================================================== */
-/* 22. MANIFESTO & VALUES                                             */
+/* 25. MANIFESTO & VALUES                                             */
 /* ================================================================== */
 
 .sv-manifesto-headline {
@@ -1702,7 +2282,7 @@
 }
 
 /* ================================================================== */
-/* 23. RESPONSIVE BREAKPOINTS                                         */
+/* 26. RESPONSIVE BREAKPOINTS                                         */
 /* ================================================================== */
 
 /* Extra Large Screens (1200px and below) */
@@ -1795,6 +2375,23 @@
         gap: 25px;
         max-width: 900px;
     }
+    
+    /* Hide scroll nav on smaller screens */
+    .sv-scroll-nav {
+        display: none;
+    }
+    
+    .sv-section-number-display {
+        display: none;
+    }
+    
+    .sv-expand-btn {
+        display: none;
+    }
+    
+    .sv-expandable-panel {
+        display: none;
+    }
 }
 
 /* Large Screens (1024px and below) */
@@ -1861,6 +2458,10 @@
     
     .sv-title { 
         font-size: clamp(36px, 12vw, 80px); 
+    }
+    
+    .sv-title-ghost {
+        font-size: clamp(36px, 12vw, 80px);
     }
     
     .sv-cursor { 
@@ -1941,6 +2542,14 @@
         font-size: 10px;
         line-height: 1.7;
     }
+    
+    .sv-fill-bar-container {
+        display: none;
+    }
+    
+    .sv-arrow-decor {
+        display: none;
+    }
 }
 
 /* Mobile (480px and below) */
@@ -1951,6 +2560,10 @@
     
     .sv-title { 
         font-size: clamp(28px, 10vw, 60px); 
+    }
+    
+    .sv-title-ghost {
+        display: none;
     }
     
     .sv-project-title { 
@@ -2006,7 +2619,7 @@
 }
 
 /* ================================================================== */
-/* 24. PERFORMANCE & ACCESSIBILITY                                    */
+/* 27. PERFORMANCE & ACCESSIBILITY                                    */
 /* ================================================================== */
 
 /* Reduced Motion */
@@ -2018,7 +2631,11 @@
     .sv-skill-fill,
     .sv-vortex-ring,
     .sv-vortex-core,
-    .sv-vortex-bar {
+    .sv-vortex-bar,
+    .sv-title,
+    .sv-title-ghost,
+    .sv-fill-bar,
+    .sv-nav-icon {
         transition: none;
         animation: none !important;
     }
@@ -2031,6 +2648,14 @@
     }
     
     .sv-ring-segment {
+        opacity: 1;
+    }
+    
+    .sv-title {
+        opacity: 1;
+    }
+    
+    .sv-title-ghost {
         opacity: 1;
     }
 }
