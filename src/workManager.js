@@ -1,11 +1,12 @@
 /**
  * WORK MANAGER - STARVORTEX Section
- * OPTIMIZED VERSION v2.0
+ * OPTIMIZED VERSION v2.1 - WITH VISIONS SECTION
  * - Better memory management
  * - Improved RAF usage with proper cleanup
  * - Audio pooling for better performance
  * - Fixed navigation integration
  * - Smoother exit transitions
+ * - VISIONS section support
  */
 
 class WorkManager {
@@ -41,15 +42,18 @@ class WorkManager {
             rollover: '/src/sfx/UI_menu_text_rollover.mp3',
             scanBefore: {
                 skye: '/src/sfx/voice_scan_before.wav',
-                projects: '/src/sfx/voice_scan_before.wav'
+                projects: '/src/sfx/voice_scan_before.wav',
+                visions: '/src/sfx/b-computer-on.mp3'
             },
             scanIntro: {
                 skye: '/src/sfx/scan_intro.mp3',
-                projects: '/src/sfx/scan_intro.mp3'
+                projects: '/src/sfx/scan_intro.mp3',
+                visions: '/src/sfx/scan_intro.mp3'
             },
             scanAfter: {
                 skye: '/src/sfx/skye_data_analysis.wav',
-                projects: '/src/sfx/projects_data_analysis.wav'
+                projects: '/src/sfx/projects_data_analysis.wav',
+                visions: '/src/sfx/visions_voice.wav'
             }
         };
         
@@ -537,9 +541,34 @@ void main() { vec2 uv = (gl_FragCoord.xy - offset) / resolution; vec2 p = uv * 2
         } catch (e) { if (onEnded) onEnded(); }
     }
     
-    stopCurrentVoice() { if (this.currentVoiceAudio) { try { this.currentVoiceAudio.pause(); this.currentVoiceAudio.currentTime = 0; this.currentVoiceAudio.onended = null; this.currentVoiceAudio.onerror = null; } catch (e) {} this.currentVoiceAudio = null; } }
-    stopCurrentScanAudio() { if (this.currentScanAudio) { try { this.currentScanAudio.pause(); this.currentScanAudio.currentTime = 0; this.currentScanAudio.onended = null; this.currentScanAudio.onerror = null; } catch (e) {} this.currentScanAudio = null; } }
-    stopAllScanAudio() { this.stopCurrentVoice(); this.stopCurrentScanAudio(); }
+    stopCurrentVoice() { 
+        if (this.currentVoiceAudio) { 
+            try { 
+                this.currentVoiceAudio.pause(); 
+                this.currentVoiceAudio.currentTime = 0; 
+                this.currentVoiceAudio.onended = null; 
+                this.currentVoiceAudio.onerror = null; 
+            } catch (e) {} 
+            this.currentVoiceAudio = null; 
+        } 
+    }
+    
+    stopCurrentScanAudio() { 
+        if (this.currentScanAudio) { 
+            try { 
+                this.currentScanAudio.pause(); 
+                this.currentScanAudio.currentTime = 0; 
+                this.currentScanAudio.onended = null; 
+                this.currentScanAudio.onerror = null; 
+            } catch (e) {} 
+            this.currentScanAudio = null; 
+        } 
+    }
+    
+    stopAllScanAudio() { 
+        this.stopCurrentVoice(); 
+        this.stopCurrentScanAudio(); 
+    }
     
     revealScanPanels(scanId) {
         const panels = document.querySelectorAll(`.sv-scan-panel[data-scan-group="${scanId}"]`);
@@ -550,6 +579,15 @@ void main() { vec2 uv = (gl_FragCoord.xy - offset) / resolution; vec2 p = uv * 2
                 panel.querySelectorAll('.sv-skill-fill').forEach((fill, i) => setTimeout(() => fill.classList.add('animate'), i * 100));
             }, index * 200);
         });
+        
+        // Reveal vortex logo container (floating, no panel) for visions section
+        if (scanId === 'visions') {
+            const vortexContainer = document.querySelector('.sv-vortex-container[data-scan-group="visions"]');
+            if (vortexContainer) {
+                setTimeout(() => vortexContainer.classList.add('revealed'), 100);
+            }
+        }
+        
         document.querySelectorAll(`.sv-scan-asset[data-scan-group="${scanId}"]`).forEach((asset, index) => setTimeout(() => asset.classList.add('visible'), index * 150));
         const dotPattern = document.querySelector(`.sv-dot-pattern[data-scan-group="${scanId}"]`);
         if (dotPattern) dotPattern.classList.add('visible');
@@ -560,7 +598,10 @@ void main() { vec2 uv = (gl_FragCoord.xy - offset) / resolution; vec2 p = uv * 2
         panel.querySelectorAll('[data-text]').forEach((el, i) => {
             const text = el.dataset.text;
             const effect = el.dataset.effect;
-            setTimeout(() => { if (effect === 'scramble') this.scramble(el, text); else if (effect === 'type') this.typewriter(el, text); }, i * 80);
+            setTimeout(() => { 
+                if (effect === 'scramble') this.scramble(el, text); 
+                else if (effect === 'type') this.typewriter(el, text); 
+            }, i * 80);
         });
     }
     
@@ -596,7 +637,7 @@ void main() { vec2 uv = (gl_FragCoord.xy - offset) / resolution; vec2 p = uv * 2
             this.playRolloverSound();
             setTimeout(() => this.scramble(document.getElementById('sv-ch1'), 'ABOUT'), 100);
             setTimeout(() => this.scramble(document.getElementById('sv-title1'), 'STARVORTEX'), 200);
-            setTimeout(() => this.typewriter(document.getElementById('sv-text1'), 'A GROWING TECH MICRO-COMPANY FORMED BY A SMALL, FOCUSED TEAM DEDICATED TO THE DESIGN AND DEVELOPMENT OF MODERN TECHNOLOGICAL SYSTEMS. THE COMPANY SPANS MOBILE, DESKTOP, WEB APPLICATIONS, AND VIDEO GAME DEVELOPMENT.'), 400);
+            setTimeout(() => this.typewriter(document.getElementById('sv-text1'), 'A GROWING TECH COLLECTIVE FORMED BY A SMALL, FOCUSED TEAM DEDICATED TO THE DESIGN AND DEVELOPMENT OF MODERN TECHNOLOGICAL SYSTEMS. THE GROUP SPANS MOBILE, DESKTOP, WEB APPLICATIONS, AND VIDEO GAME DEVELOPMENT.'), 400);
         } else if (id === 'sv-sec-2') {
             this.playRolloverSound();
             setTimeout(() => this.scramble(document.getElementById('sv-ch2'), 'DIVISION 01'), 100);
@@ -605,7 +646,7 @@ void main() { vec2 uv = (gl_FragCoord.xy - offset) / resolution; vec2 p = uv * 2
             setTimeout(() => this.scramble(document.getElementById('sv-ch3'), 'DIVISION 02'), 100);
             setTimeout(() => this.scramble(document.getElementById('sv-sub2'), 'ECHO STUDIOS'), 150);
             setTimeout(() => this.typewriter(document.getElementById('sv-text3'), 'DEDICATED TO VIDEO GAME DEVELOPMENT AND INTERACTIVE EXPERIENCES. THIS IS WHERE I, SKYE, CREATE AND INNOVATE!'), 300);
-        } else if (id === 'sv-scan-skye' || id === 'sv-scan-projects') {
+        } else if (id === 'sv-scan-skye' || id === 'sv-scan-projects' || id === 'sv-scan-visions') {
             this.playRolloverSound();
             const scrollRevealEl = section.querySelector('.sv-scroll-reveal');
             if (scrollRevealEl && scrollRevealEl.dataset.scrollText) setTimeout(() => this.scramble(scrollRevealEl, scrollRevealEl.dataset.scrollText), 100);
@@ -728,18 +769,52 @@ void main() { vec2 uv = (gl_FragCoord.xy - offset) / resolution; vec2 p = uv * 2
         else if (window.app?.navigateTo) setTimeout(() => window.app.navigateTo('home'), 100);
     }
     
-    hideOtherScreens() { ['homeScreen', 'aboutScreen', 'contactScreen', 'introScreen'].forEach(id => { const s = document.getElementById(id); if (s) { s.classList.remove('show'); s.classList.add('hidden'); } }); }
-    stopAllAudio() { if (window.app?.get) { const mm = window.app.get('music'); if (mm?.pause) mm.pause(); } document.querySelectorAll('audio').forEach(a => { if (!a.paused) { a.pause(); a.currentTime = 0; } }); }
+    hideOtherScreens() { 
+        ['homeScreen', 'aboutScreen', 'contactScreen', 'introScreen'].forEach(id => { 
+            const s = document.getElementById(id); 
+            if (s) { s.classList.remove('show'); s.classList.add('hidden'); } 
+        }); 
+    }
+    
+    stopAllAudio() { 
+        if (window.app?.get) { 
+            const mm = window.app.get('music'); 
+            if (mm?.pause) mm.pause(); 
+        } 
+        document.querySelectorAll('audio').forEach(a => { 
+            if (!a.paused) { a.pause(); a.currentTime = 0; } 
+        }); 
+    }
     
     playAmbientAudio() { 
         try { 
             this.workAudio = this.getPooledAudio(this.audioTracks.ambient, 0);
             this.workAudio.loop = true;
-            this.workAudio.play().then(() => { let v = 0; const fade = setInterval(() => { v += 0.02; this.workAudio.volume = Math.min(0.3, v); if (v >= 0.3) clearInterval(fade); }, 80); }).catch(() => {}); 
+            this.workAudio.play().then(() => { 
+                let v = 0; 
+                const fade = setInterval(() => { 
+                    v += 0.02; 
+                    this.workAudio.volume = Math.min(0.3, v); 
+                    if (v >= 0.3) clearInterval(fade); 
+                }, 80); 
+            }).catch(() => {}); 
         } catch (e) {} 
     }
     
-    stopWorkAudio() { if (this.workAudio) { let v = this.workAudio.volume; const fade = setInterval(() => { v -= 0.03; this.workAudio.volume = Math.max(0, v); if (v <= 0) { clearInterval(fade); this.workAudio.pause(); this.workAudio = null; } }, 50); } }
+    stopWorkAudio() { 
+        if (this.workAudio) { 
+            let v = this.workAudio.volume; 
+            const fade = setInterval(() => { 
+                v -= 0.03; 
+                this.workAudio.volume = Math.max(0, v); 
+                if (v <= 0) { 
+                    clearInterval(fade); 
+                    this.workAudio.pause(); 
+                    this.workAudio = null; 
+                } 
+            }, 50); 
+        } 
+    }
     
     playScanSound() { this.playSound(this.audioTracks.scan, 0.3); }
     playClickSound() { this.playSound(this.audioTracks.click, 0.25); }
