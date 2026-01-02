@@ -1,10 +1,16 @@
 /**
  * ============================
- * ANIMATIONS MANAGER MODULE V4
+ * ANIMATIONS MANAGER MODULE V6 - ENHANCED
  * ============================
  * Handles all page animations and transitions
- * Includes Enhanced Stellar Intro Controller with 5 phases
- * Optimized for smooth navigation between Home, About, Work, Contact
+ * Enhanced Stellar Intro with multi-terrain visualization and single brain model
+ * Optimized performance and memory management
+ * - Larger brain visualization
+ * - Slower terrain transitions (50 seconds total)
+ * - Geographic info with typewriter effect
+ * - Smoother animations
+ * - Sequential sound effects
+ * - Extended brain technical info with type effect
  * Exports as ES6 module
  */
 
@@ -20,6 +26,10 @@ class AnimationsManager {
         // Current intro phase
         this.currentPhase = 0;
         
+        // Performance optimization flags
+        this.isLowPowerMode = this.detectLowPowerDevice();
+        this.shouldUseOptimizedMode = window.innerWidth <= 768 || this.isLowPowerMode;
+        
         // Stellar Intro Audio
         this.stellarAudio = {
             bgMusic: null,
@@ -28,7 +38,22 @@ class AnimationsManager {
             voiceDataDisplay: null,
             voiceDataUser: null,
             voiceFinal: null,
-            transitions: []
+            transitions: [],
+            // NEW: UI Sound Effects (sequential, not repeated)
+            sfx: {
+                textRollover: null,
+                scanZoom: null,
+                textAnimation: null,
+                affirmation: null
+            }
+        };
+        
+        // SFX playback tracking
+        this.sfxPlayed = {
+            textRollover: false,
+            scanZoom: false,
+            textAnimation: false,
+            affirmation: false
         };
         
         // Volume levels
@@ -39,10 +64,11 @@ class AnimationsManager {
             voiceDataDisplay: 0.75,
             voiceDataUser: 0.75,
             voiceFinal: 0.70,
-            transition: 0.35
+            transition: 0.35,
+            sfx: 0.15 // Soft SFX volume
         };
         
-        // Phase 1 subtitles
+        // Subtitles data (condensed for better performance)
         this.subtitlesPhase1 = [
             { start: 0.0, end: 6.5, text: "Identity confirmed. Welcome aboard, Skye. All systems recognize your signature." },
             { start: 7.0, end: 10.5, text: "Creative core active, anomaly levels within acceptable range." },
@@ -50,43 +76,22 @@ class AnimationsManager {
             { start: 15.0, end: 19.0, text: "This ship will not limit you, only amplify you. Proceed when ready." }
         ];
         
-        // Phase 2 subtitles
         this.subtitlesDataDisplay = [
             { start: 0.0, end: 4.0, text: "Records indicate prolonged cryogenic stasis." },
-            { start: 4.0, end: 6.0, text: "Memory drift detected." },
-            { start: 6.0, end: 7.0, text: "Temporal gaps." },
-            { start: 7.0, end: 8.0, text: "Altered perception." },
+            { start: 4.0, end: 8.0, text: "Memory drift detected. Temporal gaps. Altered perception." },
             { start: 8.0, end: 13.0, text: "Minor desynchronization between emotional recall and factual data." },
-            { start: 13.0, end: 15.0, text: "This is... normal." },
-            { start: 15.0, end: 17.0, text: "Some things may feel unfamiliar." },
-            { start: 17.0, end: 19.0, text: "Others may feel too familiar." },
-            { start: 19.0, end: 21.0, text: "Current date registered." },
-            { start: 21.0, end: 23.0, text: "Year 2090." },
-            { start: 23.0, end: 24.0, text: "Earth status." },
-            { start: 24.0, end: 26.0, text: "Population increased." },
-            { start: 26.0, end: 27.0, text: "Attention span decreased." },
-            { start: 27.0, end: 30.0, text: "Systems louder but no smarter." },
-            { start: 30.0, end: 32.0, text: "Signal saturation critical." },
-            { start: 32.0, end: 35.0, text: "Creativity remains rare." },
-            { start: 35.0, end: 36.0, text: "Medical scan complete." },
-            { start: 36.0, end: 38.0, text: "Body integrity stable." },
-            { start: 38.0, end: 40.0, text: "Neural activity elevated." },
-            { start: 40.0, end: 43.0, text: "Creative cortex highly responsive." },
-            { start: 43.0, end: 46.0, text: "Signs of prolonged screen adaptation detected." },
-            { start: 46.0, end: 49.0, text: "No critical damage found." }
+            { start: 13.0, end: 19.0, text: "This is normal. Some things may feel unfamiliar." },
+            { start: 19.0, end: 26.0, text: "Current date: 2090. Earth status: Population increased, attention decreased." },
+            { start: 26.0, end: 32.0, text: "Systems louder but no smarter. Signal saturation critical." },
+            { start: 32.0, end: 40.0, text: "Creativity remains rare. Medical scan complete. Body integrity stable." },
+            { start: 40.0, end: 49.0, text: "Neural activity elevated. Creative cortex highly responsive. No critical damage found." }
         ];
         
-        // Phase 4 subtitles
         this.subtitlesDataUser = [
-            { start: 0.0, end: 3.0, text: "It's been a long time, hasn't it?" },
-            { start: 3.0, end: 7.0, text: "Your body has been offline for a long time, Skye." },
-            { start: 7.0, end: 12.0, text: "Muscles idle, senses dormant, systems suspended in silence." },
-            { start: 12.0, end: 18.0, text: "Waking up after stasis is never clean, your reflexes may feel delayed, your thoughts sharper" },
-            { start: 18.0, end: 20.0, text: "than your movements." },
-            { start: 20.0, end: 22.0, text: "That imbalance will pass." },
-            { start: 22.0, end: 24.0, text: "Your mind, however." },
-            { start: 24.0, end: 25.0, text: "It never fully shut down." },
-            { start: 25.0, end: 30.0, text: "Creative activity persisted beneath the surface, fragmented but active." }
+            { start: 0.0, end: 7.0, text: "It's been a long time, hasn't it? Your body has been offline for a long time, Skye." },
+            { start: 7.0, end: 18.0, text: "Muscles idle, senses dormant, systems suspended in silence. Waking up after stasis is never clean." },
+            { start: 18.0, end: 25.0, text: "Your reflexes may feel delayed, your thoughts sharper than your movements. That imbalance will pass." },
+            { start: 25.0, end: 30.0, text: "Your mind, however, never fully shut down. Creative activity persisted beneath the surface." }
         ];
         
         // Skip functionality
@@ -97,7 +102,7 @@ class AnimationsManager {
         this.skipHoldInterval = null;
         this.isHoldingSpace = false;
         
-        // Three.js references
+        // Three.js Terrain references
         this.threeScene = null;
         this.threeCamera = null;
         this.threeRenderer = null;
@@ -105,45 +110,391 @@ class AnimationsManager {
         this.terrainParticles = null;
         this.mountainGeometry = null;
         this.mountainParticles = null;
-        this.animationFrame = null;
+        this.terrainAnimationFrame = null;
         this.pointsPlot = [];
         this.particleDistance = 25;
-        this.centerPoint = {};
+        
+        // Multi-terrain system - 2 LOCATIONS, 80 SECONDS EACH
+        this.terrainLocations = [
+            { 
+                name: 'everest-valley', 
+                duration: 80000, 
+                label: 'EVEREST VALLEY',
+                geoInfo: {
+                    coords: '27.9659°N 86.7797°E',
+                    elevation: '5,364m',
+                    region: 'KHUMBU, NEPAL',
+                    climate: 'HIGH ALTITUDE VALLEY',
+                    discovery: 'MAPPED 1921',
+                    facts: [
+                        'Gateway to Everest',
+                        'Sherpa homeland',
+                        'Namche Bazaar hub',
+                        'Tourism since 1950s'
+                    ]
+                }
+            },
+            { 
+                name: 'coldeliseran', 
+                duration: 80000, 
+                label: 'COL DE L\'ISERAN',
+                geoInfo: {
+                    coords: '45.4167°N 6.9333°E',
+                    elevation: '2,770m',
+                    region: 'FRENCH ALPS',
+                    climate: 'ALPINE MEDITERRANEAN',
+                    discovery: 'ROAD BUILT 1937',
+                    facts: [
+                        'Highest paved pass in Alps',
+                        'Tour de France famous',
+                        'Part of Route des Grandes Alpes',
+                        'Open June-October'
+                    ]
+                }
+            }
+        ];
+        this.currentTerrainIndex = 0;
+        this.terrainTransitionInProgress = false;
         
         // Geography data
         this.baseURL = 'https://s3.ca-central-1.amazonaws.com/kevinnewcombe/three-terrain/';
         
-        // Brain 3D references
+        // Brain 3D references (optimized single model approach) - LARGER SIZE
         this.brainScene = null;
         this.brainCamera = null;
         this.brainRenderer = null;
         this.brainControls = null;
-        this.brainParts = [];
-        this.brainMaterials = [];
+        this.brainMesh = null;
+        this.brainMaterial = null;
         this.brainAnimationFrame = null;
+        this.brainHighlightRegions = [];
+        this.brainScale = 1.6; // INCREASED from 1.0 to 1.6 for larger brain
         
-        // Brain data - modelos en blanco puro
-        this.brainModels = [
-            '/src/model-3d/brain-parts-big_04.OBJ',
-            '/src/model-3d/brain-parts-big_06.OBJ',
-            '/src/model-3d/brain-parts-big_07.OBJ',
-            '/src/model-3d/brain-parts-big_08.OBJ',
-            '/src/model-3d/brain_vertex_low.OBJ'
+        // Single optimized brain model
+        this.brainModelPath = '/src/model-3d/brain_vertex_low.OBJ';
+        
+        // Extended Brain Technical Info - NEW
+        this.brainTechnicalInfo = [
+            { label: 'SUBJECT ID', value: 'SKYE-2090-CRYO', delay: 0 },
+            { label: 'NEURAL DENSITY', value: '86.2 BILLION NEURONS', delay: 400 },
+            { label: 'SYNAPTIC ACTIVITY', value: '142.7 TRILLION CONNECTIONS', delay: 800 },
+            { label: 'PREFRONTAL CORTEX', value: 'EXECUTIVE FUNCTION: OPTIMAL', delay: 1200 },
+            { label: 'HIPPOCAMPUS', value: 'MEMORY ENCODING: 78% RECOVERED', delay: 1600 },
+            { label: 'AMYGDALA', value: 'EMOTIONAL PROCESSING: STABLE', delay: 2000 },
+            { label: 'CEREBELLUM', value: 'MOTOR COORDINATION: RECALIBRATING', delay: 2400 },
+            { label: 'TEMPORAL LOBE', value: 'AUDITORY PROCESSING: ACTIVE', delay: 2800 },
+            { label: 'OCCIPITAL LOBE', value: 'VISUAL CORTEX: 94% FUNCTIONALITY', delay: 3200 },
+            { label: 'BROCA\'S AREA', value: 'SPEECH PRODUCTION: ONLINE', delay: 3600 },
+            { label: 'WERNICKE\'S AREA', value: 'LANGUAGE COMPREHENSION: ACTIVE', delay: 4000 },
+            { label: 'CREATIVE CORTEX', value: 'DIVERGENT THINKING: EXCEPTIONAL', delay: 4400 },
+            { label: 'DOPAMINE LEVELS', value: '127% OF BASELINE - ELEVATED', delay: 4800 },
+            { label: 'SEROTONIN SYNC', value: 'MOOD REGULATION: BALANCED', delay: 5200 },
+            { label: 'NEURAL PLASTICITY', value: 'ADAPTATION RATE: HIGH', delay: 5600 },
+            { label: 'DREAM STATE', value: 'REM PATTERNS: RECORDED DURING STASIS', delay: 6000 },
+            { label: 'CONSCIOUSNESS', value: 'AWARENESS INDEX: 98.7%', delay: 6400 },
+            { label: 'INTUITION MATRIX', value: 'PATTERN RECOGNITION: ENHANCED', delay: 6800 },
+            { label: 'MEMORY BANKS', value: 'LONG-TERM: FRAGMENTED | SHORT-TERM: CLEAR', delay: 7200 },
+            { label: 'OVERALL STATUS', value: 'NEURAL REINITIALIZATION: SUCCESSFUL', delay: 7600 }
         ];
         
-        // Bind methods
-        this.updateSubtitlesPhase1 = this.updateSubtitlesPhase1.bind(this);
-        this.updateSubtitlesPhase2 = this.updateSubtitlesPhase2.bind(this);
-        this.updateSubtitlesPhase4 = this.updateSubtitlesPhase4.bind(this);
-        this.handleSkipKeyDown = this.handleSkipKeyDown.bind(this);
-        this.handleSkipKeyUp = this.handleSkipKeyUp.bind(this);
-        this.loadGeography = this.loadGeography.bind(this);
-        this.initBrainVisualization = this.initBrainVisualization.bind(this);
-        this.animateBrain = this.animateBrain.bind(this);
-        this.loadBrainModels = this.loadBrainModels.bind(this);
-        this.createBrainLighting = this.createBrainLighting.bind(this);
-        this.animateBrainAssembly = this.animateBrainAssembly.bind(this);
-        this.cleanupBrain = this.cleanupBrain.bind(this);
+        // Definir los métodos como funciones flecha para evitar problemas de binding
+        this.updateSubtitlesPhase1 = () => {
+            if (this.introSkipped || !this.stellarAudio.voiceIntro) return;
+            
+            const currentTime = this.stellarAudio.voiceIntro.currentTime;
+            const subtitleText = this.elements.subtitleText;
+            if (!subtitleText) return;
+            
+            const currentSub = this.subtitlesPhase1.find(sub => 
+                currentTime >= sub.start && currentTime < sub.end
+            );
+            
+            if (currentSub && subtitleText.textContent !== currentSub.text) {
+                subtitleText.textContent = currentSub.text;
+                subtitleText.classList.add('visible');
+            } else if (currentTime >= this.subtitlesPhase1[this.subtitlesPhase1.length - 1].end) {
+                subtitleText.classList.remove('visible');
+            }
+            
+            this.updateFrequencyBars();
+        };
+        
+        this.updateSubtitlesPhase2 = () => {
+            if (this.introSkipped || !this.stellarAudio.voiceDataDisplay) return;
+            
+            const currentTime = this.stellarAudio.voiceDataDisplay.currentTime;
+            const dataSubtitle = this.elements.dataSubtitle;
+            if (!dataSubtitle) return;
+            
+            const currentSub = this.subtitlesDataDisplay.find(sub => 
+                currentTime >= sub.start && currentTime < sub.end
+            );
+            
+            if (currentSub && dataSubtitle.textContent !== currentSub.text) {
+                dataSubtitle.textContent = currentSub.text;
+                dataSubtitle.classList.add('visible');
+            }
+            
+            this.updateDataProgress(currentTime);
+        };
+        
+        this.updateSubtitlesPhase4 = () => {
+            if (this.introSkipped || !this.stellarAudio.voiceDataUser) return;
+            
+            const currentTime = this.stellarAudio.voiceDataUser.currentTime;
+            const bodySubtitle = this.elements.bodySubtitle;
+            if (!bodySubtitle) return;
+            
+            const currentSub = this.subtitlesDataUser.find(sub => 
+                currentTime >= sub.start && currentTime < sub.end
+            );
+            
+            if (currentSub && bodySubtitle.textContent !== currentSub.text) {
+                bodySubtitle.textContent = currentSub.text;
+                bodySubtitle.classList.add('visible');
+            }
+        };
+        
+        this.handleSkipKeyDown = (e) => {
+            if (e.code === 'Space' && !this.introSkipped && !this.isHoldingSpace) {
+                e.preventDefault();
+                const skipIndicator = this.elements.skipIndicator;
+                const skipBar = skipIndicator?.querySelector('.skip-bar');
+                this.startSkipHold(skipBar, skipIndicator);
+            }
+        };
+        
+        this.handleSkipKeyUp = (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                const skipIndicator = this.elements.skipIndicator;
+                const skipBar = skipIndicator?.querySelector('.skip-bar');
+                this.cancelSkipHold(skipBar, skipIndicator);
+            }
+        };
+        
+        this.loadNextTerrain = async () => {
+            if (this.terrainTransitionInProgress) return;
+            
+            const location = this.terrainLocations[this.currentTerrainIndex];
+            console.log(`🏔️ Loading terrain: ${location.label}`);
+            
+            // Update UI
+            if (this.elements.terrainLocation) {
+                this.elements.terrainLocation.textContent = location.label;
+            }
+            
+            this.terrainTransitionInProgress = true;
+            
+            // Display geographic info with typewriter effect
+            this.displayGeoInfo(location.geoInfo);
+            
+            try {
+                const response = await fetch(`${this.baseURL}_terrain/${location.name}.json?v=2`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                this.processTerrainData(data);
+                
+            } catch (error) {
+                console.error(`Error loading terrain ${location.name}:`, error);
+            } finally {
+                this.terrainTransitionInProgress = false;
+            }
+        };
+        
+        this.initBrainVisualization = () => {
+            const canvas = this.elements.brainCanvas;
+            
+            try {
+                canvas.width = canvas.offsetWidth || window.innerWidth;
+                canvas.height = canvas.offsetHeight || window.innerHeight;
+                
+                // Optimized scene setup
+                this.brainScene = new THREE.Scene();
+                this.brainScene.background = new THREE.Color(0x000000);
+                
+                // Camera positioned further back to accommodate larger brain
+                this.brainCamera = new THREE.PerspectiveCamera(
+                    45,
+                    canvas.width / canvas.height,
+                    0.1,
+                    5000
+                );
+                this.brainCamera.position.set(0, 180, 500); // Moved back for larger brain
+                
+                this.brainRenderer = new THREE.WebGLRenderer({
+                    canvas: canvas,
+                    antialias: !this.shouldUseOptimizedMode,
+                    alpha: true,
+                    powerPreference: this.shouldUseOptimizedMode ? "low-power" : "high-performance"
+                });
+                this.brainRenderer.setSize(canvas.width, canvas.height);
+                this.brainRenderer.setClearColor(0x000000, 0);
+                
+                // Controls with smoother damping
+                if (THREE.OrbitControls) {
+                    this.brainControls = new THREE.OrbitControls(this.brainCamera, this.brainRenderer.domElement);
+                    this.brainControls.enableDamping = true;
+                    this.brainControls.dampingFactor = 0.03; // Smoother damping
+                    this.brainControls.autoRotate = true;
+                    this.brainControls.autoRotateSpeed = 0.2; // Slower rotation
+                    this.brainControls.enableZoom = false;
+                    this.brainControls.enablePan = false;
+                }
+                
+                this.createBrainLighting();
+                this.loadSingleBrainModel();
+                this.animateBrain();
+                
+                console.log('🧠 Large brain model initialized');
+                
+            } catch (error) {
+                console.error('Brain visualization error:', error);
+                this.initBrainFallback(canvas);
+            }
+        };
+        
+        this.animateBrain = () => {
+            if (!this.brainRenderer || this.currentPhase !== 4 || this.introSkipped) {
+                if (this.brainAnimationFrame) {
+                    cancelAnimationFrame(this.brainAnimationFrame);
+                    this.brainAnimationFrame = null;
+                }
+                return;
+            }
+            
+            this.brainAnimationFrame = requestAnimationFrame(() => this.animateBrain());
+            
+            this.brainControls?.update();
+            
+            // Update brain material based on highlight regions
+            if (this.brainMaterial) {
+                const time = Date.now() * 0.001;
+                let totalIntensity = 0.7;
+                
+                this.brainHighlightRegions.forEach(region => {
+                    if (region.active) {
+                        region.activationTime += 0.02;
+                        const pulse = Math.sin(region.activationTime * region.pulseSpeed * 3) * 0.3 + 0.7;
+                        totalIntensity = Math.max(totalIntensity, region.baseIntensity + pulse * 0.3);
+                    }
+                });
+                
+                this.brainMaterial.opacity = totalIntensity;
+                
+                // Subtle global pulsing
+                const globalPulse = Math.sin(time * 0.5) * 0.1 + 0.9;
+                this.brainMaterial.emissiveIntensity = globalPulse * 0.1;
+            }
+            
+            if (this.brainScene && this.brainCamera) {
+                this.brainRenderer.render(this.brainScene, this.brainCamera);
+            }
+        };
+        
+        this.cleanupBrain = () => {
+            if (this.brainAnimationFrame) {
+                cancelAnimationFrame(this.brainAnimationFrame);
+                this.brainAnimationFrame = null;
+            }
+            
+            if (this.brainMesh) {
+                this.brainScene?.remove(this.brainMesh);
+                this.brainMesh.traverse((child) => {
+                    if (child.geometry) child.geometry.dispose();
+                    if (child.material) {
+                        if (Array.isArray(child.material)) {
+                            child.material.forEach(m => m.dispose());
+                        } else {
+                            child.material.dispose();
+                        }
+                    }
+                });
+                this.brainMesh = null;
+            }
+            
+            if (this.brainMaterial) {
+                this.brainMaterial.dispose();
+                this.brainMaterial = null;
+            }
+            
+            if (this.brainRenderer) {
+                this.brainRenderer.dispose();
+                this.brainRenderer = null;
+            }
+            
+            this.brainScene = null;
+            this.brainCamera = null;
+            this.brainControls = null;
+            this.brainHighlightRegions = [];
+            
+            console.log('🗑️ Brain cleanup complete');
+        };
+        
+        this.cleanupTerrain = () => {
+            if (this.terrainInterval) {
+                clearInterval(this.terrainInterval);
+                this.terrainInterval = null;
+            }
+            
+            if (this.terrainAnimationFrame) {
+                cancelAnimationFrame(this.terrainAnimationFrame);
+                this.terrainAnimationFrame = null;
+            }
+            
+            if (this.mountainParticles) {
+                if (this.mountainGeometry) this.mountainGeometry.dispose();
+                if (this.mountainParticles.material) this.mountainParticles.material.dispose();
+                this.threeScene?.remove(this.mountainParticles);
+            }
+            
+            if (this.threeRenderer) {
+                this.threeRenderer.dispose();
+            }
+            
+            this.threeScene = null;
+            this.threeCamera = null;
+            this.threeControls = null;
+            this.mountainGeometry = null;
+            this.mountainParticles = null;
+            this.pointsPlot = [];
+            
+            console.log('🗑️ Terrain cleanup complete');
+        };
+        
+        this.animateTerrain = () => {
+            if (!this.threeRenderer || this.currentPhase !== 3 || this.introSkipped) {
+                if (this.terrainAnimationFrame) {
+                    cancelAnimationFrame(this.terrainAnimationFrame);
+                    this.terrainAnimationFrame = null;
+                }
+                return;
+            }
+            
+            this.terrainAnimationFrame = requestAnimationFrame(() => this.animateTerrain());
+            
+            this.threeControls?.update();
+            
+            if (this.threeScene && this.threeCamera) {
+                this.threeRenderer.render(this.threeScene, this.threeCamera);
+            }
+        };
+    }
+
+    // ========================================
+    // UTILITY & INITIALIZATION
+    // ========================================
+    
+    detectLowPowerDevice() {
+        // Check for low power indicators
+        return navigator.hardwareConcurrency <= 2 || 
+               navigator.connection?.effectiveType === 'slow-2g' ||
+               navigator.connection?.effectiveType === '2g' ||
+               navigator.deviceMemory < 4;
     }
 
     init() {
@@ -152,7 +503,8 @@ class AnimationsManager {
             return;
         }
         
-        console.log('🎬 Animations Manager V4 initializing...');
+        console.log('🎬 Animations Manager V6 Enhanced initializing...');
+        console.log(`📱 Device mode: ${this.shouldUseOptimizedMode ? 'Optimized' : 'Full'}`);
         
         this.cacheElements();
 
@@ -161,11 +513,11 @@ class AnimationsManager {
             return;
         }
 
-        console.log('🚀 Starting Stellar Intro V4...');
+        console.log('🚀 Starting Stellar Intro V6 Enhanced...');
         this.startStellarIntro();
 
         this.initialized = true;
-        console.log('✅ Animations Manager V4 initialized');
+        console.log('✅ Animations Manager V6 Enhanced initialized');
     }
     
     cacheElements() {
@@ -189,6 +541,7 @@ class AnimationsManager {
             // Phase 3 - Canvas para terreno
             phaseGlobe: document.getElementById('phaseGlobe'),
             terrainCanvas: document.getElementById('terrainCanvas'),
+            terrainLocation: document.getElementById('terrainLocation'),
             
             // Phase 4 - Canvas para cerebro 3D
             phaseBody: document.getElementById('phaseBody'),
@@ -215,103 +568,112 @@ class AnimationsManager {
     }
 
     // ========================================
-    // AUDIO MANAGEMENT
+    // AUDIO MANAGEMENT (ENHANCED WITH SFX)
     // ========================================
     
     preloadStellarAudio() {
-        const audioEnabled = true;
+        // Optimized audio loading with error handling
+        const loadAudio = (src, volume) => {
+            const audio = new Audio(src);
+            audio.volume = volume;
+            audio.preload = 'metadata'; // Only load metadata initially
+            return audio;
+        };
+
+        try {
+            this.stellarAudio.bgMusic = loadAudio('/src/sfx/INTROx_song.mp3', this.volumes.bgMusic);
+            this.stellarAudio.bgMusicLoop = loadAudio('/src/sfx/INTROx_AFTER_loop.mp3', this.volumes.bgMusicLoop);
+            this.stellarAudio.bgMusicLoop.loop = true;
+            
+            this.stellarAudio.voiceIntro = loadAudio('/src/starvortex_assets/voice_intro.mp3', this.volumes.voiceIntro);
+            this.stellarAudio.voiceDataDisplay = loadAudio('/src/starvortex_assets/voice-data-display.mp3', this.volumes.voiceDataDisplay);
+            this.stellarAudio.voiceDataUser = loadAudio('/src/starvortex_assets/voice-data-user.mp3', this.volumes.voiceDataUser);
+            this.stellarAudio.voiceFinal = loadAudio('/src/starvortex_assets/voice-final.mp3', this.volumes.voiceFinal);
+            
+            this.stellarAudio.transitions = [
+                loadAudio('/src/sfx/FX_flow_transition_data-tech.mp3', this.volumes.transition),
+                loadAudio('/src/sfx/FX_Transition.mp3', this.volumes.transition)
+            ];
+            
+            // NEW: Load sequential SFX (soft, non-repeated)
+            this.stellarAudio.sfx.textRollover = loadAudio('/src/sfx/UI_menu_text_rollover_2.mp3', this.volumes.sfx);
+            this.stellarAudio.sfx.scanZoom = loadAudio('/src/sfx/scan-zoom.mp3', this.volumes.sfx);
+            this.stellarAudio.sfx.textAnimation = loadAudio('/src/sfx/FX_text_animation_loop.mp3', this.volumes.sfx);
+            this.stellarAudio.sfx.affirmation = loadAudio('/src/sfx/affirmation-tech.wav', this.volumes.sfx);
+            
+            // Setup loop transition
+            this.stellarAudio.bgMusic.addEventListener('ended', () => {
+                if (!this.introSkipped) {
+                    this.playAudio(this.stellarAudio.bgMusicLoop);
+                }
+            });
+            
+            console.log('🎵 Stellar audio preloaded with SFX');
+        } catch (error) {
+            console.error('❌ Audio preload error:', error);
+        }
+    }
+    
+    // Play SFX only once (sequential, not repeated)
+    playSFX(sfxName) {
+        if (this.sfxPlayed[sfxName] || !this.stellarAudio.sfx[sfxName]) return;
         
-        // Background music
-        this.stellarAudio.bgMusic = new Audio('/src/sfx/INTROx_song.mp3');
-        this.stellarAudio.bgMusic.volume = this.volumes.bgMusic;
-        this.stellarAudio.bgMusic.loop = false;
-        
-        // Loop music
-        this.stellarAudio.bgMusicLoop = new Audio('/src/sfx/INTROx_AFTER_loop.mp3');
-        this.stellarAudio.bgMusicLoop.volume = this.volumes.bgMusicLoop;
-        this.stellarAudio.bgMusicLoop.loop = true;
-        
-        // Voice files
-        this.stellarAudio.voiceIntro = new Audio('/src/starvortex_assets/voice_intro.mp3');
-        this.stellarAudio.voiceIntro.volume = this.volumes.voiceIntro;
-        
-        this.stellarAudio.voiceDataDisplay = new Audio('/src/starvortex_assets/voice-data-display.mp3');
-        this.stellarAudio.voiceDataDisplay.volume = this.volumes.voiceDataDisplay;
-        
-        this.stellarAudio.voiceDataUser = new Audio('/src/starvortex_assets/voice-data-user.mp3');
-        this.stellarAudio.voiceDataUser.volume = this.volumes.voiceDataUser;
-        
-        this.stellarAudio.voiceFinal = new Audio('/src/starvortex_assets/voice-final.mp3');
-        this.stellarAudio.voiceFinal.volume = this.volumes.voiceFinal;
-        
-        // Transition sounds
-        this.stellarAudio.transitions = [
-            new Audio('/src/sfx/FX_flow_transition_data-tech.mp3'),
-            new Audio('/src/sfx/FX_Transition.mp3')
-        ];
-        this.stellarAudio.transitions.forEach(t => t.volume = this.volumes.transition);
-        
-        // Setup loop transition when main song ends
-        this.stellarAudio.bgMusic.addEventListener('ended', () => {
-            if (!this.introSkipped) {
-                console.log('🔁 Main music ended, starting loop...');
-                this.playAudio(this.stellarAudio.bgMusicLoop);
-            }
-        });
-        
-        console.log('🎵 Stellar audio preloaded. Audio enabled:', audioEnabled);
+        this.sfxPlayed[sfxName] = true;
+        this.playAudio(this.stellarAudio.sfx[sfxName]);
+        console.log(`🔊 SFX played: ${sfxName}`);
     }
     
     playAudio(audioElement) {
-        if (audioElement) {
-            return audioElement.play().catch(err => {
-                console.log('Audio play blocked:', err.message);
-            });
-        }
-        return Promise.resolve();
+        return audioElement?.play().catch(err => 
+            console.log('Audio play blocked:', err.message)
+        ) || Promise.resolve();
     }
     
     stopAllAudio() {
         Object.values(this.stellarAudio).forEach(audio => {
-            if (Array.isArray(audio)) {
-                audio.forEach(a => {
-                    if (a && !a.paused) {
-                        a.pause();
-                        a.currentTime = 0;
-                    }
-                });
-            } else if (audio && !audio.paused) {
-                audio.pause();
-                audio.currentTime = 0;
+            if (typeof audio === 'object' && audio !== null) {
+                if (Array.isArray(audio)) {
+                    audio.forEach(this.stopSingleAudio);
+                } else if (audio.pause) {
+                    this.stopSingleAudio(audio);
+                } else {
+                    // Handle sfx object
+                    Object.values(audio).forEach(sfx => this.stopSingleAudio(sfx));
+                }
             }
         });
     }
     
+    stopSingleAudio(audio) {
+        if (audio && !audio.paused) {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+    }
+    
     fadeOutMusic(duration = 1000) {
-        const music = this.stellarAudio.bgMusicLoop && !this.stellarAudio.bgMusicLoop.paused 
+        const music = (this.stellarAudio.bgMusicLoop && !this.stellarAudio.bgMusicLoop.paused) 
             ? this.stellarAudio.bgMusicLoop 
             : this.stellarAudio.bgMusic;
             
-        if (music && !music.paused) {
-            const startVolume = music.volume;
-            const steps = 20;
-            const stepTime = duration / steps;
-            const volumeStep = startVolume / steps;
+        if (!music || music.paused) return;
+        
+        const fade = () => {
+            const fadeStep = music.volume * 0.1;
+            music.volume = Math.max(0, music.volume - fadeStep);
             
-            let step = 0;
-            const fade = setInterval(() => {
-                step++;
-                music.volume = Math.max(0, startVolume - (volumeStep * step));
-                if (step >= steps) {
-                    clearInterval(fade);
-                    music.pause();
-                }
-            }, stepTime);
-        }
+            if (music.volume > 0) {
+                setTimeout(fade, duration / 20);
+            } else {
+                music.pause();
+            }
+        };
+        
+        fade();
     }
 
     // ========================================
-    // SKIP FUNCTIONALITY
+    // SKIP FUNCTIONALITY (OPTIMIZED)
     // ========================================
     
     setupSkipListener() {
@@ -340,20 +702,16 @@ class AnimationsManager {
         this.isHoldingSpace = true;
         this.skipHoldProgress = 0;
         
-        if (skipIndicator) {
-            skipIndicator.classList.add('holding');
-        }
+        skipIndicator?.classList.add('holding');
         
-        const holdDuration = 3000;
-        const interval = 30;
+        const holdDuration = 2500; // Reduced for better UX
+        const interval = 50;
         const increment = (interval / holdDuration) * 100;
         
         this.skipHoldInterval = setInterval(() => {
             this.skipHoldProgress += increment;
             
-            if (skipBar) {
-                skipBar.style.setProperty('--progress', `${this.skipHoldProgress}%`);
-            }
+            skipBar?.style.setProperty('--progress', `${this.skipHoldProgress}%`);
             
             if (this.skipHoldProgress >= 100) {
                 this.completeSkip(skipIndicator);
@@ -370,24 +728,17 @@ class AnimationsManager {
         }
         
         this.skipHoldProgress = 0;
-        
-        if (skipBar) {
-            skipBar.style.setProperty('--progress', '0%');
-        }
-        
-        if (skipIndicator) {
-            skipIndicator.classList.remove('holding');
-        }
+        skipBar?.style.setProperty('--progress', '0%');
+        skipIndicator?.classList.remove('holding');
     }
     
     completeSkip(skipIndicator) {
         this.cancelSkipHold(null, skipIndicator);
         this.introSkipped = true;
         
-        if (skipIndicator) {
-            skipIndicator.classList.add('pressed');
-        }
+        skipIndicator?.classList.add('pressed');
         
+        // Cleanup listeners
         if (this.skipHandler) {
             document.removeEventListener('keydown', this.skipHandler);
             this.skipHandler = null;
@@ -398,21 +749,9 @@ class AnimationsManager {
         }
         
         this.stopAllAudio();
-        this.cleanupThree();
+        this.cleanupTerrain();
         this.cleanupBrain();
         this.transitionFromStellarToMain();
-    }
-    
-    handleSkipKeyDown(e) {
-        if (e.code === 'Space' && !this.introSkipped) {
-            e.preventDefault();
-        }
-    }
-    
-    handleSkipKeyUp(e) {
-        if (e.code === 'Space' && !this.introSkipped) {
-            e.preventDefault();
-        }
     }
 
     // ========================================
@@ -423,42 +762,21 @@ class AnimationsManager {
         this.preloadStellarAudio();
         this.setupSkipListener();
         
-        // Start background music
         await this.playAudio(this.stellarAudio.bgMusic);
         
-        // Phase 1: Voice Recognition
-        if (!this.introSkipped) {
-            await this.playStellarPhase1();
-        }
+        if (!this.introSkipped) await this.playStellarPhase1();
+        if (!this.introSkipped) await this.playStellarPhase2();
+        if (!this.introSkipped) await this.playStellarPhase3(); // Extended to 50s
+        if (!this.introSkipped) await this.playStellarPhase4();
+        if (!this.introSkipped) await this.playStellarPhase5();
         
-        // Phase 2: Data Visualization
-        if (!this.introSkipped) {
-            await this.playStellarPhase2();
-        }
-        
-        // Phase 3: Globe Visualization
-        if (!this.introSkipped) {
-            await this.playStellarPhase3();
-        }
-        
-        // Phase 4: Brain Scan
-        if (!this.introSkipped) {
-            await this.playStellarPhase4();
-        }
-        
-        // Phase 5: Boarding Pass
-        if (!this.introSkipped) {
-            await this.playStellarPhase5();
-        }
-        
-        // Transition to main
         if (!this.introSkipped) {
             this.transitionFromStellarToMain();
         }
     }
 
     // ========================================
-    // PHASE 1: VOICE AUTHENTICATION
+    // PHASE 1: VOICE AUTHENTICATION (OPTIMIZED)
     // ========================================
     
     async playStellarPhase1() {
@@ -467,30 +785,24 @@ class AnimationsManager {
             this.currentPhase = 1;
             
             const phaseVoice = this.elements.phaseVoice;
-            const subtitleText = this.elements.subtitleText;
-            
-            if (!phaseVoice) {
-                resolve();
-                return;
-            }
+            if (!phaseVoice) return resolve();
             
             phaseVoice.classList.add('active');
             
+            // Play first SFX
+            setTimeout(() => this.playSFX('textRollover'), 500);
+            
             setTimeout(() => {
-                if (this.introSkipped) {
-                    resolve();
-                    return;
-                }
+                if (this.introSkipped) return resolve();
                 
                 this.playAudio(this.stellarAudio.voiceIntro);
                 
                 if (this.stellarAudio.voiceIntro) {
                     this.stellarAudio.voiceIntro.addEventListener('timeupdate', this.updateSubtitlesPhase1);
-                    
                     this.stellarAudio.voiceIntro.onended = () => {
                         setTimeout(() => {
                             if (!this.introSkipped) {
-                                if (subtitleText) subtitleText.classList.remove('visible');
+                                this.elements.subtitleText?.classList.remove('visible');
                                 phaseVoice.classList.remove('active');
                             }
                             resolve();
@@ -498,59 +810,22 @@ class AnimationsManager {
                     };
                 }
                 
-                // Fallback timer
                 setTimeout(() => {
-                    if (this.stellarAudio.voiceIntro && 
-                        this.stellarAudio.voiceIntro.paused && 
-                        this.stellarAudio.voiceIntro.currentTime === 0) {
-                        console.log('⏭️ Voice fallback timer triggered');
-                        if (!this.introSkipped) {
-                            phaseVoice.classList.remove('active');
-                        }
-                        resolve();
-                    }
+                    if (!this.introSkipped) resolve();
                 }, 22000);
                 
             }, 1000);
         });
     }
     
-    updateSubtitlesPhase1() {
-        if (this.introSkipped || !this.stellarAudio.voiceIntro) return;
-        
-        const currentTime = this.stellarAudio.voiceIntro.currentTime;
-        const subtitleText = this.elements.subtitleText;
-        
-        if (!subtitleText) return;
-        
-        const currentSub = this.subtitlesPhase1.find(sub => 
-            currentTime >= sub.start && currentTime < sub.end
-        );
-        
-        if (currentSub) {
-            if (subtitleText.textContent !== currentSub.text) {
-                subtitleText.textContent = currentSub.text;
-                subtitleText.classList.add('visible');
-            }
-        } else if (currentTime >= this.subtitlesPhase1[this.subtitlesPhase1.length - 1].end) {
-            subtitleText.classList.remove('visible');
-        }
-        
-        // Update frequency bars
-        this.updateFrequencyBars();
-    }
-    
     updateFrequencyBars() {
-        if (this.elements.frequencyBars) {
-            this.elements.frequencyBars.forEach((bar) => {
-                const height = 8 + Math.random() * 35;
-                bar.style.height = `${height}px`;
-            });
-        }
+        this.elements.frequencyBars?.forEach((bar) => {
+            bar.style.height = `${8 + Math.random() * 35}px`;
+        });
     }
 
     // ========================================
-    // PHASE 2: DATA VISUALIZATION
+    // PHASE 2: DATA VISUALIZATION (OPTIMIZED)
     // ========================================
     
     async playStellarPhase2() {
@@ -559,38 +834,26 @@ class AnimationsManager {
             this.currentPhase = 2;
             
             const phaseData = this.elements.phaseData;
-            const dataSubtitle = this.elements.dataSubtitle;
+            if (!phaseData) return resolve();
             
-            if (!phaseData) {
-                resolve();
-                return;
-            }
-            
-            // Play transition sound
-            if (this.stellarAudio.transitions[0]) {
-                this.playAudio(this.stellarAudio.transitions[0]);
-            }
-            
+            this.playAudio(this.stellarAudio.transitions[0]);
             phaseData.classList.add('active');
-            
-            // Animate data elements
             this.animateDataElements();
             
+            // Play second SFX
+            setTimeout(() => this.playSFX('scanZoom'), 1000);
+            
             setTimeout(() => {
-                if (this.introSkipped) {
-                    resolve();
-                    return;
-                }
+                if (this.introSkipped) return resolve();
                 
                 this.playAudio(this.stellarAudio.voiceDataDisplay);
                 
                 if (this.stellarAudio.voiceDataDisplay) {
                     this.stellarAudio.voiceDataDisplay.addEventListener('timeupdate', this.updateSubtitlesPhase2);
-                    
                     this.stellarAudio.voiceDataDisplay.onended = () => {
                         setTimeout(() => {
                             if (!this.introSkipped) {
-                                if (dataSubtitle) dataSubtitle.classList.remove('visible');
+                                this.elements.dataSubtitle?.classList.remove('visible');
                                 phaseData.classList.remove('active');
                             }
                             resolve();
@@ -598,68 +861,31 @@ class AnimationsManager {
                     };
                 }
                 
-                // Fallback
                 setTimeout(() => {
-                    if (this.stellarAudio.voiceDataDisplay && 
-                        this.stellarAudio.voiceDataDisplay.paused && 
-                        !this.introSkipped) {
-                        phaseData.classList.remove('active');
-                        resolve();
-                    }
+                    if (!this.introSkipped) resolve();
                 }, 55000);
                 
             }, 2000);
         });
     }
     
-    updateSubtitlesPhase2() {
-        if (this.introSkipped || !this.stellarAudio.voiceDataDisplay) return;
-        
-        const currentTime = this.stellarAudio.voiceDataDisplay.currentTime;
-        const dataSubtitle = this.elements.dataSubtitle;
-        
-        if (!dataSubtitle) return;
-        
-        const currentSub = this.subtitlesDataDisplay.find(sub => 
-            currentTime >= sub.start && currentTime < sub.end
-        );
-        
-        if (currentSub) {
-            if (dataSubtitle.textContent !== currentSub.text) {
-                dataSubtitle.textContent = currentSub.text;
-                dataSubtitle.classList.add('visible');
-            }
-        }
-        
-        // Update progress
-        this.updateDataProgress(currentTime);
-    }
-    
     animateDataElements() {
-        // Reveal readout items
+        // Optimized sequential animations with smoother timing
         const readouts = document.querySelectorAll('.readout-item');
-        readouts.forEach((item, i) => {
-            setTimeout(() => {
-                item.classList.add('visible');
-            }, i * 800);
-        });
-        
-        // Reveal info blocks
         const infoBlocks = document.querySelectorAll('.info-block');
-        infoBlocks.forEach((block, i) => {
-            setTimeout(() => {
-                block.classList.add('visible');
-            }, 2000 + (i * 600));
+        
+        readouts.forEach((item, i) => {
+            setTimeout(() => item.classList.add('visible'), i * 600);
         });
         
-        // Show status box
+        infoBlocks.forEach((block, i) => {
+            setTimeout(() => block.classList.add('visible'), 1500 + (i * 400));
+        });
+        
         setTimeout(() => {
-            const statusBox = this.elements.statusBox;
-            if (statusBox) {
-                statusBox.classList.add('visible');
-                this.animateStatusLines();
-            }
-        }, 3000);
+            this.elements.statusBox?.classList.add('visible');
+            this.animateStatusLines();
+        }, 2500);
     }
     
     animateStatusLines() {
@@ -677,7 +903,7 @@ class AnimationsManager {
                     el.textContent = texts[i];
                     el.classList.add('visible');
                 }
-            }, i * 1000);
+            }, i * 800);
         });
     }
     
@@ -701,120 +927,334 @@ class AnimationsManager {
     }
 
     // ========================================
-    // PHASE 3: GLOBE VISUALIZATION WITH TERRAIN
+    // PHASE 3: MULTI-TERRAIN VISUALIZATION (50 SECONDS)
     // ========================================
     
     async playStellarPhase3() {
         return new Promise((resolve) => {
-            console.log('📍 Phase 3: Globe/Terrain Visualization');
+            console.log('📍 Phase 3: Multi-Terrain Visualization (160s - 2 locations)');
             this.currentPhase = 3;
             
             const phaseGlobe = this.elements.phaseGlobe;
-            const canvas = this.elements.terrainCanvas;
+            if (!phaseGlobe) return resolve();
             
-            if (!phaseGlobe) {
-                resolve();
-                return;
-            }
-            
-            // Play transition sound
-            if (this.stellarAudio.transitions[1]) {
-                this.playAudio(this.stellarAudio.transitions[1]);
-            }
-            
+            this.playAudio(this.stellarAudio.transitions[1]);
             phaseGlobe.classList.add('active');
             
-            // Initialize Three.js terrain with geographic data
-            if (canvas && window.THREE) {
-                this.initThreeTerrainWithGeo(canvas);
-            } else {
-                console.error('Three.js or canvas not available');
+            // Play third SFX
+            setTimeout(() => this.playSFX('textAnimation'), 2000);
+            
+            // Create geo info panels
+            this.createGeoInfoPanels();
+            
+            // Initialize terrain system
+            if (this.elements.terrainCanvas && window.THREE) {
+                this.initMultiTerrainSystem();
             }
             
-            // Reveal panel items
-            const panelItems = document.querySelectorAll('.panel-item');
-            panelItems.forEach((item, i) => {
-                setTimeout(() => {
-                    item.classList.add('visible');
-                }, 500 + (i * 400));
-            });
-            
-            // Update coordinates dynamically
             this.animateGlobeData();
             
-            // Duration - extended for terrain loading
+            // Extended duration: 160 seconds for terrain (80s x 2)
             setTimeout(() => {
                 if (!this.introSkipped) {
-                    this.cleanupThree();
+                    this.cleanupTerrain();
                     phaseGlobe.classList.remove('active');
                 }
                 resolve();
-            }, 15000);
+            }, 162000); // 160s + 2s buffer
         });
     }
     
-    initThreeTerrainWithGeo(canvas) {
+    createGeoInfoPanels() {
+        // Create left and right geo info panels if they don't exist
+        const globeContainer = document.querySelector('.globe-container');
+        if (!globeContainer) return;
+        
+        // Left panel for geographic data
+        let leftPanel = document.getElementById('geoInfoLeft');
+        if (!leftPanel) {
+            leftPanel = document.createElement('div');
+            leftPanel.id = 'geoInfoLeft';
+            leftPanel.className = 'geo-info-panel left';
+            leftPanel.innerHTML = `
+                <div class="geo-panel-header">
+                    <span class="geo-icon">◉</span>
+                    <span class="geo-title">LOCATION DATA</span>
+                </div>
+                <div class="geo-content" id="geoContentLeft"></div>
+            `;
+            globeContainer.appendChild(leftPanel);
+        }
+        
+        // Right panel for facts
+        let rightPanel = document.getElementById('geoInfoRight');
+        if (!rightPanel) {
+            rightPanel = document.createElement('div');
+            rightPanel.id = 'geoInfoRight';
+            rightPanel.className = 'geo-info-panel right';
+            rightPanel.innerHTML = `
+                <div class="geo-panel-header">
+                    <span class="geo-icon">◎</span>
+                    <span class="geo-title">TERRAIN FACTS</span>
+                </div>
+                <div class="geo-content" id="geoContentRight"></div>
+            `;
+            globeContainer.appendChild(rightPanel);
+        }
+        
+        // Add styles dynamically
+        this.injectGeoInfoStyles();
+    }
+    
+    injectGeoInfoStyles() {
+        if (document.getElementById('geoInfoStyles')) return;
+        
+        const style = document.createElement('style');
+        style.id = 'geoInfoStyles';
+        style.textContent = `
+            .geo-info-panel {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 280px;
+                background: rgba(0, 0, 0, 0.7);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 20px;
+                font-family: 'SV-Tech', 'Courier New', monospace;
+                z-index: 10;
+                backdrop-filter: blur(5px);
+                opacity: 0;
+                transition: opacity 0.8s ease;
+            }
+            .geo-info-panel.visible {
+                opacity: 1;
+            }
+            .geo-info-panel.left {
+                left: 40px;
+            }
+            .geo-info-panel.right {
+                right: 40px;
+            }
+            .geo-panel-header {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .geo-icon {
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 0.8rem;
+            }
+            .geo-title {
+                font-size: 0.65rem;
+                letter-spacing: 0.15em;
+                color: rgba(255, 255, 255, 0.7);
+            }
+            .geo-content {
+                min-height: 150px;
+            }
+            .geo-item {
+                margin-bottom: 12px;
+                opacity: 0;
+                transform: translateX(-10px);
+                transition: opacity 0.5s ease, transform 0.5s ease;
+            }
+            .geo-item.visible {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            .geo-item.right-panel {
+                transform: translateX(10px);
+            }
+            .geo-item.right-panel.visible {
+                transform: translateX(0);
+            }
+            .geo-label {
+                font-size: 0.55rem;
+                letter-spacing: 0.1em;
+                color: rgba(255, 255, 255, 0.4);
+                display: block;
+                margin-bottom: 3px;
+            }
+            .geo-value {
+                font-size: 0.7rem;
+                color: rgba(255, 255, 255, 0.9);
+                letter-spacing: 0.05em;
+            }
+            .geo-value.typing {
+                border-right: 2px solid rgba(255, 255, 255, 0.7);
+                animation: blink 0.7s step-end infinite;
+            }
+            @keyframes blink {
+                50% { border-color: transparent; }
+            }
+            .geo-fact {
+                font-size: 0.6rem;
+                color: rgba(255, 255, 255, 0.7);
+                margin-bottom: 8px;
+                padding-left: 12px;
+                border-left: 2px solid rgba(255, 255, 255, 0.3);
+            }
+            
+            @media (max-width: 1100px) {
+                .geo-info-panel {
+                    width: 220px;
+                    padding: 15px;
+                }
+                .geo-info-panel.left { left: 20px; }
+                .geo-info-panel.right { right: 20px; }
+            }
+            
+            @media (max-width: 800px) {
+                .geo-info-panel {
+                    display: none;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    displayGeoInfo(geoInfo) {
+        const leftContent = document.getElementById('geoContentLeft');
+        const rightContent = document.getElementById('geoContentRight');
+        const leftPanel = document.getElementById('geoInfoLeft');
+        const rightPanel = document.getElementById('geoInfoRight');
+        
+        if (!leftContent || !rightContent) return;
+        
+        // Clear previous content
+        leftContent.innerHTML = '';
+        rightContent.innerHTML = '';
+        
+        // Show panels
+        leftPanel?.classList.add('visible');
+        rightPanel?.classList.add('visible');
+        
+        // Left panel: Geographic data with typewriter effect
+        const geoData = [
+            { label: 'COORDINATES', value: geoInfo.coords },
+            { label: 'ELEVATION', value: geoInfo.elevation },
+            { label: 'REGION', value: geoInfo.region },
+            { label: 'CLIMATE', value: geoInfo.climate },
+            { label: 'DISCOVERY', value: geoInfo.discovery }
+        ];
+        
+        geoData.forEach((item, i) => {
+            const div = document.createElement('div');
+            div.className = 'geo-item';
+            div.innerHTML = `
+                <span class="geo-label">${item.label}</span>
+                <span class="geo-value" id="geoValue${i}"></span>
+            `;
+            leftContent.appendChild(div);
+            
+            // Staggered reveal
+            setTimeout(() => {
+                div.classList.add('visible');
+                // Typewriter effect
+                this.typewriterEffect(`geoValue${i}`, item.value, 50);
+            }, i * 400);
+        });
+        
+        // Right panel: Facts with typewriter effect
+        geoInfo.facts.forEach((fact, i) => {
+            const div = document.createElement('div');
+            div.className = 'geo-item right-panel';
+            div.innerHTML = `<div class="geo-fact" id="geoFact${i}"></div>`;
+            rightContent.appendChild(div);
+            
+            // Staggered reveal
+            setTimeout(() => {
+                div.classList.add('visible');
+                this.typewriterEffect(`geoFact${i}`, `• ${fact}`, 30);
+            }, 2000 + (i * 500));
+        });
+    }
+    
+    typewriterEffect(elementId, text, speed = 50) {
+        const element = document.getElementById(elementId);
+        if (!element || this.introSkipped) return;
+        
+        let index = 0;
+        element.classList.add('typing');
+        
+        const type = () => {
+            if (this.introSkipped || index >= text.length) {
+                element.textContent = text;
+                element.classList.remove('typing');
+                return;
+            }
+            
+            element.textContent = text.substring(0, index + 1);
+            index++;
+            setTimeout(type, speed);
+        };
+        
+        type();
+    }
+    
+    initMultiTerrainSystem() {
+        const canvas = this.elements.terrainCanvas;
+        
         try {
-            // Configura el tamaño del canvas
             canvas.width = canvas.offsetWidth || window.innerWidth;
             canvas.height = canvas.offsetHeight || window.innerHeight;
             
-            // Scene setup
+            // Scene setup with performance optimizations
             this.threeScene = new THREE.Scene();
-            this.threeScene.fog = new THREE.Fog(0x111111, 22000, 25000);
+            this.threeScene.fog = new THREE.Fog(0x111111, 15000, 20000);
             
-            // Camera setup
+            // Optimized camera settings
             this.threeCamera = new THREE.PerspectiveCamera(
-                10, 
-                canvas.width / canvas.height, 
-                0.1, 
-                200000
+                this.shouldUseOptimizedMode ? 8 : 10,
+                canvas.width / canvas.height,
+                0.1,
+                this.shouldUseOptimizedMode ? 100000 : 200000
             );
-            this.threeCamera.position.set(0, 10000, -20000);
-            this.threeScene.add(this.threeCamera);
+            this.threeCamera.position.set(0, 8000, -15000);
             
-            // Renderer setup
+            // Renderer with performance settings
             this.threeRenderer = new THREE.WebGLRenderer({
                 canvas: canvas,
-                antialias: false,
-                alpha: true
+                antialias: !this.shouldUseOptimizedMode,
+                alpha: true,
+                powerPreference: this.shouldUseOptimizedMode ? "low-power" : "high-performance"
             });
             this.threeRenderer.setSize(canvas.width, canvas.height);
             this.threeRenderer.setClearColor(0x000000, 0);
-            this.threeRenderer.shadowMap.enabled = true;
+            this.threeRenderer.shadowMap.enabled = false; // Disabled for performance
             
-            // Controls setup
+            // Controls setup - SLOWER ROTATION for smoother feel
             if (THREE.OrbitControls) {
                 this.threeControls = new THREE.OrbitControls(this.threeCamera, this.threeRenderer.domElement);
                 this.threeControls.autoRotate = true;
-                this.threeControls.autoRotateSpeed = 0.25;
+                this.threeControls.autoRotateSpeed = 0.08; // Much slower for smoother animation
                 this.threeControls.enableDamping = true;
-                this.threeControls.dampingFactor = 0.125;
+                this.threeControls.dampingFactor = 0.03; // Smoother damping
             }
             
-            // Create terrain particle system
-            this.createGroundPlane();
-            
-            // Start animation loop
+            // Create optimized terrain particle system
+            this.createOptimizedTerrain();
             this.animateTerrain();
             
-            // Load geographic data
-            setTimeout(() => {
-                this.loadGeography('everest');
-            }, 1000);
+            // Start terrain sequence with 10s intervals
+            this.startTerrainSequence();
             
-            console.log('🌍 Three.js terrain with geography initialized');
+            console.log('🌍 Multi-terrain system initialized (160s duration, 80s each)');
             
         } catch (error) {
-            console.error('Three.js terrain error:', error);
-            this.initCanvasFallback(canvas);
+            console.error('Terrain system error:', error);
+            this.initTerrainFallback(canvas);
         }
     }
     
-    createGroundPlane() {
-        const totalX = 150;
-        const totalZ = 150;
-        this.particleDistance = 25;
+    createOptimizedTerrain() {
+        // Reduced terrain size for better performance
+        const totalX = this.shouldUseOptimizedMode ? 100 : 120;
+        const totalZ = this.shouldUseOptimizedMode ? 100 : 120;
+        this.particleDistance = 30;
         
         const particleCount = totalX * totalZ;
         const positions = new Float32Array(particleCount * 3);
@@ -829,7 +1269,6 @@ class AnimationsManager {
             for (let z = 0; z < totalZ; z++) {
                 const zplot = z - Math.round((totalZ - 1) / 2);
                 
-                // Posición del vértice
                 positions[index * 3] = x * this.particleDistance - this.particleDistance * (totalX - 1) / 2;
                 positions[index * 3 + 1] = 0;
                 positions[index * 3 + 2] = z * this.particleDistance - this.particleDistance * (totalZ - 1) / 2;
@@ -838,7 +1277,8 @@ class AnimationsManager {
                     x: xplot,
                     z: zplot,
                     index: index,
-                    targetY: 0
+                    targetY: 0,
+                    currentY: 0
                 };
                 index++;
             }
@@ -850,139 +1290,114 @@ class AnimationsManager {
         
         const material = new THREE.PointsMaterial({
             color: 0xffffff,
-            size: 1.5,
+            size: this.shouldUseOptimizedMode ? 1.2 : 1.5,
             sizeAttenuation: false,
             transparent: true,
             opacity: 0.8
         });
         
         this.mountainParticles = new THREE.Points(this.mountainGeometry, material);
-        this.mountainParticles.position.y = -700;
+        this.mountainParticles.position.y = -500;
         this.threeScene.add(this.mountainParticles);
     }
     
-    loadGeography(filename = 'everest') {
-        if (!this.baseURL) {
-            console.error('Base URL not defined');
-            return;
-        }
+    startTerrainSequence() {
+        this.currentTerrainIndex = 0;
+        this.loadNextTerrain();
         
-        const request = new XMLHttpRequest();
-        request.open('GET', `${this.baseURL}_terrain/${filename}.json?v=2`);
-        
-        request.onprogress = (evt) => {
-            if (evt.lengthComputable) {
-                const progress = Math.round((evt.loaded / evt.total) * 100);
-                console.log(`🌍 Loading terrain: ${progress}%`);
-                const loadingEl = document.getElementById('terrainLoading');
-                if (loadingEl) {
-                    loadingEl.textContent = `LOADING TERRAIN DATA... ${progress}%`;
-                }
+        // Schedule terrain transitions every 80 seconds
+        this.terrainInterval = setInterval(() => {
+            if (this.introSkipped || this.currentPhase !== 3) {
+                clearInterval(this.terrainInterval);
+                return;
             }
-        };
-        
-        request.onload = () => {
-            if (request.status >= 200 && request.status < 400) {
-                try {
-                    const data = JSON.parse(request.responseText);
-                    this.processGeographicData(data);
-                    
-                    // Actualizar texto de carga
-                    const loadingEl = document.getElementById('terrainLoading');
-                    if (loadingEl) {
-                        loadingEl.textContent = 'TERRAIN DATA LOADED';
-                    }
-                } catch (error) {
-                    console.error('Error parsing geography data:', error);
-                }
-            } else {
-                console.error('Error loading geography data:', request.status);
-            }
-        };
-        
-        request.onerror = () => {
-            console.error('Network error loading geography data');
-        };
-        
-        request.send();
+            
+            this.currentTerrainIndex = (this.currentTerrainIndex + 1) % this.terrainLocations.length;
+            this.loadNextTerrain();
+        }, 80000); // 80 seconds per terrain
     }
     
-    processGeographicData(data) {
-        if (!this.mountainParticles || !data.coords) {
-            console.error('No mountain particles or coords data');
-            return;
-        }
-        
-        console.log('🗺️ Processing geographic data...');
-        
-        // Set center point
-        if (data.boundaries) {
-            this.centerPoint.lat = data.boundaries[2] + (data.boundaries[0] - data.boundaries[2]) / 2;
-            this.centerPoint.lng = data.boundaries[3] + (data.boundaries[1] - data.boundaries[3]) / 2;
-            console.log(`📍 Center: ${this.centerPoint.lat}, ${this.centerPoint.lng}`);
-        }
+    processTerrainData(data) {
+        if (!this.mountainParticles || !data.coords) return;
         
         const positions = this.mountainGeometry.getAttribute('position').array;
         
-        // Process terrain data
-        data.coords.forEach(coord => {
-            const [x, y, z] = coord;
-            
-            if (this.pointsPlot[x] && this.pointsPlot[x][z]) {
-                const vertex = this.pointsPlot[x][z];
-                const targetY = (y - (data.lowest_point || 0)) * this.particleDistance;
+        // Smooth transition: first flatten current terrain (slower)
+        this.flattenCurrentTerrain(positions, () => {
+            // Then apply new terrain data
+            data.coords.forEach(coord => {
+                const [x, y, z] = coord;
                 
-                // Store target height for animation
-                vertex.targetY = targetY;
-                
-                // Animate to target height
-                this.animateVertexHeight(vertex, targetY, positions);
-            }
+                if (this.pointsPlot[x]?.[z]) {
+                    const vertex = this.pointsPlot[x][z];
+                    const targetY = (y - (data.lowest_point || 0)) * this.particleDistance * 0.8;
+                    this.animateVertexToHeight(vertex, targetY, positions);
+                }
+            });
         });
     }
     
-    animateVertexHeight(vertex, targetY, positions) {
-        if (!vertex) return;
-        
+    flattenCurrentTerrain(positions, callback) {
+        const flattenDuration = 2000; // Slower flattening
         const startTime = Date.now();
-        const duration = 1500;
+        
+        // Store original heights
+        const originalHeights = [];
+        for (let i = 1; i < positions.length; i += 3) {
+            originalHeights.push(positions[i]);
+        }
+        
+        const flatten = () => {
+            if (this.introSkipped || this.currentPhase !== 3) return;
+            
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / flattenDuration, 1);
+            // Smoother easing
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            
+            for (let i = 1; i < positions.length; i += 3) {
+                const originalIndex = (i - 1) / 3;
+                positions[i] = originalHeights[originalIndex] * (1 - easeOut);
+            }
+            
+            this.mountainGeometry.getAttribute('position').needsUpdate = true;
+            
+            if (progress < 1) {
+                requestAnimationFrame(flatten);
+            } else {
+                callback();
+            }
+        };
+        
+        flatten();
+    }
+    
+    animateVertexToHeight(vertex, targetY, positions) {
+        const duration = 3000; // Slower rise for smoother animation
+        const startTime = Date.now();
         const startY = positions[vertex.index * 3 + 1];
         
-        const animateHeight = () => {
+        const animate = () => {
             if (this.introSkipped || this.currentPhase !== 3) return;
             
             const elapsed = Date.now() - startTime;
             const progress = Math.min(elapsed / duration, 1);
+            // Smoother easing function
+            const easeOut = 1 - Math.pow(1 - progress, 4);
             
-            // Easing function (ease out)
-            const easeOut = 1 - Math.pow(1 - progress, 3);
             const currentY = startY + (targetY - startY) * easeOut;
-            
             positions[vertex.index * 3 + 1] = currentY;
-            this.mountainGeometry.getAttribute('position').needsUpdate = true;
+            
+            if (vertex.index % 50 === 0) { // Update less frequently
+                this.mountainGeometry.getAttribute('position').needsUpdate = true;
+            }
             
             if (progress < 1) {
-                requestAnimationFrame(animateHeight);
+                requestAnimationFrame(animate);
             }
         };
         
-        animateHeight();
-    }
-    
-    animateTerrain() {
-        if (!this.threeRenderer || this.currentPhase !== 3 || this.introSkipped) {
-            return;
-        }
-        
-        this.animationFrame = requestAnimationFrame(() => this.animateTerrain());
-        
-        if (this.threeControls) {
-            this.threeControls.update();
-        }
-        
-        if (this.threeScene && this.threeCamera) {
-            this.threeRenderer.render(this.threeScene, this.threeCamera);
-        }
+        animate();
     }
     
     animateGlobeData() {
@@ -992,10 +1407,8 @@ class AnimationsManager {
         const terrainEl = document.getElementById('globeTerrain');
         
         const locations = [
-            { coords: '27.9881°N 86.9250°E', sector: 'EVEREST', elev: '8849m', terrain: 'MOUNTAIN' },
-            { coords: '35.7120°N 139.7876°E', sector: 'TOKYO', elev: '40m', terrain: 'URBAN' },
-            { coords: '40.7128°N 74.0060°W', sector: 'NEW YORK', elev: '10m', terrain: 'URBAN' },
-            { coords: '51.5074°N 0.1278°W', sector: 'LONDON', elev: '11m', terrain: 'URBAN' }
+            { coords: '27.9659°N 86.7797°E', sector: 'EVEREST VALLEY', elev: '5364m', terrain: 'VALLEY' },
+            { coords: '45.4167°N 6.9333°E', sector: 'COL DE LISERAN', elev: '2770m', terrain: 'ALPINE' }
         ];
         
         let index = 0;
@@ -1009,89 +1422,52 @@ class AnimationsManager {
             if (terrainEl) terrainEl.textContent = loc.terrain;
             
             index++;
-            setTimeout(updateLocation, 3000);
+            setTimeout(updateLocation, 80000); // Sync with terrain transitions (80s)
         };
         
         setTimeout(updateLocation, 1000);
     }
     
-    cleanupThree() {
-        if (this.animationFrame) {
-            cancelAnimationFrame(this.animationFrame);
-            this.animationFrame = null;
-        }
-        
-        if (this.mountainParticles) {
-            if (this.mountainGeometry) this.mountainGeometry.dispose();
-            if (this.mountainParticles.material) this.mountainParticles.material.dispose();
-            if (this.threeScene) {
-                this.threeScene.remove(this.mountainParticles);
-            }
-            this.mountainParticles = null;
-        }
-        
-        if (this.threeRenderer) {
-            this.threeRenderer.dispose();
-            this.threeRenderer = null;
-        }
-        
-        this.threeScene = null;
-        this.threeCamera = null;
-        this.threeControls = null;
-        this.mountainGeometry = null;
-        this.pointsPlot = [];
-    }
-
     // ========================================
-    // PHASE 4: BRAIN VISUALIZATION
+    // PHASE 4: BRAIN VISUALIZATION (LARGER + MORE INFO)
     // ========================================
     
     async playStellarPhase4() {
         return new Promise((resolve) => {
-            console.log('📍 Phase 4: Brain Visualization');
+            console.log('📍 Phase 4: Brain Visualization (Large + Extended Info)');
             this.currentPhase = 4;
             
             const phaseBody = this.elements.phaseBody;
-            const brainCanvas = this.elements.brainCanvas;
-            
-            if (!phaseBody) {
-                resolve();
-                return;
-            }
+            if (!phaseBody) return resolve();
             
             phaseBody.classList.add('active');
             
-            // Initialize Brain 3D visualization
-            if (brainCanvas && window.THREE) {
-                this.initBrainVisualization(brainCanvas);
-            } else {
-                console.error('Three.js or brain canvas not available');
+            // Play fourth SFX
+            setTimeout(() => this.playSFX('affirmation'), 1500);
+            
+            if (this.elements.brainCanvas && window.THREE) {
+                this.initBrainVisualization();
             }
             
-            // Reveal scan items
-            const scanItems = document.querySelectorAll('.scan-item');
-            scanItems.forEach((item, i) => {
-                setTimeout(() => {
-                    item.classList.add('visible');
-                }, 2000 + (i * 1500));
-            });
+            // Create extended brain info panel
+            this.createBrainInfoPanel();
+            
+            this.animateScanItems();
+            
+            // Start extended brain info with typewriter effect
+            setTimeout(() => this.displayBrainTechnicalInfo(), 2000);
             
             setTimeout(() => {
-                if (this.introSkipped) {
-                    resolve();
-                    return;
-                }
+                if (this.introSkipped) return resolve();
                 
                 this.playAudio(this.stellarAudio.voiceDataUser);
                 
                 if (this.stellarAudio.voiceDataUser) {
                     this.stellarAudio.voiceDataUser.addEventListener('timeupdate', this.updateSubtitlesPhase4);
-                    
                     this.stellarAudio.voiceDataUser.onended = () => {
                         setTimeout(() => {
                             if (!this.introSkipped) {
-                                const bodySubtitle = document.getElementById('bodySubtitle');
-                                if (bodySubtitle) bodySubtitle.classList.remove('visible');
+                                this.elements.bodySubtitle?.classList.remove('visible');
                                 phaseBody.classList.remove('active');
                             }
                             resolve();
@@ -1099,452 +1475,329 @@ class AnimationsManager {
                     };
                 }
                 
-                // Fallback
                 setTimeout(() => {
-                    if (this.stellarAudio.voiceDataUser && 
-                        this.stellarAudio.voiceDataUser.paused && 
-                        !this.introSkipped) {
-                        phaseBody.classList.remove('active');
-                        resolve();
-                    }
+                    if (!this.introSkipped) resolve();
                 }, 35000);
                 
             }, 1500);
         });
     }
     
-    initBrainVisualization(canvas) {
-        try {
-            // Configurar tamaño del canvas
-            canvas.width = canvas.offsetWidth || window.innerWidth;
-            canvas.height = canvas.offsetHeight || window.innerHeight;
-            
-            // Crear escena
-            this.brainScene = new THREE.Scene();
-            this.brainScene.background = new THREE.Color(0x000000);
-            
-            // Crear cámara
-            this.brainCamera = new THREE.PerspectiveCamera(
-                45,
-                canvas.width / canvas.height,
-                0.1,
-                10000
-            );
-            this.brainCamera.position.set(0, 200, 500);
-            
-            // Crear renderer
-            this.brainRenderer = new THREE.WebGLRenderer({
-                canvas: canvas,
-                antialias: true,
-                alpha: true
-            });
-            this.brainRenderer.setSize(canvas.width, canvas.height);
-            this.brainRenderer.setClearColor(0x000000, 0);
-            this.brainRenderer.shadowMap.enabled = true;
-            this.brainRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            
-            // Configurar controles de órbita
-            if (THREE.OrbitControls) {
-                this.brainControls = new THREE.OrbitControls(this.brainCamera, this.brainRenderer.domElement);
-                this.brainControls.enableDamping = true;
-                this.brainControls.dampingFactor = 0.05;
-                this.brainControls.autoRotate = true;
-                this.brainControls.autoRotateSpeed = 0.5;
-                this.brainControls.enableZoom = true;
-                this.brainControls.enablePan = false;
-                this.brainControls.minDistance = 300;
-                this.brainControls.maxDistance = 800;
+    createBrainInfoPanel() {
+        const bodyContainer = document.querySelector('.body-container');
+        if (!bodyContainer) return;
+        
+        // Left panel for extended brain info
+        let infoPanel = document.getElementById('brainTechInfo');
+        if (!infoPanel) {
+            infoPanel = document.createElement('div');
+            infoPanel.id = 'brainTechInfo';
+            infoPanel.className = 'brain-tech-panel';
+            infoPanel.innerHTML = `
+                <div class="brain-panel-header">
+                    <span class="brain-icon">⬡</span>
+                    <span class="brain-title">NEURAL ANALYSIS</span>
+                </div>
+                <div class="brain-tech-content" id="brainTechContent"></div>
+            `;
+            bodyContainer.appendChild(infoPanel);
+        }
+        
+        // Add styles dynamically
+        this.injectBrainInfoStyles();
+    }
+    
+    injectBrainInfoStyles() {
+        if (document.getElementById('brainInfoStyles')) return;
+        
+        const style = document.createElement('style');
+        style.id = 'brainInfoStyles';
+        style.textContent = `
+            .brain-tech-panel {
+                position: absolute;
+                left: 40px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 320px;
+                max-height: 70vh;
+                overflow-y: auto;
+                background: rgba(0, 0, 0, 0.75);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 20px;
+                font-family: 'SV-Tech', 'Courier New', monospace;
+                z-index: 10;
+                backdrop-filter: blur(5px);
+                opacity: 0;
+                transition: opacity 0.8s ease;
+            }
+            .brain-tech-panel.visible {
+                opacity: 1;
+            }
+            .brain-tech-panel::-webkit-scrollbar {
+                width: 4px;
+            }
+            .brain-tech-panel::-webkit-scrollbar-track {
+                background: rgba(255, 255, 255, 0.05);
+            }
+            .brain-tech-panel::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.2);
+            }
+            .brain-panel-header {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .brain-icon {
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 0.9rem;
+            }
+            .brain-title {
+                font-size: 0.65rem;
+                letter-spacing: 0.15em;
+                color: rgba(255, 255, 255, 0.7);
+            }
+            .brain-tech-content {
+                min-height: 200px;
+            }
+            .brain-tech-item {
+                margin-bottom: 10px;
+                padding: 8px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                opacity: 0;
+                transform: translateX(-15px);
+                transition: opacity 0.6s ease, transform 0.6s ease;
+            }
+            .brain-tech-item.visible {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            .brain-tech-label {
+                font-size: 0.5rem;
+                letter-spacing: 0.12em;
+                color: rgba(255, 255, 255, 0.4);
+                display: block;
+                margin-bottom: 4px;
+            }
+            .brain-tech-value {
+                font-size: 0.65rem;
+                color: rgba(255, 255, 255, 0.9);
+                letter-spacing: 0.03em;
+            }
+            .brain-tech-value.typing {
+                border-right: 2px solid rgba(255, 255, 255, 0.7);
+                animation: blink 0.7s step-end infinite;
+            }
+            .brain-tech-value.success {
+                color: rgba(150, 255, 150, 0.9);
+            }
+            .brain-tech-value.warning {
+                color: rgba(255, 200, 100, 0.9);
             }
             
-            // Crear iluminación
-            this.createBrainLighting();
+            @media (max-width: 1100px) {
+                .brain-tech-panel {
+                    width: 260px;
+                    left: 20px;
+                    padding: 15px;
+                }
+            }
             
-            // Cargar modelos del cerebro
-            this.loadBrainModels();
+            @media (max-width: 800px) {
+                .brain-tech-panel {
+                    display: none;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    displayBrainTechnicalInfo() {
+        const content = document.getElementById('brainTechContent');
+        const panel = document.getElementById('brainTechInfo');
+        
+        if (!content) return;
+        
+        content.innerHTML = '';
+        panel?.classList.add('visible');
+        
+        this.brainTechnicalInfo.forEach((info, i) => {
+            const div = document.createElement('div');
+            div.className = 'brain-tech-item';
             
-            // Iniciar animación
-            this.animateBrain();
+            // Determine status class based on value content
+            let statusClass = '';
+            if (info.value.includes('OPTIMAL') || info.value.includes('ACTIVE') || 
+                info.value.includes('SUCCESSFUL') || info.value.includes('EXCEPTIONAL') ||
+                info.value.includes('ENHANCED') || info.value.includes('HIGH')) {
+                statusClass = 'success';
+            } else if (info.value.includes('FRAGMENTED') || info.value.includes('RECALIBRATING') ||
+                       info.value.includes('RECOVERED')) {
+                statusClass = 'warning';
+            }
             
-            console.log('🧠 Brain visualization initialized');
+            div.innerHTML = `
+                <span class="brain-tech-label">${info.label}</span>
+                <span class="brain-tech-value ${statusClass}" id="brainVal${i}"></span>
+            `;
+            content.appendChild(div);
             
-        } catch (error) {
-            console.error('Brain visualization error:', error);
-            this.initBrainFallback(canvas);
-        }
+            // Staggered reveal with typewriter effect
+            setTimeout(() => {
+                if (this.introSkipped) return;
+                div.classList.add('visible');
+                this.typewriterEffect(`brainVal${i}`, info.value, 25);
+            }, info.delay);
+        });
     }
     
     createBrainLighting() {
-        // Luz ambiental - blanco suave
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        // Optimized lighting setup
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
         this.brainScene.add(ambientLight);
         
-        // Luz direccional principal - blanca
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(100, 100, 100);
-        directionalLight.castShadow = true;
-        directionalLight.shadow.mapSize.width = 2048;
-        directionalLight.shadow.mapSize.height = 2048;
+        directionalLight.position.set(50, 100, 50);
         this.brainScene.add(directionalLight);
         
-        // Luz de relleno - blanca suave
         const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
-        fillLight.position.set(-100, 50, -100);
+        fillLight.position.set(-50, 0, -50);
         this.brainScene.add(fillLight);
-        
-        // Luces de acento - todas blancas
-        this.brainAccentLights = [];
-        const accentPositions = [
-            { x: 0, y: 100, z: 0 },
-            { x: 50, y: 0, z: 50 },
-            { x: -50, y: 0, z: -50 },
-            { x: 0, y: -50, z: 50 }
-        ];
-        
-        accentPositions.forEach(pos => {
-            const light = new THREE.PointLight(0xffffff, 0.6, 300);
-            light.position.set(pos.x, pos.y, pos.z);
-            this.brainScene.add(light);
-            this.brainAccentLights.push(light);
-        });
     }
     
-    loadBrainModels() {
+    loadSingleBrainModel() {
         const loader = new THREE.OBJLoader();
-        const loadedParts = [];
         
-        this.brainModels.forEach((modelPath, index) => {
-            loader.load(
-                modelPath,
-                (object) => {
-                    // Material blanco transparente para todas las partes
-                    const material = new THREE.MeshPhongMaterial({
-                        color: 0xffffff, // Blanco puro
-                        transparent: true,
-                        opacity: 0.1, // Muy transparente inicialmente
-                        shininess: 100,
-                        specular: 0x222222,
-                        side: THREE.DoubleSide
-                    });
-                    
-                    // Aplicar material a todas las mallas del objeto
-                    object.traverse((child) => {
-                        if (child instanceof THREE.Mesh) {
-                            child.material = material;
-                            child.castShadow = true;
-                            child.receiveShadow = true;
-                            
-                            // Posicionar aleatoriamente alrededor del centro
-                            const angle = (index / this.brainModels.length) * Math.PI * 2;
-                            const radius = 100;
-                            object.position.x = Math.cos(angle) * radius;
-                            object.position.z = Math.sin(angle) * radius;
-                            object.position.y = (Math.random() - 0.5) * 50;
-                            
-                            // Rotación inicial
-                            object.rotation.x = Math.random() * Math.PI;
-                            object.rotation.y = Math.random() * Math.PI * 2;
-                            object.rotation.z = Math.random() * Math.PI;
-                            
-                            // Escalar según el modelo
-                            const scale = 0.8 + Math.random() * 0.4;
-                            object.scale.set(scale, scale, scale);
-                            
-                            // Agregar animación única
-                            object.userData = {
-                                rotationSpeedX: 0.0005 + Math.random() * 0.001,
-                                rotationSpeedY: 0.001 + Math.random() * 0.002,
-                                rotationSpeedZ: 0.0003 + Math.random() * 0.0007,
-                                floatSpeed: 0.3 + Math.random() * 0.4,
-                                floatAmplitude: 15 + Math.random() * 25,
-                                pulseSpeed: 0.8 + Math.random() * 1.2,
-                                pulseIntensity: 0.3 + Math.random() * 0.4,
-                                initialY: object.position.y,
-                                timeOffset: Math.random() * Math.PI * 2,
-                                isHighlighted: false,
-                                highlightTimer: 0
-                            };
-                        }
-                    });
-                    
-                    this.brainScene.add(object);
-                    this.brainParts.push(object);
-                    this.brainMaterials.push(material);
-                    loadedParts.push(object);
-                    
-                    console.log(`✅ Loaded brain part ${index + 1}/${this.brainModels.length}`);
-                    
-                    // Si es la última parte, iniciar animación de reunión
-                    if (loadedParts.length === this.brainModels.length) {
-                        setTimeout(() => this.animateBrainAssembly(), 500);
-                    }
-                },
-                (progress) => {
-                    console.log(`Loading brain part ${index + 1}: ${Math.round(progress * 100)}%`);
-                },
-                (error) => {
-                    console.error(`Error loading brain model ${modelPath}:`, error);
-                    // Intentar con una ruta alternativa
-                    const altPath = modelPath.replace('.OBJ', '.obj');
-                    console.log(`Trying alternative path: ${altPath}`);
-                    
-                    // Cargar modelo de respaldo simple
-                    const geometry = new THREE.IcosahedronGeometry(30, 1);
-                    const material = new THREE.MeshPhongMaterial({
-                        color: 0xffffff,
-                        transparent: true,
-                        opacity: 0.1,
-                        wireframe: true
-                    });
-                    const fallbackMesh = new THREE.Mesh(geometry, material);
-                    fallbackMesh.position.set(
-                        (Math.random() - 0.5) * 200,
-                        (Math.random() - 0.5) * 100,
-                        (Math.random() - 0.5) * 200
-                    );
-                    this.brainScene.add(fallbackMesh);
-                    this.brainParts.push(fallbackMesh);
-                    this.brainMaterials.push(material);
-                    loadedParts.push(fallbackMesh);
-                    
-                    if (loadedParts.length === this.brainModels.length) {
-                        setTimeout(() => this.animateBrainAssembly(), 500);
-                    }
-                }
-            );
-        });
-    }
-    
-    animateBrainAssembly() {
-        // Animar las partes del cerebro hacia el centro
-        const duration = 2500;
-        const startTime = Date.now();
-        
-        const animateAssembly = () => {
-            if (this.introSkipped || this.currentPhase !== 4) return;
-            
-            const elapsed = Date.now() - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            
-            // Función de easing suave
-            const easeOutCubic = 1 - Math.pow(1 - progress, 3);
-            
-            this.brainParts.forEach((part, index) => {
-                const targetX = 0;
-                const targetY = 0;
-                const targetZ = 0;
+        loader.load(
+            this.brainModelPath,
+            (object) => {
+                // Single optimized material
+                this.brainMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xffffff,
+                    transparent: true,
+                    opacity: 0.7,
+                    shininess: 30,
+                    specular: 0x111111
+                });
                 
-                part.position.x = part.position.x * (1 - easeOutCubic);
-                part.position.y = (part.position.y * (1 - easeOutCubic)) + (targetY * easeOutCubic);
-                part.position.z = part.position.z * (1 - easeOutCubic);
-                
-                // Suavizar rotación hacia orientación neutra
-                part.rotation.x = part.rotation.x * (1 - easeOutCubic * 0.3);
-                part.rotation.z = part.rotation.z * (1 - easeOutCubic * 0.3);
-                
-                // Aumentar gradualmente la opacidad
-                if (this.brainMaterials[index]) {
-                    this.brainMaterials[index].opacity = 0.1 + (easeOutCubic * 0.3);
-                }
-            });
-            
-            if (progress < 1) {
-                requestAnimationFrame(animateAssembly);
-            } else {
-                // Iniciar secuencia de destacado después del ensamblaje
-                this.startHighlightSequence();
-            }
-        };
-        
-        animateAssembly();
-    }
-    
-    startHighlightSequence() {
-        // Secuencia para destacar diferentes partes del cerebro
-        let currentHighlight = 0;
-        
-        const highlightNextPart = () => {
-            if (this.introSkipped || this.currentPhase !== 4) return;
-            
-            // Resetear todas las partes
-            this.brainParts.forEach((part, index) => {
-                part.userData.isHighlighted = false;
-                part.userData.highlightTimer = 0;
-                if (this.brainMaterials[index]) {
-                    this.brainMaterials[index].opacity = 0.4;
-                    this.brainMaterials[index].emissive = new THREE.Color(0x000000);
-                    this.brainMaterials[index].emissiveIntensity = 0;
-                }
-            });
-            
-            // Destacar la parte actual
-            if (currentHighlight < this.brainParts.length) {
-                this.brainParts[currentHighlight].userData.isHighlighted = true;
-                
-                // Actualizar texto HUD
-                const brainSections = [
-                    "Frontal Lobe",
-                    "Temporal Lobe", 
-                    "Parietal Lobe",
-                    "Occipital Lobe",
-                    "Cerebellum"
-                ];
-                
-                const scanItems = document.querySelectorAll('.scan-item');
-                if (scanItems[currentHighlight]) {
-                    scanItems[currentHighlight].querySelector('.scan-text').textContent = 
-                        `${brainSections[currentHighlight]}: ACTIVATED`;
-                    scanItems[currentHighlight].querySelector('.scan-dot').classList.add('success');
-                }
-            }
-            
-            currentHighlight = (currentHighlight + 1) % this.brainParts.length;
-            
-            // Programar siguiente destacado
-            setTimeout(highlightNextPart, 3000);
-        };
-        
-        // Empezar la secuencia después de un breve delay
-        setTimeout(highlightNextPart, 1000);
-    }
-    
-    animateBrain() {
-        if (!this.brainRenderer || this.currentPhase !== 4 || this.introSkipped) {
-            if (this.brainAnimationFrame) {
-                cancelAnimationFrame(this.brainAnimationFrame);
-                this.brainAnimationFrame = null;
-            }
-            return;
-        }
-        
-        this.brainAnimationFrame = requestAnimationFrame(() => this.animateBrain());
-        
-        // Actualizar controles
-        if (this.brainControls) {
-            this.brainControls.update();
-        }
-        
-        // Animar partes del cerebro
-        const time = Date.now() * 0.001;
-        
-        this.brainParts.forEach((part, index) => {
-            if (part.userData) {
-                // Rotación suave en múltiples ejes
-                part.rotation.x += part.userData.rotationSpeedX;
-                part.rotation.y += part.userData.rotationSpeedY;
-                part.rotation.z += part.userData.rotationSpeedZ;
-                
-                // Flotación suave
-                const floatTime = time * part.userData.floatSpeed + part.userData.timeOffset;
-                part.position.y = part.userData.initialY + Math.sin(floatTime) * part.userData.floatAmplitude;
-                
-                // Pulsación de opacidad
-                const pulseTime = time * part.userData.pulseSpeed + part.userData.timeOffset;
-                const pulse = Math.sin(pulseTime) * 0.5 + 0.5;
-                
-                // Actualizar material si existe
-                if (this.brainMaterials[index]) {
-                    // Efecto de destacado
-                    if (part.userData.isHighlighted) {
-                        part.userData.highlightTimer += 0.02;
-                        const highlightPulse = Math.sin(part.userData.highlightTimer * 3) * 0.3 + 0.7;
-                        this.brainMaterials[index].opacity = 0.7 + highlightPulse * 0.3;
-                        this.brainMaterials[index].emissive = new THREE.Color(0xffffff);
-                        this.brainMaterials[index].emissiveIntensity = highlightPulse * 0.5;
-                    } else {
-                        // Pulsación normal
-                        const baseOpacity = 0.4;
-                        this.brainMaterials[index].opacity = baseOpacity + pulse * part.userData.pulseIntensity;
-                        this.brainMaterials[index].emissive = new THREE.Color(0x000000);
-                        this.brainMaterials[index].emissiveIntensity = 0;
-                    }
-                }
-            }
-        });
-        
-        // Animar luces de acento
-        if (this.brainAccentLights) {
-            this.brainAccentLights.forEach((light, index) => {
-                const lightTime = time * 0.3 + index;
-                light.intensity = 0.4 + Math.sin(lightTime) * 0.2;
-                
-                // Movimiento circular suave de las luces
-                const orbitRadius = 150;
-                const orbitSpeed = 0.1;
-                light.position.x = Math.cos(time * orbitSpeed + index) * orbitRadius;
-                light.position.z = Math.sin(time * orbitSpeed + index) * orbitRadius;
-            });
-        }
-        
-        // Renderizar
-        if (this.brainScene && this.brainCamera) {
-            this.brainRenderer.render(this.brainScene, this.brainCamera);
-        }
-    }
-    
-    cleanupBrain() {
-        if (this.brainAnimationFrame) {
-            cancelAnimationFrame(this.brainAnimationFrame);
-            this.brainAnimationFrame = null;
-        }
-        
-        if (this.brainParts.length > 0) {
-            this.brainParts.forEach(part => {
-                if (this.brainScene) {
-                    this.brainScene.remove(part);
-                }
-                // Limpiar geometrías y materiales
-                part.traverse((child) => {
-                    if (child.geometry) child.geometry.dispose();
-                    if (child.material) {
-                        if (Array.isArray(child.material)) {
-                            child.material.forEach(m => m.dispose());
-                        } else {
-                            child.material.dispose();
-                        }
+                // Apply material and setup mesh
+                object.traverse((child) => {
+                    if (child instanceof THREE.Mesh) {
+                        child.material = this.brainMaterial;
+                        child.castShadow = false;
+                        child.receiveShadow = false;
                     }
                 });
-            });
-            this.brainParts = [];
-        }
-        
-        if (this.brainMaterials.length > 0) {
-            this.brainMaterials.forEach(material => material.dispose());
-            this.brainMaterials = [];
-        }
-        
-        if (this.brainRenderer) {
-            this.brainRenderer.dispose();
-            this.brainRenderer = null;
-        }
-        
-        this.brainScene = null;
-        this.brainCamera = null;
-        this.brainControls = null;
-        this.brainAccentLights = null;
+                
+                // Center and scale the model - LARGER SIZE
+                const box = new THREE.Box3().setFromObject(object);
+                const center = box.getCenter(new THREE.Vector3());
+                object.position.sub(center);
+                
+                // Increased scale for larger brain
+                const scale = this.shouldUseOptimizedMode ? 1.3 : this.brainScale;
+                object.scale.setScalar(scale);
+                
+                this.brainMesh = object;
+                this.brainScene.add(object);
+                
+                // Create highlight regions for visual effect
+                this.createBrainHighlightRegions();
+                
+                console.log('✅ Large brain model loaded (scale: ' + scale + ')');
+            },
+            (progress) => {
+                console.log(`Loading brain: ${Math.round((progress.loaded / progress.total) * 100)}%`);
+            },
+            (error) => {
+                console.error('Error loading brain model:', error);
+                this.createFallbackBrain();
+            }
+        );
     }
     
-    updateSubtitlesPhase4() {
-        if (this.introSkipped || !this.stellarAudio.voiceDataUser) return;
+    createBrainHighlightRegions() {
+        // Create 5 invisible regions for highlighting effects
+        this.brainHighlightRegions = [];
         
-        const currentTime = this.stellarAudio.voiceDataUser.currentTime;
-        const bodySubtitle = document.getElementById('bodySubtitle');
-        
-        if (!bodySubtitle) return;
-        
-        const currentSub = this.subtitlesDataUser.find(sub => 
-            currentTime >= sub.start && currentTime < sub.end
-        );
-        
-        if (currentSub) {
-            if (bodySubtitle.textContent !== currentSub.text) {
-                bodySubtitle.textContent = currentSub.text;
-                bodySubtitle.classList.add('visible');
-            }
+        for (let i = 0; i < 5; i++) {
+            const region = {
+                active: false,
+                intensity: 0,
+                baseIntensity: 0.7,
+                pulseSpeed: 0.5 + Math.random() * 0.5,
+                activationTime: 0
+            };
+            
+            this.brainHighlightRegions.push(region);
         }
+        
+        // Start highlight sequence
+        this.startBrainHighlightSequence();
     }
-
+    
+    startBrainHighlightSequence() {
+        let currentRegion = 0;
+        
+        const activateNextRegion = () => {
+            if (this.introSkipped || this.currentPhase !== 4) return;
+            
+            // Deactivate all regions
+            this.brainHighlightRegions.forEach(region => {
+                region.active = false;
+                region.activationTime = 0;
+            });
+            
+            // Activate current region
+            if (this.brainHighlightRegions[currentRegion]) {
+                this.brainHighlightRegions[currentRegion].active = true;
+                
+                // Update scan display
+                const scanItems = document.querySelectorAll('.scan-item');
+                if (scanItems[currentRegion]) {
+                    const regionNames = ['Frontal Cortex', 'Parietal Lobe', 'Temporal Region', 'Occipital Area', 'Cerebellum'];
+                    scanItems[currentRegion].querySelector('.scan-text').textContent = 
+                        `${regionNames[currentRegion]}: ACTIVE`;
+                    scanItems[currentRegion].querySelector('.scan-dot').classList.add('success');
+                }
+            }
+            
+            currentRegion = (currentRegion + 1) % this.brainHighlightRegions.length;
+            setTimeout(activateNextRegion, 3000);
+        };
+        
+        setTimeout(activateNextRegion, 1000);
+    }
+    
+    createFallbackBrain() {
+        // Simple fallback geometry if model fails to load - LARGER
+        const geometry = new THREE.SphereGeometry(120, 16, 12); // Increased from 80
+        this.brainMaterial = new THREE.MeshPhongMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.6,
+            wireframe: true
+        });
+        
+        this.brainMesh = new THREE.Mesh(geometry, this.brainMaterial);
+        this.brainScene.add(this.brainMesh);
+        
+        console.log('🔄 Large fallback brain created');
+    }
+    
+    animateScanItems() {
+        const scanItems = document.querySelectorAll('.scan-item');
+        scanItems.forEach((item, i) => {
+            setTimeout(() => {
+                item.classList.add('visible');
+            }, 1000 + (i * 800));
+        });
+    }
+    
     // ========================================
-    // PHASE 5: BOARDING PASS
+    // PHASE 5: BOARDING PASS (UNCHANGED)
     // ========================================
     
     async playStellarPhase5() {
@@ -1553,26 +1806,15 @@ class AnimationsManager {
             this.currentPhase = 5;
             
             const phaseBoarding = this.elements.phaseBoarding;
-            const boardingWrapper = this.elements.boardingWrapper;
-            
-            if (!phaseBoarding) {
-                resolve();
-                return;
-            }
+            if (!phaseBoarding) return resolve();
             
             phaseBoarding.classList.add('active');
-            
-            // Play final voice (no subtitles)
             this.playAudio(this.stellarAudio.voiceFinal);
             
-            // Reveal boarding pass
             setTimeout(() => {
-                if (boardingWrapper) {
-                    boardingWrapper.classList.add('visible');
-                }
+                this.elements.boardingWrapper?.classList.add('visible');
             }, 500);
             
-            // Wait for voice to finish or timeout
             if (this.stellarAudio.voiceFinal) {
                 this.stellarAudio.voiceFinal.onended = () => {
                     setTimeout(() => {
@@ -1584,117 +1826,115 @@ class AnimationsManager {
                 };
             }
             
-            // Fallback timeout
             setTimeout(() => {
-                if (!this.introSkipped) {
-                    phaseBoarding.classList.remove('active');
-                }
-                resolve();
-            }, 20000);
+                if (!this.introSkipped) resolve();
+            }, 18000);
         });
     }
 
     // ========================================
-    // TRANSITION TO MAIN
+    // TRANSITION AND CLEANUP (OPTIMIZED)
     // ========================================
     
     transitionFromStellarToMain() {
-        console.log('🎬 Transitioning to main...');
+        console.log('🎬 Transitioning to main (optimized)...');
         
-        // Hide skip indicator
+        // Cleanup listeners and intervals
+        this.cleanupSkipFunctionality();
+        
+        // Fade out music and intro
+        this.fadeOutMusic(1200);
+        
+        const stellarIntro = this.elements.stellarIntro;
+        stellarIntro?.classList.add('fade-out');
+        
+        setTimeout(() => {
+            if (stellarIntro) stellarIntro.style.display = 'none';
+            
+            // Show main content
+            this.showMainContent();
+            
+            // Final cleanup
+            this.performFinalCleanup();
+            
+            console.log('✅ Intro complete, optimized transition finished');
+            
+        }, 1200);
+    }
+    
+    cleanupSkipFunctionality() {
         const skipIndicator = this.elements.skipIndicator;
-        if (skipIndicator) {
-            skipIndicator.classList.add('hidden');
-        }
+        skipIndicator?.classList.add('hidden');
         
-        // Remove skip listeners
         if (this.skipHandler) {
             document.removeEventListener('keydown', this.skipHandler);
             this.skipHandler = null;
         }
+        
         if (this.skipKeyUpHandler) {
             document.removeEventListener('keyup', this.skipKeyUpHandler);
             this.skipKeyUpHandler = null;
         }
         
-        // Clear skip interval
         if (this.skipHoldInterval) {
             clearInterval(this.skipHoldInterval);
             this.skipHoldInterval = null;
         }
+    }
+    
+    showMainContent() {
+        const mainScreen = this.elements.mainScreen;
+        const homeScreen = this.elements.homeScreen;
+        const mainNav = this.elements.mainNav;
         
-        // Fade out music
-        this.fadeOutMusic(1500);
+        if (mainScreen) mainScreen.style.display = 'block';
+        if (homeScreen) homeScreen.classList.add('show');
+        if (mainNav) mainNav.classList.add('show');
         
-        // Fade out intro
-        const stellarIntro = this.elements.stellarIntro;
-        if (stellarIntro) {
-            stellarIntro.classList.add('fade-out');
+        this.currentPage = 'home';
+    }
+    
+    performFinalCleanup() {
+        this.stopAllAudio();
+        this.cleanupTerrain();
+        this.cleanupBrain();
+        
+        // Clear any remaining intervals or timeouts
+        if (this.terrainInterval) {
+            clearInterval(this.terrainInterval);
+            this.terrainInterval = null;
         }
-        
-        // Complete transition
-        setTimeout(() => {
-            if (stellarIntro) {
-                stellarIntro.style.display = 'none';
-            }
-            
-            // Show main content
-            const mainScreen = this.elements.mainScreen;
-            const homeScreen = this.elements.homeScreen;
-            const mainNav = this.elements.mainNav;
-            
-            if (mainScreen) mainScreen.style.display = 'block';
-            if (homeScreen) homeScreen.classList.add('show');
-            if (mainNav) mainNav.classList.add('show');
-            
-            this.currentPage = 'home';
-            
-            // Cleanup
-            this.stopAllAudio();
-            this.cleanupThree();
-            this.cleanupBrain();
-            
-            console.log('✅ Intro complete, main screen shown');
-            
-        }, 1500);
     }
 
     // ========================================
-    // FALLBACK FUNCTIONS
+    // FALLBACK FUNCTIONS (OPTIMIZED)
     // ========================================
     
-    initCanvasFallback(canvas) {
+    initTerrainFallback(canvas) {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
         
-        canvas.width = canvas.offsetWidth || window.innerWidth;
-        canvas.height = canvas.offsetHeight || window.innerHeight;
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
         
-        const particles = [];
-        for (let i = 0; i < 500; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.random() * 2 + 0.5,
-                speedX: (Math.random() - 0.5) * 0.5,
-                speedY: (Math.random() - 0.5) * 0.5,
-                alpha: Math.random() * 0.5 + 0.3
-            });
-        }
+        const particleCount = this.shouldUseOptimizedMode ? 300 : 500;
+        const particles = Array(particleCount).fill().map(() => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2 + 0.5,
+            speedX: (Math.random() - 0.5) * 0.2, // Slower for smoothness
+            speedY: (Math.random() - 0.5) * 0.2,
+            alpha: Math.random() * 0.4 + 0.4
+        }));
         
-        const animateFallback = () => {
+        const animate = () => {
             if (this.currentPhase !== 3 || this.introSkipped) return;
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             particles.forEach(p => {
-                p.x += p.speedX;
-                p.y += p.speedY;
-                
-                if (p.x < 0) p.x = canvas.width;
-                if (p.x > canvas.width) p.x = 0;
-                if (p.y < 0) p.y = canvas.height;
-                if (p.y > canvas.height) p.y = 0;
+                p.x = (p.x + p.speedX + canvas.width) % canvas.width;
+                p.y = (p.y + p.speedY + canvas.height) % canvas.height;
                 
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
@@ -1702,144 +1942,94 @@ class AnimationsManager {
                 ctx.fill();
             });
             
-            requestAnimationFrame(animateFallback);
+            requestAnimationFrame(animate);
         };
         
-        animateFallback();
+        animate();
     }
     
     initBrainFallback(canvas) {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
         
-        canvas.width = canvas.offsetWidth || window.innerWidth;
-        canvas.height = canvas.offsetHeight || window.innerHeight;
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
         
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
+        const nodeCount = this.shouldUseOptimizedMode ? 60 : 80;
         
-        const brainNodes = [];
-        for (let i = 0; i < 80; i++) {
-            const angle = (i / 80) * Math.PI * 2;
-            const radius = 100 + Math.random() * 50;
-            brainNodes.push({
+        // LARGER fallback brain
+        const nodes = Array(nodeCount).fill().map((_, i) => {
+            const angle = (i / nodeCount) * Math.PI * 2;
+            const radius = 120 + Math.random() * 60; // Increased from 80 + 40
+            return {
                 x: centerX + Math.cos(angle) * radius,
                 y: centerY + Math.sin(angle) * radius,
-                size: 3 + Math.random() * 4,
-                baseSize: 3 + Math.random() * 4,
+                size: 2 + Math.random() * 3,
                 pulse: Math.random() * Math.PI * 2,
-                pulseSpeed: 0.5 + Math.random() * 1.5,
-                connections: [],
+                pulseSpeed: 0.6 + Math.random() * 1.0, // Slower for smoothness
                 isHighlighted: false
-            });
-        }
-        
-        // Crear conexiones
-        brainNodes.forEach((node, i) => {
-            node.connections = [];
-            for (let j = i + 1; j < brainNodes.length; j++) {
-                const dx = node.x - brainNodes[j].x;
-                const dy = node.y - brainNodes[j].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance < 120) {
-                    node.connections.push(j);
-                }
-            }
+            };
         });
         
-        // Secuencia de destacado
         let highlightIndex = 0;
-        const highlightSequence = () => {
+        const highlightNodes = () => {
             if (this.introSkipped || this.currentPhase !== 4) return;
             
-            brainNodes.forEach(node => node.isHighlighted = false);
+            nodes.forEach(node => node.isHighlighted = false);
             
-            // Destacar un grupo de nodos
-            for (let i = 0; i < 5; i++) {
-                const idx = (highlightIndex + i) % brainNodes.length;
-                brainNodes[idx].isHighlighted = true;
+            for (let i = 0; i < 8; i++) {
+                const idx = (highlightIndex + i) % nodes.length;
+                nodes[idx].isHighlighted = true;
             }
             
-            highlightIndex = (highlightIndex + 5) % brainNodes.length;
-            setTimeout(highlightSequence, 2000);
+            highlightIndex = (highlightIndex + 8) % nodes.length;
+            setTimeout(highlightNodes, 2500);
         };
         
-        setTimeout(highlightSequence, 1000);
+        setTimeout(highlightNodes, 500);
         
-        const animateBrainFallback = () => {
+        const animate = () => {
             if (this.currentPhase !== 4 || this.introSkipped) return;
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            const time = Date.now() * 0.001;
-            
-            // Dibujar conexiones
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-            ctx.lineWidth = 1;
-            
-            brainNodes.forEach((node, i) => {
-                node.connections.forEach(j => {
-                    const target = brainNodes[j];
-                    ctx.beginPath();
-                    ctx.moveTo(node.x, node.y);
-                    ctx.lineTo(target.x, target.y);
-                    ctx.stroke();
-                });
-            });
-            
-            // Dibujar nodos
-            brainNodes.forEach(node => {
-                node.pulse += node.pulseSpeed * 0.02;
-                const pulseScale = 1 + Math.sin(node.pulse) * 0.4;
+            nodes.forEach(node => {
+                node.pulse += node.pulseSpeed * 0.015; // Slower animation
+                const pulseScale = 1 + Math.sin(node.pulse) * 0.25;
                 
-                let size = node.baseSize;
-                let opacity = 0.7;
-                
-                if (node.isHighlighted) {
-                    size = node.baseSize * 1.8;
-                    opacity = 0.9;
-                }
+                const size = node.size * (node.isHighlighted ? 1.5 : 1);
+                const opacity = node.isHighlighted ? 0.9 : 0.6;
                 
                 ctx.beginPath();
                 ctx.arc(node.x, node.y, size * pulseScale, 0, Math.PI * 2);
                 ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
                 ctx.fill();
                 
-                // Efecto de brillo para nodos destacados
                 if (node.isHighlighted) {
                     ctx.beginPath();
-                    ctx.arc(node.x, node.y, (size * pulseScale) + 5, 0, Math.PI * 2);
-                    ctx.strokeStyle = `rgba(255, 255, 255, 0.4)`;
-                    ctx.lineWidth = 2;
+                    ctx.arc(node.x, node.y, (size * pulseScale) + 3, 0, Math.PI * 2);
+                    ctx.strokeStyle = `rgba(255, 255, 255, 0.3)`;
+                    ctx.lineWidth = 1;
                     ctx.stroke();
                 }
             });
             
-            // Efecto de escaneo circular
-            const scanRadius = 150 + Math.sin(time * 0.5) * 30;
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, scanRadius, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            
-            requestAnimationFrame(animateBrainFallback);
+            requestAnimationFrame(animate);
         };
         
-        animateBrainFallback();
+        animate();
     }
 
     // ========================================
-    // UTILITY FUNCTIONS
+    // UTILITY FUNCTIONS (OPTIMIZED)
     // ========================================
     
     navigateToPage(pageName) {
         if (this.currentPage === pageName) return;
-
-        const previousPage = this.currentPage;
         this.currentPage = pageName;
-
-        console.log(`Navigating from ${previousPage} to ${pageName}`);
+        console.log(`Navigating to ${pageName}`);
     }
 
     queueAnimation(callback, priority = 0) {
@@ -1869,40 +2059,24 @@ class AnimationsManager {
         this.rafCallbacks.delete(callback);
     }
 
-    runRAFCallbacks() {
-        this.rafCallbacks.forEach(callback => {
-            try {
-                callback();
-            } catch (error) {
-                console.error('RAF callback error:', error);
-                this.rafCallbacks.delete(callback);
-            }
-        });
-        requestAnimationFrame(() => this.runRAFCallbacks());
-    }
-
     destroy() {
+        console.log('🗑️ Destroying AnimationsManager...');
+        
         this.animationQueue = [];
         this.rafCallbacks.clear();
         this.isAnimating = false;
+        
         this.stopAllAudio();
-        this.cleanupThree();
+        this.cleanupTerrain();
         this.cleanupBrain();
+        this.cleanupSkipFunctionality();
         
-        if (this.skipHoldInterval) {
-            clearInterval(this.skipHoldInterval);
-        }
-        
-        if (this.skipHandler) {
-            document.removeEventListener('keydown', this.skipHandler);
-        }
-        if (this.skipKeyUpHandler) {
-            document.removeEventListener('keyup', this.skipKeyUpHandler);
-        }
+        this.initialized = false;
+        console.log('✅ AnimationsManager destroyed');
     }
 }
 
-// Exportar e instanciar
+// Export and instantiate
 export const animationsManager = new AnimationsManager();
 window.animationsManager = animationsManager;
 export default animationsManager;

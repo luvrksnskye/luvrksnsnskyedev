@@ -25,30 +25,6 @@
     <link rel="stylesheet" href="/src/css/work.css">
     <link rel="stylesheet" href="/src/css/responsive.css">
     <link rel="stylesheet" href="/src/css/intro.css">
-    <script src="https://iframe.chat/scripts/main.min.js"></script>
-<script type="module">
-    import { VFX } from "https://esm.sh/@vfx-js/core@0.5.2";
-    window.VFX = VFX;
-    console.log('VFX loaded successfully');
-</script>
-    <!-- THREE.JS & DEPENDENCIES -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/MTLLoader.js"></script>
-    
-    <!-- GSAP para animaciones -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    
-    <!-- Spline Loader -->
-    <script type="module">
-        import { SplineLoader } from 'https://unpkg.com/@splinetool/loader@1.9.0/build/SplineLoader.js';
-        window.SplineLoader = SplineLoader;
-    </script>
 
 </head>
 
@@ -2440,6 +2416,19 @@
        <!-- ========================================
                     SISTEMA MODULAR JS
          ======================================== -->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/MTLLoader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+        <script src="https://iframe.chat/scripts/main.min.js"></script>
+<script type="module">
+    import { VFX } from "https://esm.sh/@vfx-js/core@0.5.2";
+    window.VFX = VFX;
+    console.log('VFX loaded successfully');
+</script>
     <script type="module" src="/src/index.js"></script>
     <script>
                         chattable.initialize({

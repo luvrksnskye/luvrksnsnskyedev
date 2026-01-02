@@ -49,6 +49,34 @@ async function initializeApp() {
             }
         }));
         
+        // ==========================================
+        // 🌟 STELLAR INTRO AUTO-START
+        // ==========================================
+        // Iniciar la intro stellar automáticamente después de que todo esté listo
+        setTimeout(() => {
+            const animationsManager = coreManager.getManager('animations');
+            
+            if (animationsManager && animationsManager.initialized) {
+                console.log('🌟 Starting Enhanced Stellar Intro...');
+                animationsManager.startStellarIntro();
+            } else {
+                console.warn('⚠️ AnimationsManager not ready, retrying in 1 second...');
+                
+                // Retry después de 1 segundo
+                setTimeout(() => {
+                    const am = coreManager.getManager('animations');
+                    if (am && am.initialized) {
+                        console.log('🌟 Starting Enhanced Stellar Intro (retry)...');
+                        am.startStellarIntro();
+                    } else {
+                        console.error('❌ Could not auto-start Stellar Intro');
+                        console.log('💡 Start manually with: window.animationsManager.startStellarIntro()');
+                    }
+                }, 1000);
+            }
+        }, 500); // Pequeño delay para asegurar que el DOM esté listo
+        // ==========================================
+        
     } catch (error) {
         console.error('❌ Application initialization failed:', error);
     }
@@ -108,9 +136,33 @@ window.app = {
     destroy: () => coreManager?.destroy(),
     
     // Loader reference
-    loader: loaderManager
+    loader: loaderManager,
+    
+    // ==========================================
+    // 🌟 STELLAR INTRO CONTROLS
+    // ==========================================
+    // Métodos de utilidad para controlar la intro
+    startIntro: () => {
+        const am = coreManager?.getManager('animations');
+        if (am && am.initialized) {
+            am.startStellarIntro();
+            console.log('🌟 Stellar Intro started manually');
+        } else {
+            console.error('❌ AnimationsManager not ready');
+        }
+    },
+    
+    skipIntro: () => {
+        const am = coreManager?.getManager('animations');
+        if (am) {
+            am.skipToMain();
+            console.log('⏭️ Stellar Intro skipped');
+        }
+    }
+    // ==========================================
 };
 
 console.log('📦 Skye Journey Module System v2.0.0 loaded');
 console.log('⏳ Waiting for preloader to complete...');
 console.log('💡 Access via: window.app');
+console.log('🌟 Stellar Intro will start automatically after preloader');
