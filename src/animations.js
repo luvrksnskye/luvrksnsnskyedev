@@ -36,6 +36,7 @@ class AnimationsManager {
             bgMusicLoop: null,
             voiceIntro: null,
             voiceDataDisplay: null,
+            voiceDataEarth: null,
             voiceDataUser: null,
             voiceFinal: null,
             transitions: [],
@@ -587,6 +588,7 @@ class AnimationsManager {
             
             this.stellarAudio.voiceIntro = loadAudio('/src/starvortex_assets/voice_intro.mp3', this.volumes.voiceIntro);
             this.stellarAudio.voiceDataDisplay = loadAudio('/src/starvortex_assets/voice-data-display.mp3', this.volumes.voiceDataDisplay);
+            this.stellarAudio.voiceDataEarth = loadAudio('/src/starvortex_assets/voice-data-earth.mp3', this.volumes.voiceDataDisplay);
             this.stellarAudio.voiceDataUser = loadAudio('/src/starvortex_assets/voice-data-user.mp3', this.volumes.voiceDataUser);
             this.stellarAudio.voiceFinal = loadAudio('/src/starvortex_assets/voice-final.mp3', this.volumes.voiceFinal);
             
@@ -927,7 +929,7 @@ class AnimationsManager {
     }
 
     // ========================================
-    // PHASE 3: MULTI-TERRAIN VISUALIZATION (50 SECONDS)
+    // PHASE 3: MULTI-TERRAIN VISUALIZATION (160 SECONDS)
     // ========================================
     
     async playStellarPhase3() {
@@ -953,6 +955,12 @@ class AnimationsManager {
             }
             
             this.animateGlobeData();
+            
+            // Play voice-data-earth audio
+            setTimeout(() => {
+                if (this.introSkipped) return;
+                this.playAudio(this.stellarAudio.voiceDataEarth);
+            }, 3000);
             
             // Extended duration: 160 seconds for terrain (80s x 2)
             setTimeout(() => {
