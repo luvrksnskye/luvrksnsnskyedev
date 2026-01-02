@@ -15,7 +15,7 @@ class AboutManager {
             name: "Skye",
             role: "Creative Developer & Designer",
             avatar: "https://dl.dropbox.com/scl/fi/nrgsz0vtcnwgd9msz1nzh/puppy.JPG?rlkey=jen8najj04sih3gw2pxeymq35&st=hvyte78j&dl=0",
-            bio: `I'm Skye, a web development, game development, and web design enthusiast based in Venezuela. I've always loved creating things. Making hand-coded websites with HTML/CSS/JS is my latest obsession. Growing up, my parents repeatedly told me to get off the computer and go outside. The OG Touch Grass™ lol. That's how I learned how to code (thanks, <a href="https://neocities.org/" target="_blank" class="neocities-link"><strong>Neocities ↗</strong></a>), and from that, I'm never able to stop doing it. Officially coding since 2023, so be nice to me, waa.<br><br>
+            bio: `I'm Skye, a web development, game development, and web design enthusiast based in Venezuela. I've always loved creating things. Making hand-coded websites with HTML/CSS/JS is my latest obsession. Growing up, my parents repeatedly told me to get off the computer and go outside. The OG Touch Grassâ„¢ lol. That's how I learned how to code (thanks, <a href="https://neocities.org/" target="_blank" class="neocities-link"><strong>Neocities â†—</strong></a>), and from that, I'm never able to stop doing it. Officially coding since 2023, so be nice to me, waa.<br><br>
 
  I always had an obsession with video games! So it is pretty normal that I'm always trying to play some during my free time. Especially Nintendo 3DS games. Currently interested in game dev, so I learned how to use Godot Engine. My love for all of this started a long time ago, but I didn't start coding right away; it was more like "experimenting and doing random things until something works or not!", so yeah, more than coding, I always went more down the path of hardware, cybersecurity, and OS at the beginning. Linux lover, btw, I started with Arch and then Debian. Now I'm just a boring macOS user. Some days I miss Linux, tho.<br><br>
 
@@ -75,7 +75,6 @@ Today, when I'm not working or sleeping all day after studying, you can usually 
         this.renderLocation();
 
         this.initialized = true;
-        console.log('✅ About Manager module loaded');
     }
 
     renderProfile() {
@@ -137,7 +136,7 @@ Today, when I'm not working or sleeping all day after studying, you can usually 
 
         this.locationContainer.innerHTML = `
             <div class="location-header">
-                <div class="location-icon">📍</div>
+                <div class="location-icon">ðŸ“</div>
                 <div class="location-info">
                     <h3>Current Location</h3>
                     <p>${this.locationData.city}, ${this.locationData.country}</p>

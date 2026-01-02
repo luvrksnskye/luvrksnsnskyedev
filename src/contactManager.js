@@ -19,10 +19,10 @@ class ContactManager {
 
         this.dialogVariations = {
             greeting: [
-                "Hey there! I'm so happy you want to get in touch! ✨",
-                "Hi! Oh my gosh, I love when people reach out! 💙",
-                "Hello! Thanks for stopping by to chat! 🌟",
-                "Hey! So excited to hear from you! 💫"
+                "Hey there! I'm so happy you want to get in touch! âœ¨",
+                "Hi! Oh my gosh, I love when people reach out! ðŸ’™",
+                "Hello! Thanks for stopping by to chat! ðŸŒŸ",
+                "Hey! So excited to hear from you! ðŸ’«"
             ],
             intro: [
                 "Let me ask you a few quick questions so I can get back to you properly.",
@@ -37,10 +37,10 @@ class ContactManager {
                 "What email should I use to get back to you?"
             ],
             emailConfirm: [
-                "Perfect! Got it! 📧",
-                "Awesome, thank you! ✨",
-                "Great, saved! 💙",
-                "Perfect, all set! 🌟"
+                "Perfect! Got it! ðŸ“§",
+                "Awesome, thank you! âœ¨",
+                "Great, saved! ðŸ’™",
+                "Perfect, all set! ðŸŒŸ"
             ],
             askName: [
                 "Now, what should I call you? (Your name or username)",
@@ -49,10 +49,10 @@ class ContactManager {
                 "What would you like me to call you?"
             ],
             greetName: [
-                "Nice to meet you, {username}! 💫",
-                "Hey {username}! Love that name! ✨",
-                "So good to meet you, {username}! 💙",
-                "{username}! What a great name! 🌟"
+                "Nice to meet you, {username}! ðŸ’«",
+                "Hey {username}! Love that name! âœ¨",
+                "So good to meet you, {username}! ðŸ’™",
+                "{username}! What a great name! ðŸŒŸ"
             ],
             askTopic: [
                 "What would you like to talk about? (Project collaboration, feedback, just saying hi, etc.)",
@@ -67,10 +67,10 @@ class ContactManager {
                 "Cool! Now spill - what's this all about?"
             ],
             thanks: [
-                "Thank you so much for reaching out, {username}! 💙",
-                "This was so nice, {username}! Thanks for chatting! ✨",
-                "I really appreciate you taking the time, {username}! 💫",
-                "You're awesome for reaching out, {username}! 🌟"
+                "Thank you so much for reaching out, {username}! ðŸ’™",
+                "This was so nice, {username}! Thanks for chatting! âœ¨",
+                "I really appreciate you taking the time, {username}! ðŸ’«",
+                "You're awesome for reaching out, {username}! ðŸŒŸ"
             ],
             followUp: [
                 "I'll get back to you at {email} as soon as possible!",
@@ -79,10 +79,10 @@ class ContactManager {
                 "Watch your inbox at {email} - I'll reply fast!"
             ],
             sending: [
-                "Sending your message now... ✉️",
-                "Alright, firing off your message! 🚀",
-                "Okay, sending this over! 💌",
-                "Message away! 📨"
+                "Sending your message now... âœ‰ï¸",
+                "Alright, firing off your message! ðŸš€",
+                "Okay, sending this over! ðŸ’Œ",
+                "Message away! ðŸ“¨"
             ]
         };
 
@@ -118,7 +118,7 @@ class ContactManager {
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     return emailRegex.test(value);
                 },
-                errorMessage: "Hmm, that doesn't look like a valid email. Could you try again? 📧"
+                errorMessage: "Hmm, that doesn't look like a valid email. Could you try again? ðŸ“§"
             },
             {
                 type: 'skye',
@@ -132,7 +132,7 @@ class ContactManager {
                 waitForInput: true,
                 inputType: 'username',
                 validation: (value) => value.trim().length >= 2,
-                errorMessage: "I need at least 2 characters for your name! ✨"
+                errorMessage: "I need at least 2 characters for your name! âœ¨"
             },
             {
                 type: 'skye',
@@ -146,7 +146,7 @@ class ContactManager {
                 waitForInput: true,
                 inputType: 'topic',
                 validation: (value) => value.trim().length >= 3,
-                errorMessage: "Could you give me a bit more detail? At least 3 characters! 💭",
+                errorMessage: "Could you give me a bit more detail? At least 3 characters! ðŸ’­",
                 checkKeywords: true
             },
             {
@@ -156,7 +156,7 @@ class ContactManager {
                 waitForInput: true,
                 inputType: 'message',
                 validation: (value) => value.trim().length >= 10,
-                errorMessage: "I'd love to hear more! Please write at least 10 characters. 💬",
+                errorMessage: "I'd love to hear more! Please write at least 10 characters. ðŸ’¬",
                 checkKeywords: true
             },
             {
@@ -192,13 +192,11 @@ class ContactManager {
         this.sendButton = document.getElementById('sendButton');
 
         if (!this.contactContainer) {
-            console.warn('Contact container not found');
             return;
         }
 
         this.setupEventListeners();
         this.initialized = true;
-        console.log('✅ Contact Manager module loaded');
     }
 
     setupEventListeners() {
@@ -242,7 +240,7 @@ class ContactManager {
     detectSpecialKeywords(text) {
         const lower = text.toLowerCase();
 
-        if (lower.includes('love') || lower.includes('amo') || lower.includes('❤️') || lower.includes('💕')) {
+        if (lower.includes('love') || lower.includes('amo') || lower.includes('â¤ï¸') || lower.includes('ðŸ’•')) {
             const responses = [
                 "Aww, sending love right back!",
                 "That's so sweet! ily ily ilyyyy",
@@ -253,27 +251,27 @@ class ContactManager {
 
         if (lower.includes('urgent') || lower.includes('urgente') || lower.includes('asap') || lower.includes('emergency')) {
             const responses = [
-                "Got it, I'll prioritize this! 🚀",
-                "On it! I'll get back to you ASAP! ⚡",
-                "Understood - marking this as urgent! 🔥"
+                "Got it, I'll prioritize this! ðŸš€",
+                "On it! I'll get back to you ASAP! âš¡",
+                "Understood - marking this as urgent! ðŸ”¥"
             ];
             return responses[Math.floor(Math.random() * responses.length)];
         }
 
         if (lower.includes('thank') || lower.includes('gracias') || lower.includes('thanks')) {
             const responses = [
-                "Of course! Happy to help! ✨",
-                "No problem at all! 💙",
-                "Anytime! That's what I'm here for! 🌟"
+                "Of course! Happy to help! âœ¨",
+                "No problem at all! ðŸ’™",
+                "Anytime! That's what I'm here for! ðŸŒŸ"
             ];
             return responses[Math.floor(Math.random() * responses.length)];
         }
 
         if (lower.includes('collab') || lower.includes('project') || lower.includes('trabajo') || lower.includes('partner')) {
             const responses = [
-                "Ooh, I love collaborations! Can't wait to hear more! 🤝✨",
-                "Collaboration? Yes please! Tell me everything! 💫",
-                "I'm so down to work together! This is exciting! 🌟"
+                "Ooh, I love collaborations! Can't wait to hear more! ðŸ¤âœ¨",
+                "Collaboration? Yes please! Tell me everything! ðŸ’«",
+                "I'm so down to work together! This is exciting! ðŸŒŸ"
             ];
             return responses[Math.floor(Math.random() * responses.length)];
         }
@@ -281,17 +279,17 @@ class ContactManager {
         if (lower.includes('amazing') || lower.includes('awesome') || lower.includes('love your') || lower.includes('beautiful')) {
             const responses = [
                 "Omg thank you so much! That means a lot!",
-                "You're too kind! Thank you! 💙✨",
-                "Aww, you're making me blush! Thanks! 💕"
+                "You're too kind! Thank you! ðŸ’™âœ¨",
+                "Aww, you're making me blush! Thanks! ðŸ’•"
             ];
             return responses[Math.floor(Math.random() * responses.length)];
         }
 
         if ((lower.includes('just saying hi') || lower.includes('say hello') || lower.includes('hi') && lower.length < 30)) {
             const responses = [
-                "Hey! So nice of you to stop by! 👋💙",
-                "Hi! Love that you're here! ✨",
-                "Hello! Thanks for saying hi! 🌟"
+                "Hey! So nice of you to stop by! ðŸ‘‹ðŸ’™",
+                "Hi! Love that you're here! âœ¨",
+                "Hello! Thanks for saying hi! ðŸŒŸ"
             ];
             return responses[Math.floor(Math.random() * responses.length)];
         }
@@ -299,17 +297,17 @@ class ContactManager {
         if (lower.includes('question') || lower.includes('pregunta') || lower.includes('wondering') || lower.includes('?')) {
             const responses = [
                 "Ask away! I'm all ears!",
-                "I love questions! Fire away! 💭",
-                "Ooh, let's figure this out together! 🤔💙"
+                "I love questions! Fire away! ðŸ’­",
+                "Ooh, let's figure this out together! ðŸ¤”ðŸ’™"
             ];
             return responses[Math.floor(Math.random() * responses.length)];
         }
 
         if (lower.includes('fan') || lower.includes('admire') || lower.includes('inspire') || lower.includes('inspiration')) {
             const responses = [
-                "That's so incredibly sweet! Thank you! 🥺💕",
-                "You're gonna make me cry! Thank you so much! 💙✨",
-                "Wow, I'm honored! Thanks for the kind words! 🌟"
+                "That's so incredibly sweet! Thank you! ðŸ¥ºðŸ’•",
+                "You're gonna make me cry! Thank you so much! ðŸ’™âœ¨",
+                "Wow, I'm honored! Thanks for the kind words! ðŸŒŸ"
             ];
             return responses[Math.floor(Math.random() * responses.length)];
         }
@@ -499,15 +497,14 @@ class ContactManager {
             const data = await response.json();
 
             if (response.ok) {
-                await this.addSkyeMessage("Message sent successfully! ✨ I'll get back to you soon!");
+                await this.addSkyeMessage("Message sent successfully! âœ¨ I'll get back to you soon!");
                 soundManager?.play('imessageSent', 0.6);
             } else {
-                await this.addSkyeMessage(`Oops! ${data.error || 'Something went wrong.'} Could you try again or email me directly at luvrksnskyejourney@icloud.com? 💙`);
+                await this.addSkyeMessage(`Oops! ${data.error || 'Something went wrong.'} Could you try again or email me directly at luvrksnskyejourney@icloud.com? ðŸ’™`);
                 soundManager?.play('knock', 0.4);
             }
         } catch (error) {
-            console.error('Error sending email:', error);
-            await this.addSkyeMessage("Hmm, there was a connection issue. Please email me directly at luvrksnskyejourney@icloud.com! 💌");
+            await this.addSkyeMessage("Hmm, there was a connection issue. Please email me directly at luvrksnskyejourney@icloud.com! ðŸ’Œ");
             soundManager?.play('knock', 0.4);
         }
 

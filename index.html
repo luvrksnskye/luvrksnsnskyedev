@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="/src/css/loader.css">
     <link rel="stylesheet" href="/src/css/work.css">
     <link rel="stylesheet" href="/src/css/responsive.css">
+    <link rel="stylesheet" href="/src/css/intro.css">
     <script src="https://iframe.chat/scripts/main.min.js"></script>
 <script type="module">
     import { VFX } from "https://esm.sh/@vfx-js/core@0.5.2";
@@ -107,70 +108,365 @@
     </nav>
 
     <!-- Intro Screen -->
-    <div class="intro-screen" id="introScreen">
-        <div class="hero">
-            <h1 id="heroTitle">SKYE JOURNEY</h1>
+   <!-- ========================================
+     NEW STELLAR INTRO SEQUENCE - SKYEDEV
+     Phase 1: Voice Recognition & Subtitles
+     Phase 2: Data Visualization
+     Phase 3: Boarding Pass
+     ======================================== -->
+
+<div class="stellar-intro" id="stellarIntro">
+    
+    <!-- Skip Indicator -->
+    <div class="skip-indicator" id="skipIndicator">
+        <div class="skip-bracket left">[</div>
+        <div class="skip-content">
+            <svg class="skip-icon" viewBox="0 0 24 24">
+                <rect x="4" y="4" width="6" height="16" rx="1" fill="currentColor"/>
+                <rect x="14" y="4" width="6" height="16" rx="1" fill="currentColor"/>
+            </svg>
+            <span class="skip-text">HOLD SPACE TO SKIP</span>
+            <div class="skip-bar"></div>
+        </div>
+        <div class="skip-bracket right">]</div>
+    </div>
+    
+    <!-- Phase 1: Voice Authentication -->
+    <div class="intro-phase phase-voice" id="phaseVoice">
+        <div class="voice-container">
+            <!-- Animated waveform -->
+            <svg class="voice-waveform" viewBox="0 0 200 60">
+                <g class="wave-group">
+                    <rect class="wave-bar" x="10" y="25" width="3" height="10" rx="1.5"/>
+                    <rect class="wave-bar" x="18" y="20" width="3" height="20" rx="1.5"/>
+                    <rect class="wave-bar" x="26" y="15" width="3" height="30" rx="1.5"/>
+                    <rect class="wave-bar" x="34" y="10" width="3" height="40" rx="1.5"/>
+                    <rect class="wave-bar" x="42" y="18" width="3" height="24" rx="1.5"/>
+                    <rect class="wave-bar" x="50" y="22" width="3" height="16" rx="1.5"/>
+                    <rect class="wave-bar" x="58" y="12" width="3" height="36" rx="1.5"/>
+                    <rect class="wave-bar" x="66" y="8" width="3" height="44" rx="1.5"/>
+                    <rect class="wave-bar" x="74" y="16" width="3" height="28" rx="1.5"/>
+                    <rect class="wave-bar" x="82" y="20" width="3" height="20" rx="1.5"/>
+                    <rect class="wave-bar" x="90" y="14" width="3" height="32" rx="1.5"/>
+                    <rect class="wave-bar" x="98" y="18" width="3" height="24" rx="1.5"/>
+                    <rect class="wave-bar" x="106" y="10" width="3" height="40" rx="1.5"/>
+                    <rect class="wave-bar" x="114" y="22" width="3" height="16" rx="1.5"/>
+                    <rect class="wave-bar" x="122" y="12" width="3" height="36" rx="1.5"/>
+                    <rect class="wave-bar" x="130" y="16" width="3" height="28" rx="1.5"/>
+                    <rect class="wave-bar" x="138" y="20" width="3" height="20" rx="1.5"/>
+                    <rect class="wave-bar" x="146" y="15" width="3" height="30" rx="1.5"/>
+                    <rect class="wave-bar" x="154" y="18" width="3" height="24" rx="1.5"/>
+                    <rect class="wave-bar" x="162" y="10" width="3" height="40" rx="1.5"/>
+                    <rect class="wave-bar" x="170" y="22" width="3" height="16" rx="1.5"/>
+                    <rect class="wave-bar" x="178" y="14" width="3" height="32" rx="1.5"/>
+                    <rect class="wave-bar" x="186" y="20" width="3" height="20" rx="1.5"/>
+                </g>
+            </svg>
             
-            <div class="notifications-container">
-                <div class="notification">
-                    <div class="card"></div>
-                    <div class="icon"></div>
-                    <div class="content">
-                        <div class="header">
-                            <div class="title">Skye</div>
-                            <div class="time">9:41 AM</div>
-                        </div>
-                        <div class="message">Trying to craft beautiful digital experiences</div>
+            <!-- Subtitle display -->
+            <div class="subtitle-container">
+                <p class="subtitle-text" id="subtitleText"></p>
+            </div>
+            
+            <!-- Voice indicator -->
+            <div class="voice-indicator">
+                <div class="voice-ring"></div>
+                <div class="voice-ring"></div>
+                <div class="voice-ring"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phase 2: Data Visualization -->
+    <div class="intro-phase phase-data" id="phaseData">
+        <div class="data-container">
+            
+            <!-- Top Header Bar -->
+            <div class="data-header">
+                <svg class="header-icon" viewBox="0 0 24 24">
+                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" 
+                          fill="none" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <span class="header-label">STELLAR NAVIGATION</span>
+            </div>
+
+            <!-- Section Label -->
+            <div class="section-label">| ORBITAL COMMAND</div>
+
+            <!-- Data Bars -->
+            <div class="data-bars">
+                <!-- Bar 1 -->
+                <div class="data-bar">
+                    <div class="bar-left">
+                        <span class="bar-text typewriter" data-text="ENERGY_OUTPUT">ENERGY_OUTPUT</span>
+                        <span class="bar-sep">|</span>
+                        <span class="bar-text typewriter" data-text="CREW_STATUS">CREW_STATUS</span>
+                        <span class="bar-sep">|</span>
+                        <span class="bar-text typewriter" data-text="HULL_INTEGRITY">HULL_INTEGRITY</span>
+                    </div>
+                    <div class="bar-center">
+                        <div class="bar-badge scramble" data-final="INITIALIZING STELLAR DRIVE">INITIALIZING STELLAR DRIVE</div>
+                    </div>
+                    <div class="bar-right">
+                        <span class="bar-text">2387-03-15 | ◈ SOLAR WIND: 450 km/s</span>
                     </div>
                 </div>
-                
-                <div class="notification">
-                    <div class="card"></div>
-                    <div class="icon"></div>
-                    <div class="content">
-                        <div class="header">
-                            <div class="title">Skye</div>
-                            <div class="time">9:41 AM</div>
-                        </div>
-                        <div class="message">With attention to detail and passion for innovation</div>
+
+                <!-- Bar 2 - Gold -->
+                <div class="data-bar gold-bar">
+                    <div class="bar-left">
+                        <span class="bar-tag">PLASMA_FLOW</span>
+                        <span class="bar-tag">ANTIMATTER</span>
+                        <span class="bar-tag">QUANTUM_FIELD</span>
+                        <span class="bar-tag">GRAVITON_FLUX</span>
+                    </div>
+                    <div class="bar-center">
+                        <div class="bar-badge gold scramble" data-final="HYPERSPACE NAVIGATION CORE">HYPERSPACE NAVIGATION CORE</div>
+                    </div>
+                    <div class="bar-right">
+                        <span class="bar-text">2387-03-15 | ◈ NEBULA DENSITY: 2.1M/m³</span>
                     </div>
                 </div>
-                
-                <div class="notification">
-                    <div class="card"></div>
-                    <div class="icon"></div>
-                    <div class="content">
-                        <div class="header">
-                            <div class="title">Skye</div>
-                            <div class="time">9:41 AM</div>
-                        </div>
-                        <div class="message">Studying design for web and game development</div>
+
+                <!-- Bar 3 - Buttons -->
+                <div class="data-bar">
+                    <div class="bar-left">
+                        <span class="bar-title scramble" data-final="INTERSTELLAR COMMAND INTERFACE">INTERSTELLAR COMMAND INTERFACE</span>
+                        <span class="bar-chevrons">›››</span>
+                    </div>
+                    <div class="bar-center">
+                        <button class="bar-btn active">WARP_CORE</button>
+                        <button class="bar-btn">SHIELD_GRID</button>
+                        <button class="bar-btn">LIFE_SUPPORT</button>
+                    </div>
+                    <div class="bar-right">
+                        <span class="bar-text">2387-03-15 | ◈ RADIATION: 0.03 rads</span>
+                    </div>
+                </div>
+
+                <!-- Bar 4 - Bordered -->
+                <div class="data-bar bordered-bar">
+                    <div class="bar-title-large scramble" data-final="DEEP SPACE EXPLORATION PROTOCOL">DEEP SPACE EXPLORATION PROTOCOL</div>
+                    <div class="bar-buttons">
+                        <button class="bar-btn outline">SCANNERS</button>
+                        <button class="bar-btn outline">PROBES</button>
+                        <button class="bar-btn outline">ANALYSIS</button>
+                        <span class="bar-text">2387-03-15 | ◈ PARSECS: 12,847</span>
                     </div>
                 </div>
             </div>
-            
-          <button class="cta-button" id="startButton">Start</button>
 
-<script>
-const clickSoundUrl = 'https://dl.dropbox.com/scl/fi/kyolk2xpiinjup0o96s5c/command-press.mp3?rlkey=i5rd4cajqgguuldfhxl90cjm0&st=854pyd5h&dl=0';
+            <!-- Module Grid -->
+            <div class="section-label">| SUBSYSTEM MODULES</div>
+            <div class="module-grid">
+                <div class="module-row">
+                    <div class="module-btn typewriter" data-text="▶ QUANTUM MATRIX •">▶ QUANTUM MATRIX •</div>
+                    <div class="module-btn outline typewriter" data-text="▷ NEURAL LINK ///">▷ NEURAL LINK ///</div>
+                    <div class="module-btn filled typewriter" data-text="☆ VOID ENGINE..">☆ VOID ENGINE..</div>
+                </div>
+                <div class="module-row">
+                    <div class="module-btn highlight scramble" data-final="STAR FORGE PROTOCOL">STAR FORGE PROTOCOL</div>
+                    <div class="module-btn typewriter" data-text="■ PHOTON LANCE">■ PHOTON LANCE</div>
+                    <div class="module-btn filled-white scramble" data-final="■ COSMIC ANCHOR">■ COSMIC ANCHOR</div>
+                </div>
+                <div class="module-row">
+                    <div class="module-btn typewriter" data-text="• DARK MATTER FLOW.. ›››">• DARK MATTER FLOW.. ›››</div>
+                    <div class="module-btn scramble" data-final="◖ STELLAR CARTOGRAPHY">◖ STELLAR CARTOGRAPHY</div>
+                    <div class="module-btn dark typewriter" data-text="» Beyond the event horizon">» Beyond the event horizon</div>
+                </div>
+            </div>
 
-document.addEventListener('click', (e) => {
- 
-  if (e.target.closest('#startButton')) {
-    try {
-      const clickSound = new Audio(clickSoundUrl);
-      clickSound.volume = 0.9;
-      clickSound.play().catch(() => {}); 
-    } catch (err) {
-      console.error('Error playing sound:', err);
-    }
-  }
-}, true); 
-</script>
-
-
+            <!-- Footer -->
+            <div class="data-footer">
+                <div class="footer-logo">
+                    <span class="logo-circle">S</span>
+                    <span class="logo-text">STELLAR COMMAND</span>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Phase 3: Boarding Pass -->
+    <div class="intro-phase phase-boarding" id="phaseBoarding">
+        <div class="boarding-container">
+            
+            <!-- Left Side - Passenger Info -->
+            <div class="boarding-left">
+                <div class="boarding-header">
+                    <svg class="boarding-chevrons" viewBox="0 0 40 40">
+                        <path d="M8,10 L18,20 L8,30" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16,10 L26,20 L16,30" fill="none" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <span class="boarding-title">RUNAWAY</span>
+                </div>
+
+                <div class="passenger-section">
+                    <div class="passenger-label">PASSENGER</div>
+                    <div class="passenger-name">
+                        <span class="name-prefix">MISS.</span>
+                        <span class="name-main">SKYEDEV</span>
+                    </div>
+                    
+                    <!-- Diagonal stripes -->
+                    <svg class="diagonal-stripes" viewBox="0 0 100 40">
+                        <pattern id="stripes" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                            <rect width="5" height="10" fill="currentColor"/>
+                        </pattern>
+                        <rect width="100" height="40" fill="url(#stripes)" opacity="0.3"/>
+                    </svg>
+                    
+                    <!-- Coordinates -->
+                    <div class="coordinates">
+                        <div class="coord-value">35.7120° N</div>
+                        <div class="coord-value">139.7876° E</div>
+                    </div>
+                </div>
+
+                <div class="boarding-time">
+                    <div class="time-label">BOARDING</div>
+                    <div class="time-value">TM.16.20</div>
+                </div>
+
+                <div class="journey-section">
+                    <div class="journey-from">
+                        <div class="journey-label">FROM</div>
+                        <div class="journey-value">THE NOISE</div>
+                    </div>
+                    <div class="journey-to">
+                        <div class="journey-label">TO</div>
+                        <div class="journey-value">A NEW CHAPTER</div>
+                    </div>
+                </div>
+
+                <div class="status-section">
+                    <svg class="status-arrow" viewBox="0 0 24 24">
+                        <path d="M7 7l10 10M17 7l-10 10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M14 3l7 7M21 10l-7 7" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <div class="status-text">STATUS: PROCESSING</div>
+                    
+                    <!-- QR Code placeholder -->
+                    <svg class="qr-code" viewBox="0 0 100 60">
+                        <rect x="5" y="5" width="8" height="8" fill="currentColor"/>
+                        <rect x="18" y="5" width="8" height="8" fill="currentColor"/>
+                        <rect x="31" y="5" width="8" height="8" fill="currentColor"/>
+                        <rect x="5" y="18" width="8" height="8" fill="currentColor"/>
+                        <rect x="31" y="18" width="8" height="8" fill="currentColor"/>
+                        <rect x="5" y="31" width="8" height="8" fill="currentColor"/>
+                        <rect x="18" y="31" width="8" height="8" fill="currentColor"/>
+                        <rect x="31" y="31" width="8" height="8" fill="currentColor"/>
+                        <rect x="44" y="5" width="8" height="8" fill="currentColor"/>
+                        <rect x="57" y="5" width="8" height="8" fill="currentColor"/>
+                        <rect x="44" y="18" width="8" height="8" fill="currentColor"/>
+                        <rect x="57" y="18" width="8" height="8" fill="currentColor"/>
+                        <rect x="44" y="31" width="8" height="8" fill="currentColor"/>
+                        <rect x="70" y="5" width="8" height="8" fill="currentColor"/>
+                        <rect x="83" y="5" width="8" height="8" fill="currentColor"/>
+                        <rect x="70" y="18" width="8" height="8" fill="currentColor"/>
+                        <rect x="83" y="18" width="8" height="8" fill="currentColor"/>
+                        <rect x="57" y="31" width="8" height="8" fill="currentColor"/>
+                        <rect x="70" y="31" width="8" height="8" fill="currentColor"/>
+                        <rect x="83" y="31" width="8" height="8" fill="currentColor"/>
+                    </svg>
+                </div>
+
+                <div class="boarding-footer">
+                    <div class="footer-icon">◉</div>
+                    <div class="footer-message">ten thousand voices fill your broken soul, just fade away you know there's nothing here to make us stay, headed out far away where no one knows ya.</div>
+                </div>
+            </div>
+
+            <!-- Right Side - Gate Info -->
+            <div class="boarding-right">
+                <div class="gate-header">
+                    <svg class="gate-chevrons" viewBox="0 0 40 40">
+                        <path d="M8,10 L18,20 L8,30" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16,10 L26,20 L16,30" fill="none" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <svg class="gate-expand" viewBox="0 0 24 24">
+                        <path d="M4 8l4-4 4 4M16 16l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/>
+                    </svg>
+                </div>
+
+                <div class="gate-label">GATE</div>
+                <div class="gate-number">A6</div>
+
+                <!-- Barcode Section -->
+                <div class="barcode-section">
+                    <div class="passenger-id">PASSENGER ID</div>
+                    <div class="id-number">SKYEDEV_2025</div>
+                    
+                    <!-- Barcode -->
+                    <svg class="barcode" viewBox="0 0 200 40">
+                        <rect x="5" y="0" width="2" height="40" fill="currentColor"/>
+                        <rect x="10" y="0" width="4" height="40" fill="currentColor"/>
+                        <rect x="18" y="0" width="2" height="40" fill="currentColor"/>
+                        <rect x="24" y="0" width="6" height="40" fill="currentColor"/>
+                        <rect x="34" y="0" width="2" height="40" fill="currentColor"/>
+                        <rect x="40" y="0" width="4" height="40" fill="currentColor"/>
+                        <rect x="48" y="0" width="2" height="40" fill="currentColor"/>
+                        <rect x="54" y="0" width="8" height="40" fill="currentColor"/>
+                        <rect x="66" y="0" width="2" height="40" fill="currentColor"/>
+                        <rect x="72" y="0" width="4" height="40" fill="currentColor"/>
+                        <rect x="80" y="0" width="2" height="40" fill="currentColor"/>
+                        <rect x="86" y="0" width="6" height="40" fill="currentColor"/>
+                        <rect x="96" y="0" width="2" height="40" fill="currentColor"/>
+                        <rect x="102" y="0" width="4" height="40" fill="currentColor"/>
+                        <rect x="110" y="0" width="2" height="40" fill="currentColor"/>
+                        <rect x="116" y="0" width="8" height="40" fill="currentColor"/>
+                        <rect x="128" y="0" width="2" height="40" fill="currentColor"/>
+                        <rect x="134" y="0" width="4" height="40" fill="currentColor"/>
+                        <rect x="142" y="0" width="2" height="40" fill="currentColor"/>
+                        <rect x="148" y="0" width="6" height="40" fill="currentColor"/>
+                        <rect x="158" y="0" width="2" height="40" fill="currentColor"/>
+                        <rect x="164" y="0" width="4" height="40" fill="currentColor"/>
+                        <rect x="172" y="0" width="2" height="40" fill="currentColor"/>
+                        <rect x="178" y="0" width="8" height="40" fill="currentColor"/>
+                        <rect x="190" y="0" width="2" height="40" fill="currentColor"/>
+                    </svg>
+                </div>
+
+                <div class="flight-info">
+                    <div class="info-label">ENTER THE FLIGHT</div>
+                    <div class="info-icons">
+                        <svg class="info-globe" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" 
+                                  fill="none" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <svg class="info-globe" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" 
+                                  fill="none" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="seat-number">SEAT <span>25-F</span></div>
+                </div>
+
+                <div class="date-stamp">
+                    <span class="date-label">FEB 25 2025</span>
+                </div>
+
+                <div class="bottom-barcode">
+                    <svg class="barcode-sm" viewBox="0 0 200 20">
+                        <rect x="0" y="0" width="2" height="20" fill="currentColor"/>
+                        <rect x="4" y="0" width="3" height="20" fill="currentColor"/>
+                        <rect x="9" y="0" width="2" height="20" fill="currentColor"/>
+                        <rect x="13" y="0" width="4" height="20" fill="currentColor"/>
+                        <rect x="19" y="0" width="2" height="20" fill="currentColor"/>
+                        <rect x="23" y="0" width="3" height="20" fill="currentColor"/>
+                        <rect x="28" y="0" width="2" height="20" fill="currentColor"/>
+                        <rect x="32" y="0" width="5" height="20" fill="currentColor"/>
+                        <rect x="39" y="0" width="2" height="20" fill="currentColor"/>
+                        <rect x="43" y="0" width="3" height="20" fill="currentColor"/>
+                        <rect x="48" y="0" width="2" height="20" fill="currentColor"/>
+                        <rect x="52" y="0" width="4" height="20" fill="currentColor"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- Main Screen (Home) -->
     <div class="main-screen" id="homeScreen">
@@ -348,7 +644,7 @@ document.addEventListener('click', (e) => {
                                                     <span class="tweet-username">@LuvrksnSkye</span>
                                                 </div>
                                             </div>
-                                            <p>spending 6 hours perfecting a button animation that nobody will notice because I have my priorities straight 😌✨</p>
+                                            <p>spending 6 hours perfecting a button animation that nobody will notice because I have my priorities straight ðŸ˜Œâœ¨</p>
                                         </div>
                                         <button class="twitter-button">
                                             <span>Read my tweets</span>
@@ -473,7 +769,7 @@ document.addEventListener('click', (e) => {
                             
                             <!-- Cute Text Below Highlights -->
                             <div class="highlights-description">
-                                <p>If you already know me, you may also see that I am the creator of <a href="https://luvrksknskyejourney.org/" target="_blank" class="website-link"><strong>luvrksknskyejourney↗</strong></a>! I find it quite funny to create things to express myself. A few months ago, I tried to make a portfolio on my GitHub,  but you know, time passes, so we need new things. So I made this, or at least I'm trying. Sometimes the most beautiful things are the ones we create with love and care, like a gentle whisper in the digital world.</p>
+                                <p>If you already know me, you may also see that I am the creator of <a href="https://luvrksknskyejourney.org/" target="_blank" class="website-link"><strong>luvrksknskyejourneyâ†—</strong></a>! I find it quite funny to create things to express myself. A few months ago, I tried to make a portfolio on my GitHub,  but you know, time passes, so we need new things. So I made this, or at least I'm trying. Sometimes the most beautiful things are the ones we create with love and care, like a gentle whisper in the digital world.</p>
                                 &nbsp;
                                 &nbsp;
                                 &nbsp;
@@ -481,7 +777,7 @@ document.addEventListener('click', (e) => {
                                   &nbsp;
                                 &nbsp;
                                 &nbsp;
-                                <p>If you want to see more about him, you can check his <a href="https://github.com/RegreDanger" target="_blank"> <strong>GitHub↗</strong></a> or... his violently-coolest <a href="https://regredanger.neocities.org/" target="_blank"> <strong>Website↗</strong></a>  that I also made for him! He is so cool tho, also such a nerdy,  but a cutie pie. I love him!</p>
+                                <p>If you want to see more about him, you can check his <a href="https://github.com/RegreDanger" target="_blank"> <strong>GitHubâ†—</strong></a> or... his violently-coolest <a href="https://regredanger.neocities.org/" target="_blank"> <strong>Websiteâ†—</strong></a>  that I also made for him! He is so cool tho, also such a nerdy,  but a cutie pie. I love him!</p>
                             </div>
                         </div>
                     </div>
@@ -498,7 +794,7 @@ document.addEventListener('click', (e) => {
                         <div class="about-panel-content">
                             
                             <div class="personal-thoughts">
-                                <p>I have native fluency in both <b>English</b> and <b>Spanish (Caribbean)</b>, and can speak in conversational <b>French/Français</b>, currently still learning. I also speak <b>Italian</b> and <b>German</b>, but at a very, very pre-school proficiency! ^^</p>
+                                <p>I have native fluency in both <b>English</b> and <b>Spanish (Caribbean)</b>, and can speak in conversational <b>French/FranÃ§ais</b>, currently still learning. I also speak <b>Italian</b> and <b>German</b>, but at a very, very pre-school proficiency! ^^</p>
                                 &nbsp;
                                 &nbsp;
                                 &nbsp;
@@ -666,7 +962,7 @@ document.addEventListener('click', (e) => {
                     </div>
                     
                     <div class="response-note">
-                        <p><strong>Note:</strong> I may take a bit longer to respond due to health considerations, but I read every message and will get back to you! 💙</p>
+                        <p><strong>Note:</strong> I may take a bit longer to respond due to health considerations, but I read every message and will get back to you! ðŸ’™</p>
                     </div>
                 </div>
             </div>
@@ -693,7 +989,7 @@ document.addEventListener('click', (e) => {
                     
                     <div class="guideline-card">
                         <h3 class="guideline-title">
-                            <span class="guideline-emoji">✨</span>
+                            <span class="guideline-emoji">âœ¨</span>
                             Free to Help
                         </h3>
                         <p class="guideline-description">
@@ -703,7 +999,7 @@ document.addEventListener('click', (e) => {
                     
                     <div class="guideline-card">
                         <h3 class="guideline-title">
-                            <span class="guideline-emoji">🌷</span>
+                            <span class="guideline-emoji">ðŸŒ·</span>
                             Love Collaborating
                         </h3>
                         <p class="guideline-description">
@@ -713,7 +1009,7 @@ document.addEventListener('click', (e) => {
                     
                     <div class="guideline-card">
                         <h3 class="guideline-title">
-                            <span class="guideline-emoji">🌸</span>
+                            <span class="guideline-emoji">ðŸŒ¸</span>
                             Always Learning
                         </h3>
                         <p class="guideline-description">
@@ -792,7 +1088,7 @@ document.addEventListener('click', (e) => {
     <!-- Expandable Info Panel -->
     <div class="sv-expandable-panel" id="sv-expandable-panel">
         <div class="sv-expandable-panel-header">
-            <span class="sv-panel-dot">■</span>
+            <span class="sv-panel-dot">â– </span>
             <span>// DATA </span>
         </div>
         <div class="sv-expandable-content">
@@ -813,7 +1109,7 @@ document.addEventListener('click', (e) => {
                         <span class="sv-info-stat-label">PROJECTS</span>
                     </div>
                     <div class="sv-info-stat">
-                        <span class="sv-info-stat-value">∞</span>
+                        <span class="sv-info-stat-value">âˆž</span>
                         <span class="sv-info-stat-label">PASSION</span>
                     </div>
                 </div>
@@ -821,12 +1117,12 @@ document.addEventListener('click', (e) => {
             
             <div class="sv-info-block">
                 <h3 class="sv-info-block-title">QUANTUM ANALYTICS</h3>
-                <p class="sv-info-block-text">DIVISION 01 — FOCUSED ON DATA ANALYSIS, BACKEND SYSTEMS, AND ANALYTICAL SOLUTIONS. TRANSFORMING RAW DATA INTO ACTIONABLE INSIGHTS.</p>
+                <p class="sv-info-block-text">DIVISION 01 â€” FOCUSED ON DATA ANALYSIS, BACKEND SYSTEMS, AND ANALYTICAL SOLUTIONS. TRANSFORMING RAW DATA INTO ACTIONABLE INSIGHTS.</p>
             </div>
             
             <div class="sv-info-block">
                 <h3 class="sv-info-block-title">ECHO STUDIOS</h3>
-                <p class="sv-info-block-text">DIVISION 02 — DEDICATED TO VIDEO GAME DEVELOPMENT, INTERACTIVE EXPERIENCES, AND CREATIVE DIGITAL PROJECTS.</p>
+                <p class="sv-info-block-text">DIVISION 02 â€” DEDICATED TO VIDEO GAME DEVELOPMENT, INTERACTIVE EXPERIENCES, AND CREATIVE DIGITAL PROJECTS.</p>
             </div>
             
             <div class="sv-info-block">
@@ -868,12 +1164,12 @@ document.addEventListener('click', (e) => {
             
             <!-- Labels -->
             <div class="sv-label sv-label-l">
-                <span class="sv-dot">■</span>
+                <span class="sv-dot">â– </span>
                 <span id="sv-label-l"></span>
             </div>
             <div class="sv-label sv-label-r">
                 <span id="sv-label-r"></span>
-                <span class="sv-dot">■</span>
+                <span class="sv-dot">â– </span>
             </div>
             
 <div class="sv-title-container">
@@ -906,7 +1202,7 @@ document.addEventListener('click', (e) => {
                 <div class="sv-dot-pattern" data-scan-group="skye"></div>
                 
                 <h2 class="sv-scan-title sv-scan-target sv-scroll-reveal" data-scan-id="skye" data-scroll-text="WHAT I'M INTO?"></h2>
-                <p class="sv-scan-subtitle">CREATIVE • DEVELOPER • CREATOR</p>
+                <p class="sv-scan-subtitle">CREATIVE â€¢ DEVELOPER â€¢ CREATOR</p>
                 
                 <!-- VISUAL DATA ASSETS - appear on scan -->
                 <img class="sv-scan-asset sv-asset-geo" src="/src/starvortex_assets/data_geo.webp" alt="" data-scan-group="skye">
@@ -917,7 +1213,7 @@ document.addEventListener('click', (e) => {
                 <!-- IDENTITY -->
                 <div class="sv-scan-panel sv-panel-tl" data-scan-group="skye">
                     <div class="sv-panel-content">
-                        <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// IDENTITY" data-effect="scramble"></span></div>
+                        <div class="sv-panel-header"><span class="sv-panel-dot">â– </span><span data-text="// IDENTITY" data-effect="scramble"></span></div>
                         <div class="sv-panel-grid">
                             <div class="sv-panel-data"><span class="sv-data-label" data-text="ALIAS" data-effect="type"></span><span class="sv-data-value" data-text="SKYE" data-effect="scramble"></span></div>
                             <div class="sv-panel-data"><span class="sv-data-label" data-text="DESIGNATION" data-effect="type"></span><span class="sv-data-value" data-text="DEV" data-effect="scramble"></span></div>
@@ -930,7 +1226,7 @@ document.addEventListener('click', (e) => {
                 <!-- BIOMETRICS -->
                 <div class="sv-scan-panel sv-panel-tr" data-scan-group="skye">
                     <div class="sv-panel-content">
-                        <div class="sv-panel-header"><span class="sv-panel-dot">■ ■</span><span data-text="// BIOMETRICS" data-effect="scramble"></span></div>
+                        <div class="sv-panel-header"><span class="sv-panel-dot">â–  â– </span><span data-text="// BIOMETRICS" data-effect="scramble"></span></div>
                         <div class="sv-bio-list">
                             <div class="sv-bio-row"><span data-text="AGE" data-effect="type"></span><span data-text="20" data-effect="scramble"></span></div>
                             <div class="sv-bio-row"><span data-text="LOCATION" data-effect="type"></span><span data-text="VENEZUELA" data-effect="scramble"></span></div>
@@ -945,7 +1241,7 @@ document.addEventListener('click', (e) => {
                 <!-- SKILLS -->
                 <div class="sv-scan-panel sv-panel-left" data-scan-group="skye">
                     <div class="sv-panel-content">
-                        <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// SKILL MATRIX" data-effect="scramble"></span><span class="sv-panel-plus">+</span></div>
+                        <div class="sv-panel-header"><span class="sv-panel-dot">â– </span><span data-text="// SKILL MATRIX" data-effect="scramble"></span><span class="sv-panel-plus">+</span></div>
                         <div class="sv-panel-skills">
                             <div class="sv-skill-item"><div class="sv-skill-row"><span class="sv-skill-name" data-text="WEB DEVELOPMENT" data-effect="scramble"></span><span class="sv-skill-pct" data-text="95%" data-effect="type"></span></div><div class="sv-skill-bar"><div class="sv-skill-fill" style="--fill: 95%"></div></div></div>
                             <div class="sv-skill-item"><div class="sv-skill-row"><span class="sv-skill-name" data-text="UI/UX DESIGN" data-effect="scramble"></span><span class="sv-skill-pct" data-text="90%" data-effect="type"></span></div><div class="sv-skill-bar"><div class="sv-skill-fill" style="--fill: 90%"></div></div></div>
@@ -964,7 +1260,7 @@ document.addEventListener('click', (e) => {
                 <!-- TECH SPECS -->
                 <div class="sv-scan-panel sv-panel-right" data-scan-group="skye">
                     <div class="sv-panel-content">
-                        <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// TECH STACK" data-effect="scramble"></span></div>
+                        <div class="sv-panel-header"><span class="sv-panel-dot">â– </span><span data-text="// TECH STACK" data-effect="scramble"></span></div>
                         <div class="sv-tech-list">
                             <span data-text="> HTML / CSS / JAVASCRIPT" data-effect="type"></span>
                             <span data-text="> REACT / TAILWIND / VITE" data-effect="type"></span>
@@ -978,7 +1274,7 @@ document.addEventListener('click', (e) => {
                 <!-- BIO -->
                 <div class="sv-scan-panel sv-panel-br" data-scan-group="skye">
                     <div class="sv-panel-content">
-                        <div class="sv-panel-header"><span class="sv-panel-dot">■ ■ ■</span><span data-text="// PROFILE" data-effect="scramble"></span><span class="sv-panel-plus">+</span></div>
+                        <div class="sv-panel-header"><span class="sv-panel-dot">â–  â–  â– </span><span data-text="// PROFILE" data-effect="scramble"></span><span class="sv-panel-plus">+</span></div>
                         <p class="sv-panel-bio" data-text="ART LOVER. PIXEL ARTIST. CAT PERSON. DRAGON ENTHUSIAST. CREATIVE DEV AT ECHO STUDIOS, STARVORTEX. PASSIONATE ABOUT CRAFTING BEAUTIFUL DIGITAL EXPERIENCES WITH ATTENTION TO DETAIL. ADVANCED MASTERY IN SHADERS AND CREATIVE CODING, ACHIEVING RESULTS WITH HIGH TECHNICAL PRECISION AND AESTHETIC QUALITY. EXPERIENCED IN INTERACTIVE DEVELOPMENT AND GAME DEVELOPMENT USING GODOT, INTEGRATING LOGIC, VISUALS, AND DESIGN. IN CYBERSECURITY, HAS LED TRAINING AND RIGOROUS TESTING IN CYBERWARFARE ENVIRONMENTS WITH STRATEGIC FOCUS. HANDLES OPERATING SYSTEMS AND NETWORKING AT ADVANCED LEVEL, SPECIALIZING IN ARCH LINUX AND BLACKARCH, AS WELL AS DEEP CONFIGURATION OF ENVIRONMENTS AND SHELLS. WORKS WITH PYTHON, RUST, AND SHELL SCRIPTING FOR TOOL DEVELOPMENT AND CONSOLE APPLICATIONS, ADAPTING TO CROSS-PLATFORM ENVIRONMENTS USING TECHNOLOGIES LIKE QML AND OBJECTIVE-C WHEN NECESSARY." data-effect="type"></p>
                     </div>
                 </div>
@@ -1078,7 +1374,7 @@ document.addEventListener('click', (e) => {
                             <text x="25" y="325" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7" letter-spacing="0.06em">> GODOT ENGINE / AFFINITY SUITE / FIGMA / GIT</text>
                             
                             <!-- Profile bio -->
-                            <text x="25" y="350" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="6" letter-spacing="0.06em">ART LOVER • PIXEL ARTIST • CAT PERSON • DRAGON ENTHUSIAST • LINUX LOVER</text>
+                            <text x="25" y="350" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="6" letter-spacing="0.06em">ART LOVER â€¢ PIXEL ARTIST â€¢ CAT PERSON â€¢ DRAGON ENTHUSIAST â€¢ LINUX LOVER</text>
                             
                             <!-- Scan animation -->
                             <rect class="sv-scan-line" x="10" y="10" width="380" height="2" fill="rgba(255,255,255,0.2)">
@@ -1192,7 +1488,7 @@ document.addEventListener('click', (e) => {
                 <div class="sv-dot-pattern" data-scan-group="projects"></div>
                 
                 <h2 class="sv-scan-title sv-scan-target sv-scroll-reveal" data-scan-id="projects" data-scroll-text="PERSONAL PROJECTS"></h2>
-                <p class="sv-scan-subtitle">CREATIVE WORKS • INDEPENDENT</p>
+                <p class="sv-scan-subtitle">CREATIVE WORKS â€¢ INDEPENDENT</p>
                 
                 <!-- VISUAL DATA ASSETS -->
                 <img class="sv-scan-asset sv-asset-geo sv-asset-geo-proj" src="/src/starvortex_assets/data_geo.webp" alt="" data-scan-group="projects">
@@ -1201,7 +1497,7 @@ document.addEventListener('click', (e) => {
                 <!-- SKYE JOURNEY -->
                 <div class="sv-scan-panel sv-panel-project-1" data-scan-group="projects">
                     <div class="sv-panel-content">
-                        <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// PROJECT ALPHA" data-effect="scramble"></span><span class="sv-panel-status" data-text="ACTIVE" data-effect="type"></span></div>
+                        <div class="sv-panel-header"><span class="sv-panel-dot">â– </span><span data-text="// PROJECT ALPHA" data-effect="scramble"></span><span class="sv-panel-status" data-text="ACTIVE" data-effect="type"></span></div>
                         <h3 class="sv-project-title" data-text="SKYE JOURNEY" data-effect="scramble"></h3>
                         <div class="sv-project-meta"><span data-text="TYPE: PERSONAL WEBSITE" data-effect="type"></span><span data-text="STATUS: IN DEVELOPMENT" data-effect="type"></span></div>
                         <p class="sv-project-desc" data-text="MY PERSONAL SAFE SPACE ON THE INTERNET. A COZY CORNER WHERE I SHARE BEAUTIFUL MOMENTS, THOUGHTS, AND PERSONAL THINGS FROM MY LIFE. DESIGNED TO FEEL WARM, INTIMATE, AND AUTHENTICALLY ME." data-effect="type"></p>
@@ -1212,7 +1508,7 @@ document.addEventListener('click', (e) => {
                 <!-- OUR INNER WORLD -->
               <div class="sv-scan-panel sv-panel-project-2" data-scan-group="projects">
     <div class="sv-panel-content">
-        <div class="sv-panel-header"><span class="sv-panel-dot">■ ■</span><span data-text="// PROJECT BETA" data-effect="scramble"></span><span class="sv-panel-status sv-status-dev" data-text="DEV" data-effect="type"></span></div>
+        <div class="sv-panel-header"><span class="sv-panel-dot">â–  â– </span><span data-text="// PROJECT BETA" data-effect="scramble"></span><span class="sv-panel-status sv-status-dev" data-text="DEV" data-effect="type"></span></div>
         <h3 class="sv-project-title" data-text="OUR INNER WORLD" data-effect="scramble"></h3>
         <p class="sv-project-subtitle" style="font-family: 'SV-Tech', monospace; font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 0.15em; margin: -5px 0 12px 0; text-transform: uppercase;" data-text="// DREAMERS JOURNEY" data-effect="scramble"></p>
         <div class="sv-project-meta">
@@ -1221,8 +1517,8 @@ document.addEventListener('click', (e) => {
             <span data-text="GENRE: PSYCHOLOGICAL HORROR / RPG" data-effect="type"></span>
             <span data-text="INSPIRED BY: OMORI" data-effect="type"></span>
         </div>
-        <p class="sv-project-desc" data-text="OURINNERWORLD COULD BE CONSIDERED THE CLOSEST THING TO AN OMORI FANGAME, BLENDING FORMULAS FROM MY FAVORITE CHILDHOOD VIDEO GAMES WITH A TOUCH OF LOVE—A GIFT FOR THOSE I CARE ABOUT MOST." data-effect="type"></p>
-        <p class="sv-project-desc sv-project-desc-long" data-text="I AM DEVELOPING THIS PROJECT SOLO AS A PERSONAL ENDEAVOR, WITH HELP FROM FRIENDS. THE DREAMERS JOURNEY TELLS A STORY STILL UNDER CONSTRUCTION BUT BUILT ON SOLID FOUNDATIONS. OUR PROTAGONIST, RAINY, FACES AN UNKNOWN WORLD IN THE HEADSPACE—ADVENTURES BEYOND THE STARS WITH NEW MECHANICS AND SYSTEMS, ALONGSIDE NEW COMPANIONS." data-effect="type"></p>
+        <p class="sv-project-desc" data-text="OURINNERWORLD COULD BE CONSIDERED THE CLOSEST THING TO AN OMORI FANGAME, BLENDING FORMULAS FROM MY FAVORITE CHILDHOOD VIDEO GAMES WITH A TOUCH OF LOVEâ€”A GIFT FOR THOSE I CARE ABOUT MOST." data-effect="type"></p>
+        <p class="sv-project-desc sv-project-desc-long" data-text="I AM DEVELOPING THIS PROJECT SOLO AS A PERSONAL ENDEAVOR, WITH HELP FROM FRIENDS. THE DREAMERS JOURNEY TELLS A STORY STILL UNDER CONSTRUCTION BUT BUILT ON SOLID FOUNDATIONS. OUR PROTAGONIST, RAINY, FACES AN UNKNOWN WORLD IN THE HEADSPACEâ€”ADVENTURES BEYOND THE STARS WITH NEW MECHANICS AND SYSTEMS, ALONGSIDE NEW COMPANIONS." data-effect="type"></p>
         <p class="sv-project-desc sv-project-desc-long" data-text="COLORFUL CHARACTERS AND ENEMIES AWAIT, BUT WHAT COULD BE HIDING BEHIND THIS DREAM COME TRUE? WHO KNOWS? PERHAPS DREAMS CAN BECOME DANGEROUS WHEN YOU'RE NO LONGER THE ONLY ONE IN CONTROL. THINGS CAN TURN DARK AND PERILOUS IF YOU LET YOUR GUARD DOWN." data-effect="type"></p>
         <div class="sv-project-warning">
             <span class="sv-warning-icon">!</span>
@@ -1239,8 +1535,8 @@ document.addEventListener('click', (e) => {
                 <!-- STATS -->
                 <div class="sv-scan-panel sv-panel-project-stats" data-scan-group="projects">
                     <div class="sv-panel-content">
-                        <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// STATS" data-effect="scramble"></span></div>
-                        <div class="sv-stats-grid"><div class="sv-stat"><span class="sv-stat-value" data-text="02" data-effect="scramble"></span><span class="sv-stat-label" data-text="ACTIVE" data-effect="type"></span></div><div class="sv-stat"><span class="sv-stat-value" data-text="∞" data-effect="scramble"></span><span class="sv-stat-label" data-text="PASSION" data-effect="type"></span></div></div>
+                        <div class="sv-panel-header"><span class="sv-panel-dot">â– </span><span data-text="// STATS" data-effect="scramble"></span></div>
+                        <div class="sv-stats-grid"><div class="sv-stat"><span class="sv-stat-value" data-text="02" data-effect="scramble"></span><span class="sv-stat-label" data-text="ACTIVE" data-effect="type"></span></div><div class="sv-stat"><span class="sv-stat-value" data-text="âˆž" data-effect="scramble"></span><span class="sv-stat-label" data-text="PASSION" data-effect="type"></span></div></div>
                     </div>
                 </div>
                 
@@ -1319,7 +1615,7 @@ document.addEventListener('click', (e) => {
         <section class="sv-section sv-grid-section" id="sv-sec-1" data-section-index="3">
             <div class="sv-content-grid sv-grid-3col">
                 <div class="sv-box sv-box-vid"><video class="sv-deco-vid" muted playsinline><source src="/src/starvortex_assets/exp_symbol_mark.webm" type="video/webm"></video></div>
-                <div class="sv-box sv-box-info"><div class="sv-box-header"><span class="sv-dot">■</span><span class="sv-ch" id="sv-ch1"></span></div><h2 class="sv-box-title" id="sv-title1"></h2><p class="sv-box-text" id="sv-text1"></p></div>
+                <div class="sv-box sv-box-info"><div class="sv-box-header"><span class="sv-dot">â– </span><span class="sv-ch" id="sv-ch1"></span></div><h2 class="sv-box-title" id="sv-title1"></h2><p class="sv-box-text" id="sv-text1"></p></div>
                 <div class="sv-box sv-box-vid"><video class="sv-deco-vid" muted playsinline><source src="/src/starvortex_assets/exp_symbol_focus.webm" type="video/webm"></video></div>
             </div>
         </section>
@@ -1327,16 +1623,16 @@ document.addEventListener('click', (e) => {
         <!-- DIVISIONS -->
         <section class="sv-section sv-grid-section" id="sv-sec-2" data-section-index="4">
             <div class="sv-content-grid sv-grid-3col">
-                <div class="sv-box sv-box-div"><div class="sv-box-header"><span class="sv-dot">■ ■</span><span class="sv-ch" id="sv-ch2"></span></div><h3 class="sv-box-subtitle" id="sv-sub1"></h3><p class="sv-box-text" id="sv-text2"></p></div>
+                <div class="sv-box sv-box-div"><div class="sv-box-header"><span class="sv-dot">â–  â– </span><span class="sv-ch" id="sv-ch2"></span></div><h3 class="sv-box-subtitle" id="sv-sub1"></h3><p class="sv-box-text" id="sv-text2"></p></div>
                 <div class="sv-box sv-box-vid"><video class="sv-deco-vid" muted playsinline><source src="/src/starvortex_assets/exp_symbol_exposition.webm" type="video/webm"></video></div>
-                <div class="sv-box sv-box-div"><div class="sv-box-header"><span class="sv-dot">■ ■</span><span class="sv-ch" id="sv-ch3"></span></div><h3 class="sv-box-subtitle" id="sv-sub2"></h3><p class="sv-box-text" id="sv-text3"></p></div>
+                <div class="sv-box sv-box-div"><div class="sv-box-header"><span class="sv-dot">â–  â– </span><span class="sv-ch" id="sv-ch3"></span></div><h3 class="sv-box-subtitle" id="sv-sub2"></h3><p class="sv-box-text" id="sv-text3"></p></div>
             </div>
         </section>
         
         <!-- MEMBERS SECTION -->
         <section class="sv-section sv-members-section" id="sv-members" data-section-index="5">
             <div class="sv-members-header">
-                <div class="sv-section-label"><span class="sv-dot">■ ■ ■</span><span id="sv-members-label"></span></div>
+                <div class="sv-section-label"><span class="sv-dot">â–  â–  â– </span><span id="sv-members-label"></span></div>
                 <h2 class="sv-members-title" id="sv-members-title"></h2>
                 <p class="sv-members-subtitle" id="sv-members-subtitle"></p>
             </div>
@@ -1635,17 +1931,17 @@ document.addEventListener('click', (e) => {
             
             <!-- Bottom stats with placeholders -->
             <text x="25" y="215" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">CLEARANCE</text>
-            <text x="25" y="230" fill="white" font-family="monospace" font-size="16" letter-spacing="0.15em">—</text>
+            <text x="25" y="230" fill="white" font-family="monospace" font-size="16" letter-spacing="0.15em">â€”</text>
             
             <text x="100" y="215" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">FRONTEND</text>
             <rect x="100" y="222" width="80" height="4" fill="rgba(255,255,255,0.15)"/>
             <rect x="100" y="222" width="0" height="4" fill="white"/>
-            <text x="185" y="228" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="8">—%</text>
+            <text x="185" y="228" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="8">â€”%</text>
             
             <text x="220" y="215" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">BACKEND</text>
             <rect x="220" y="222" width="80" height="4" fill="rgba(255,255,255,0.15)"/>
             <rect x="220" y="222" width="0" height="4" fill="white"/>
-            <text x="305" y="228" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="8">—%</text>
+            <text x="305" y="228" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="8">â€”%</text>
             
             <!-- Specializations placeholder -->
             <text x="25" y="260" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">SPECIALIZATIONS</text>
@@ -1735,7 +2031,7 @@ document.addEventListener('click', (e) => {
         <div class="sv-dot-pattern" data-scan-group="visions"></div>
         
         <h2 class="sv-scan-title sv-scan-target sv-scroll-reveal" data-scan-id="visions" data-scroll-text="OUR VISION">VISIONS</h2>
-        <p class="sv-scan-subtitle">BUILDING TOMORROW • TOGETHER</p>
+        <p class="sv-scan-subtitle">BUILDING TOMORROW â€¢ TOGETHER</p>
         
         <!-- VISUAL DATA ASSETS -->
         <img class="sv-scan-asset sv-asset-geo sv-asset-geo-visions" src="/src/starvortex_assets/data_geo.webp" alt="" data-scan-group="visions">
@@ -1786,7 +2082,7 @@ document.addEventListener('click', (e) => {
                     <ellipse fill="rgba(255,255,255,0.9)" filter="url(#sv-glow-intense)" cx="500" cy="500" rx="620.77" ry="18.12" transform="rotate(-40.11 500 500)"/>
                 </g>
                 
-                <!-- CORE - Núcleo central BLANCO -->
+                <!-- CORE - NÃºcleo central BLANCO -->
                 <g id="sv-core" class="sv-vortex-core">
                     <circle fill="white" filter="url(#sv-core-glow)" cx="500" cy="500" r="100"/>
                 </g>
@@ -1797,13 +2093,13 @@ document.addEventListener('click', (e) => {
         <div class="sv-scan-panel sv-panel-manifesto" data-scan-group="visions">
             <div class="sv-panel-content">
                 <div class="sv-panel-header">
-                    <span class="sv-panel-dot">■</span>
+                    <span class="sv-panel-dot">â– </span>
                     <span data-text="// VISIONS" data-effect="scramble"></span>
                 </div>
                 <h3 class="sv-manifesto-headline" data-text="BUILDING TOMORROW'S SYSTEMS WITH TODAY'S PASSION" data-effect="type"></h3>
                 <div class="sv-manifesto-text">
-                    <p data-text="STARVORTEX ISN'T JUST A COLLECTIVE—IT'S A CONVERGENCE OF CREATIVE MINDS WHO REFUSE TO COMPROMISE BETWEEN AESTHETICS AND FUNCTIONALITY." data-effect="type"></p>
-                    <p data-text="WE BELIEVE TECHNOLOGY SHOULD FEEL ALIVE. EVERY LINE OF CODE, EVERY PIXEL, EVERY INTERACTION MATTERS. WE DON'T BUILD APPS—WE CRAFT EXPERIENCES THAT RESONATE." data-effect="type"></p>
+                    <p data-text="STARVORTEX ISN'T JUST A COLLECTIVEâ€”IT'S A CONVERGENCE OF CREATIVE MINDS WHO REFUSE TO COMPROMISE BETWEEN AESTHETICS AND FUNCTIONALITY." data-effect="type"></p>
+                    <p data-text="WE BELIEVE TECHNOLOGY SHOULD FEEL ALIVE. EVERY LINE OF CODE, EVERY PIXEL, EVERY INTERACTION MATTERS. WE DON'T BUILD APPSâ€”WE CRAFT EXPERIENCES THAT RESONATE." data-effect="type"></p>
                     <p data-text="OUR DIVISIONS WORK INDEPENDENTLY BUT THINK AS ONE: DATA-DRIVEN PRECISION MEETS CREATIVE INNOVATION. QUANTUM ANALYTICS BRINGS THE LOGIC. ECHO STUDIOS BRINGS THE SOUL." data-effect="type"></p>
                     <p class="sv-manifesto-final" data-text="THE FUTURE ISN'T CORPORATE. IT'S COLLABORATIVE. IT'S INDEPENDENT. IT'S US." data-effect="type"></p>
                 </div>
@@ -1814,24 +2110,24 @@ document.addEventListener('click', (e) => {
         <div class="sv-scan-panel sv-panel-values" data-scan-group="visions">
             <div class="sv-panel-content">
                 <div class="sv-panel-header">
-                    <span class="sv-panel-dot">■ ■</span>
+                    <span class="sv-panel-dot">â–  â– </span>
                     <span data-text="// CORE VALUES" data-effect="scramble"></span>
                 </div>
                 <div class="sv-values-grid">
                     <div class="sv-value-item">
-                        <div class="sv-value-icon">◆</div>
+                        <div class="sv-value-icon">â—†</div>
                         <span class="sv-value-label" data-text="INDEPENDENCE" data-effect="scramble"></span>
                     </div>
                     <div class="sv-value-item">
-                        <div class="sv-value-icon">▲</div>
+                        <div class="sv-value-icon">â–²</div>
                         <span class="sv-value-label" data-text="INNOVATION" data-effect="scramble"></span>
                     </div>
                     <div class="sv-value-item">
-                        <div class="sv-value-icon">●</div>
+                        <div class="sv-value-icon">â—</div>
                         <span class="sv-value-label" data-text="INTEGRITY" data-effect="scramble"></span>
                     </div>
                     <div class="sv-value-item">
-                        <div class="sv-value-icon">✦</div>
+                        <div class="sv-value-icon">âœ¦</div>
                         <span class="sv-value-label" data-text="EXCELLENCE" data-effect="scramble"></span>
                     </div>
                 </div>
@@ -1896,8 +2192,8 @@ document.addEventListener('click', (e) => {
             <line x1="60" y1="50" x2="60" y2="70" stroke="white" stroke-width="1.5"/>
             <circle cx="60" cy="60" r="3" fill="white"/>
         </svg>
-        <span class="sv-cursor-arrow sv-arrow-left">◄</span>
-        <span class="sv-cursor-arrow sv-arrow-right">►</span>
+        <span class="sv-cursor-arrow sv-arrow-left">â—„</span>
+        <span class="sv-cursor-arrow sv-arrow-right">â–º</span>
         <span class="sv-cursor-hold-text"></span>
     </div>
     <span class="sv-cursor-label"></span>

@@ -3,6 +3,7 @@
  * ANIMATIONS MANAGER MODULE
  * ============================
  * Handles all page animations and transitions
+ * Includes Stellar Intro Controller
  * Optimized for smooth navigation between Home, About, Work, Contact
  * Exports as ES6 module
  */
@@ -16,428 +17,556 @@ class AnimationsManager {
         this.currentPage = 'home';
         this.rafCallbacks = new Set();
         this.initialized = false;
-        this.INTRO_SEEN_KEY = 'skye_intro_seen';
-        this.pageAnimationStates = new Map(); // Track which pages have been animated
-
-        // Don't auto-initialize - wait for core manager
+        this.pageAnimationStates = new Map();
+        
+        // Stellar Intro properties
+        this.stellarAudio = {
+            bgMusic: null,
+            voice: null,
+            dataTransition: null,
+            finalTransition: null
+        };
+        
+        this.subtitles = [
+            { start: 0.0, end: 6.5, text: "Identity confirmed. Welcome aboard, Skye. All systems recognize your signature." },
+            { start: 7.0, end: 10.5, text: "Creative core active, anomaly levels within acceptable range." },
+            { start: 11.0, end: 14.5, text: "You are cleared for full access to Star Vortex systems." },
+            { start: 15.0, end: 19.0, text: "This ship will not limit you, only amplify you. Proceed when ready." }
+        ];
+        
+        this.introSkipped = false;
+        this.skipHandler = null;
+        this.skipKeyUpHandler = null;
+        this.skipHoldProgress = 0;
+        this.skipHoldInterval = null;
+        this.isHoldingSpace = false;
+        
+        this.updateSubtitles = this.updateSubtitles.bind(this);
+        this.handleSkipKeyDown = this.handleSkipKeyDown.bind(this);
+        this.handleSkipKeyUp = this.handleSkipKeyUp.bind(this);
     }
 
     init() {
-        if (this.initialized) return;
+        if (this.initialized) {
+            console.log('⚠️ Animations already initialized, skipping');
+            return;
+        }
+        
+        console.log('🎬 Animations Manager initializing...');
         
         this.elements = {
-            heroTitle: document.getElementById('heroTitle'),
-            notifications: document.querySelectorAll('.notification'),
-            startButton: document.getElementById('startButton'),
-            introScreen: document.getElementById('introScreen'),
+            stellarIntro: document.getElementById('stellarIntro'),
+            phaseVoice: document.getElementById('phaseVoice'),
+            phaseData: document.getElementById('phaseData'),
+            phaseBoarding: document.getElementById('phaseBoarding'),
+            subtitleText: document.getElementById('subtitleText'),
             mainScreen: document.getElementById('mainScreen'),
             aboutScreen: document.getElementById('aboutScreen'),
             contactScreen: document.getElementById('contactScreen'),
             mainNav: document.getElementById('mainNav')
         };
 
-        // Check if user has seen the intro before
-        if (this.hasSeenIntro()) {
-            this.skipToNotifications();
-        } else {
-            this.startTerminalEffect();
-            this.markIntroAsSeen();
+        console.log('🔍 Elements found:', {
+            stellarIntro: !!this.elements.stellarIntro,
+            phaseVoice: !!this.elements.phaseVoice,
+            phaseData: !!this.elements.phaseData,
+            phaseBoarding: !!this.elements.phaseBoarding,
+            subtitleText: !!this.elements.subtitleText
+        });
+
+        if (!this.elements.stellarIntro) {
+            console.error('❌ stellarIntro element not found! Cannot start intro.');
+            return;
         }
+
+        // ALWAYS show intro - No localStorage check
+        console.log('🚀 Starting Stellar Intro...');
+        this.startStellarIntro();
 
         this.initialized = true;
-        console.log('✅ Animations Manager module loaded');
+        console.log('✅ Animations Manager initialized');
     }
 
-    hasSeenIntro() {
-        try {
-            return localStorage.getItem(this.INTRO_SEEN_KEY) === 'true';
-        } catch (e) {
-            console.warn('localStorage not available:', e);
-            return false;
-        }
+    // ========================================
+    // STELLAR INTRO SEQUENCE
+    // ========================================
+    
+    preloadStellarAudio() {
+        // Check if audio was unlocked by the loader
+        const audioEnabled = window.loaderManager?.audioUnlocked || false;
+        
+        this.stellarAudio.bgMusic = new Audio('/src/sfx/INTROx_song.mp3');
+        this.stellarAudio.bgMusic.volume = 0.15;
+        this.stellarAudio.bgMusic.loop = false;
+        
+        this.stellarAudio.voice = new Audio('/src/starvortex_assets/voice_intro.mp3');
+        this.stellarAudio.voice.volume = 0.8;
+        
+        this.stellarAudio.dataTransition = new Audio('/src/sfx/FX_flow_transition_data-tech.mp3');
+        this.stellarAudio.dataTransition.volume = 0.4;
+        
+        this.stellarAudio.finalTransition = new Audio('/src/sfx/FX_Transition.mp3');
+        this.stellarAudio.finalTransition.volume = 0.5;
+        
+        console.log('🎵 Stellar audio preloaded. Audio enabled:', audioEnabled);
     }
-
-    markIntroAsSeen() {
-        try {
-            localStorage.setItem(this.INTRO_SEEN_KEY, 'true');
-        } catch (e) {
-            console.warn('Could not save intro state:', e);
-        }
+    
+    async startStellarIntro() {
+        this.preloadStellarAudio();
+        this.setupSkipListener();
+        
+        await this.playStellarPhase1();
+        
+        if (this.introSkipped) return;
+        await this.playStellarPhase2();
+        
+        if (this.introSkipped) return;
+        await this.playStellarPhase3();
+        
+        if (this.introSkipped) return;
+        this.transitionFromStellarToMain();
     }
-
-    skipToNotifications() {
-        const title = this.elements.heroTitle;
-        const introScreen = this.elements.introScreen;
-        const startButton = this.elements.startButton;
-
-        // Set up the title directly for "SKYE JOURNEY"
-        if (title) {
-            title.textContent = 'SKYE JOURNEY';
-            title.style.fontSize = '72px';
-            title.style.letterSpacing = '-2px';
-            title.style.opacity = '1';
-            title.style.transform = 'none';
-            title.style.filter = 'none';
-            title.style.textShadow = 'none';
-            title.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-            title.style.fontWeight = '700';
-            title.style.color = '#ffffff';
-            title.style.textAlign = 'center';
-        }
-
-        // Reset intro screen background
-        if (introScreen) {
-            introScreen.style.background = '';
-        }
-
-        // Make sure start button and notifications are visible
-        if (startButton) {
-            startButton.style.opacity = '';
-            startButton.style.pointerEvents = '';
-        }
-
-        const notifications = this.elements.notifications;
-        notifications.forEach(notification => {
-            notification.style.opacity = '';
-            notification.style.pointerEvents = '';
-        });
-
-        // Show notifications with a brief delay
-        setTimeout(() => {
-            this.showNotificationsSequence();
-        }, 300);
-    }
-
-    startTerminalEffect() {
-        const title = this.elements.heroTitle;
-        if (!title) return;
-
-        const introScreen = this.elements.introScreen;
-        if (introScreen) {
-            introScreen.style.background = '#000000';
-        }
-
-        const startButton = this.elements.startButton;
-        if (startButton) {
-            startButton.style.opacity = '0';
-            startButton.style.pointerEvents = 'none';
-        }
-
-        const notifications = this.elements.notifications;
-        notifications.forEach(notification => {
-            notification.style.opacity = '0';
-            notification.style.pointerEvents = 'none';
-        });
-
-        this.playOriginalGlitchAnimation(title);
-    }
-
-    playOriginalGlitchAnimation(title) {
-        setTimeout(() => {
-            soundManager?.play('intro', 0.5);
-        }, 100);
-
-        const sequence = [
-            { text: 's', delay: 0, font: 'SpAlterna-Regular', size: '64px', opacity: 0.2, blur: '10px', rotate: '8deg' },
-            { text: 's', delay: 80, font: 'SpAlterna-Regular', size: '66px', opacity: 0.35, blur: '7px', rotate: '-5deg' },
-            { text: 'sk', delay: 160, font: 'SpAlterna-Regular', size: '68px', opacity: 0.5, blur: '5px', rotate: '3deg' },
-            { text: 'sky', delay: 240, font: 'SpAlterna-Regular', size: '70px', opacity: 0.65, blur: '3px', rotate: '-1deg' },
-            { text: 'skye', delay: 320, font: 'SpAlterna-Regular', size: '72px', opacity: 0.8, blur: '1px', rotate: '0deg' },
-            { text: 'skye d', delay: 450, font: 'SpAlterna-Regular', size: '72px', opacity: 0.88, blur: '0px', skew: '2deg' },
-            { text: 'skye de', delay: 580, font: 'SpAlterna-Regular', size: '72px', opacity: 0.92, blur: '0px', skew: '1deg' },
-            { text: 'skye dev', delay: 710, font: 'SpAlterna-Regular', size: '72px', opacity: 0.96, blur: '0px', skew: '0deg' },
-            { text: 'SKYE DEV', delay: 900, font: 'system', size: '71px', opacity: 0.6, blur: '3px', scale: '0.96' },
-            { text: 'SKYE DEV', delay: 1000, font: 'system', size: '71.5px', opacity: 0.8, blur: '1.5px', scale: '0.98' },
-            { text: 'SKYE DEV', delay: 1100, font: 'system', size: '72px', opacity: 0.95, blur: '0.5px', scale: '0.99' },
-            { text: 'SKYE DEV', delay: 1200, font: 'system', size: '48px', opacity: 1, blur: '0px', scale: '1', glow: 'medium' },
-            { text: 'SKYE DEV', delay: 1350, font: 'system', size: '48px', opacity: 0.85, blur: '0px', scale: '1', glow: 'none' }
-        ];
-
-        title.style.transition = 'all 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-        title.style.textAlign = 'center';
-        title.style.willChange = 'transform, opacity, filter';
-
-        sequence.forEach(step => {
-            setTimeout(() => {
-                requestAnimationFrame(() => {
-                    this.applyTitleStep(title, step);
-                });
-            }, step.delay);
-        });
-
-        setTimeout(() => {
-            this.showGlowStatements(title);
-        }, 1800);
-    }
-
-    showGlowStatements(title) {
-        setTimeout(() => {
-            const introScreen = this.elements.introScreen;
-            const container = document.createElement('div');
-            container.className = 'statements-container';
-            container.style.cssText = `
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 24px;
-                opacity: 0;
-                transition: opacity 1.2s ease;
-                z-index: 10;
-                max-width: 90%;
-            `;
-
-            introScreen.appendChild(container);
-
-            const taglines = [
-                'Built for human creativity.',
-                'Engineered for imagination.',
-                'Born from wonder. Built in code.'
-            ];
-
-            taglines.forEach(text => {
-                const glowText = document.createElement('div');
-                glowText.className = 'glow-text';
-                glowText.setAttribute('data-text', text);
-                glowText.textContent = text;
-                glowText.style.cssText = `
-                    position: relative;
-                    font-size: 48px;
-                    font-weight: 500;
-                    letter-spacing: -0.02em;
-                    color: #ffffff;
-                    filter: brightness(1.1);
-                    z-index: 1;
-                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-                    text-align: center;
-                    line-height: 1.2;
-                    white-space: nowrap;
-                `;
-                container.appendChild(glowText);
-            });
-
-            this.injectGlowStyles();
-
-            setTimeout(() => {
-                const audio = new Audio('https://dl.dropbox.com/scl/fi/j6g7zspycjuoae3f0y74r/intro-description-sound.mp3?rlkey=cx3lg52kd8f2n0hprhfmdotop&st=6r7q6ofq&dl=0');
-                audio.volume = 0.7;
-                audio.play().catch(e => console.log('Audio play failed:', e));
-            }, 100);
-
-            setTimeout(() => {
-                container.style.opacity = '1';
-            }, 200);
-
-            setTimeout(() => {
-                this.transitionToSkyeJourney(title, container);
-            }, 6500);
-        }, 300);
-    }
-
-    transitionToSkyeJourney(title, container) {
-        title.style.transition = 'opacity 1.5s ease';
-        title.style.opacity = '0';
-        container.style.transition = 'opacity 1.5s ease';
-        container.style.opacity = '0';
-
-        setTimeout(() => {
-            container.remove();
-
-            const introScreen = this.elements.introScreen;
-            if (introScreen) {
-                introScreen.style.background = '';
-            }
-
-            const startButton = this.elements.startButton;
-            if (startButton) {
-                startButton.style.opacity = '';
-                startButton.style.pointerEvents = '';
-            }
-
-            const notifications = this.elements.notifications;
-            notifications.forEach(notification => {
-                notification.style.opacity = '';
-                notification.style.pointerEvents = '';
-            });
-
-            title.textContent = 'SKYE JOURNEY';
-            title.style.fontSize = '72px';
-            title.style.letterSpacing = '-2px';
-            title.style.opacity = '0';
-            title.style.transform = 'none';
-            title.style.filter = 'none';
-            title.style.textShadow = 'none';
-            title.style.willChange = 'auto';
-            title.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-            title.style.fontWeight = '700';
-            title.style.color = '#ffffff';
-            title.style.textAlign = 'center';
-
-            setTimeout(() => {
-                title.style.transition = 'opacity 1s ease';
-                title.style.opacity = '1';
-
-                setTimeout(() => {
-                    this.showNotificationsSequence();
-                }, 500);
-            }, 300);
-        }, 1500);
-    }
-
-    injectGlowStyles() {
-        if (document.getElementById('glow-styles')) return;
-
-        const style = document.createElement('style');
-        style.id = 'glow-styles';
-        style.textContent = `
-            .glow-text::before {
-                content: attr(data-text);
-                position: absolute;
-                inset: 0;
-                background: linear-gradient(90deg, #00cfff, #a600ff, #ff006e, #ff8800);
-                filter: blur(20px) brightness(0.8);
-                opacity: 0.7;
-                border-radius: 100px;
-                z-index: -1;
-                pointer-events: none;
-                background-size: 200% 200%;
-                animation: gradientShift 12s ease-in-out infinite;
-            }
-            .glow-text::after {
-                content: attr(data-text);
-                position: absolute;
-                inset: 0;
-                font-size: inherit;
-                font-weight: inherit;
-                font-family: inherit;
-                letter-spacing: inherit;
-                background: linear-gradient(90deg, #00cfff, #a600ff, #ff006e, #ff8800);
-                background-clip: text;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                mix-blend-mode: color-burn;
-                filter: blur(3px) brightness(1.3);
-                z-index: 0;
-                pointer-events: none;
-                background-size: 200% 200%;
-                animation: gradientShift 12s ease-in-out infinite;
-            }
-            @keyframes gradientShift {
-                0%   { background-position: 0% 50%; }
-                50%  { background-position: 100% 50%; }
-                100% { background-position: 0% 50%; }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    applyTitleStep(title, step) {
-        title.textContent = step.text;
-
-        if (step.font === 'system') {
-            title.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-            title.style.fontWeight = '700';
-        } else {
-            title.style.fontFamily = `'${step.font}', sans-serif`;
-            title.style.fontWeight = 'normal';
-        }
-
-        title.style.fontSize = step.size;
-        title.style.opacity = step.opacity;
-
-        const transforms = [];
-        if (step.rotate) transforms.push(`rotate(${step.rotate})`);
-        if (step.skew) transforms.push(`skewX(${step.skew})`);
-        if (step.scale) transforms.push(`scale(${step.scale})`);
-
-        title.style.transform = transforms.length > 0 ? transforms.join(' ') : 'none';
-        title.style.filter = step.blur && step.blur !== '0px' ? `blur(${step.blur})` : 'none';
-
-        if (step.glow === 'medium') {
-            title.style.textShadow = '0 0 25px rgba(255, 255, 255, 0.4), 0 0 50px rgba(255, 255, 255, 0.2)';
-        } else {
-            title.style.textShadow = 'none';
-        }
-
-        if (step.delay === 240 || step.delay === 580 || step.delay === 970 || step.delay === 1300) {
-            soundManager?.playWithFallback('knock', 0.25);
-        }
-    }
-
-    showNotificationsSequence() {
-        const notifications = this.elements.notifications;
-        if (!notifications || notifications.length === 0) return;
-
-        const notificationDelay = 550;
-
-        notifications.forEach((notification, index) => {
-            setTimeout(() => {
-                requestAnimationFrame(() => {
-                    soundManager?.play('notification', 0.6);
-                    this.showNotification(notification);
-                });
-            }, index * notificationDelay);
-        });
-
-        const startButton = this.elements.startButton;
-        if (startButton) {
-            const newButton = startButton.cloneNode(true);
-            startButton.parentNode.replaceChild(newButton, startButton);
-            this.elements.startButton = newButton;
-
-            newButton.addEventListener('click', (e) => {
+    
+    setupSkipListener() {
+        const skipIndicator = document.getElementById('skipIndicator');
+        const skipBar = skipIndicator?.querySelector('.skip-bar');
+        
+        this.skipHandler = (e) => {
+            if (e.code === 'Space' && !this.introSkipped && !this.isHoldingSpace) {
                 e.preventDefault();
-                this.transitionToMain();
-            }, { once: true });
+                this.startSkipHold(skipBar, skipIndicator);
+            }
+        };
+        
+        this.skipKeyUpHandler = (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                this.cancelSkipHold(skipBar, skipIndicator);
+            }
+        };
+        
+        document.addEventListener('keydown', this.skipHandler);
+        document.addEventListener('keyup', this.skipKeyUpHandler);
+    }
+    
+    startSkipHold(skipBar, skipIndicator) {
+        this.isHoldingSpace = true;
+        this.skipHoldProgress = 0;
+        
+        // Add holding class for visual feedback
+        if (skipIndicator) {
+            skipIndicator.classList.add('holding');
+        }
+        
+        const holdDuration = 3000; // 3 seconds
+        const interval = 30; // Update every 30ms
+        const increment = (interval / holdDuration) * 100;
+        
+        this.skipHoldInterval = setInterval(() => {
+            this.skipHoldProgress += increment;
+            
+            // Update visual progress
+            if (skipBar) {
+                skipBar.style.setProperty('--progress', `${this.skipHoldProgress}%`);
+            }
+            
+            // Complete skip when reaching 100%
+            if (this.skipHoldProgress >= 100) {
+                this.completeSkip(skipIndicator);
+            }
+        }, interval);
+    }
+    
+    cancelSkipHold(skipBar, skipIndicator) {
+        this.isHoldingSpace = false;
+        
+        if (this.skipHoldInterval) {
+            clearInterval(this.skipHoldInterval);
+            this.skipHoldInterval = null;
+        }
+        
+        // Reset progress
+        this.skipHoldProgress = 0;
+        
+        if (skipBar) {
+            skipBar.style.setProperty('--progress', '0%');
+        }
+        
+        if (skipIndicator) {
+            skipIndicator.classList.remove('holding');
         }
     }
-
-    showNotification(notification) {
-        if (!notification) return;
-
-        notification.classList.add('show');
-
-        setTimeout(() => {
-            requestAnimationFrame(() => {
-                notification.style.transition = 'transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-                notification.style.transform = 'translateY(0) scale(0.98)';
-
-                setTimeout(() => {
-                    notification.style.transform = 'translateY(0) scale(1)';
-                }, 100);
-            });
-        }, 600);
+    
+    completeSkip(skipIndicator) {
+        this.cancelSkipHold(null, skipIndicator);
+        this.introSkipped = true;
+        
+        // Animate skip indicator out
+        if (skipIndicator) {
+            skipIndicator.classList.add('pressed');
+        }
+        
+        // Remove listeners
+        if (this.skipHandler) {
+            document.removeEventListener('keydown', this.skipHandler);
+            this.skipHandler = null;
+        }
+        if (this.skipKeyUpHandler) {
+            document.removeEventListener('keyup', this.skipKeyUpHandler);
+            this.skipKeyUpHandler = null;
+        }
+        
+        // Immediately transition
+        this.cleanupStellarAudio();
+        this.transitionFromStellarToMain();
     }
-
-    transitionToMain() {
-        soundManager?.playWithFallback('command', 0.7);
-
-        const notifications = this.elements.notifications;
-        notifications.forEach(notification => {
-            notification.classList.add('fade-out');
+    
+    skipStellarIntro() {
+        // Legacy method - now handled by completeSkip
+        this.completeSkip(document.getElementById('skipIndicator'));
+    }
+    
+    handleSkip(e) {
+        // Legacy method - kept for compatibility
+        if (e.code === 'Space' && !this.introSkipped) {
+            e.preventDefault();
+        }
+    }
+    
+    async playStellarPhase1() {
+        return new Promise((resolve) => {
+            const phaseVoice = this.elements.phaseVoice;
+            const subtitleText = this.elements.subtitleText;
+            
+            if (!phaseVoice || !subtitleText) {
+                resolve();
+                return;
+            }
+            
+            phaseVoice.classList.add('active');
+            
+            // Check if audio was unlocked
+            const audioEnabled = window.loaderManager?.audioUnlocked || false;
+            
+            // Play background music if audio enabled
+            if (audioEnabled && this.stellarAudio.bgMusic) {
+                this.stellarAudio.bgMusic.play().catch((err) => {
+                    console.log('Background music blocked:', err);
+                });
+            }
+            
+            setTimeout(() => {
+                if (this.introSkipped) {
+                    resolve();
+                    return;
+                }
+                
+                // Play voice if audio enabled
+                if (audioEnabled && this.stellarAudio.voice) {
+                    const voicePromise = this.stellarAudio.voice.play();
+                    if (voicePromise !== undefined) {
+                        voicePromise.then(() => {
+                            console.log('🎤 Voice playing');
+                        }).catch((err) => {
+                            console.log('Voice blocked:', err);
+                        });
+                    }
+                    
+                    this.stellarAudio.voice.addEventListener('timeupdate', this.updateSubtitles);
+                    
+                    this.stellarAudio.voice.onended = () => {
+                        setTimeout(() => {
+                            if (!this.introSkipped) {
+                                subtitleText.textContent = '';
+                                phaseVoice.classList.remove('active');
+                            }
+                            resolve();
+                        }, 1500);
+                    };
+                    
+                    // Fallback if voice doesn't play
+                    setTimeout(() => {
+                        if (this.stellarAudio.voice && this.stellarAudio.voice.paused && this.stellarAudio.voice.currentTime === 0) {
+                            console.log('⏭️ Voice did not start, using timer');
+                            if (!this.introSkipped) {
+                                subtitleText.textContent = '';
+                                phaseVoice.classList.remove('active');
+                            }
+                            resolve();
+                        }
+                    }, 21000); // 21s fallback
+                } else {
+                    // No audio or audio not enabled, use timer
+                    console.log('⏭️ Audio not enabled, using 20s timer');
+                    setTimeout(() => {
+                        if (!this.introSkipped) {
+                            subtitleText.textContent = '';
+                            phaseVoice.classList.remove('active');
+                        }
+                        resolve();
+                    }, 20000);
+                }
+            }, 800);
         });
-
-        setTimeout(() => {
-            requestAnimationFrame(() => {
-                const introScreen = this.elements.introScreen;
-                const homeScreen = document.getElementById('homeScreen');
-                const mainNav = this.elements.mainNav;
-
-                if (introScreen) introScreen.classList.add('hidden');
-                if (homeScreen) homeScreen.classList.add('show');
-                if (mainNav) mainNav.classList.add('show');
-
-                this.currentPage = 'home';
-
-                setTimeout(() => {
-                    this.animateHomePage();
-                }, 100);
-            });
-        }, 700);
     }
+    
+    updateSubtitles() {
+        const currentTime = this.stellarAudio.voice.currentTime;
+        const subtitleText = this.elements.subtitleText;
+        
+        if (!subtitleText) return;
+        
+        const currentSub = this.subtitles.find(sub => 
+            currentTime >= sub.start && currentTime < sub.end
+        );
+        
+        if (currentSub) {
+            if (subtitleText.textContent !== currentSub.text) {
+                subtitleText.textContent = currentSub.text;
+                subtitleText.style.animation = 'none';
+                setTimeout(() => {
+                    subtitleText.style.animation = 'fadeInText 0.5s ease';
+                }, 10);
+            }
+        } else if (currentTime >= this.subtitles[this.subtitles.length - 1].end) {
+            subtitleText.textContent = '';
+        }
+    }
+    
+    async playStellarPhase2() {
+        return new Promise((resolve) => {
+            const phaseData = this.elements.phaseData;
+            
+            if (!phaseData || this.introSkipped) {
+                resolve();
+                return;
+            }
+            
+            phaseData.classList.add('active');
+            
+            // Check if audio was unlocked
+            const audioEnabled = window.loaderManager?.audioUnlocked || false;
+            
+            // Play transition sound if audio enabled
+            if (audioEnabled && this.stellarAudio.dataTransition) {
+                this.stellarAudio.dataTransition.play().catch((err) => {
+                    console.log('Data transition audio blocked:', err);
+                });
+            }
+            
+            this.animateDataElements();
+            
+            setTimeout(() => {
+                if (!this.introSkipped) {
+                    phaseData.classList.remove('active');
+                }
+                resolve();
+            }, 8000);
+        });
+    }
+    
+    animateDataElements() {
+        const dataBars = document.querySelectorAll('.data-bar');
+        dataBars.forEach((bar, index) => {
+            setTimeout(() => {
+                bar.classList.add('show');
+                this.animateTypewriter(bar);
+                this.animateScramble(bar);
+            }, index * 200);
+        });
+        
+        const modules = document.querySelectorAll('.module-btn');
+        modules.forEach((module, index) => {
+            setTimeout(() => {
+                module.classList.add('show');
+                this.animateTypewriter(module);
+                this.animateScramble(module);
+            }, 2000 + (index * 100));
+        });
+    }
+    
+    animateTypewriter(element) {
+        const typeElements = element.querySelectorAll('.typewriter');
+        typeElements.forEach(el => {
+            const text = el.dataset.text || el.textContent;
+            if (!text) return;
+            
+            el.textContent = '';
+            let i = 0;
+            const speed = 30;
+            
+            const type = () => {
+                if (i < text.length) {
+                    el.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            };
+            
+            setTimeout(type, 100);
+        });
+    }
+    
+    animateScramble(element) {
+        const scrambleElements = element.querySelectorAll('.scramble');
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%';
+        
+        scrambleElements.forEach(el => {
+            const finalText = el.dataset.final || el.textContent;
+            if (!finalText) return;
+            
+            let iteration = 0;
+            const speed = 30;
+            const maxIterations = finalText.length * 2;
+            
+            const scramble = () => {
+                if (iteration < maxIterations) {
+                    el.textContent = finalText
+                        .split('')
+                        .map((char, index) => {
+                            if (index < iteration / 2) {
+                                return finalText[index];
+                            }
+                            if (char === ' ') return ' ';
+                            return chars[Math.floor(Math.random() * chars.length)];
+                        })
+                        .join('');
+                    
+                    iteration++;
+                    setTimeout(scramble, speed);
+                } else {
+                    el.textContent = finalText;
+                }
+            };
+            
+            setTimeout(scramble, 150);
+        });
+    }
+    
+    async playStellarPhase3() {
+        return new Promise((resolve) => {
+            const phaseBoarding = this.elements.phaseBoarding;
+            const boardingContainer = phaseBoarding?.querySelector('.boarding-container');
+            
+            if (!phaseBoarding || !boardingContainer || this.introSkipped) {
+                resolve();
+                return;
+            }
+            
+            phaseBoarding.classList.add('active');
+            
+            setTimeout(() => {
+                if (!this.introSkipped) {
+                    boardingContainer.classList.add('show');
+                }
+            }, 200);
+            
+            // TODO: Second voice here when available
+            
+            setTimeout(() => {
+                if (!this.introSkipped) {
+                    phaseBoarding.classList.remove('active');
+                }
+                resolve();
+            }, 6000);
+        });
+    }
+    
+    transitionFromStellarToMain() {
+        // Hide skip indicator
+        const skipIndicator = document.getElementById('skipIndicator');
+        if (skipIndicator) {
+            skipIndicator.classList.add('hidden');
+        }
+        
+        // Remove skip listeners
+        if (this.skipHandler) {
+            document.removeEventListener('keydown', this.skipHandler);
+            this.skipHandler = null;
+        }
+        if (this.skipKeyUpHandler) {
+            document.removeEventListener('keyup', this.skipKeyUpHandler);
+            this.skipKeyUpHandler = null;
+        }
+        
+        // Clear any ongoing skip hold
+        if (this.skipHoldInterval) {
+            clearInterval(this.skipHoldInterval);
+            this.skipHoldInterval = null;
+        }
+        
+        // Check if audio was unlocked
+        const audioEnabled = window.loaderManager?.audioUnlocked || false;
+        
+        // Play final transition if audio enabled
+        if (audioEnabled && this.stellarAudio.finalTransition) {
+            this.stellarAudio.finalTransition.play().catch((err) => {
+                console.log('Final transition audio blocked');
+            });
+        }
+        
+        const stellarIntro = this.elements.stellarIntro;
+        if (stellarIntro) {
+            stellarIntro.classList.add('fade-out');
+        }
+        
+        // Fade out background music if playing
+        if (this.stellarAudio.bgMusic && !this.stellarAudio.bgMusic.paused) {
+            const fadeOut = setInterval(() => {
+                if (this.stellarAudio.bgMusic && this.stellarAudio.bgMusic.volume > 0.01) {
+                    this.stellarAudio.bgMusic.volume -= 0.01;
+                } else {
+                    if (this.stellarAudio.bgMusic) {
+                        this.stellarAudio.bgMusic.pause();
+                    }
+                    clearInterval(fadeOut);
+                }
+            }, 50);
+        }
+        
+        setTimeout(() => {
+            if (stellarIntro) {
+                stellarIntro.style.display = 'none';
+            }
+            
+            const homeScreen = document.getElementById('homeScreen');
+            const mainNav = this.elements.mainNav;
+            
+            if (homeScreen) homeScreen.classList.add('show');
+            if (mainNav) mainNav.classList.add('show');
+            
+            this.currentPage = 'home';
+            
+            setTimeout(() => {
+                this.animateHomePage();
+            }, 100);
+            
+            this.cleanupStellarAudio();
+        }, 1000);
+    }
+    
+    cleanupStellarAudio() {
+        if (this.stellarAudio.voice) {
+            this.stellarAudio.voice.removeEventListener('timeupdate', this.updateSubtitles);
+        }
+        
+        Object.values(this.stellarAudio).forEach(audio => {
+            if (audio) {
+                try {
+                    if (!audio.paused) {
+                        audio.pause();
+                    }
+                    audio.currentTime = 0;
+                } catch (err) {
+                    console.log('Error cleaning up audio:', err);
+                }
+            }
+        });
+    }
+
+    // ========================================
+    // PAGE ANIMATIONS
+    // ========================================
 
     navigateToPage(pageName) {
         if (this.currentPage === pageName) return;
@@ -445,207 +574,183 @@ class AnimationsManager {
         const previousPage = this.currentPage;
         this.currentPage = pageName;
 
-        // Trigger page-specific animations
         this.triggerPageAnimations(pageName);
     }
 
     triggerPageAnimations(pageName) {
-        // Check if this page has already been animated during this session
-        const wasAnimated = this.pageAnimationStates.get(pageName);
-
         switch (pageName) {
-            case 'about':
-                this.animateAboutPage(!wasAnimated);
-                break;
             case 'home':
-                this.animateHomePage(!wasAnimated);
+                this.animateHomePage();
+                break;
+            case 'about':
+                this.animateAboutPage();
                 break;
             case 'contact':
-                this.animateContactPage(!wasAnimated);
+                this.animateContactPage();
                 break;
         }
-
-        // Mark page as animated
-        this.pageAnimationStates.set(pageName, true);
     }
 
-    animateAboutPage(fullAnimation = true) {
-        const profileCards = document.querySelectorAll('.profile-card, #profileContainer');
-        const interestCards = document.querySelectorAll('.interest-card');
-        const locationCard = document.querySelector('.location-card, #locationContainer');
+    animateHomePage() {
+        if (this.pageAnimationStates.get('home')) return;
 
-        if (fullAnimation) {
-            // Full entrance animation
-            this.stagger(profileCards, (card) => {
-                card.classList.add('animated');
-                this.slideIn(card, 'up', 50, 600);
-            }, 120);
-
-            setTimeout(() => {
-                this.stagger(interestCards, (card) => {
-                    card.classList.add('animated');
-                    this.scale(card, 0.85, 1, 400);
-                }, 80);
-            }, 350);
-
-            setTimeout(() => {
-                if (locationCard) {
-                    locationCard.classList.add('animated');
-                    this.fadeIn(locationCard, 500);
-                }
-            }, 550);
-        } else {
-            // Quick show (already animated once)
-            profileCards.forEach(card => card.classList.add('animated'));
-            interestCards.forEach(card => card.classList.add('animated'));
-            if (locationCard) locationCard.classList.add('animated');
-        }
-    }
-
-    animateHomePage(fullAnimation = true) {
-        const quoteCards = document.querySelectorAll('.quote-card');
-        const toolCards = document.querySelectorAll('.tool-card');
-        const panels = document.querySelectorAll('.panel');
-
-        if (fullAnimation) {
-            this.stagger(panels, (panel) => {
-                panel.classList.add('animated');
-                this.fadeIn(panel, 450);
-            }, 60);
-
-            this.stagger(quoteCards, (card) => {
-                card.classList.add('animated');
-                this.fadeIn(card, 450);
-            }, 90);
-
-            setTimeout(() => {
-                this.stagger(toolCards, (card) => {
-                    card.classList.add('animated');
-                    this.scale(card, 0.92, 1, 350);
-                }, 60);
-            }, 180);
-        } else {
-            panels.forEach(panel => panel.classList.add('animated'));
-            quoteCards.forEach(card => card.classList.add('animated'));
-            toolCards.forEach(card => card.classList.add('animated'));
-        }
-    }
-
-    animateContactPage(fullAnimation = true) {
-        const contactContainer = document.querySelector('#contactContainer, .contact-container');
-        const messagesContainer = document.querySelector('#messagesContainer');
-
-        if (contactContainer && fullAnimation) {
-            this.fadeIn(contactContainer, 400);
-        }
-
-        // Contact manager handles its own message animations
-    }
-
-    fadeIn(element, duration = 300) {
-        if (!element) return;
-        element.style.opacity = '0';
-        element.style.transition = `opacity ${duration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
-
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                element.style.opacity = '1';
-            });
-        });
-    }
-
-    slideIn(element, direction = 'down', distance = 100, duration = 500) {
-        if (!element) return;
-        const transforms = {
-            up: `translateY(${distance}px)`,
-            down: `translateY(-${distance}px)`,
-            left: `translateX(${distance}px)`,
-            right: `translateX(-${distance}px)`
-        };
-
-        element.style.transform = transforms[direction];
-        element.style.opacity = '0';
-        element.style.transition = `transform ${duration}ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity ${duration}ms ease`;
-
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                element.style.transform = 'translate(0, 0)';
-                element.style.opacity = '1';
-            });
-        });
-    }
-
-    scale(element, from = 0.5, to = 1, duration = 300) {
-        if (!element) return;
-        element.style.transform = `scale(${from})`;
-        element.style.transition = `transform ${duration}ms cubic-bezier(0.34, 1.56, 0.64, 1)`;
-
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                element.style.transform = `scale(${to})`;
-            });
-        });
-    }
-
-    stagger(elements, animationFn, delay = 100) {
-        if (!elements || !elements.length) return;
-        elements.forEach((element, index) => {
+        const quotes = document.querySelectorAll('.quote-card');
+        quotes.forEach((quote, index) => {
             setTimeout(() => {
                 requestAnimationFrame(() => {
-                    animationFn(element);
+                    quote.style.opacity = '0';
+                    quote.style.transform = 'translateY(20px)';
+                    quote.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+
+                    setTimeout(() => {
+                        quote.style.opacity = '1';
+                        quote.style.transform = 'translateY(0)';
+                    }, 50);
                 });
-            }, index * delay);
+            }, index * 150);
         });
-    }
 
-    pulse(element, scale = 1.05, duration = 200) {
-        if (!element) return;
-        const original = element.style.transform;
-        element.style.transition = `transform ${duration}ms ease`;
-        element.style.transform = `scale(${scale})`;
+        const panels = document.querySelectorAll('.panel');
+        panels.forEach((panel, index) => {
+            setTimeout(() => {
+                requestAnimationFrame(() => {
+                    panel.style.opacity = '0';
+                    panel.style.transform = 'translateY(20px)';
+                    panel.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
 
-        setTimeout(() => {
-            element.style.transform = original;
-        }, duration);
-    }
-
-    shake(element, intensity = 10, duration = 500) {
-        if (!element) return;
-        element.animate([
-            { transform: 'translateX(0)' },
-            { transform: `translateX(-${intensity}px)` },
-            { transform: `translateX(${intensity}px)` },
-            { transform: `translateX(-${intensity}px)` },
-            { transform: `translateX(${intensity}px)` },
-            { transform: 'translateX(0)' }
-        ], {
-            duration,
-            easing: 'ease-in-out'
+                    setTimeout(() => {
+                        panel.style.opacity = '1';
+                        panel.style.transform = 'translateY(0)';
+                    }, 50);
+                });
+            }, (quotes.length * 150) + (index * 150));
         });
+
+        this.pageAnimationStates.set('home', true);
     }
 
-    // Reset animation states for a fresh experience
-    resetPageAnimations() {
-        this.pageAnimationStates.clear();
-    }
+    animateAboutPage() {
+        if (this.pageAnimationStates.get('about')) return;
 
-    // Method to reset intro state (useful for testing)
-    resetIntroState() {
-        try {
-            localStorage.removeItem(this.INTRO_SEEN_KEY);
-            console.log('Intro state reset. Reload page to see intro animation again.');
-        } catch (e) {
-            console.warn('Could not reset intro state:', e);
+        const profileHeader = document.querySelector('.profile-header');
+        if (profileHeader) {
+            setTimeout(() => {
+                requestAnimationFrame(() => {
+                    profileHeader.style.opacity = '0';
+                    profileHeader.style.transform = 'translateY(20px)';
+                    profileHeader.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+
+                    setTimeout(() => {
+                        profileHeader.style.opacity = '1';
+                        profileHeader.style.transform = 'translateY(0)';
+                    }, 50);
+                });
+            }, 100);
         }
+
+        const interestCards = document.querySelectorAll('.interest-card');
+        interestCards.forEach((card, index) => {
+            setTimeout(() => {
+                requestAnimationFrame(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 50);
+                });
+            }, 300 + (index * 150));
+        });
+
+        this.pageAnimationStates.set('about', true);
+    }
+
+    animateContactPage() {
+        if (this.pageAnimationStates.get('contact')) return;
+
+        const formElements = document.querySelectorAll('.form-group, .submit-btn');
+        formElements.forEach((element, index) => {
+            setTimeout(() => {
+                requestAnimationFrame(() => {
+                    element.style.opacity = '0';
+                    element.style.transform = 'translateY(20px)';
+                    element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+
+                    setTimeout(() => {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }, 50);
+                });
+            }, index * 100);
+        });
+
+        this.pageAnimationStates.set('contact', true);
+    }
+
+    queueAnimation(callback, priority = 0) {
+        this.animationQueue.push({ callback, priority });
+        this.animationQueue.sort((a, b) => b.priority - a.priority);
+        this.processQueue();
+    }
+
+    processQueue() {
+        if (this.isAnimating || this.animationQueue.length === 0) return;
+
+        this.isAnimating = true;
+        const { callback } = this.animationQueue.shift();
+
+        requestAnimationFrame(() => {
+            callback();
+            this.isAnimating = false;
+            this.processQueue();
+        });
+    }
+
+    registerRAFCallback(callback) {
+        this.rafCallbacks.add(callback);
+    }
+
+    unregisterRAFCallback(callback) {
+        this.rafCallbacks.delete(callback);
+    }
+
+    runRAFCallbacks() {
+        this.rafCallbacks.forEach(callback => {
+            try {
+                callback();
+            } catch (error) {
+                this.rafCallbacks.delete(callback);
+            }
+        });
+        requestAnimationFrame(() => this.runRAFCallbacks());
     }
 
     destroy() {
-        this.rafCallbacks.clear();
         this.animationQueue = [];
-        this.pageAnimationStates.clear();
+        this.rafCallbacks.clear();
+        this.isAnimating = false;
+        this.cleanupStellarAudio();
     }
 }
 
 export const animationsManager = new AnimationsManager();
 window.animationsManager = animationsManager;
 export default animationsManager;
+
+// Add fadeInText animation for subtitles
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeInText {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+`;
+document.head.appendChild(style);

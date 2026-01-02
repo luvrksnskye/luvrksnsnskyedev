@@ -38,13 +38,11 @@ class LanguagesManager {
         this.languagesContainer = document.getElementById('languagesContainer');
 
         if (!this.languagesContainer) {
-            console.warn('Languages container not found');
             return;
         }
 
         this.renderLanguages();
         this.initialized = true;
-        console.log('✅ Languages Manager module loaded');
     }
 
     renderLanguages() {

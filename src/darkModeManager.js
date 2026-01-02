@@ -32,7 +32,6 @@ class DarkModeManager {
         this.videoElement = document.querySelector('.video-background video');
 
         if (!this.videoElement) {
-            console.error('Video element not found');
             return;
         }
 
@@ -40,7 +39,6 @@ class DarkModeManager {
         this.applyInitialTheme();
         this.setupEventListeners();
         this.initialized = true;
-        console.log('✅ Dark Mode Manager module loaded (Default: Dark)');
     }
 
     createToggleSwitch() {
@@ -54,8 +52,8 @@ class DarkModeManager {
                 <input type="checkbox" id="themeSwitch" class="theme-switch-input">
                 <label for="themeSwitch" class="theme-switch-label">
                     <span class="theme-switch-slider">
-                        <span class="theme-icon sun-icon">☀️</span>
-                        <span class="theme-icon moon-icon">🌙</span>
+                        <span class="theme-icon sun-icon"></span>
+                        <span class="theme-icon moon-icon"></span>
                     </span>
                 </label>
             </div>
@@ -251,7 +249,6 @@ class DarkModeManager {
             videoContainer.appendChild(newVideo);
 
             newVideo.play().catch(err => {
-                console.warn('Video autoplay failed:', err);
             });
 
             requestAnimationFrame(() => {
@@ -275,11 +272,9 @@ class DarkModeManager {
         try {
             localStorage.setItem('skye-theme-preference', this.isDarkMode ? 'dark' : 'light');
         } catch (error) {
-            console.warn('Could not save theme preference to localStorage:', error);
             try {
                 sessionStorage.setItem('skye-theme-preference', this.isDarkMode ? 'dark' : 'light');
             } catch (e) {
-                console.warn('Could not save theme preference to sessionStorage either');
             }
         }
     }
@@ -294,7 +289,6 @@ class DarkModeManager {
                 savedPreference = sessionStorage.getItem('skye-theme-preference');
             }
         } catch (error) {
-            console.warn('Could not load theme preference from storage:', error);
         }
 
         // Set theme based on saved preference, DEFAULT TO DARK if none found
@@ -334,7 +328,6 @@ class DarkModeManager {
             localStorage.removeItem('skye-theme-preference');
             sessionStorage.removeItem('skye-theme-preference');
         } catch (error) {
-            console.warn('Could not clear theme preference:', error);
         }
     }
 

@@ -41,13 +41,11 @@ class ToolsManager {
         this.toolDescriptionText = document.getElementById('toolDescriptionText');
 
         if (!this.toolsScroll || !this.toolDescription || !this.toolDescriptionText) {
-            console.warn('Tools panel elements not found');
             return;
         }
 
         this.renderTools();
         this.initialized = true;
-        console.log('✅ Tools Manager module loaded');
     }
 
     renderTools() {
