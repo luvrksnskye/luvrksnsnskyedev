@@ -371,7 +371,7 @@ class AnimationsManager {
         // Brain models from YOUR folder
         this.brainModels = {
             'complete': '/src/model-3d/brain-antre.obj',
-            'low': '/src/model-3d/brain_vertex_low.OBJ',
+            'low': '/src/model-3d/brain_vertex_low.obj',
             'parts_assembled': '/src/model-3d/brain-parts-big.obj',
             'parts_separated': {
                 'part04': '/src/model-3d/brain-parts-big_04.OBJ',
@@ -522,7 +522,7 @@ class AnimationsManager {
             ];
             
             this.stellarAudio.sfx.textRollover = loadAudio('/src/sfx/UI_menu_text_rollover_2.mp3', this.volumes.sfx);
-            this.stellarAudio.sfx.scanZoom = loadAudio('/src/sfx/scan-zoom.mp3', this.volumes.sfx);
+            this.stellarAudio.sfx.scanZoom = loadAudio('/src/sfx/scan-zoom.wav', this.volumes.sfx);
             this.stellarAudio.sfx.textAnimation = loadAudio('/src/sfx/FX_text_animation_loop.mp3', this.volumes.sfx);
             this.stellarAudio.sfx.affirmation = loadAudio('/src/sfx/affirmation-tech.wav', this.volumes.sfx);
             
