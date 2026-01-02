@@ -34,6 +34,7 @@ class WorkManager {
         this.scrambleIncrement = 2;
         
         this.audioTracks = {
+            mainSong: '/src/sfx/Main_song.mp3',
             ambient: '/src/sfx/TBL3_AFTER_loop.mp3',
             scan: '/src/sfx/scan-zoom.wav',
             click: '/src/sfx/click.wav',
@@ -101,7 +102,7 @@ class WorkManager {
         this.setupWorkNavigation();
         this.initVFX().catch(() => {});
         this.initialized = true;
-        console.log('âœ… Work Manager module loaded');
+        console.log('✅ Work Manager module loaded');
     }
     
     preloadAssets() {
@@ -737,7 +738,7 @@ void main() { vec2 uv = (gl_FragCoord.xy - offset) / resolution; vec2 p = uv * 2
         
         if (membersSubtitle) {
             membersSubtitle.dataset.animId = 'sv-members-subtitle';
-            membersSubtitle.dataset.animText = 'STARVORTEX CORE TEAM â€¢ ACTIVE OPERATIVES';
+            membersSubtitle.dataset.animText = 'STARVORTEX CORE TEAM • ACTIVE OPERATIVES';
             membersSubtitle.dataset.animEffect = 'typewriter';
             this.titleObserver.observe(membersSubtitle);
         }
@@ -944,8 +945,8 @@ void main() { vec2 uv = (gl_FragCoord.xy - offset) / resolution; vec2 p = uv * 2
     
     playAmbientAudio() { 
         try { 
-            this.workAudio = this.getPooledAudio(this.audioTracks.ambient, 0);
-            this.workAudio.loop = true;
+            // Primero reproduce Main_song.mp3
+            this.workAudio = this.getPooledAudio(this.audioTracks.mainSong, 0);
             this.workAudio.play().then(() => { 
                 let v = 0; 
                 const fade = setInterval(() => { 
@@ -953,7 +954,23 @@ void main() { vec2 uv = (gl_FragCoord.xy - offset) / resolution; vec2 p = uv * 2
                     this.workAudio.volume = Math.min(0.3, v); 
                     if (v >= 0.3) clearInterval(fade); 
                 }, 80); 
-            }).catch(() => {}); 
+            }).catch(() => {});
+            
+            // Cuando termina Main_song, reproduce el ambient en loop
+            this.workAudio.onended = () => {
+                try {
+                    this.workAudio = this.getPooledAudio(this.audioTracks.ambient, 0);
+                    this.workAudio.loop = true;
+                    this.workAudio.play().then(() => { 
+                        let v = 0; 
+                        const fade = setInterval(() => { 
+                            v += 0.02; 
+                            this.workAudio.volume = Math.min(0.3, v); 
+                            if (v >= 0.3) clearInterval(fade); 
+                        }, 80); 
+                    }).catch(() => {}); 
+                } catch (e) {}
+            };
         } catch (e) {} 
     }
     

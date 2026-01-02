@@ -70,6 +70,7 @@ class MusicManager {
         this.albumCover = this.musicPanel?.querySelector('.album-cover');
         
         if (!this.musicPanel || !this.playBtn) {
+            console.warn('Music panel elements not found');
             return;
         }
         
@@ -78,6 +79,7 @@ class MusicManager {
         this.loadTrack(this.currentTrackIndex);
         
         this.initialized = true;
+        console.log('✅ Music Manager module loaded');
     }
 
     initAudio() {
@@ -86,6 +88,7 @@ class MusicManager {
         
         this.audio.addEventListener('ended', () => this.next());
         this.audio.addEventListener('error', (e) => {
+            console.error('Audio loading error:', e);
             this.isPlaying = false;
             this.updateUI();
         });
@@ -159,6 +162,7 @@ class MusicManager {
                 this.updateUI();
                 soundManager?.play('click', 0.4);
             }).catch(error => {
+                console.warn('Playback prevented:', error.message);
                 this.isPlaying = false;
                 this.updateUI();
             });
@@ -274,6 +278,7 @@ class YouTubeManager {
         this.playlistBtn = document.getElementById('youtubePlaylistBtn');
         
         if (!this.youtubePanel || !this.playBtn) {
+            console.warn('YouTube panel elements not found');
             return;
         }
         
@@ -281,6 +286,7 @@ class YouTubeManager {
         this.setupEventListeners();
         
         this.initialized = true;
+        console.log('✅ YouTube Manager module loaded');
     }
 
     loadYouTubeAPI() {
@@ -324,6 +330,7 @@ class YouTubeManager {
     }
 
     onPlayerError(event) {
+        console.error('YouTube player error:', event.data);
         this.isPlaying = false;
         this.updateUI();
     }
@@ -375,6 +382,7 @@ class YouTubeManager {
             this.player.playVideo();
             soundManager?.play('click', 0.4);
         } catch (error) {
+            console.error('Error playing YouTube video:', error);
         }
     }
 
@@ -385,6 +393,7 @@ class YouTubeManager {
             this.player.pauseVideo();
             soundManager?.play('click', 0.3);
         } catch (error) {
+            console.error('Error pausing YouTube video:', error);
         }
     }
 
@@ -395,6 +404,7 @@ class YouTubeManager {
             this.player.seekTo(0);
             soundManager?.play('click', 0.35);
         } catch (error) {
+            console.error('Error restarting YouTube video:', error);
         }
     }
 
@@ -406,6 +416,7 @@ class YouTubeManager {
             this.player.seekTo(currentTime + 10);
             soundManager?.play('click', 0.35);
         } catch (error) {
+            console.error('Error seeking YouTube video:', error);
         }
     }
 
@@ -427,6 +438,7 @@ class YouTubeManager {
             
             soundManager?.play('click', 0.2);
         } catch (error) {
+            console.error('Error toggling YouTube mute:', error);
         }
     }
 
@@ -443,6 +455,7 @@ class YouTubeManager {
             try {
                 this.player.setVolume(Math.max(0, Math.min(100, volume)));
             } catch (error) {
+                console.error('Error setting YouTube volume:', error);
             }
         }
     }
@@ -452,6 +465,7 @@ class YouTubeManager {
             try {
                 return this.player.getVolume();
             } catch (error) {
+                console.error('Error getting YouTube volume:', error);
                 return 0;
             }
         }
@@ -474,6 +488,7 @@ class YouTubeManager {
                 this.isPlaying = false;
                 this.updateUI();
             } catch (error) {
+                console.error('Error stopping YouTube video:', error);
             }
         }
     }

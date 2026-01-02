@@ -22,6 +22,7 @@ class SoundManager {
         this.setupUnlockListeners();
         
         this.initialized = true;
+        console.log('✅ Sound Manager module loaded');
     }
 
     initializeAudioContext() {
@@ -31,6 +32,7 @@ class SoundManager {
                 this.audioContext = new AudioContext();
             }
         } catch (e) {
+            console.warn('Web Audio API not supported, using HTML5 Audio');
         }
     }
 
@@ -65,6 +67,7 @@ class SoundManager {
             });
             this.pendingPlays = [];
             
+            console.log('🔊 Audio unlocked');
         };
         
         const events = ['click', 'touchstart', 'keydown'];
@@ -120,6 +123,7 @@ class SoundManager {
             }, { once: true });
             
             audio.addEventListener('error', (e) => {
+                console.warn(`Failed to load sound: ${name}`, e);
                 const soundObj = this.sounds.get(name);
                 if (soundObj) {
                     soundObj.loading = false;
@@ -127,6 +131,7 @@ class SoundManager {
             });
             
         } catch (error) {
+            console.error(`Error loading sound ${name}:`, error);
         }
     }
 
@@ -134,6 +139,7 @@ class SoundManager {
         const soundObj = this.sounds.get(name);
         
         if (!soundObj) {
+            console.warn(`Sound "${name}" not found`);
             return Promise.reject(new Error(`Sound not found: ${name}`));
         }
 
@@ -157,11 +163,13 @@ class SoundManager {
             
             return sound.play().catch(error => {
                 if (error.name !== 'NotAllowedError') {
+                    console.warn(`Playback error for ${name}:`, error.message);
                 }
                 return Promise.reject(error);
             });
             
         } catch (error) {
+            console.error(`Error playing sound ${name}:`, error);
             return Promise.reject(error);
         }
     }

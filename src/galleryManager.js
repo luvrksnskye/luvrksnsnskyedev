@@ -65,6 +65,7 @@ class GalleryManager {
         this.galleryNav = document.getElementById('galleryNav');
         
         if (!this.photosPanel || !this.galleryImage || !this.galleryNav) {
+            console.warn('Gallery elements not found');
             return;
         }
         
@@ -78,6 +79,7 @@ class GalleryManager {
         this.setupVisibilityHandler();
         
         this.initialized = true;
+        console.log('✅ Gallery Manager module loaded');
     }
 
     setupContainer() {
@@ -383,6 +385,7 @@ class HighlightsManager {
         }
 
         this.initialized = true;
+        console.log('✅ Highlights Manager module loaded');
     }
 
     initTwitterPanel() {

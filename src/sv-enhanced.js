@@ -26,6 +26,7 @@ class SVEnhancedFeatures {
         this.setupScrollNavigation();
         this.setupExpandButton();
         this.setupSectionObserver();
+        console.log('✅ SV Enhanced Features loaded');
     }
     
     // ==========================================
@@ -266,18 +267,22 @@ class SVEnhancedFeatures {
         const expandPanel = document.getElementById('sv-expandable-panel');
         
         if (!expandBtn) {
+            console.error('❌ sv-expand-btn not found!');
             return;
         }
         
         if (!expandPanel) {
+            console.error('❌ sv-expandable-panel not found!');
             return;
         }
         
+        console.log('✅ Expand button initialized');
         
         expandBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             this.expandPanelOpen = !this.expandPanelOpen;
             
+            console.log(`📋 Panel ${this.expandPanelOpen ? 'opened' : 'closed'}`);
             
             expandBtn.classList.toggle('expanded', this.expandPanelOpen);
             expandPanel.classList.toggle('open', this.expandPanelOpen);
@@ -296,6 +301,7 @@ class SVEnhancedFeatures {
                 this.expandPanelOpen = false;
                 expandBtn.classList.remove('expanded');
                 expandPanel.classList.remove('open');
+                console.log('📋 Panel closed (click outside)');
             }
         });
     }
@@ -307,16 +313,19 @@ class SVEnhancedFeatures {
     setupSectionObserver() {
         const scroll = document.getElementById('sv-scroll');
         if (!scroll) {
+            console.error('❌ sv-scroll element not found!');
             return;
         }
         
         const sections = scroll.querySelectorAll('.sv-section[data-section-index]');
         this.totalSections = sections.length;
         
+        console.log(`✅ Found ${this.totalSections} sections`);
         
         // Log each section for debugging
         sections.forEach((section, index) => {
             const sectionIndex = section.getAttribute('data-section-index');
+            console.log(`  Section ${index}: data-section-index="${sectionIndex}", id="${section.id}"`);
         });
         
         // Initial update
@@ -324,6 +333,7 @@ class SVEnhancedFeatures {
         
         // Force initial scroll check after a short delay
         setTimeout(() => {
+            console.log('🔄 Initial scroll position check...');
             this.handleScroll();
         }, 500);
     }
@@ -346,10 +356,12 @@ const svEnhanced = new SVEnhancedFeatures();
 // Function to hook into workManager
 function hookWorkManager() {
     if (!window.workManager) {
+        console.warn('⚠️ workManager not found, retrying...');
         setTimeout(hookWorkManager, 100);
         return;
     }
     
+    console.log('✅ workManager found, hooking features...');
     
     const originalEnterWorkMode = window.workManager.enterWorkMode.bind(window.workManager);
     const originalExitWorkMode = window.workManager.exitWorkMode.bind(window.workManager);
@@ -357,6 +369,7 @@ function hookWorkManager() {
     
     window.workManager.enterWorkMode = async function() {
         await originalEnterWorkMode();
+        console.log('🚀 Initializing SV Enhanced Features...');
         svEnhanced.init();
     };
     
@@ -388,6 +401,7 @@ function hookWorkManager() {
         }
     };
     
+    console.log('✅ SV Enhanced hooked successfully');
 }
 
 // Start hooking when DOM is ready

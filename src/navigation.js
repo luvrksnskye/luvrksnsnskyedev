@@ -33,6 +33,7 @@ class NavigationManager {
         this.navMenu = document.querySelector('.nav-menu');
 
         if (!this.navLinks.length || !this.indicator || !this.navMenu) {
+            console.warn('Navigation elements not found');
             return;
         }
 
@@ -40,6 +41,7 @@ class NavigationManager {
         this.setupEventListeners();
         this.setupPageVisibility();
         this.initialized = true;
+        console.log('✅ Navigation Manager module loaded');
     }
 
     initializeIndicator() {
@@ -61,6 +63,7 @@ class NavigationManager {
         this.navMenu.addEventListener('mouseleave', () => this.handleMenuLeave());
         window.addEventListener('resize', () => this.handleResize());
         
+        // Listen for external navigation requests
         window.addEventListener('navigateToPage', (e) => {
             if (e.detail && e.detail.page) {
                 this.navigateToPage(e.detail.page);
@@ -69,6 +72,7 @@ class NavigationManager {
     }
 
     setupPageVisibility() {
+        // Initially hide all screens except the current one
         const screens = ['homeScreen', 'aboutScreen', 'contactScreen'];
         screens.forEach(screenId => {
             const screen = document.getElementById(screenId);
@@ -87,6 +91,7 @@ class NavigationManager {
 
         const pageName = link.getAttribute('data-page');
         
+        // Prevent navigation if already on page or currently navigating
         if (this.currentPage === pageName || this.isNavigating) return;
 
         soundManager?.play('click', 0.4);
@@ -99,8 +104,10 @@ class NavigationManager {
     }
 
     navigateToPage(pageName) {
+        // Prevent duplicate navigation
         if (this.currentPage === pageName) return;
         
+        // If already navigating, queue this request
         if (this.isNavigating) {
             this.navigationQueue.push(pageName);
             return;
@@ -110,11 +117,13 @@ class NavigationManager {
         const previousPage = this.currentPage;
         this.currentPage = pageName;
 
+        // Special handling for work page
         if (pageName === 'work') {
             this.handleWorkNavigation(previousPage);
             return;
         }
 
+        // Handle exiting from work mode
         if (previousPage === 'work') {
             this.exitWorkMode(() => {
                 this.performPageTransition(pageName, previousPage);
@@ -122,61 +131,46 @@ class NavigationManager {
             return;
         }
 
+        // Standard page transition
         this.performPageTransition(pageName, previousPage);
     }
 
     performPageTransition(pageName, previousPage) {
-        const allScreens = ['homeScreen', 'aboutScreen', 'contactScreen', 'sv-work-screen'];
-        
-        allScreens.forEach(screenId => {
-            const screen = document.getElementById(screenId);
-            if (screen && screenId !== `${pageName}Screen`) {
-                screen.classList.remove('show', 'page-enter', 'page-exit');
-                screen.classList.add('hidden');
-                if (screenId !== 'sv-work-screen') {
-                    setTimeout(() => {
-                        if (!screen.classList.contains('show')) {
-                            screen.style.display = 'none';
-                        }
-                    }, 400);
-                }
-            }
-        });
-
+        // Hide current page with animation
         const currentScreen = document.getElementById(`${previousPage}Screen`);
         if (currentScreen && previousPage !== 'work') {
             currentScreen.classList.add('page-exit');
             currentScreen.classList.remove('show');
         }
 
+        // Show new page after brief delay for smooth transition
         setTimeout(() => {
+            // Clean up previous screen
             if (currentScreen && previousPage !== 'work') {
                 currentScreen.classList.remove('page-exit');
-                currentScreen.classList.add('hidden');
             }
 
+            // Show new screen
             const targetScreen = document.getElementById(`${pageName}Screen`);
             if (targetScreen) {
-                targetScreen.style.display = '';
-                targetScreen.classList.remove('hidden');
+                targetScreen.classList.add('page-enter');
+                targetScreen.classList.add('show');
                 
-                requestAnimationFrame(() => {
-                    targetScreen.classList.add('page-enter');
-                    targetScreen.classList.add('show');
-                    
-                    if (animationsManager?.initialized) {
-                        animationsManager.navigateToPage(pageName);
-                    }
+                // Trigger page-specific animations
+                if (animationsManager?.initialized) {
+                    animationsManager.navigateToPage(pageName);
+                }
 
-                    setTimeout(() => {
-                        targetScreen.classList.remove('page-enter');
-                        this.finishNavigation();
-                    }, 400);
-                });
+                // Remove animation class after transition
+                setTimeout(() => {
+                    targetScreen.classList.remove('page-enter');
+                    this.finishNavigation();
+                }, 400);
             } else {
                 this.finishNavigation();
             }
 
+            // Emit navigation event
             window.dispatchEvent(new CustomEvent('pageChanged', {
                 detail: { page: pageName, previousPage }
             }));
@@ -185,18 +179,13 @@ class NavigationManager {
     }
 
     handleWorkNavigation(previousPage) {
-        const allScreens = ['homeScreen', 'aboutScreen', 'contactScreen'];
-        allScreens.forEach(screenId => {
-            const screen = document.getElementById(screenId);
-            if (screen) {
-                screen.classList.remove('show', 'page-enter');
-                screen.classList.add('hidden');
-                setTimeout(() => {
-                    screen.style.display = 'none';
-                }, 400);
-            }
-        });
+        // Hide current page first
+        const currentScreen = document.getElementById(`${previousPage}Screen`);
+        if (currentScreen) {
+            currentScreen.classList.remove('show');
+        }
 
+        // Trigger work manager
         if (window.workManager) {
             window.workManager.enterWorkMode();
         }
@@ -210,9 +199,11 @@ class NavigationManager {
 
     exitWorkMode(callback) {
         if (window.workManager && window.workManager.isActive) {
+            // workManager.exitWorkMode handles its own cleanup
             window.workManager.exitWorkMode();
         }
         
+        // Small delay to ensure work mode cleanup
         setTimeout(() => {
             if (callback) callback();
         }, 100);
@@ -221,6 +212,7 @@ class NavigationManager {
     finishNavigation() {
         this.isNavigating = false;
         
+        // Process queued navigation if any
         if (this.navigationQueue.length > 0) {
             const nextPage = this.navigationQueue.shift();
             this.navigateToPage(nextPage);
@@ -289,6 +281,7 @@ class NavigationManager {
         return this.currentPage;
     }
 
+    // Force navigation (skips queue check)
     forceNavigate(pageName) {
         this.isNavigating = false;
         this.navigationQueue = [];
