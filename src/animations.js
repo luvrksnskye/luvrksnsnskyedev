@@ -866,10 +866,10 @@ class AnimationsManager {
                     <option value="kangchenjunga">Kangchenjunga</option>
                     <option value="everest-valley">Khumbu Glacier</option>
                     <option value="coldeliseran">Col de l'Iseran</option>
-                    <option value="athabasca">Athabasca Glacier</option>
+                    <option value="athabasca" selected>Athabasca Glacier</option>
                     <option value="franzjosefglacier">Franz Josef Glacier</option>
                     <option value="grouse">Grouse Grind</option>
-                    <option value="jotunheimen" selected>Jotunheimen</option>
+                    <option value="jotunheimen">Jotunheimen</option>
                     <option value="lakecomo">Lake Como</option>
                     <option value="petra">Petra</option>
                     <option value="sanfrancisco">San Francisco</option>
