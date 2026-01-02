@@ -31,6 +31,25 @@
     window.VFX = VFX;
     console.log('VFX loaded successfully');
 </script>
+    <!-- THREE.JS & DEPENDENCIES -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/MTLLoader.js"></script>
+    
+    <!-- GSAP para animaciones -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <!-- Spline Loader -->
+    <script type="module">
+        import { SplineLoader } from 'https://unpkg.com/@splinetool/loader@1.9.0/build/SplineLoader.js';
+        window.SplineLoader = SplineLoader;
+    </script>
+
 </head>
 
 <body>
@@ -107,14 +126,6 @@
         </ul>
     </nav>
 
-    <!-- Intro Screen -->
-   <!-- ========================================
-     NEW STELLAR INTRO SEQUENCE - SKYEDEV
-     Phase 1: Voice Recognition & Subtitles
-     Phase 2: Data Visualization
-     Phase 3: Boarding Pass
-     ======================================== -->
-
 <div class="stellar-intro" id="stellarIntro">
     
     <!-- Skip Indicator -->
@@ -130,338 +141,566 @@
         </div>
         <div class="skip-bracket right">]</div>
     </div>
-    
+
     <!-- Phase 1: Voice Authentication -->
     <div class="intro-phase phase-voice" id="phaseVoice">
         <div class="voice-container">
-            <!-- Animated waveform -->
-            <svg class="voice-waveform" viewBox="0 0 200 60">
-                <g class="wave-group">
-                    <rect class="wave-bar" x="10" y="25" width="3" height="10" rx="1.5"/>
-                    <rect class="wave-bar" x="18" y="20" width="3" height="20" rx="1.5"/>
-                    <rect class="wave-bar" x="26" y="15" width="3" height="30" rx="1.5"/>
-                    <rect class="wave-bar" x="34" y="10" width="3" height="40" rx="1.5"/>
-                    <rect class="wave-bar" x="42" y="18" width="3" height="24" rx="1.5"/>
-                    <rect class="wave-bar" x="50" y="22" width="3" height="16" rx="1.5"/>
-                    <rect class="wave-bar" x="58" y="12" width="3" height="36" rx="1.5"/>
-                    <rect class="wave-bar" x="66" y="8" width="3" height="44" rx="1.5"/>
-                    <rect class="wave-bar" x="74" y="16" width="3" height="28" rx="1.5"/>
-                    <rect class="wave-bar" x="82" y="20" width="3" height="20" rx="1.5"/>
-                    <rect class="wave-bar" x="90" y="14" width="3" height="32" rx="1.5"/>
-                    <rect class="wave-bar" x="98" y="18" width="3" height="24" rx="1.5"/>
-                    <rect class="wave-bar" x="106" y="10" width="3" height="40" rx="1.5"/>
-                    <rect class="wave-bar" x="114" y="22" width="3" height="16" rx="1.5"/>
-                    <rect class="wave-bar" x="122" y="12" width="3" height="36" rx="1.5"/>
-                    <rect class="wave-bar" x="130" y="16" width="3" height="28" rx="1.5"/>
-                    <rect class="wave-bar" x="138" y="20" width="3" height="20" rx="1.5"/>
-                    <rect class="wave-bar" x="146" y="15" width="3" height="30" rx="1.5"/>
-                    <rect class="wave-bar" x="154" y="18" width="3" height="24" rx="1.5"/>
-                    <rect class="wave-bar" x="162" y="10" width="3" height="40" rx="1.5"/>
-                    <rect class="wave-bar" x="170" y="22" width="3" height="16" rx="1.5"/>
-                    <rect class="wave-bar" x="178" y="14" width="3" height="32" rx="1.5"/>
-                    <rect class="wave-bar" x="186" y="20" width="3" height="20" rx="1.5"/>
-                </g>
-            </svg>
+            
+            <!-- AI Voice Visualizer -->
+            <div class="ai-voice-visualizer">
+                <div class="voice-core">
+                    <div class="core-ring ring-1"></div>
+                    <div class="core-ring ring-2"></div>
+                    <div class="core-ring ring-3"></div>
+                    <div class="core-pulse"></div>
+                </div>
+                
+                <!-- Frequency Bars -->
+                <div class="frequency-bars">
+                    <div class="freq-bar" style="--delay: 0"></div>
+                    <div class="freq-bar" style="--delay: 1"></div>
+                    <div class="freq-bar" style="--delay: 2"></div>
+                    <div class="freq-bar" style="--delay: 3"></div>
+                    <div class="freq-bar" style="--delay: 4"></div>
+                    <div class="freq-bar" style="--delay: 5"></div>
+                    <div class="freq-bar" style="--delay: 6"></div>
+                    <div class="freq-bar" style="--delay: 7"></div>
+                    <div class="freq-bar" style="--delay: 8"></div>
+                    <div class="freq-bar" style="--delay: 9"></div>
+                    <div class="freq-bar" style="--delay: 10"></div>
+                    <div class="freq-bar" style="--delay: 11"></div>
+                    <div class="freq-bar" style="--delay: 12"></div>
+                    <div class="freq-bar" style="--delay: 13"></div>
+                    <div class="freq-bar" style="--delay: 14"></div>
+                    <div class="freq-bar" style="--delay: 15"></div>
+                    <div class="freq-bar" style="--delay: 16"></div>
+                    <div class="freq-bar" style="--delay: 17"></div>
+                    <div class="freq-bar" style="--delay: 18"></div>
+                    <div class="freq-bar" style="--delay: 19"></div>
+                </div>
+            </div>
             
             <!-- Subtitle display -->
             <div class="subtitle-container">
-                <p class="subtitle-text" id="subtitleText"></p>
+                <div class="subtitle-brackets">
+                    <span class="bracket-left">‹</span>
+                    <p class="subtitle-text" id="subtitleText"></p>
+                    <span class="bracket-right">›</span>
+                </div>
+                <div class="subtitle-line"></div>
             </div>
             
-            <!-- Voice indicator -->
-            <div class="voice-indicator">
-                <div class="voice-ring"></div>
-                <div class="voice-ring"></div>
-                <div class="voice-ring"></div>
+            <!-- Voice Status -->
+            <div class="voice-status">
+                <div class="status-dot"></div>
+                <span class="status-label">VOICE RECOGNITION ACTIVE</span>
             </div>
         </div>
     </div>
 
-    <!-- Phase 2: Data Visualization -->
+    <!-- Phase 2: Data Visualization + Medical Scan -->
     <div class="intro-phase phase-data" id="phaseData">
         <div class="data-container">
             
+            <!-- HUD Corner Elements -->
+            <div class="hud-corner top-left">
+                <svg viewBox="0 0 50 50">
+                    <path d="M0 25 L0 5 L5 0 L25 0" fill="none" stroke="currentColor" stroke-width="1"/>
+                </svg>
+            </div>
+            <div class="hud-corner top-right">
+                <svg viewBox="0 0 50 50">
+                    <path d="M50 25 L50 5 L45 0 L25 0" fill="none" stroke="currentColor" stroke-width="1"/>
+                </svg>
+            </div>
+            <div class="hud-corner bottom-left">
+                <svg viewBox="0 0 50 50">
+                    <path d="M0 25 L0 45 L5 50 L25 50" fill="none" stroke="currentColor" stroke-width="1"/>
+                </svg>
+            </div>
+            <div class="hud-corner bottom-right">
+                <svg viewBox="0 0 50 50">
+                    <path d="M50 25 L50 45 L45 50 L25 50" fill="none" stroke="currentColor" stroke-width="1"/>
+                </svg>
+            </div>
+            
             <!-- Top Header Bar -->
             <div class="data-header">
-                <svg class="header-icon" viewBox="0 0 24 24">
-                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" 
-                          fill="none" stroke="currentColor" stroke-width="2"/>
-                </svg>
-                <span class="header-label">STELLAR NAVIGATION</span>
-            </div>
-
-            <!-- Section Label -->
-            <div class="section-label">| ORBITAL COMMAND</div>
-
-            <!-- Data Bars -->
-            <div class="data-bars">
-                <!-- Bar 1 -->
-                <div class="data-bar">
-                    <div class="bar-left">
-                        <span class="bar-text typewriter" data-text="ENERGY_OUTPUT">ENERGY_OUTPUT</span>
-                        <span class="bar-sep">|</span>
-                        <span class="bar-text typewriter" data-text="CREW_STATUS">CREW_STATUS</span>
-                        <span class="bar-sep">|</span>
-                        <span class="bar-text typewriter" data-text="HULL_INTEGRITY">HULL_INTEGRITY</span>
+                <div class="header-left">
+                    <div class="header-icon-box">
+                        <svg class="header-icon" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"/>
+                            <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                        </svg>
                     </div>
-                    <div class="bar-center">
-                        <div class="bar-badge scramble" data-final="INITIALIZING STELLAR DRIVE">INITIALIZING STELLAR DRIVE</div>
-                    </div>
-                    <div class="bar-right">
-                        <span class="bar-text">2387-03-15 | ◈ SOLAR WIND: 450 km/s</span>
-                    </div>
+                    <span class="header-label">STELLAR COMMAND</span>
+                    <div class="header-line"></div>
+                    <span class="header-sub">CRYO-ANALYSIS UNIT</span>
                 </div>
-
-                <!-- Bar 2 - Gold -->
-                <div class="data-bar gold-bar">
-                    <div class="bar-left">
-                        <span class="bar-tag">PLASMA_FLOW</span>
-                        <span class="bar-tag">ANTIMATTER</span>
-                        <span class="bar-tag">QUANTUM_FIELD</span>
-                        <span class="bar-tag">GRAVITON_FLUX</span>
-                    </div>
-                    <div class="bar-center">
-                        <div class="bar-badge gold scramble" data-final="HYPERSPACE NAVIGATION CORE">HYPERSPACE NAVIGATION CORE</div>
-                    </div>
-                    <div class="bar-right">
-                        <span class="bar-text">2387-03-15 | ◈ NEBULA DENSITY: 2.1M/m³</span>
-                    </div>
-                </div>
-
-                <!-- Bar 3 - Buttons -->
-                <div class="data-bar">
-                    <div class="bar-left">
-                        <span class="bar-title scramble" data-final="INTERSTELLAR COMMAND INTERFACE">INTERSTELLAR COMMAND INTERFACE</span>
-                        <span class="bar-chevrons">›››</span>
-                    </div>
-                    <div class="bar-center">
-                        <button class="bar-btn active">WARP_CORE</button>
-                        <button class="bar-btn">SHIELD_GRID</button>
-                        <button class="bar-btn">LIFE_SUPPORT</button>
-                    </div>
-                    <div class="bar-right">
-                        <span class="bar-text">2387-03-15 | ◈ RADIATION: 0.03 rads</span>
-                    </div>
-                </div>
-
-                <!-- Bar 4 - Bordered -->
-                <div class="data-bar bordered-bar">
-                    <div class="bar-title-large scramble" data-final="DEEP SPACE EXPLORATION PROTOCOL">DEEP SPACE EXPLORATION PROTOCOL</div>
-                    <div class="bar-buttons">
-                        <button class="bar-btn outline">SCANNERS</button>
-                        <button class="bar-btn outline">PROBES</button>
-                        <button class="bar-btn outline">ANALYSIS</button>
-                        <span class="bar-text">2387-03-15 | ◈ PARSECS: 12,847</span>
-                    </div>
+                <div class="header-right">
+                    <span class="header-time" id="dataTime">2090.03.15</span>
+                    <div class="header-divider"></div>
+                    <span class="header-status">SYSTEM ONLINE</span>
                 </div>
             </div>
 
-            <!-- Module Grid -->
-            <div class="section-label">| SUBSYSTEM MODULES</div>
-            <div class="module-grid">
-                <div class="module-row">
-                    <div class="module-btn typewriter" data-text="▶ QUANTUM MATRIX •">▶ QUANTUM MATRIX •</div>
-                    <div class="module-btn outline typewriter" data-text="▷ NEURAL LINK ///">▷ NEURAL LINK ///</div>
-                    <div class="module-btn filled typewriter" data-text="☆ VOID ENGINE..">☆ VOID ENGINE..</div>
+            <!-- Medical Scan Section -->
+            <div class="medical-section">
+                <div class="scan-header">
+                    <div class="scan-icon">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1"/>
+                            <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+                            <line x1="12" y1="3" x2="12" y2="21" stroke="currentColor" stroke-width="0.5" opacity="0.5"/>
+                        </svg>
+                    </div>
+                    <span class="scan-label">CRYO-STASIS ANALYSIS</span>
+                    <div class="scan-progress">
+                        <div class="progress-fill" id="scanProgress"></div>
+                        <div class="progress-glow"></div>
+                    </div>
+                    <span class="scan-percent" id="scanPercent">0%</span>
                 </div>
-                <div class="module-row">
-                    <div class="module-btn highlight scramble" data-final="STAR FORGE PROTOCOL">STAR FORGE PROTOCOL</div>
-                    <div class="module-btn typewriter" data-text="■ PHOTON LANCE">■ PHOTON LANCE</div>
-                    <div class="module-btn filled-white scramble" data-final="■ COSMIC ANCHOR">■ COSMIC ANCHOR</div>
+                
+                <div class="scan-grid">
+                    <!-- Left: Data Readouts -->
+                    <div class="data-readouts">
+                        <div class="readout-item" data-reveal="1">
+                            <div class="readout-header">
+                                <span class="readout-id">01</span>
+                                <span class="readout-label">STASIS DURATION</span>
+                            </div>
+                            <span class="readout-value scramble-data">PROLONGED</span>
+                            <div class="readout-bar"><div class="bar-fill" style="--fill: 87%"></div></div>
+                        </div>
+                        <div class="readout-item" data-reveal="2">
+                            <div class="readout-header">
+                                <span class="readout-id">02</span>
+                                <span class="readout-label">MEMORY INTEGRITY</span>
+                            </div>
+                            <span class="readout-value scramble-data">DRIFT DETECTED</span>
+                            <div class="readout-bar"><div class="bar-fill warning" style="--fill: 62%"></div></div>
+                        </div>
+                        <div class="readout-item" data-reveal="3">
+                            <div class="readout-header">
+                                <span class="readout-id">03</span>
+                                <span class="readout-label">TEMPORAL SYNC</span>
+                            </div>
+                            <span class="readout-value scramble-data">MINOR GAPS</span>
+                            <div class="readout-bar"><div class="bar-fill" style="--fill: 78%"></div></div>
+                        </div>
+                        <div class="readout-item" data-reveal="4">
+                            <div class="readout-header">
+                                <span class="readout-id">04</span>
+                                <span class="readout-label">NEURAL ACTIVITY</span>
+                            </div>
+                            <span class="readout-value scramble-data">ELEVATED</span>
+                            <div class="readout-bar"><div class="bar-fill success" style="--fill: 94%"></div></div>
+                        </div>
+                        <div class="readout-item" data-reveal="5">
+                            <div class="readout-header">
+                                <span class="readout-id">05</span>
+                                <span class="readout-label">CREATIVE CORTEX</span>
+                            </div>
+                            <span class="readout-value scramble-data">HIGHLY RESPONSIVE</span>
+                            <div class="readout-bar"><div class="bar-fill success" style="--fill: 98%"></div></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Center: Status Display -->
+                    <div class="status-display">
+                        <div class="status-box" id="statusBox">
+                            <div class="status-header">
+                                <div class="status-icon-wrap">
+                                    <span class="status-icon">!</span>
+                                </div>
+                                <span class="status-title">ANALYSIS REPORT</span>
+                                <span class="status-code">REF: SKY-2090-CRY</span>
+                            </div>
+                            <div class="status-content">
+                                <p class="status-line" id="statusLine1"></p>
+                                <p class="status-line" id="statusLine2"></p>
+                                <p class="status-line" id="statusLine3"></p>
+                            </div>
+                            <div class="status-footer">
+                                <div class="status-dots">
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot active"></span>
+                                </div>
+                                <span class="status-stamp">VERIFIED</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Circular Percentage -->
+                        <div class="percentage-ring">
+                            <svg viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2"
+                                        stroke-dasharray="339.292" stroke-dashoffset="339.292" id="progressRing"
+                                        transform="rotate(-90 60 60)"/>
+                                <circle cx="60" cy="60" r="45" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                            </svg>
+                            <div class="percentage-value">
+                                <span class="percent-num" id="percentNum">0</span>
+                                <span class="percent-sign">%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: System Info -->
+                    <div class="system-info">
+                        <div class="info-block" data-reveal="1">
+                            <span class="info-label">YEAR</span>
+                            <span class="info-value large">2090</span>
+                            <div class="info-underline"></div>
+                        </div>
+                        <div class="info-block" data-reveal="2">
+                            <span class="info-label">EARTH STATUS</span>
+                            <span class="info-value">POP: INCREASED</span>
+                            <span class="info-sub">ATTN: DECREASED</span>
+                            <div class="info-underline"></div>
+                        </div>
+                        <div class="info-block" data-reveal="3">
+                            <span class="info-label">SIGNAL STATUS</span>
+                            <span class="info-value warning">SATURATION CRITICAL</span>
+                            <div class="info-underline"></div>
+                        </div>
+                        <div class="info-block" data-reveal="4">
+                            <span class="info-label">CREATIVITY INDEX</span>
+                            <span class="info-value success">RARE ASSET</span>
+                            <div class="info-underline"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="module-row">
-                    <div class="module-btn typewriter" data-text="• DARK MATTER FLOW.. ›››">• DARK MATTER FLOW.. ›››</div>
-                    <div class="module-btn scramble" data-final="◖ STELLAR CARTOGRAPHY">◖ STELLAR CARTOGRAPHY</div>
-                    <div class="module-btn dark typewriter" data-text="» Beyond the event horizon">» Beyond the event horizon</div>
+                
+                <!-- Subtitle for data phase -->
+                <div class="data-subtitle-container">
+                    <div class="subtitle-line-left"></div>
+                    <p class="data-subtitle" id="dataSubtitle"></p>
+                    <div class="subtitle-line-right"></div>
                 </div>
             </div>
 
-            <!-- Footer -->
+            <!-- Data Footer -->
             <div class="data-footer">
-                <div class="footer-logo">
-                    <span class="logo-circle">S</span>
-                    <span class="logo-text">STELLAR COMMAND</span>
+                <div class="footer-left">
+                    <div class="footer-bracket">[</div>
+                    <span class="footer-label">STELLAR NAVIGATION v3.7</span>
+                    <div class="footer-bracket">]</div>
+                </div>
+                <div class="footer-center">
+                    <div class="footer-line"></div>
+                    <div class="footer-dots">
+                        <span class="dot active"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                    <div class="footer-line"></div>
+                </div>
+                <div class="footer-right">
+                    <span class="footer-coord">35.7120°N</span>
+                    <span class="footer-divider">/</span>
+                    <span class="footer-coord">139.7876°E</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Phase 3: Boarding Pass -->
-    <div class="intro-phase phase-boarding" id="phaseBoarding">
-        <div class="boarding-container">
+    <!-- Phase 3: Globe/Terrain Visualization -->
+    <div class="intro-phase phase-globe" id="phaseGlobe">
+        <div class="globe-container">
+            <!-- Canvas para Three.js Terrain - CENTRADO -->
+            <canvas id="terrainCanvas" class="centered-canvas"></canvas>
             
-            <!-- Left Side - Passenger Info -->
-            <div class="boarding-left">
-                <div class="boarding-header">
-                    <svg class="boarding-chevrons" viewBox="0 0 40 40">
-                        <path d="M8,10 L18,20 L8,30" fill="none" stroke="currentColor" stroke-width="2"/>
-                        <path d="M16,10 L26,20 L16,30" fill="none" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                    <span class="boarding-title">RUNAWAY</span>
+            <!-- Globe HUD Overlay -->
+            <div class="globe-hud">
+                <div class="globe-header">
+                    <div class="globe-header-left">
+                        <div class="globe-icon">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"/>
+                                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" fill="none" stroke="currentColor" stroke-width="1"/>
+                            </svg>
+                        </div>
+                        <span class="globe-label">GLOBAL TERRAIN SCAN</span>
+                    </div>
+                    <div class="globe-header-right">
+                        <span class="globe-status">MAPPING</span>
+                        <div class="status-blink"></div>
+                    </div>
                 </div>
-
-                <div class="passenger-section">
-                    <div class="passenger-label">PASSENGER</div>
-                    <div class="passenger-name">
-                        <span class="name-prefix">MISS.</span>
-                        <span class="name-main">SKYEDEV</span>
+                
+                <div class="globe-data-panels">
+                    <div class="globe-panel left">
+                        <div class="panel-title">LOCATION DATA</div>
+                        <div class="panel-item">
+                            <span class="panel-label">COORDINATES</span>
+                            <span class="panel-value" id="globeCoords">00.0000°N 00.0000°E</span>
+                        </div>
+                        <div class="panel-item">
+                            <span class="panel-label">SECTOR</span>
+                            <span class="panel-value" id="globeSector">SCANNING...</span>
+                        </div>
+                        <div class="panel-item">
+                            <span class="panel-label">ELEVATION</span>
+                            <span class="panel-value" id="globeElev">0m</span>
+                        </div>
+                        <div class="panel-item">
+                            <span class="panel-label">TERRAIN</span>
+                            <span class="panel-value" id="globeTerrain">ANALYZING</span>
+                        </div>
                     </div>
                     
-                    <!-- Diagonal stripes -->
-                    <svg class="diagonal-stripes" viewBox="0 0 100 40">
-                        <pattern id="stripes" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                            <rect width="5" height="10" fill="currentColor"/>
-                        </pattern>
-                        <rect width="100" height="40" fill="url(#stripes)" opacity="0.3"/>
-                    </svg>
-                    
-                    <!-- Coordinates -->
-                    <div class="coordinates">
-                        <div class="coord-value">35.7120° N</div>
-                        <div class="coord-value">139.7876° E</div>
+                    <div class="globe-panel right">
+                        <div class="panel-title">EARTH STATUS 2090</div>
+                        <div class="panel-item">
+                            <span class="panel-label">POPULATION</span>
+                            <span class="panel-value">12.4B</span>
+                        </div>
+                        <div class="panel-item">
+                            <span class="panel-label">SIGNAL DENSITY</span>
+                            <span class="panel-value warning">CRITICAL</span>
+                        </div>
+                        <div class="panel-item">
+                            <span class="panel-label">NOISE LEVEL</span>
+                            <span class="panel-value">98.7%</span>
+                        </div>
+                        <div class="panel-item">
+                            <span class="panel-label">CREATIVITY</span>
+                            <span class="panel-value success">0.3% ACTIVE</span>
+                        </div>
                     </div>
                 </div>
-
-                <div class="boarding-time">
-                    <div class="time-label">BOARDING</div>
-                    <div class="time-value">TM.16.20</div>
-                </div>
-
-                <div class="journey-section">
-                    <div class="journey-from">
-                        <div class="journey-label">FROM</div>
-                        <div class="journey-value">THE NOISE</div>
+                
+                <div class="globe-footer">
+                    <div class="scan-line-container">
+                        <div class="scan-line"></div>
                     </div>
-                    <div class="journey-to">
-                        <div class="journey-label">TO</div>
-                        <div class="journey-value">A NEW CHAPTER</div>
+                    <div class="globe-footer-info">
+                        <span class="loading-text" id="terrainLoading">LOADING TERRAIN DATA...</span>
                     </div>
-                </div>
-
-                <div class="status-section">
-                    <svg class="status-arrow" viewBox="0 0 24 24">
-                        <path d="M7 7l10 10M17 7l-10 10" stroke="currentColor" stroke-width="2"/>
-                        <path d="M14 3l7 7M21 10l-7 7" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                    <div class="status-text">STATUS: PROCESSING</div>
-                    
-                    <!-- QR Code placeholder -->
-                    <svg class="qr-code" viewBox="0 0 100 60">
-                        <rect x="5" y="5" width="8" height="8" fill="currentColor"/>
-                        <rect x="18" y="5" width="8" height="8" fill="currentColor"/>
-                        <rect x="31" y="5" width="8" height="8" fill="currentColor"/>
-                        <rect x="5" y="18" width="8" height="8" fill="currentColor"/>
-                        <rect x="31" y="18" width="8" height="8" fill="currentColor"/>
-                        <rect x="5" y="31" width="8" height="8" fill="currentColor"/>
-                        <rect x="18" y="31" width="8" height="8" fill="currentColor"/>
-                        <rect x="31" y="31" width="8" height="8" fill="currentColor"/>
-                        <rect x="44" y="5" width="8" height="8" fill="currentColor"/>
-                        <rect x="57" y="5" width="8" height="8" fill="currentColor"/>
-                        <rect x="44" y="18" width="8" height="8" fill="currentColor"/>
-                        <rect x="57" y="18" width="8" height="8" fill="currentColor"/>
-                        <rect x="44" y="31" width="8" height="8" fill="currentColor"/>
-                        <rect x="70" y="5" width="8" height="8" fill="currentColor"/>
-                        <rect x="83" y="5" width="8" height="8" fill="currentColor"/>
-                        <rect x="70" y="18" width="8" height="8" fill="currentColor"/>
-                        <rect x="83" y="18" width="8" height="8" fill="currentColor"/>
-                        <rect x="57" y="31" width="8" height="8" fill="currentColor"/>
-                        <rect x="70" y="31" width="8" height="8" fill="currentColor"/>
-                        <rect x="83" y="31" width="8" height="8" fill="currentColor"/>
-                    </svg>
-                </div>
-
-                <div class="boarding-footer">
-                    <div class="footer-icon">◉</div>
-                    <div class="footer-message">ten thousand voices fill your broken soul, just fade away you know there's nothing here to make us stay, headed out far away where no one knows ya.</div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Right Side - Gate Info -->
-            <div class="boarding-right">
-                <div class="gate-header">
-                    <svg class="gate-chevrons" viewBox="0 0 40 40">
-                        <path d="M8,10 L18,20 L8,30" fill="none" stroke="currentColor" stroke-width="2"/>
-                        <path d="M16,10 L26,20 L16,30" fill="none" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                    <svg class="gate-expand" viewBox="0 0 24 24">
-                        <path d="M4 8l4-4 4 4M16 16l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/>
-                    </svg>
+    <!-- Phase 4: Brain Visualization -->
+    <div class="intro-phase phase-body" id="phaseBody">
+        <div class="body-container">
+            <!-- Canvas para Cerebro 3D -->
+            <canvas id="brainCanvas" class="centered-canvas"></canvas>
+            
+            <!-- Brain Scan HUD -->
+            <div class="body-hud">
+                <div class="body-header">
+                    <div class="body-header-left">
+                        <div class="body-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 5a7 7 0 0 0-7 7c0 1.5.5 3 1.5 4.5L12 22l5.5-5.5C18.5 15 19 13.5 19 12a7 7 0 0 0-7-7z" 
+                                      fill="none" stroke="currentColor" stroke-width="1"/>
+                                <circle cx="12" cy="9" r="2" fill="none" stroke="currentColor" stroke-width="1"/>
+                            </svg>
+                        </div>
+                        <span class="body-label">NEURAL MAPPING</span>
+                    </div>
+                    <div class="body-header-right">
+                        <span class="body-id">SUBJECT: SKYE</span>
+                    </div>
                 </div>
-
-                <div class="gate-label">GATE</div>
-                <div class="gate-number">A6</div>
-
-                <!-- Barcode Section -->
-                <div class="barcode-section">
-                    <div class="passenger-id">PASSENGER ID</div>
-                    <div class="id-number">SKYEDEV_2025</div>
-                    
-                    <!-- Barcode -->
-                    <svg class="barcode" viewBox="0 0 200 40">
-                        <rect x="5" y="0" width="2" height="40" fill="currentColor"/>
-                        <rect x="10" y="0" width="4" height="40" fill="currentColor"/>
-                        <rect x="18" y="0" width="2" height="40" fill="currentColor"/>
-                        <rect x="24" y="0" width="6" height="40" fill="currentColor"/>
-                        <rect x="34" y="0" width="2" height="40" fill="currentColor"/>
-                        <rect x="40" y="0" width="4" height="40" fill="currentColor"/>
-                        <rect x="48" y="0" width="2" height="40" fill="currentColor"/>
-                        <rect x="54" y="0" width="8" height="40" fill="currentColor"/>
-                        <rect x="66" y="0" width="2" height="40" fill="currentColor"/>
-                        <rect x="72" y="0" width="4" height="40" fill="currentColor"/>
-                        <rect x="80" y="0" width="2" height="40" fill="currentColor"/>
-                        <rect x="86" y="0" width="6" height="40" fill="currentColor"/>
-                        <rect x="96" y="0" width="2" height="40" fill="currentColor"/>
-                        <rect x="102" y="0" width="4" height="40" fill="currentColor"/>
-                        <rect x="110" y="0" width="2" height="40" fill="currentColor"/>
-                        <rect x="116" y="0" width="8" height="40" fill="currentColor"/>
-                        <rect x="128" y="0" width="2" height="40" fill="currentColor"/>
-                        <rect x="134" y="0" width="4" height="40" fill="currentColor"/>
-                        <rect x="142" y="0" width="2" height="40" fill="currentColor"/>
-                        <rect x="148" y="0" width="6" height="40" fill="currentColor"/>
-                        <rect x="158" y="0" width="2" height="40" fill="currentColor"/>
-                        <rect x="164" y="0" width="4" height="40" fill="currentColor"/>
-                        <rect x="172" y="0" width="2" height="40" fill="currentColor"/>
-                        <rect x="178" y="0" width="8" height="40" fill="currentColor"/>
-                        <rect x="190" y="0" width="2" height="40" fill="currentColor"/>
-                    </svg>
+                
+                <div class="body-scan-data">
+                    <div class="scan-item" data-reveal="1">
+                        <div class="scan-dot"></div>
+                        <span class="scan-text">Frontal Lobe: ACTIVE</span>
+                    </div>
+                    <div class="scan-item" data-reveal="2">
+                        <div class="scan-dot"></div>
+                        <span class="scan-text">Temporal Lobe: SYNCHRONIZED</span>
+                    </div>
+                    <div class="scan-item" data-reveal="3">
+                        <div class="scan-dot success"></div>
+                        <span class="scan-text">Creative Cortex: HIGHLY RESPONSIVE</span>
+                    </div>
+                    <div class="scan-item" data-reveal="4">
+                        <div class="scan-dot warning"></div>
+                        <span class="scan-text">Memory Banks: FRAGMENTED</span>
+                    </div>
+                    <div class="scan-item" data-reveal="5">
+                        <div class="scan-dot success"></div>
+                        <span class="scan-text">Neural Pathways: REINITIALIZED</span>
+                    </div>
                 </div>
+                
+                <div class="body-subtitle-container">
+                    <p class="body-subtitle" id="bodySubtitle"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="flight-info">
-                    <div class="info-label">ENTER THE FLIGHT</div>
-                    <div class="info-icons">
-                        <svg class="info-globe" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-                            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" 
-                                  fill="none" stroke="currentColor" stroke-width="2"/>
+    <!-- Phase 5: Boarding Pass -->
+    <div class="intro-phase phase-boarding" id="phaseBoarding">
+        <div class="boarding-wrapper">
+            <div class="boarding-container">
+                
+                <!-- Left Side - Passenger Info -->
+                <div class="boarding-left">
+                    <div class="boarding-header">
+                        <svg class="boarding-chevrons" viewBox="0 0 40 40">
+                            <path d="M8,10 L18,20 L8,30" fill="none" stroke="currentColor" stroke-width="1"/>
+                            <path d="M16,10 L26,20 L16,30" fill="none" stroke="currentColor" stroke-width="1"/>
                         </svg>
-                        <svg class="info-globe" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-                            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" 
-                                  fill="none" stroke="currentColor" stroke-width="2"/>
+                        <span class="boarding-title">RUNAWAY</span>
+                    </div>
+
+                    <div class="passenger-section">
+                        <div class="passenger-label">PASSENGER</div>
+                        <div class="passenger-name">
+                            <span class="name-prefix">MISS.</span>
+                            <span class="name-main">SKYEDEV</span>
+                        </div>
+                        
+                        <!-- Diagonal stripes -->
+                        <div class="diagonal-stripes">
+                            <div class="stripe"></div>
+                            <div class="stripe"></div>
+                            <div class="stripe"></div>
+                            <div class="stripe"></div>
+                            <div class="stripe"></div>
+                        </div>
+                        
+                        <!-- Coordinates -->
+                        <div class="coordinates">
+                            <div class="coord-value">35.7120° N</div>
+                            <div class="coord-value">139.7876° E</div>
+                        </div>
+                    </div>
+
+                    <div class="boarding-time">
+                        <div class="time-label">BOARDING</div>
+                        <div class="time-value">TM.16.20</div>
+                    </div>
+
+                    <div class="journey-section">
+                        <div class="journey-from">
+                            <div class="journey-label">FROM</div>
+                            <div class="journey-value">UKNOWN</div>
+                        </div>
+                        <div class="journey-arrow">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="1" fill="none"/>
+                            </svg>
+                        </div>
+                        <div class="journey-to">
+                            <div class="journey-label">TO</div>
+                            <div class="journey-value">STARVORTEX SHIP</div>
+                        </div>
+                    </div>
+
+                    <div class="status-section">
+                        <div class="status-indicator">
+                            <div class="status-dot-large"></div>
+                            <div class="status-text">STATUS: CLEARED</div>
+                        </div>
+                        
+                        <!-- QR Code -->
+                        <div class="qr-code">
+                            <div class="qr-row"><span></span><span></span><span></span><span class="empty"></span><span></span></div>
+                            <div class="qr-row"><span></span><span class="empty"></span><span></span><span></span><span class="empty"></span></div>
+                            <div class="qr-row"><span class="empty"></span><span></span><span class="empty"></span><span></span><span></span></div>
+                            <div class="qr-row"><span></span><span></span><span></span><span class="empty"></span><span></span></div>
+                            <div class="qr-row"><span></span><span class="empty"></span><span></span><span></span><span></span></div>
+                        </div>
+                    </div>
+
+                    <div class="boarding-footer">
+                        <div class="footer-icon">◉</div>
+                        <div class="footer-message">ten thousand voices fill your broken soul, just fade away you know there's nothing here to make us stay, headed out far away where no one knows ya.</div>
+                    </div>
+                </div>
+
+                <!-- Right Side - Gate Info -->
+                <div class="boarding-right">
+                    <div class="gate-header">
+                        <svg class="gate-chevrons" viewBox="0 0 40 40">
+                            <path d="M8,10 L18,20 L8,30" fill="none" stroke="currentColor" stroke-width="1"/>
+                            <path d="M16,10 L26,20 L16,30" fill="none" stroke="currentColor" stroke-width="1"/>
+                        </svg>
+                        <svg class="gate-expand" viewBox="0 0 24 24">
+                            <path d="M4 14l4 4M4 14h4v4M20 10l-4-4M20 10h-4v-4" stroke="currentColor" stroke-width="1" fill="none"/>
                         </svg>
                     </div>
-                    <div class="seat-number">SEAT <span>25-F</span></div>
-                </div>
 
-                <div class="date-stamp">
-                    <span class="date-label">FEB 25 2025</span>
-                </div>
+                    <div class="gate-label">GATE</div>
+                    <div class="gate-number">A6</div>
 
-                <div class="bottom-barcode">
-                    <svg class="barcode-sm" viewBox="0 0 200 20">
-                        <rect x="0" y="0" width="2" height="20" fill="currentColor"/>
-                        <rect x="4" y="0" width="3" height="20" fill="currentColor"/>
-                        <rect x="9" y="0" width="2" height="20" fill="currentColor"/>
-                        <rect x="13" y="0" width="4" height="20" fill="currentColor"/>
-                        <rect x="19" y="0" width="2" height="20" fill="currentColor"/>
-                        <rect x="23" y="0" width="3" height="20" fill="currentColor"/>
-                        <rect x="28" y="0" width="2" height="20" fill="currentColor"/>
-                        <rect x="32" y="0" width="5" height="20" fill="currentColor"/>
-                        <rect x="39" y="0" width="2" height="20" fill="currentColor"/>
-                        <rect x="43" y="0" width="3" height="20" fill="currentColor"/>
-                        <rect x="48" y="0" width="2" height="20" fill="currentColor"/>
-                        <rect x="52" y="0" width="4" height="20" fill="currentColor"/>
-                    </svg>
+                    <!-- Barcode Section -->
+                    <div class="barcode-section">
+                        <div class="passenger-id">PASSENGER ID</div>
+                        <div class="id-number">SKYEDEV_2025</div>
+                        
+                        <!-- Barcode -->
+                        <div class="barcode">
+                            <div class="bar thin"></div>
+                            <div class="bar thick"></div>
+                            <div class="bar thin"></div>
+                            <div class="bar medium"></div>
+                            <div class="bar thin"></div>
+                            <div class="bar thick"></div>
+                            <div class="bar thin"></div>
+                            <div class="bar medium"></div>
+                            <div class="bar thick"></div>
+                            <div class="bar thin"></div>
+                            <div class="bar medium"></div>
+                            <div class="bar thin"></div>
+                            <div class="bar thick"></div>
+                            <div class="bar thin"></div>
+                            <div class="bar medium"></div>
+                            <div class="bar thin"></div>
+                            <div class="bar thick"></div>
+                            <div class="bar thin"></div>
+                        </div>
+                    </div>
+
+                    <div class="flight-info">
+                        <div class="info-label">ENTER THE FLIGHT</div>
+                        <div class="info-icons">
+                            <div class="globe-icon-small">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"/>
+                                    <path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10" fill="none" stroke="currentColor" stroke-width="1"/>
+                                </svg>
+                            </div>
+                            <div class="globe-icon-small">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"/>
+                                    <path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10" fill="none" stroke="currentColor" stroke-width="1"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="seat-number">SEAT <span>25-F</span></div>
+                    </div>
+
+                    <div class="date-stamp">
+                        <span class="date-label">FEB 25 2025</span>
+                    </div>
+
+                    <div class="bottom-barcode">
+                        <div class="barcode small">
+                            <div class="bar thin"></div>
+                            <div class="bar medium"></div>
+                            <div class="bar thin"></div>
+                            <div class="bar thick"></div>
+                            <div class="bar thin"></div>
+                            <div class="bar medium"></div>
+                            <div class="bar thin"></div>
+                            <div class="bar thick"></div>
+                            <div class="bar thin"></div>
+                            <div class="bar medium"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

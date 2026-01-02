@@ -1,6 +1,5 @@
 /* ========================================
-   STELLAR INTRO STYLES V2 - SKYEDEV
-   Enhanced with custom fonts and improved animations
+   STELLAR INTRO STYLES  - SKYEDEV
    ======================================== */
 
 /* Custom Fonts */
@@ -9,30 +8,39 @@
     src: url('/src/starvortex_assets/tech.ttf') format('truetype'); 
 }
 
-@font-face { 
-    font-family: 'SV-Hexaframe'; 
-    src: url('/src/starvortex_assets/Hexaframe.woff') format('woff'), 
-         url('/src/starvortex_assets/Hexaframe.otf') format('opentype'); 
+/* CSS Variables - Pure White Theme */
+:root {
+    --intro-bg: #000;
+    --intro-white: #fff;
+    --intro-white-90: rgba(255, 255, 255, 0.9);
+    --intro-white-70: rgba(255, 255, 255, 0.7);
+    --intro-white-50: rgba(255, 255, 255, 0.5);
+    --intro-white-30: rgba(255, 255, 255, 0.3);
+    --intro-white-20: rgba(255, 255, 255, 0.2);
+    --intro-white-10: rgba(255, 255, 255, 0.1);
+    --intro-white-05: rgba(255, 255, 255, 0.05);
+    --subtitle-font: 'Orbitron', sans-serif;
+    --data-font: 'SV-Tech', 'Courier New', monospace;
 }
 
-@font-face { 
-    font-family: 'SV-Sprintura'; 
-    src: url('/src/starvortex_assets/sprintura.otf') format('truetype'); 
-}
+/* ========================================
+   BASE STYLES CON ID ÚNICO
+   ======================================== */
 
-.stellar-intro {
+#stellarIntro {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
-    background: #000;
+    background: var(--intro-bg);
     z-index: 10000;
     overflow: hidden;
-    font-family: 'SV-Tech', 'Courier New', monospace;
+    font-family: var(--data-font);
+    color: var(--intro-white);
 }
 
-.intro-phase {
+#stellarIntro .intro-phase {
     position: absolute;
     top: 0;
     left: 0;
@@ -40,19 +48,19 @@
     height: 100%;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 1s ease, visibility 1s ease;
+    transition: opacity 1.2s ease, visibility 1.2s ease;
 }
 
-.intro-phase.active {
+#stellarIntro .intro-phase.active {
     opacity: 1;
     visibility: visible;
 }
 
 /* ========================================
-   SKIP INDICATOR - Enhanced Design
+   SKIP INDICATOR
    ======================================== */
 
-.skip-indicator {
+#stellarIntro .skip-indicator {
     position: fixed;
     bottom: 50px;
     left: 50%;
@@ -60,207 +68,86 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    font-family: 'SV-Hexaframe', 'Courier New', monospace;
-    color: rgba(255, 255, 255, 0.7);
+    font-family: var(--subtitle-font);
+    color: var(--intro-white-50);
     z-index: 10001;
     opacity: 0;
-    animation: skipFadeIn 1.5s ease 3s forwards, skipPulse 3s ease-in-out 5s infinite;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+    animation: skipFadeIn 1.5s ease 3s forwards;
 }
 
 @keyframes skipFadeIn {
-    from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-    }
+    to { opacity: 1; }
 }
 
-@keyframes skipPulse {
-    0%, 100% {
-        opacity: 1;
-        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
-    }
-    50% {
-        opacity: 0.5;
-        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
-    }
+#stellarIntro .skip-bracket {
+    font-size: 1.5rem;
+    font-weight: 200;
+    color: var(--intro-white-30);
 }
 
-.skip-bracket {
-    font-size: 2rem;
-    font-weight: bold;
-    color: rgba(255, 255, 255, 0.5);
-    animation: bracketGlow 2.5s ease-in-out infinite;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-}
-
-.skip-bracket.left {
-    animation-delay: 0s;
-}
-
-.skip-bracket.right {
-    animation-delay: 1.25s;
-}
-
-@keyframes bracketGlow {
-    0%, 100% {
-        color: rgba(255, 255, 255, 0.5);
-        text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-    }
-    50% {
-        color: rgba(255, 255, 255, 1);
-        text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 25px rgba(255, 255, 255, 0.5);
-    }
-}
-
-.skip-content {
+#stellarIntro .skip-content {
     display: flex;
     align-items: center;
     gap: 15px;
-    padding: 14px 28px;
-    background: rgba(0, 0, 0, 0.6);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 2px;
+    padding: 10px 20px;
+    border: 1px solid var(--intro-white-20);
     position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(10px);
 }
 
-.skip-content::before {
+#stellarIntro .skip-content::before {
     content: '';
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    background: linear-gradient(90deg, transparent, var(--intro-white-10), transparent);
     animation: skipScan 3s ease-in-out infinite;
 }
 
 @keyframes skipScan {
-    0% {
-        left: -100%;
-    }
-    100% {
-        left: 100%;
-    }
+    0% { left: -100%; }
+    100% { left: 100%; }
 }
 
-.skip-content::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+#stellarIntro .skip-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--intro-white-50);
 }
 
-.skip-icon {
-    width: 22px;
-    height: 22px;
-    color: rgba(255, 255, 255, 0.8);
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
-}
-
-.skip-text {
-    font-size: 0.9rem;
-    letter-spacing: 0.2em;
-    color: rgba(255, 255, 255, 0.85);
+#stellarIntro .skip-text {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--intro-white-50);
     text-transform: uppercase;
-    position: relative;
-    font-weight: 600;
+    font-weight: 300;
 }
 
-.skip-bar {
-    width: 70px;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.15);
+#stellarIntro .skip-bar {
+    width: 50px;
+    height: 2px;
+    background: var(--intro-white-20);
     position: relative;
-    overflow: hidden;
-    border-radius: 2px;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
     --progress: 0%;
 }
 
-.skip-bar::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 40%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-    animation: skipBarMove 1.8s ease-in-out infinite;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
-}
-
-/* Progress bar when holding */
-.skip-bar::before {
+#stellarIntro .skip-bar::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: var(--progress);
     height: 100%;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 1));
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    background: var(--intro-white);
     transition: width 0.03s linear;
-    z-index: 1;
 }
 
-.skip-indicator.holding .skip-bar::after {
-    animation: none;
-    opacity: 0;
+#stellarIntro .skip-indicator.holding .skip-content {
+    border-color: var(--intro-white-50);
 }
 
-.skip-indicator.holding {
-    transform: translateX(-50%) scale(1.05);
-    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
-}
-
-.skip-indicator.holding .skip-content {
-    border-color: rgba(255, 255, 255, 0.6);
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.skip-indicator.holding .skip-text {
-    color: #fff;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-}
-
-@keyframes skipBarMove {
-    0% {
-        left: -40%;
-    }
-    100% {
-        left: 100%;
-    }
-}
-
-.skip-indicator.pressed {
-    animation: skipPressed 0.4s ease forwards;
-}
-
-@keyframes skipPressed {
-    0% {
-        transform: translateX(-50%) translateY(0) scale(1);
-    }
-    50% {
-        transform: translateX(-50%) translateY(3px) scale(0.92);
-        opacity: 0.3;
-    }
-    100% {
-        transform: translateX(-50%) translateY(0) scale(1);
-        opacity: 0;
-    }
-}
-
-.skip-indicator.hidden {
+#stellarIntro .skip-indicator.hidden {
     opacity: 0;
     pointer-events: none;
 }
@@ -269,860 +156,1423 @@
    PHASE 1: VOICE AUTHENTICATION
    ======================================== */
 
-.phase-voice {
+#stellarIntro .phase-voice {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background: radial-gradient(circle at center, rgba(20, 20, 40, 0.5) 0%, #000 100%);
 }
 
-.voice-container {
+#stellarIntro .voice-container {
     width: 100%;
-    max-width: 900px;
+    max-width: 1000px;
     text-align: center;
-    padding: 60px 40px;
+    padding: 40px;
 }
 
-.voice-waveform {
-    width: 100%;
-    max-width: 500px;
-    height: 100px;
-    margin: 0 auto 80px;
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
-}
-
-.wave-bar {
-    fill: rgba(255, 255, 255, 0.25);
-    animation: waveAnimation 1.4s ease-in-out infinite;
-}
-
-.wave-bar:nth-child(2n) {
-    animation-delay: 0.1s;
-}
-
-.wave-bar:nth-child(3n) {
-    animation-delay: 0.2s;
-}
-
-.wave-bar:nth-child(4n) {
-    animation-delay: 0.3s;
-}
-
-.wave-bar:nth-child(5n) {
-    animation-delay: 0.15s;
-}
-
-@keyframes waveAnimation {
-    0%, 100% {
-        fill: rgba(255, 255, 255, 0.25);
-        transform: scaleY(1);
-    }
-    50% {
-        fill: rgba(255, 255, 255, 1);
-        transform: scaleY(2);
-    }
-}
-
-.subtitle-container {
-    min-height: 140px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 60px;
-    padding: 0 20px;
-}
-
-.subtitle-text {
-    font-family: 'SV-Hexaframe', 'Courier New', monospace;
-    font-size: 1.6rem;
-    color: #fff;
-    letter-spacing: 0.08em;
-    line-height: 1.8;
-    max-width: 95%;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
-                 0 0 40px rgba(255, 255, 255, 0.3);
-    font-weight: 500;
-}
-
-.voice-indicator {
+/* AI Voice Visualizer */
+#stellarIntro .ai-voice-visualizer {
     position: relative;
-    width: 80px;
-    height: 80px;
-    margin: 0 auto;
+    width: 250px;
+    height: 250px;
+    margin: 0 auto 80px;
 }
 
-.voice-ring {
+#stellarIntro .voice-core {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 25px;
-    height: 25px;
-    border: 2px solid rgba(255, 255, 255, 0.6);
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+}
+
+#stellarIntro .core-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 1px solid var(--intro-white-30);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    animation: ringPulse 2.5s ease-out infinite;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
 }
 
-.voice-ring:nth-child(2) {
-    animation-delay: 0.6s;
+#stellarIntro .ring-1 {
+    width: 40px;
+    height: 40px;
+    animation: ringPulse 2s ease-out infinite;
 }
 
-.voice-ring:nth-child(3) {
-    animation-delay: 1.2s;
+#stellarIntro .ring-2 {
+    width: 60px;
+    height: 60px;
+    animation: ringPulse 2s ease-out infinite 0.5s;
+}
+
+#stellarIntro .ring-3 {
+    width: 80px;
+    height: 80px;
+    animation: ringPulse 2s ease-out infinite 1s;
 }
 
 @keyframes ringPulse {
-    0% {
-        width: 25px;
-        height: 25px;
-        opacity: 1;
-        border-width: 2px;
-    }
-    100% {
-        width: 80px;
-        height: 80px;
-        opacity: 0;
-        border-width: 1px;
-    }
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
 }
 
-/* ========================================
-   PHASE 2: DATA VISUALIZATION
-   Enhanced to match reference images
-   ======================================== */
+#stellarIntro .core-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 15px;
+    height: 15px;
+    background: var(--intro-white);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: corePulse 1.5s ease-in-out infinite;
+}
 
-.phase-data {
+@keyframes corePulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+    50% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+}
+
+/* Frequency Bars */
+#stellarIntro .frequency-bars {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 3px;
+    height: 50px;
+}
+
+#stellarIntro .freq-bar {
+    width: 2px;
+    background: var(--intro-white);
+    border-radius: 1px;
+    animation: freqBar 0.4s ease-in-out infinite;
+    animation-delay: calc(var(--delay) * 0.05s);
+}
+
+@keyframes freqBar {
+    0%, 100% { height: 5px; opacity: 0.3; }
+    50% { height: calc(15px + var(--delay) * 2px); opacity: 1; }
+}
+
+/* Subtitle Container */
+#stellarIntro .subtitle-container {
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 30px;
-    background: #000;
+    margin-bottom: 40px;
 }
 
-.data-container {
-    width: 100%;
-    max-width: 1600px;
-    font-family: 'SV-Tech', 'Courier New', monospace;
-}
-
-.data-header {
+#stellarIntro .subtitle-brackets {
     display: flex;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 25px;
-    padding: 18px 0;
-    border-top: 2px solid rgba(255, 255, 255, 0.3);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.header-icon {
-    width: 35px;
-    height: 35px;
-    color: #fff;
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
-}
-
-.header-label {
-    font-size: 1rem;
-    color: #fff;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    font-weight: 700;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
-
-.section-label {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.65);
-    margin: 25px 0 18px;
-    letter-spacing: 0.15em;
-    font-weight: 600;
-}
-
-.data-bars {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 35px;
-}
-
-.data-bar {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    padding: 18px 25px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     gap: 25px;
-    transition: all 0.4s ease;
+}
+
+#stellarIntro .bracket-left,
+#stellarIntro .bracket-right {
+    font-size: 1.5rem;
+    color: var(--intro-white-20);
+    font-weight: 200;
+}
+
+#stellarIntro .subtitle-text {
+    font-family: var(--subtitle-font);
+    font-size: 1.15rem;
+    color: var(--intro-white-90);
+    letter-spacing: 0.08em;
+    line-height: 1.9;
+    max-width: 700px;
+    font-weight: 300;
     opacity: 0;
-    transform: translateX(-40px);
-    position: relative;
-    overflow: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.data-bar::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
-    transition: left 0.6s ease;
-}
-
-.data-bar.show {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-.data-bar.show::before {
-    left: 100%;
-}
-
-.data-bar:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
-    border-color: rgba(255, 255, 255, 0.35);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-}
-
-.gold-bar {
-    border-color: rgba(255, 255, 255, 0.4);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
-}
-
-.gold-bar:hover {
-    border-color: rgba(255, 255, 255, 0.6);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
-}
-
-.bordered-bar {
-    border: 3px solid rgba(255, 255, 255, 0.25);
-    flex-direction: column;
-    align-items: flex-start;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
-}
-
-.bar-left,
-.bar-center,
-.bar-right {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.bar-left {
-    flex: 1;
-}
-
-.bar-center {
-    flex-shrink: 0;
-}
-
-.bar-right {
-    flex-shrink: 0;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.55);
-    font-family: 'SV-Hexaframe', monospace;
-}
-
-.bar-text {
-    font-size: 0.85rem;
-    color: #fff;
-    letter-spacing: 0.08em;
-    font-weight: 600;
-}
-
-.bar-sep {
-    color: rgba(255, 255, 255, 0.4);
-    margin: 0 6px;
-    font-size: 0.9rem;
-}
-
-.bar-tag {
-    font-size: 0.75rem;
-    padding: 5px 12px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 2px;
-    letter-spacing: 0.08em;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.bar-tag:hover {
-    background: rgba(255, 255, 255, 0.18);
-    border-color: rgba(255, 255, 255, 0.4);
-}
-
-.bar-badge {
-    font-size: 0.9rem;
-    padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 2px solid rgba(255, 255, 255, 0.35);
-    letter-spacing: 0.12em;
-    white-space: nowrap;
-    font-weight: 700;
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
-}
-
-.bar-badge.gold {
-    border-color: rgba(255, 255, 255, 0.6);
-    background: rgba(255, 255, 255, 0.15);
-    color: #fff;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
-
-.bar-title {
-    font-size: 0.95rem;
-    letter-spacing: 0.1em;
-    color: #fff;
-    font-weight: 700;
-}
-
-.bar-title-large {
-    font-size: 1.05rem;
-    letter-spacing: 0.12em;
-    color: #fff;
-    margin-bottom: 18px;
-    font-weight: 700;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-}
-
-.bar-chevrons {
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 1rem;
-    margin-left: 8px;
-}
-
-.bar-btn {
-    padding: 10px 18px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 2px solid rgba(255, 255, 255, 0.25);
-    color: #fff;
-    font-family: 'SV-Tech', monospace;
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 600;
-}
-
-.bar-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-    transform: translateY(-1px);
-}
-
-.bar-btn.active {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: #fff;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
-}
-
-.bar-btn.outline {
-    background: transparent;
-    border-color: rgba(255, 255, 255, 0.35);
-}
-
-.bar-buttons {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    width: 100%;
-}
-
-/* Module Grid */
-.module-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 35px;
-}
-
-.module-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-}
-
-.module-btn {
-    padding: 18px 24px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
-    font-family: 'SV-Tech', monospace;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0;
-    transform: translateY(15px);
-    position: relative;
-    overflow: hidden;
-    font-weight: 600;
-}
-
-.module-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: left 0.6s ease;
-}
-
-.module-btn.show {
+#stellarIntro .subtitle-text.visible {
     opacity: 1;
     transform: translateY(0);
 }
 
-.module-btn.show::before {
-    left: 100%;
+#stellarIntro .subtitle-line {
+    width: 0;
+    height: 1px;
+    background: var(--intro-white-20);
+    margin-top: 25px;
+    transition: width 0.8s ease;
 }
 
-.module-btn:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+#stellarIntro .subtitle-text.visible ~ .subtitle-line,
+#stellarIntro .subtitle-brackets:has(.subtitle-text.visible) ~ .subtitle-line {
+    width: 150px;
 }
 
-.module-btn.outline {
-    background: transparent;
-    border-style: dashed;
-    border-width: 2px;
-}
-
-.module-btn.filled {
-    background: rgba(255, 255, 255, 0.12);
-}
-
-.module-btn.filled-white {
-    background: rgba(255, 255, 255, 0.18);
-    border-color: rgba(255, 255, 255, 0.4);
-}
-
-.module-btn.highlight {
-    border-color: rgba(255, 255, 255, 0.5);
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
-}
-
-.module-btn.dark {
-    background: rgba(0, 0, 0, 0.4);
-    border-color: rgba(255, 255, 255, 0.15);
-}
-
-.data-footer {
-    padding: 25px 0;
-    border-top: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.footer-logo {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    font-size: 1rem;
-    letter-spacing: 0.18em;
-    color: #fff;
-    font-weight: 700;
-}
-
-.logo-circle {
-    width: 35px;
-    height: 35px;
-    border: 2px solid #fff;
-    border-radius: 50%;
+/* Voice Status */
+#stellarIntro .voice-status {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    font-size: 1.2rem;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    gap: 10px;
+    opacity: 0.5;
+}
+
+#stellarIntro .status-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--intro-white);
+    border-radius: 50%;
+    animation: statusBlink 1.5s ease-in-out infinite;
+}
+
+@keyframes statusBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+}
+
+#stellarIntro .status-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--intro-white-50);
+    font-weight: 300;
 }
 
 /* ========================================
-   PHASE 3: BOARDING PASS
-   Enhanced to match ticket aesthetic
+   PHASE 2: DATA VISUALIZATION
    ======================================== */
 
-.phase-boarding {
+#stellarIntro .phase-data {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 50px 30px;
-    background: #000;
+    padding: 40px;
 }
 
-.boarding-container {
+#stellarIntro .data-container {
     width: 100%;
-    max-width: 1200px;
-    display: grid;
-    grid-template-columns: 1.3fr 0.7fr;
-    background: linear-gradient(135deg, rgba(20, 20, 20, 1) 0%, rgba(0, 0, 0, 1) 100%);
-    border: 3px solid rgba(255, 255, 255, 0.25);
-    font-family: 'SV-Hexaframe', monospace;
-    opacity: 0;
-    transform: scale(0.94);
-    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+    max-width: 1400px;
+    position: relative;
 }
 
-.boarding-container.show {
+/* HUD Corners */
+#stellarIntro .hud-corner {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    color: var(--intro-white-30);
+    opacity: 0;
+    animation: cornerFadeIn 0.8s ease forwards;
+}
+
+#stellarIntro .hud-corner.top-left { top: -20px; left: -20px; animation-delay: 0.2s; }
+#stellarIntro .hud-corner.top-right { top: -20px; right: -20px; animation-delay: 0.3s; }
+#stellarIntro .hud-corner.bottom-left { bottom: -20px; left: -20px; animation-delay: 0.4s; }
+#stellarIntro .hud-corner.bottom-right { bottom: -20px; right: -20px; animation-delay: 0.5s; }
+
+@keyframes cornerFadeIn {
+    to { opacity: 1; }
+}
+
+/* Data Header */
+#stellarIntro .data-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 35px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--intro-white-10);
+    opacity: 0;
+    transform: translateY(-15px);
+    animation: slideDown 0.6s ease forwards 0.3s;
+}
+
+@keyframes slideDown {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#stellarIntro .header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#stellarIntro .header-icon-box {
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--intro-white-20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#stellarIntro .header-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--intro-white-70);
+}
+
+#stellarIntro .header-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--intro-white-70);
+    font-weight: 400;
+}
+
+#stellarIntro .header-line {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--intro-white-20), transparent);
+}
+
+#stellarIntro .header-sub {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--intro-white-30);
+}
+
+#stellarIntro .header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.65rem;
+    color: var(--intro-white-50);
+}
+
+#stellarIntro .header-divider {
+    width: 1px;
+    height: 15px;
+    background: var(--intro-white-20);
+}
+
+#stellarIntro .header-status {
+    color: var(--intro-white-70);
+}
+
+/* Medical Section */
+#stellarIntro .medical-section {
+    padding: 30px;
+    border: 1px solid var(--intro-white-10);
+    position: relative;
+}
+
+#stellarIntro .scan-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--intro-white-10);
+}
+
+#stellarIntro .scan-icon {
+    width: 25px;
+    height: 25px;
+    color: var(--intro-white-50);
+}
+
+#stellarIntro .scan-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--intro-white-70);
+}
+
+#stellarIntro .scan-progress {
+    flex: 1;
+    height: 2px;
+    background: var(--intro-white-10);
+    margin-left: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+#stellarIntro .progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: var(--intro-white);
+    transition: width 0.3s ease;
+}
+
+#stellarIntro .progress-glow {
+    position: absolute;
+    top: -2px;
+    right: 0;
+    width: 30px;
+    height: 6px;
+    background: linear-gradient(90deg, transparent, var(--intro-white));
+    filter: blur(3px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#stellarIntro .scan-percent {
+    font-size: 0.65rem;
+    color: var(--intro-white-50);
+    letter-spacing: 0.1em;
+    min-width: 35px;
+    text-align: right;
+}
+
+/* Scan Grid */
+#stellarIntro .scan-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 40px;
+    margin-bottom: 30px;
+}
+
+/* Data Readouts */
+#stellarIntro .data-readouts {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+#stellarIntro .readout-item {
+    opacity: 0;
+    transform: translateX(-15px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#stellarIntro .readout-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+#stellarIntro .readout-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+#stellarIntro .readout-id {
+    font-size: 0.55rem;
+    color: var(--intro-white-30);
+    letter-spacing: 0.1em;
+}
+
+#stellarIntro .readout-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: var(--intro-white-50);
+}
+
+#stellarIntro .readout-value {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--intro-white-90);
+    margin-bottom: 8px;
+    letter-spacing: 0.08em;
+}
+
+#stellarIntro .readout-bar {
+    height: 2px;
+    background: var(--intro-white-10);
+    position: relative;
+}
+
+#stellarIntro .bar-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: var(--intro-white-70);
+    transition: width 1.2s ease;
+}
+
+#stellarIntro .bar-fill.warning { background: var(--intro-white-50); }
+#stellarIntro .bar-fill.success { background: var(--intro-white); }
+
+#stellarIntro .readout-item.visible .bar-fill {
+    width: var(--fill);
+}
+
+/* Status Display */
+#stellarIntro .status-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+#stellarIntro .status-box {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid var(--intro-white-15);
+    background: var(--intro-white-05);
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+#stellarIntro .status-box.visible {
     opacity: 1;
     transform: scale(1);
 }
 
-/* Left Side */
-.boarding-left {
-    padding: 50px 45px;
-    border-right: 3px dashed rgba(255, 255, 255, 0.25);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
-    position: relative;
-}
-
-.boarding-left::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-}
-
-.boarding-header {
+#stellarIntro .status-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 50px;
-}
-
-.boarding-chevrons {
-    width: 45px;
-    height: 45px;
-    color: rgba(255, 255, 255, 0.8);
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
-}
-
-.boarding-title {
-    font-size: 1.4rem;
-    letter-spacing: 0.35em;
-    color: #fff;
-    font-weight: 900;
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-}
-
-.passenger-section {
-    margin-bottom: 50px;
-    position: relative;
-}
-
-.passenger-label {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 0.25em;
-    margin-bottom: 12px;
-    font-weight: 600;
-}
-
-.passenger-name {
-    display: flex;
-    align-items: baseline;
     gap: 12px;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--intro-white-10);
 }
 
-.name-prefix {
-    font-size: 1.8rem;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 600;
-}
-
-.name-main {
-    font-size: 3.5rem;
-    color: #fff;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
-}
-
-.diagonal-stripes {
-    width: 180px;
-    height: 70px;
-    color: rgba(255, 255, 255, 0.12);
-    margin: 25px 0;
-}
-
-.coordinates {
-    display: flex;
-    gap: 25px;
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.85);
-    margin-top: 18px;
-    font-weight: 600;
-}
-
-.boarding-time {
-    margin-bottom: 50px;
-}
-
-.time-label {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 0.25em;
-    margin-bottom: 10px;
-    font-weight: 600;
-}
-
-.time-value {
-    font-size: 3rem;
-    color: #fff;
-    font-weight: 900;
-    letter-spacing: 0.15em;
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
-}
-
-.journey-section {
-    margin-bottom: 50px;
-}
-
-.journey-from,
-.journey-to {
-    margin-bottom: 25px;
-}
-
-.journey-label {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 0.25em;
-    margin-bottom: 8px;
-    font-weight: 600;
-}
-
-.journey-value {
-    font-size: 1.5rem;
-    color: #fff;
-    letter-spacing: 0.08em;
-    font-weight: 700;
-}
-
-.status-section {
+#stellarIntro .status-icon-wrap {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--intro-white-30);
     display: flex;
     align-items: center;
-    gap: 18px;
-    margin-bottom: 40px;
+    justify-content: center;
 }
 
-.status-arrow {
-    width: 28px;
-    height: 28px;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.status-text {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.85);
-    letter-spacing: 0.12em;
-    font-weight: 600;
-}
-
-.qr-code {
-    width: 110px;
-    height: 70px;
-    color: rgba(255, 255, 255, 0.9);
-    margin-left: auto;
-}
-
-.boarding-footer {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding-top: 25px;
-    border-top: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.footer-icon {
-    font-size: 1.4rem;
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.footer-message {
+#stellarIntro .status-icon {
     font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.55);
-    line-height: 1.5;
-    letter-spacing: 0.03em;
-    font-weight: 500;
+    color: var(--intro-white-70);
 }
 
-/* Right Side */
-.boarding-right {
-    padding: 50px 40px;
-    background: rgba(255, 255, 255, 0.04);
+#stellarIntro .status-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--intro-white-70);
+}
+
+#stellarIntro .status-code {
+    margin-left: auto;
+    font-size: 0.5rem;
+    color: var(--intro-white-30);
+    letter-spacing: 0.1em;
+}
+
+#stellarIntro .status-content {
+    margin-bottom: 15px;
+}
+
+#stellarIntro .status-line {
+    font-size: 0.65rem;
+    color: var(--intro-white-50);
+    line-height: 1.8;
+    margin-bottom: 5px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#stellarIntro .status-line.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#stellarIntro .status-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--intro-white-10);
+}
+
+#stellarIntro .status-dots {
+    display: flex;
+    gap: 5px;
+}
+
+#stellarIntro .status-dots .dot {
+    width: 4px;
+    height: 4px;
+    background: var(--intro-white-20);
+}
+
+#stellarIntro .status-dots .dot.active {
+    background: var(--intro-white);
+}
+
+#stellarIntro .status-stamp {
+    font-size: 0.55rem;
+    color: var(--intro-white-50);
+    letter-spacing: 0.15em;
+    padding: 3px 8px;
+    border: 1px solid var(--intro-white-20);
+}
+
+/* Percentage Ring */
+#stellarIntro .percentage-ring {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+#stellarIntro .percentage-ring svg {
+    width: 100%;
+    height: 100%;
+}
+
+#stellarIntro .percentage-ring circle {
+    transition: stroke-dashoffset 1.5s ease;
+}
+
+#stellarIntro .percentage-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+#stellarIntro .percent-num {
+    font-size: 1.5rem;
+    color: var(--intro-white);
+    font-weight: 300;
+}
+
+#stellarIntro .percent-sign {
+    font-size: 0.6rem;
+    color: var(--intro-white-50);
+}
+
+/* System Info */
+#stellarIntro .system-info {
     display: flex;
     flex-direction: column;
-    position: relative;
-}
-
-.boarding-right::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-}
-
-.gate-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 40px;
-}
-
-.gate-chevrons,
-.gate-expand {
-    width: 35px;
-    height: 35px;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.gate-label {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 0.25em;
-    margin-bottom: 12px;
-    font-weight: 600;
-}
-
-.gate-number {
-    font-size: 6rem;
-    color: #fff;
-    font-weight: 900;
-    letter-spacing: 0.12em;
-    line-height: 1;
-    margin-bottom: 50px;
-    text-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
-}
-
-.barcode-section {
-    margin-bottom: 50px;
-    padding-bottom: 35px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.passenger-id {
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 0.18em;
-    margin-bottom: 8px;
-    font-weight: 600;
-}
-
-.id-number {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.85);
-    letter-spacing: 0.12em;
-    margin-bottom: 25px;
-    font-weight: 700;
-}
-
-.barcode {
-    width: 100%;
-    height: 55px;
-    color: #fff;
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
-}
-
-.flight-info {
-    margin-bottom: 35px;
-}
-
-.info-label {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 0.18em;
-    margin-bottom: 18px;
-    font-weight: 600;
-}
-
-.info-icons {
-    display: flex;
     gap: 18px;
-    margin-bottom: 25px;
 }
 
-.info-globe {
-    width: 40px;
-    height: 40px;
-    color: rgba(255, 255, 255, 0.8);
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+#stellarIntro .info-block {
+    padding-left: 12px;
+    border-left: 1px solid var(--intro-white-20);
+    opacity: 0;
+    transform: translateX(15px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.seat-number {
+#stellarIntro .info-block.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+#stellarIntro .info-label {
+    display: block;
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    color: var(--intro-white-30);
+    margin-bottom: 6px;
+}
+
+#stellarIntro .info-value {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--intro-white-70);
+    letter-spacing: 0.08em;
+}
+
+#stellarIntro .info-value.large {
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--intro-white);
+}
+
+#stellarIntro .info-value.warning { color: var(--intro-white-50); }
+#stellarIntro .info-value.success { color: var(--intro-white); }
+
+#stellarIntro .info-sub {
+    display: block;
+    font-size: 0.6rem;
+    color: var(--intro-white-30);
+    margin-top: 4px;
+}
+
+#stellarIntro .info-underline {
+    width: 30px;
+    height: 1px;
+    background: var(--intro-white-10);
+    margin-top: 10px;
+}
+
+/* Data Subtitle */
+#stellarIntro .data-subtitle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid var(--intro-white-10);
+}
+
+#stellarIntro .subtitle-line-left,
+#stellarIntro .subtitle-line-right {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--intro-white-20));
+}
+
+#stellarIntro .subtitle-line-right {
+    background: linear-gradient(90deg, var(--intro-white-20), transparent);
+}
+
+#stellarIntro .data-subtitle {
+    font-family: var(--subtitle-font);
     font-size: 1rem;
-    color: rgba(255, 255, 255, 0.85);
-    letter-spacing: 0.12em;
-    font-weight: 600;
+    color: var(--intro-white-70);
+    letter-spacing: 0.08em;
+    font-weight: 300;
+    text-align: center;
+    max-width: 600px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }
 
-.seat-number span {
-    font-size: 1.5rem;
-    font-weight: 900;
-    margin-left: 10px;
-    color: #fff;
+#stellarIntro .data-subtitle.visible {
+    opacity: 1;
 }
 
-.date-stamp {
-    margin-bottom: 35px;
+/* Data Footer */
+#stellarIntro .data-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid var(--intro-white-10);
+    font-size: 0.55rem;
+    color: var(--intro-white-30);
 }
 
-.date-label {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.75);
-    letter-spacing: 0.18em;
-    font-weight: 700;
+#stellarIntro .footer-left,
+#stellarIntro .footer-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.bottom-barcode {
-    margin-top: auto;
+#stellarIntro .footer-bracket {
+    color: var(--intro-white-20);
 }
 
-.barcode-sm {
-    width: 100%;
-    height: 35px;
-    color: rgba(255, 255, 255, 0.9);
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
+#stellarIntro .footer-center {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#stellarIntro .footer-line {
+    width: 60px;
+    height: 1px;
+    background: var(--intro-white-10);
+}
+
+#stellarIntro .footer-dots {
+    display: flex;
+    gap: 6px;
+}
+
+#stellarIntro .footer-dots .dot {
+    width: 4px;
+    height: 4px;
+    background: var(--intro-white-20);
+}
+
+#stellarIntro .footer-dots .dot.active {
+    background: var(--intro-white-70);
+}
+
+#stellarIntro .footer-divider {
+    color: var(--intro-white-20);
 }
 
 /* ========================================
-   ANIMATIONS
+   PHASE 3: GLOBE/TERRAIN VISUALIZATION
    ======================================== */
 
-@keyframes fadeInText {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+#stellarIntro .phase-globe {
+    background: var(--intro-bg);
 }
 
-/* Fade out animation */
-.stellar-intro.fade-out {
-    animation: fadeOut 1.2s ease forwards;
+#stellarIntro .globe-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#stellarIntro #terrainViewport {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#stellarIntro #terrainViewport canvas {
+    cursor: grab;
+}
+
+#stellarIntro #terrainViewport canvas:active {
+    cursor: grabbing;
+}
+
+#stellarIntro .globe-hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+#stellarIntro .globe-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--intro-white-10);
+}
+
+#stellarIntro .globe-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#stellarIntro .globe-icon {
+    width: 25px;
+    height: 25px;
+    color: var(--intro-white-50);
+}
+
+#stellarIntro .globe-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--intro-white-70);
+}
+
+#stellarIntro .globe-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#stellarIntro .globe-status {
+    font-size: 0.6rem;
+    color: var(--intro-white-50);
+    letter-spacing: 0.15em;
+}
+
+#stellarIntro .status-blink {
+    width: 6px;
+    height: 6px;
+    background: var(--intro-white);
+    animation: statusBlink 1s ease-in-out infinite;
+}
+
+#stellarIntro .globe-data-panels {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+    padding: 40px 0;
+}
+
+#stellarIntro .globe-panel {
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#stellarIntro .globe-panel.left {
+    align-items: flex-start;
+}
+
+#stellarIntro .globe-panel.right {
+    align-items: flex-end;
+    text-align: right;
+}
+
+#stellarIntro .panel-title {
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    color: var(--intro-white-30);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--intro-white-10);
+    width: 100%;
+}
+
+#stellarIntro .panel-item {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#stellarIntro .panel-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#stellarIntro .panel-label {
+    display: block;
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    color: var(--intro-white-30);
+    margin-bottom: 4px;
+}
+
+#stellarIntro .panel-value {
+    font-size: 0.7rem;
+    color: var(--intro-white-70);
+    letter-spacing: 0.05em;
+}
+
+#stellarIntro .panel-value.warning {
+    color: var(--intro-white-50);
+}
+
+#stellarIntro .panel-value.success {
+    color: var(--intro-white);
+}
+
+#stellarIntro .globe-footer {
+    padding-top: 20px;
+    border-top: 1px solid var(--intro-white-10);
+}
+
+#stellarIntro .scan-line-container {
+    width: 100%;
+    height: 2px;
+    background: var(--intro-white-05);
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+#stellarIntro .scan-line {
+    width: 100px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--intro-white-70), transparent);
+    animation: scanLineMove 3s linear infinite;
+}
+
+@keyframes scanLineMove {
+    0% { transform: translateX(-100px); }
+    100% { transform: translateX(100vw); }
+}
+
+#stellarIntro .globe-footer-info {
+    text-align: center;
+}
+
+#stellarIntro .loading-text {
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    color: var(--intro-white-30);
+}
+
+/* ========================================
+   PHASE 4: BODY SCAN (SPLINE 3D)
+   ======================================== */
+
+#stellarIntro .phase-body {
+    background: var(--intro-bg);
+}
+
+#stellarIntro .body-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#stellarIntro #splineContainer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#stellarIntro #splineContainer canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#stellarIntro .body-hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+#stellarIntro .body-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--intro-white-10);
+}
+
+#stellarIntro .body-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#stellarIntro .body-icon {
+    width: 25px;
+    height: 25px;
+    color: var(--intro-white-50);
+}
+
+#stellarIntro .body-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--intro-white-70);
+}
+
+#stellarIntro .body-id {
+    font-size: 0.6rem;
+    color: var(--intro-white-50);
+    letter-spacing: 0.15em;
+}
+
+#stellarIntro .body-scan-data {
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+#stellarIntro .scan-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    transform: translateX(15px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#stellarIntro .scan-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+#stellarIntro .scan-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--intro-white-50);
+}
+
+#stellarIntro .scan-dot.success { background: var(--intro-white); }
+#stellarIntro .scan-dot.warning { background: var(--intro-white-30); }
+
+#stellarIntro .scan-text {
+    font-size: 0.65rem;
+    color: var(--intro-white-50);
+    letter-spacing: 0.08em;
+}
+
+#stellarIntro .body-subtitle-container {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+}
+
+#stellarIntro .body-subtitle {
+    font-family: var(--subtitle-font);
+    font-size: 1rem;
+    color: var(--intro-white-70);
+    letter-spacing: 0.08em;
+    font-weight: 300;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#stellarIntro .body-subtitle.visible {
+    opacity: 1;
+}
+
+/* ========================================
+   PHASE 5: BOARDING PASS
+   ======================================== */
+
+#stellarIntro .phase-boarding {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+#stellarIntro .boarding-wrapper {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+#stellarIntro .boarding-wrapper.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+#stellarIntro .boarding-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    max-width: 900px;
+    border: 1px solid var(--intro-white-20);
+    position: relative;
+}
+
+/* Left Side */
+#stellarIntro .boarding-left {
+    padding: 40px 35px;
+    border-right: 1px dashed var(--intro-white-20);
+}
+
+#stellarIntro .boarding-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#stellarIntro .boarding-chevrons {
+    width: 30px;
+    height: 30px;
+    color: var(--intro-white-50);
+}
+
+#stellarIntro .boarding-title {
+    font-size: 1rem;
+    letter-spacing: 0.3em;
+    color: var(--intro-white);
+    font-weight: 300;
+}
+
+#stellarIntro .passenger-section {
+    margin-bottom: 35px;
+}
+
+#stellarIntro .passenger-label {
+    font-size: 0.55rem;
+    color: var(--intro-white-30);
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+}
+
+#stellarIntro .passenger-name {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#stellarIntro .name-prefix {
+    font-size: 1.2rem;
+    color: var(--intro-white-50);
+    font-weight: 300;
+}
+
+#stellarIntro .name-main {
+    font-size: 2.2rem;
+    color: var(--intro-white);
+    font-weight: 300;
+    letter-spacing: 0.1em;
+}
+
+#stellarIntro .diagonal-stripes {
+    display: flex;
+    gap: 8px;
+    margin: 15px 0;
+    height: 30px;
+    overflow: hidden;
+}
+
+#stellarIntro .stripe {
+    width: 3px;
+    height: 150%;
+    background: var(--intro-white-10);
+    transform: rotate(45deg);
+}
+
+#stellarIntro .coordinates {
+    display: flex;
+    gap: 20px;
+    font-size: 0.7rem;
+    color: var(--intro-white-50);
+}
+
+#stellarIntro .boarding-time {
+    margin-bottom: 30px;
+}
+
+#stellarIntro .time-label {
+    font-size: 0.55rem;
+    color: var(--intro-white-30);
+    letter-spacing: 0.2em;
+    margin-bottom: 6px;
+}
+
+#stellarIntro .time-value {
+    font-size: 2rem;
+    color: var(--intro-white);
+    font-weight: 300;
+    letter-spacing: 0.1em;
+}
+
+#stellarIntro .journey-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+#stellarIntro .journey-from,
+#stellarIntro .journey-to {
+    flex: 1;
+}
+
+#stellarIntro .journey-label {
+    font-size: 0.5rem;
+    color: var(--intro-white-30);
+    letter-spacing: 0.2em;
+    margin-bottom: 5px;
+}
+
+#stellarIntro .journey-value {
+    font-size: 1rem;
+    color: var(--intro-white-70);
+    letter-spacing: 0.08em;
+    font-weight: 300;
+}
+
+#stellarIntro .journey-arrow {
+    width: 20px;
+    height: 20px;
+    color: var(--intro-white-30);
+}
+
+#stellarIntro .status-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+#stellarIntro .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#stellarIntro .status-dot-large {
+    width: 8px;
+    height: 8px;
+    background: var(--intro-white);
+    animation: statusBlink 1.5s ease-in-out infinite;
+}
+
+#stellarIntro .status-text {
+    font-size: 0.65rem;
+    color: var(--intro-white-70);
+    letter-spacing: 0.1em;
+}
+
+#stellarIntro .qr-code {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+#stellarIntro .qr-row {
+    display: flex;
+    gap: 3px;
+}
+
+#stellarIntro .qr-row span {
+    width: 8px;
+    height: 8px;
+    background: var(--intro-white-70);
+}
+
+#stellarIntro .qr-row span.empty {
+    background: transparent;
+}
+
+#stellarIntro .boarding-footer {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding-top: 20px;
+    border-top: 1px solid var(--intro-white-10);
+}
+
+#stellarIntro .footer-icon {
+    font-size: 1rem;
+    color: var(--intro-white-30);
+}
+
+#stellarIntro .footer-message {
+    font-size: 0.5rem;
+    color: var(--intro-white-30);
+    line-height: 1.7;
+    font-weight: 300;
+}
+
+/* Right Side */
+#stellarIntro .boarding-right {
+    padding: 35px 25px;
+    background: var(--intro-white-05);
+    display: flex;
+    flex-direction: column;
+}
+
+#stellarIntro .gate-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+#stellarIntro .gate-chevrons,
+#stellarIntro .gate-expand {
+    width: 25px;
+    height: 25px;
+    color: var(--intro-white-50);
+}
+
+#stellarIntro .gate-label {
+    font-size: 0.55rem;
+    color: var(--intro-white-30);
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+}
+
+#stellarIntro .gate-number {
+    font-size: 4rem;
+    color: var(--intro-white);
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    line-height: 1;
+    margin-bottom: 30px;
+}
+
+#stellarIntro .barcode-section {
+    margin-bottom: 30px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid var(--intro-white-10);
+}
+
+#stellarIntro .passenger-id {
+    font-size: 0.5rem;
+    color: var(--intro-white-30);
+    letter-spacing: 0.15em;
+    margin-bottom: 4px;
+}
+
+#stellarIntro .id-number {
+    font-size: 0.7rem;
+    color: var(--intro-white-70);
+    letter-spacing: 0.1em;
+    margin-bottom: 15px;
+}
+
+#stellarIntro .barcode {
+    display: flex;
+    gap: 2px;
+    height: 35px;
+    align-items: stretch;
+}
+
+#stellarIntro .barcode.small {
+    height: 20px;
+}
+
+#stellarIntro .bar {
+    background: var(--intro-white-70);
+}
+
+#stellarIntro .bar.thin { width: 2px; }
+#stellarIntro .bar.medium { width: 4px; }
+#stellarIntro .bar.thick { width: 6px; }
+
+#stellarIntro .flight-info {
+    margin-bottom: 25px;
+}
+
+#stellarIntro .info-label {
+    font-size: 0.55rem;
+    color: var(--intro-white-30);
+    letter-spacing: 0.15em;
+    margin-bottom: 12px;
+}
+
+#stellarIntro .info-icons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+#stellarIntro .globe-icon-small {
+    width: 30px;
+    height: 30px;
+    color: var(--intro-white-50);
+}
+
+#stellarIntro .seat-number {
+    font-size: 0.7rem;
+    color: var(--intro-white-50);
+    letter-spacing: 0.1em;
+}
+
+#stellarIntro .seat-number span {
+    font-size: 1.1rem;
+    color: var(--intro-white);
+    margin-left: 8px;
+    font-weight: 300;
+}
+
+#stellarIntro .date-stamp {
+    margin-bottom: 25px;
+}
+
+#stellarIntro .date-label {
+    font-size: 0.65rem;
+    color: var(--intro-white-50);
+    letter-spacing: 0.15em;
+}
+
+#stellarIntro .bottom-barcode {
+    margin-top: auto;
+}
+
+/* ========================================
+   FADE OUT
+   ======================================== */
+
+#stellarIntro.fade-out {
+    animation: fadeOut 1.5s ease forwards;
 }
 
 @keyframes fadeOut {
@@ -1136,98 +1586,320 @@
    RESPONSIVE
    ======================================== */
 
-@media (max-width: 1024px) {
-    .boarding-container {
+@media (max-width: 1100px) {
+    #stellarIntro .scan-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+    
+    #stellarIntro .system-info {
+        grid-column: span 2;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    #stellarIntro .info-block {
+        flex: 1;
+        min-width: 140px;
+    }
+}
+
+@media (max-width: 800px) {
+    #stellarIntro .boarding-container {
         grid-template-columns: 1fr;
     }
     
-    .boarding-left {
+    #stellarIntro .boarding-left {
         border-right: none;
-        border-bottom: 3px dashed rgba(255, 255, 255, 0.25);
+        border-bottom: 1px dashed var(--intro-white-20);
     }
     
-    .module-row {
-        grid-template-columns: 1fr;
+    #stellarIntro .name-main {
+        font-size: 1.8rem;
     }
     
-    .data-bar {
+    #stellarIntro .gate-number {
+        font-size: 3rem;
+    }
+    
+    #stellarIntro .globe-data-panels {
         flex-direction: column;
+        gap: 30px;
+    }
+    
+    #stellarIntro .globe-panel {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    #stellarIntro .globe-panel.right {
+        text-align: left;
         align-items: flex-start;
     }
     
-    .name-main {
-        font-size: 2.5rem;
-    }
-    
-    .gate-number {
-        font-size: 4.5rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .name-main {
-        font-size: 2rem;
-    }
-    
-    .gate-number {
-        font-size: 3.5rem;
-    }
-    
-    .subtitle-text {
-        font-size: 1.2rem;
-    }
-    
-    .bar-text {
-        font-size: 0.75rem;
-    }
-    
-    .skip-indicator {
-        bottom: 35px;
-        scale: 0.9;
-    }
-    
-    .skip-text {
-        font-size: 0.8rem;
-    }
-    
-    .skip-bracket {
-        font-size: 1.6rem;
-    }
-    
-    .data-container {
-        padding: 0 15px;
+    #stellarIntro .body-scan-data {
+        right: 30px;
+        top: auto;
+        bottom: 150px;
+        transform: none;
     }
 }
 
-@media (max-width: 480px) {
-    .skip-indicator {
-        bottom: 25px;
-        scale: 0.8;
+@media (max-width: 600px) {
+    #stellarIntro .scan-grid {
+        grid-template-columns: 1fr;
     }
     
-    .skip-content {
-        padding: 10px 18px;
-        gap: 10px;
+    #stellarIntro .status-display {
+        order: -1;
     }
     
-    .skip-text {
-        font-size: 0.7rem;
-        letter-spacing: 0.12em;
-    }
-    
-    .skip-bar {
-        width: 50px;
-    }
-    
-    .subtitle-text {
+    #stellarIntro .subtitle-text {
         font-size: 1rem;
     }
     
-    .name-main {
-        font-size: 1.6rem;
+    #stellarIntro .skip-indicator {
+        bottom: 25px;
+        transform: translateX(-50%) scale(0.85);
     }
     
-    .time-value {
-        font-size: 2rem;
+    #stellarIntro .body-subtitle-container {
+        bottom: 60px;
+    }
+    
+    #stellarIntro .ai-voice-visualizer {
+        width: 180px;
+        height: 180px;
+        margin-bottom: 60px;
+    }
+}
+/* ========================================
+   CANVAS CENTRADO
+   ======================================== */
+
+#stellarIntro .centered-canvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw !important;
+    height: 90vh !important;
+    max-width: 1400px;
+    max-height: 900px;
+    z-index: 1;
+}
+
+/* ========================================
+   PHASE 4: BRAIN VISUALIZATION
+   ======================================== */
+
+#stellarIntro .phase-body {
+    background: var(--intro-bg);
+}
+
+#stellarIntro .body-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+#stellarIntro #brainCanvas {
+    cursor: grab;
+}
+
+#stellarIntro #brainCanvas:active {
+    cursor: grabbing;
+}
+
+#stellarIntro .body-hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+}
+
+#stellarIntro .body-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--intro-white-10);
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+}
+
+#stellarIntro .body-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#stellarIntro .body-icon {
+    width: 25px;
+    height: 25px;
+    color: var(--intro-white-50);
+}
+
+#stellarIntro .body-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--intro-white-70);
+}
+
+#stellarIntro .body-id {
+    font-size: 0.6rem;
+    color: var(--intro-white-50);
+    letter-spacing: 0.15em;
+}
+
+#stellarIntro .body-scan-data {
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border: 1px solid var(--intro-white-20);
+    border-radius: 4px;
+}
+
+#stellarIntro .scan-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    transform: translateX(15px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#stellarIntro .scan-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+#stellarIntro .scan-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--intro-white-50);
+    border-radius: 50%;
+    animation: pulseDot 2s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+#stellarIntro .scan-dot.success { 
+    background: var(--intro-white); 
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+#stellarIntro .scan-dot.warning { 
+    background: #ffa726; 
+    box-shadow: 0 0 8px rgba(255, 167, 38, 0.5);
+}
+
+#stellarIntro .scan-text {
+    font-size: 0.65rem;
+    color: var(--intro-white-70);
+    letter-spacing: 0.08em;
+}
+
+#stellarIntro .body-subtitle-container {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 4px;
+    border: 1px solid var(--intro-white-20);
+}
+
+#stellarIntro .body-subtitle {
+    font-family: var(--subtitle-font);
+    font-size: 1rem;
+    color: var(--intro-white-90);
+    letter-spacing: 0.08em;
+    font-weight: 300;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#stellarIntro .body-subtitle.visible {
+    opacity: 1;
+}
+
+/* ========================================
+   PHASE 3: GLOBE CANVAS FIX
+   ======================================== */
+
+#stellarIntro .phase-globe .globe-hud {
+    z-index: 2;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1100px) {
+    #stellarIntro .centered-canvas {
+        width: 95vw !important;
+        height: 85vh !important;
+    }
+    
+    #stellarIntro .body-scan-data {
+        right: 30px;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 800px) {
+    #stellarIntro .centered-canvas {
+        width: 100vw !important;
+        height: 80vh !important;
+    }
+    
+    #stellarIntro .body-scan-data {
+        position: static;
+        transform: none;
+        margin: 40px auto 0;
+        width: 90%;
+        background: rgba(0, 0, 0, 0.8);
+    }
+    
+    #stellarIntro .body-subtitle-container {
+        bottom: 30px;
+        width: 90%;
+    }
+}
+
+@media (max-width: 600px) {
+    #stellarIntro .centered-canvas {
+        height: 70vh !important;
+    }
+    
+    #stellarIntro .body-scan-data {
+        gap: 12px;
+        padding: 12px;
+    }
+    
+    #stellarIntro .scan-text {
+        font-size: 0.6rem;
     }
 }
