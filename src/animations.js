@@ -41,9 +41,12 @@ class AnimationsManager {
         this.skipHoldInterval = null;
         this.isHoldingSpace = false;
         
-        this.updateSubtitles = this.updateSubtitles.bind(this);
-        this.handleSkipKeyDown = this.handleSkipKeyDown.bind(this);
-        this.handleSkipKeyUp = this.handleSkipKeyUp.bind(this);
+        // Bind methods after they are defined
+        setTimeout(() => {
+            this.updateSubtitles = this.updateSubtitles.bind(this);
+            this.handleSkipKeyDown = this.handleSkipKeyDown.bind(this);
+            this.handleSkipKeyUp = this.handleSkipKeyUp.bind(this);
+        }, 0);
     }
 
     init() {
@@ -233,6 +236,41 @@ class AnimationsManager {
         }
     }
     
+    updateSubtitles() {
+        const currentTime = this.stellarAudio.voice.currentTime;
+        const subtitleText = this.elements.subtitleText;
+        
+        if (!subtitleText) return;
+        
+        const currentSub = this.subtitles.find(sub => 
+            currentTime >= sub.start && currentTime < sub.end
+        );
+        
+        if (currentSub) {
+            if (subtitleText.textContent !== currentSub.text) {
+                subtitleText.textContent = currentSub.text;
+                subtitleText.style.animation = 'none';
+                setTimeout(() => {
+                    subtitleText.style.animation = 'fadeInText 0.5s ease';
+                }, 10);
+            }
+        } else if (currentTime >= this.subtitles[this.subtitles.length - 1].end) {
+            subtitleText.textContent = '';
+        }
+    }
+    
+    handleSkipKeyDown(e) {
+        if (e.code === 'Space' && !this.introSkipped) {
+            e.preventDefault();
+        }
+    }
+    
+    handleSkipKeyUp(e) {
+        if (e.code === 'Space' && !this.introSkipped) {
+            e.preventDefault();
+        }
+    }
+    
     async playStellarPhase1() {
         return new Promise((resolve) => {
             const phaseVoice = this.elements.phaseVoice;
@@ -272,7 +310,7 @@ class AnimationsManager {
                         });
                     }
                     
-                    this.stellarAudio.voice.addEventListener('timeupdate', this.updateSubtitles);
+                    this.stellarAudio.voice.addEventListener('timeupdate', this.updateSubtitles.bind(this));
                     
                     this.stellarAudio.voice.onended = () => {
                         setTimeout(() => {
@@ -308,29 +346,6 @@ class AnimationsManager {
                 }
             }, 800);
         });
-    }
-    
-    updateSubtitles() {
-        const currentTime = this.stellarAudio.voice.currentTime;
-        const subtitleText = this.elements.subtitleText;
-        
-        if (!subtitleText) return;
-        
-        const currentSub = this.subtitles.find(sub => 
-            currentTime >= sub.start && currentTime < sub.end
-        );
-        
-        if (currentSub) {
-            if (subtitleText.textContent !== currentSub.text) {
-                subtitleText.textContent = currentSub.text;
-                subtitleText.style.animation = 'none';
-                setTimeout(() => {
-                    subtitleText.style.animation = 'fadeInText 0.5s ease';
-                }, 10);
-            }
-        } else if (currentTime >= this.subtitles[this.subtitles.length - 1].end) {
-            subtitleText.textContent = '';
-        }
     }
     
     async playStellarPhase2() {
@@ -547,7 +562,7 @@ class AnimationsManager {
     
     cleanupStellarAudio() {
         if (this.stellarAudio.voice) {
-            this.stellarAudio.voice.removeEventListener('timeupdate', this.updateSubtitles);
+            this.stellarAudio.voice.removeEventListener('timeupdate', this.updateSubtitles.bind(this));
         }
         
         Object.values(this.stellarAudio).forEach(audio => {
