@@ -115,17 +115,71 @@ class AnimationsManager {
         this.pointsPlot = [];
         this.particleDistance = 25;
         
-        // Multi-terrain system - 2 LOCATIONS, 80 SECONDS EACH
-        this.terrainLocations = [
-            { 
-                name: 'everest-valley', 
-                duration: 80000, 
-                label: 'EVEREST VALLEY',
+        // Multi-terrain system - USER SELECTABLE, 160 SECONDS TOTAL
+        this.terrainLocations = {
+            'everest': {
+                name: 'everest',
+                label: 'MOUNT EVEREST',
+                geoInfo: {
+                    coords: '27.9881°N 86.9250°E',
+                    elevation: '8,849m',
+                    region: 'HIMALAYAS, NEPAL/TIBET',
+                    climate: 'ALPINE ARCTIC',
+                    population: 'UNINHABITED',
+                    discovery: 'SURVEYED 1856',
+                    facts: [
+                        'Highest point on Earth',
+                        'Known as Sagarmatha in Nepal',
+                        'Chomolungma in Tibetan',
+                        'First summited 1953'
+                    ]
+                }
+            },
+            'k2': {
+                name: 'k2',
+                label: 'K2 PEAK',
+                geoInfo: {
+                    coords: '35.8833°N 76.5167°E',
+                    elevation: '8,611m',
+                    region: 'KARAKORAM, PAKISTAN/CHINA',
+                    climate: 'EXTREME ALPINE',
+                    population: 'UNINHABITED',
+                    discovery: 'SURVEYED 1856',
+                    facts: [
+                        'Second highest mountain',
+                        'Known as Savage Mountain',
+                        'Most dangerous 8000m peak',
+                        'First summited 1954'
+                    ]
+                }
+            },
+            'kangchenjunga': {
+                name: 'kangchenjunga',
+                label: 'KANGCHENJUNGA',
+                geoInfo: {
+                    coords: '27.7025°N 88.1475°E',
+                    elevation: '8,586m',
+                    region: 'HIMALAYAS, NEPAL/INDIA',
+                    climate: 'ALPINE MONSOON',
+                    population: 'UNINHABITED',
+                    discovery: 'SURVEYED 1849',
+                    facts: [
+                        'Third highest mountain',
+                        'Five treasures of snow',
+                        'Sacred to Sikkim people',
+                        'First summited 1955'
+                    ]
+                }
+            },
+            'everest-valley': {
+                name: 'everest-valley',
+                label: 'KHUMBU GLACIER',
                 geoInfo: {
                     coords: '27.9659°N 86.7797°E',
                     elevation: '5,364m',
                     region: 'KHUMBU, NEPAL',
                     climate: 'HIGH ALTITUDE VALLEY',
+                    population: '~6,000 (NAMCHE)',
                     discovery: 'MAPPED 1921',
                     facts: [
                         'Gateway to Everest',
@@ -135,15 +189,15 @@ class AnimationsManager {
                     ]
                 }
             },
-            { 
-                name: 'coldeliseran', 
-                duration: 80000, 
+            'coldeliseran': {
+                name: 'coldeliseran',
                 label: 'COL DE L\'ISERAN',
                 geoInfo: {
                     coords: '45.4167°N 6.9333°E',
                     elevation: '2,770m',
                     region: 'FRENCH ALPS',
                     climate: 'ALPINE MEDITERRANEAN',
+                    population: 'SEASONAL PASS',
                     discovery: 'ROAD BUILT 1937',
                     facts: [
                         'Highest paved pass in Alps',
@@ -152,9 +206,153 @@ class AnimationsManager {
                         'Open June-October'
                     ]
                 }
+            },
+            'athabasca': {
+                name: 'athabasca',
+                label: 'ATHABASCA GLACIER',
+                geoInfo: {
+                    coords: '52.2167°N 117.2333°W',
+                    elevation: '1,900m - 3,450m',
+                    region: 'ROCKY MOUNTAINS, CANADA',
+                    climate: 'SUBARCTIC GLACIAL',
+                    population: 'UNINHABITED',
+                    discovery: 'EXPLORED 1898',
+                    facts: [
+                        'Part of Columbia Icefield',
+                        'Retreating 5m per year',
+                        'One of most visited glaciers',
+                        '6km long, 1km wide'
+                    ]
+                }
+            },
+            'franzjosefglacier': {
+                name: 'franzjosefglacier',
+                label: 'FRANZ JOSEF GLACIER',
+                geoInfo: {
+                    coords: '43.4667°S 170.1833°E',
+                    elevation: '300m - 2,700m',
+                    region: 'SOUTH ISLAND, NEW ZEALAND',
+                    climate: 'TEMPERATE MARITIME',
+                    population: '~330 (FRANZ JOSEF)',
+                    discovery: 'NAMED 1865',
+                    facts: [
+                        'Descends into rainforest',
+                        'Named after Austrian Emperor',
+                        'One of steepest glaciers',
+                        'UNESCO World Heritage'
+                    ]
+                }
+            },
+            'grouse': {
+                name: 'grouse',
+                label: 'GROUSE GRIND',
+                geoInfo: {
+                    coords: '49.3833°N 123.0833°W',
+                    elevation: '1,127m',
+                    region: 'NORTH VANCOUVER, CANADA',
+                    climate: 'PACIFIC MARITIME',
+                    population: '~52,000 (N. VAN)',
+                    discovery: 'TRAIL EST. 1981',
+                    facts: [
+                        'Known as Mother Nature\'s Stairmaster',
+                        '2,830 steps to summit',
+                        '~100,000 hikers annually',
+                        'Record time: 23 minutes'
+                    ]
+                }
+            },
+            'jotunheimen': {
+                name: 'jotunheimen',
+                label: 'JOTUNHEIMEN',
+                geoInfo: {
+                    coords: '61.6333°N 8.3000°E',
+                    elevation: '2,469m (GALDHØPIGGEN)',
+                    region: 'SOUTHERN NORWAY',
+                    climate: 'ALPINE TUNDRA',
+                    population: 'UNINHABITED',
+                    discovery: 'NAMED 1862',
+                    facts: [
+                        'Home of the Giants',
+                        'Highest peaks in Scandinavia',
+                        'Over 250 peaks above 1,900m',
+                        'Popular hiking destination'
+                    ]
+                }
+            },
+            'lakecomo': {
+                name: 'lakecomo',
+                label: 'LAKE COMO',
+                geoInfo: {
+                    coords: '46.0167°N 9.2667°E',
+                    elevation: '198m (LAKE SURFACE)',
+                    region: 'LOMBARDY, ITALY',
+                    climate: 'HUMID SUBTROPICAL',
+                    population: '~146,000 (COMO CITY)',
+                    discovery: 'ROMAN ERA',
+                    facts: [
+                        'Third largest Italian lake',
+                        'Maximum depth 410m',
+                        'Celebrity retreat destination',
+                        'Y-shaped glacial lake'
+                    ]
+                }
+            },
+            'petra': {
+                name: 'petra',
+                label: 'PETRA',
+                geoInfo: {
+                    coords: '30.3285°N 35.4444°E',
+                    elevation: '810m - 1,350m',
+                    region: 'MA\'AN, JORDAN',
+                    climate: 'HOT DESERT',
+                    population: '~32,000 (WADI MUSA)',
+                    discovery: 'REDISCOVERED 1812',
+                    facts: [
+                        'Ancient Nabataean city',
+                        'UNESCO World Heritage Site',
+                        'One of New 7 Wonders',
+                        'Rose City carved in rock'
+                    ]
+                }
+            },
+            'sanfrancisco': {
+                name: 'sanfrancisco',
+                label: 'SAN FRANCISCO',
+                geoInfo: {
+                    coords: '37.7749°N 122.4194°W',
+                    elevation: '0m - 280m',
+                    region: 'CALIFORNIA, USA',
+                    climate: 'MEDITERRANEAN',
+                    population: '~874,000 (CITY)',
+                    discovery: 'FOUNDED 1776',
+                    facts: [
+                        'City of 43 hills',
+                        'Golden Gate Bridge 1937',
+                        'Tech hub of the world',
+                        'Frequent fog: Karl'
+                    ]
+                }
+            },
+            'valparaiso': {
+                name: 'valparaiso',
+                label: 'VALPARAÍSO',
+                geoInfo: {
+                    coords: '33.0472°S 71.6127°W',
+                    elevation: '0m - 500m',
+                    region: 'CENTRAL CHILE',
+                    climate: 'MEDITERRANEAN',
+                    population: '~296,000',
+                    discovery: 'FOUNDED 1536',
+                    facts: [
+                        'Jewel of the Pacific',
+                        '42 cerros (hills)',
+                        'UNESCO World Heritage',
+                        'Famous funiculars since 1883'
+                    ]
+                }
             }
-        ];
-        this.currentTerrainIndex = 0;
+        };
+        this.currentTerrainKey = 'coldeliseran'; // Default location
         this.terrainTransitionInProgress = false;
         
         // Geography data
@@ -274,15 +472,30 @@ class AnimationsManager {
             }
         };
         
-        this.loadNextTerrain = async () => {
+        this.loadNextTerrain = async (terrainKey = null) => {
             if (this.terrainTransitionInProgress) return;
             
-            const location = this.terrainLocations[this.currentTerrainIndex];
+            // Use provided key or current key
+            const key = terrainKey || this.currentTerrainKey;
+            const location = this.terrainLocations[key];
+            
+            if (!location) {
+                console.error(`Terrain not found: ${key}`);
+                return;
+            }
+            
+            this.currentTerrainKey = key;
             console.log(`🏔️ Loading terrain: ${location.label}`);
             
             // Update UI
             if (this.elements.terrainLocation) {
                 this.elements.terrainLocation.textContent = location.label;
+            }
+            
+            // Update selector if exists
+            const selector = document.getElementById('terrainSelector');
+            if (selector && selector.value !== key) {
+                selector.value = key;
             }
             
             this.terrainTransitionInProgress = true;
@@ -978,6 +1191,43 @@ class AnimationsManager {
         const globeContainer = document.querySelector('.globe-container');
         if (!globeContainer) return;
         
+        // Top selector panel for location selection
+        let selectorPanel = document.getElementById('terrainSelectorPanel');
+        if (!selectorPanel) {
+            selectorPanel = document.createElement('div');
+            selectorPanel.id = 'terrainSelectorPanel';
+            selectorPanel.className = 'terrain-selector-panel';
+            selectorPanel.innerHTML = `
+                <div class="selector-header">
+                    <span class="selector-icon">◈</span>
+                    <span class="selector-title">SELECT TERRAIN</span>
+                </div>
+                <select id="terrainSelector" class="terrain-select">
+                    <option value="everest">Mount Everest</option>
+                    <option value="k2">K2</option>
+                    <option value="kangchenjunga">Kangchenjunga</option>
+                    <option value="everest-valley">Khumbu Glacier</option>
+                    <option value="coldeliseran" selected>Col de l'Iseran</option>
+                    <option value="athabasca">Athabasca Glacier</option>
+                    <option value="franzjosefglacier">Franz Josef Glacier</option>
+                    <option value="grouse">Grouse Grind</option>
+                    <option value="jotunheimen">Jotunheimen</option>
+                    <option value="lakecomo">Lake Como</option>
+                    <option value="petra">Petra</option>
+                    <option value="sanfrancisco">San Francisco</option>
+                    <option value="valparaiso">Valparaíso</option>
+                </select>
+                <div class="selector-hint">EXPLORE EARTH'S TERRAIN</div>
+            `;
+            globeContainer.appendChild(selectorPanel);
+            
+            // Add event listener for terrain selection
+            const selector = selectorPanel.querySelector('#terrainSelector');
+            selector.addEventListener('change', (e) => {
+                this.loadNextTerrain(e.target.value);
+            });
+        }
+        
         // Left panel for geographic data
         let leftPanel = document.getElementById('geoInfoLeft');
         if (!leftPanel) {
@@ -1020,6 +1270,81 @@ class AnimationsManager {
         const style = document.createElement('style');
         style.id = 'geoInfoStyles';
         style.textContent = `
+            /* Terrain Selector Panel */
+            .terrain-selector-panel {
+                position: absolute;
+                top: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.8);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                padding: 15px 25px;
+                font-family: 'SV-Tech', 'Courier New', monospace;
+                z-index: 15;
+                backdrop-filter: blur(10px);
+                opacity: 0;
+                animation: selectorFadeIn 1s ease 1s forwards;
+                text-align: center;
+            }
+            @keyframes selectorFadeIn {
+                to { opacity: 1; }
+            }
+            .selector-header {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                margin-bottom: 12px;
+            }
+            .selector-icon {
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 0.9rem;
+            }
+            .selector-title {
+                font-size: 0.6rem;
+                letter-spacing: 0.2em;
+                color: rgba(255, 255, 255, 0.7);
+            }
+            .terrain-select {
+                background: rgba(0, 0, 0, 0.6);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                color: rgba(255, 255, 255, 0.9);
+                padding: 10px 20px;
+                font-family: 'SV-Tech', 'Courier New', monospace;
+                font-size: 0.75rem;
+                letter-spacing: 0.1em;
+                cursor: pointer;
+                outline: none;
+                width: 100%;
+                min-width: 220px;
+                transition: all 0.3s ease;
+                appearance: none;
+                -webkit-appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='rgba(255,255,255,0.7)' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 12px center;
+                padding-right: 35px;
+            }
+            .terrain-select:hover {
+                border-color: rgba(255, 255, 255, 0.6);
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+            .terrain-select:focus {
+                border-color: rgba(255, 255, 255, 0.8);
+            }
+            .terrain-select option {
+                background: #111;
+                color: rgba(255, 255, 255, 0.9);
+                padding: 10px;
+            }
+            .selector-hint {
+                font-size: 0.5rem;
+                letter-spacing: 0.15em;
+                color: rgba(255, 255, 255, 0.4);
+                margin-top: 10px;
+            }
+            
+            /* Geo Info Panels */
             .geo-info-panel {
                 position: absolute;
                 top: 50%;
@@ -1113,11 +1438,26 @@ class AnimationsManager {
                 }
                 .geo-info-panel.left { left: 20px; }
                 .geo-info-panel.right { right: 20px; }
+                .terrain-selector-panel {
+                    top: 80px;
+                    padding: 12px 20px;
+                }
+                .terrain-select {
+                    min-width: 180px;
+                }
             }
             
             @media (max-width: 800px) {
                 .geo-info-panel {
                     display: none;
+                }
+                .terrain-selector-panel {
+                    top: 60px;
+                    padding: 10px 15px;
+                }
+                .terrain-select {
+                    min-width: 160px;
+                    font-size: 0.65rem;
                 }
             }
         `;
@@ -1140,12 +1480,13 @@ class AnimationsManager {
         leftPanel?.classList.add('visible');
         rightPanel?.classList.add('visible');
         
-        // Left panel: Geographic data with typewriter effect
+        // Left panel: Geographic data with typewriter effect (including population)
         const geoData = [
             { label: 'COORDINATES', value: geoInfo.coords },
             { label: 'ELEVATION', value: geoInfo.elevation },
             { label: 'REGION', value: geoInfo.region },
             { label: 'CLIMATE', value: geoInfo.climate },
+            { label: 'POPULATION', value: geoInfo.population || 'N/A' },
             { label: 'DISCOVERY', value: geoInfo.discovery }
         ];
         
@@ -1162,8 +1503,8 @@ class AnimationsManager {
             setTimeout(() => {
                 div.classList.add('visible');
                 // Typewriter effect
-                this.typewriterEffect(`geoValue${i}`, item.value, 50);
-            }, i * 400);
+                this.typewriterEffect(`geoValue${i}`, item.value, 40);
+            }, i * 350);
         });
         
         // Right panel: Facts with typewriter effect
@@ -1176,8 +1517,8 @@ class AnimationsManager {
             // Staggered reveal
             setTimeout(() => {
                 div.classList.add('visible');
-                this.typewriterEffect(`geoFact${i}`, `• ${fact}`, 30);
-            }, 2000 + (i * 500));
+                this.typewriterEffect(`geoFact${i}`, `• ${fact}`, 25);
+            }, 2500 + (i * 600));
         });
     }
     
@@ -1310,19 +1651,10 @@ class AnimationsManager {
     }
     
     startTerrainSequence() {
-        this.currentTerrainIndex = 0;
-        this.loadNextTerrain();
+        // Load default terrain (user can change via selector)
+        this.loadNextTerrain(this.currentTerrainKey);
         
-        // Schedule terrain transitions every 80 seconds
-        this.terrainInterval = setInterval(() => {
-            if (this.introSkipped || this.currentPhase !== 3) {
-                clearInterval(this.terrainInterval);
-                return;
-            }
-            
-            this.currentTerrainIndex = (this.currentTerrainIndex + 1) % this.terrainLocations.length;
-            this.loadNextTerrain();
-        }, 80000); // 80 seconds per terrain
+        console.log('🌍 Terrain system ready - user can select locations');
     }
     
     processTerrainData(data) {
@@ -1414,26 +1746,22 @@ class AnimationsManager {
         const elevEl = document.getElementById('globeElev');
         const terrainEl = document.getElementById('globeTerrain');
         
-        const locations = [
-            { coords: '27.9659°N 86.7797°E', sector: 'EVEREST VALLEY', elev: '5364m', terrain: 'VALLEY' },
-            { coords: '45.4167°N 6.9333°E', sector: 'COL DE LISERAN', elev: '2770m', terrain: 'ALPINE' }
-        ];
-        
-        let index = 0;
-        const updateLocation = () => {
+        const updateFromCurrentTerrain = () => {
             if (this.introSkipped || this.currentPhase !== 3) return;
             
-            const loc = locations[index % locations.length];
-            if (coordsEl) coordsEl.textContent = loc.coords;
-            if (sectorEl) sectorEl.textContent = loc.sector;
-            if (elevEl) elevEl.textContent = loc.elev;
-            if (terrainEl) terrainEl.textContent = loc.terrain;
+            const location = this.terrainLocations[this.currentTerrainKey];
+            if (!location) return;
             
-            index++;
-            setTimeout(updateLocation, 80000); // Sync with terrain transitions (80s)
+            if (coordsEl) coordsEl.textContent = location.geoInfo.coords;
+            if (sectorEl) sectorEl.textContent = location.label;
+            if (elevEl) elevEl.textContent = location.geoInfo.elevation;
+            if (terrainEl) terrainEl.textContent = location.geoInfo.climate;
+            
+            // Update every 2 seconds to reflect selector changes
+            setTimeout(updateFromCurrentTerrain, 2000);
         };
         
-        setTimeout(updateLocation, 1000);
+        setTimeout(updateFromCurrentTerrain, 1000);
     }
     
     // ========================================
