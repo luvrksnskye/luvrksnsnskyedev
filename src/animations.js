@@ -132,14 +132,14 @@ class AnimationsManager {
             currentHeight: 0,
             targetHeight: 0,
             startTime: 0,
-            duration: 2500
+            duration: 1500  // Faster, smoother like GSAP
         };
         
         // Camera transition state
         this.cameraTransition = {
             active: false,
             startTime: 0,
-            duration: 2500,
+            duration: 1800,  // Smooth camera movement
             startPos: {},
             targetPos: {}
         };
@@ -1643,52 +1643,77 @@ class AnimationsManager {
     // CAMERA TRANSITION ANIMATION
     // ========================================
     // Smoothly moves camera for cinematic effect
+    // Uses GSAP for professional smooth motion
     // ========================================
     animateCameraTransition() {
         if (!this.threeCamera) return;
         
-        // ========================================
-        // SETUP CAMERA MOVEMENT
-        // ========================================
-        this.cameraTransition.active = true;
-        this.cameraTransition.startTime = Date.now();
-        
-        // Store current position
-        this.cameraTransition.startPos = {
-            x: this.threeCamera.position.x,
-            y: this.threeCamera.position.y,
-            z: this.threeCamera.position.z
-        };
+        const tweenEngine = typeof gsap !== 'undefined' ? gsap : (typeof TweenMax !== 'undefined' ? TweenMax : null);
         
         // Calculate new dynamic position based on terrain
-        const variation = (Math.random() - 0.5) * 3000;
-        this.cameraTransition.targetPos = {
+        const variation = (Math.random() - 0.5) * 2000;
+        const targetPos = {
             x: variation,
-            y: 8000 + (Math.random() - 0.5) * 2000,
-            z: -15000 + (Math.random() - 0.5) * 2000
+            y: 8000 + (Math.random() - 0.5) * 1500,
+            z: -15000 + (Math.random() - 0.5) * 1500
         };
         
-        console.log('[TERRAIN] Starting camera transition');
+        if (tweenEngine) {
+            // GSAP camera transition
+            tweenEngine.to(this.threeCamera.position, {
+                x: targetPos.x,
+                y: targetPos.y,
+                z: targetPos.z,
+                duration: 1.8,
+                ease: "power2.inOut",
+                onStart: () => {
+                    this.cameraTransition.active = true;
+                    console.log('[TERRAIN] Starting GSAP camera transition');
+                },
+                onComplete: () => {
+                    this.cameraTransition.active = false;
+                    console.log('[TERRAIN] GSAP camera transition complete');
+                }
+            });
+        } else {
+            // Fallback without GSAP
+            this.cameraTransition.active = true;
+            this.cameraTransition.startTime = performance.now();
+            this.cameraTransition.duration = 1800;
+            
+            this.cameraTransition.startPos = {
+                x: this.threeCamera.position.x,
+                y: this.threeCamera.position.y,
+                z: this.threeCamera.position.z
+            };
+            this.cameraTransition.targetPos = targetPos;
+            
+            console.log('[TERRAIN] Starting fallback camera transition');
+        }
     }
     
     // ========================================
-    // UPDATE CAMERA POSITION
+    // UPDATE CAMERA POSITION (Fallback only)
     // ========================================
-    // Called each frame to smoothly interpolate camera
+    // Called each frame when GSAP is not available
     // ========================================
     updateCameraTransition() {
+        // Skip if GSAP is handling it or not active
         if (!this.cameraTransition.active || !this.threeCamera) return;
         
-        const elapsed = Date.now() - this.cameraTransition.startTime;
+        // Check if GSAP is handling this
+        const tweenEngine = typeof gsap !== 'undefined' ? gsap : (typeof TweenMax !== 'undefined' ? TweenMax : null);
+        if (tweenEngine) return; // GSAP handles its own updates
+        
+        const elapsed = performance.now() - this.cameraTransition.startTime;
         const progress = Math.min(elapsed / this.cameraTransition.duration, 1);
         
         // ========================================
-        // SMOOTH EASING FUNCTION
+        // SMOOTH EASE-IN-OUT FUNCTION
         // ========================================
-        // Ease in-out cubic for smooth start and end
         const eased = progress < 0.5
-            ? 4 * progress * progress * progress
-            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+            ? (1 - Math.cos(progress * Math.PI)) / 2
+            : (1 + Math.sin((progress - 0.5) * Math.PI)) / 2;
         
         // ========================================
         // INTERPOLATE POSITION
@@ -1713,14 +1738,24 @@ class AnimationsManager {
     // PROCESS TERRAIN DATA
     // ========================================
     // Initiates smooth morphing animation to new heights
+    // Uses GSAP library for fluid transitions (like CodePen reference)
     // ========================================
     processTerrainDataWithTransition(data) {
         if (!this.mountainParticles || !data.coords) return;
         
-        const startTime = Date.now();
+        // Check if GSAP is available
+        if (typeof gsap === 'undefined' && typeof TweenMax === 'undefined') {
+            console.warn('[TERRAIN] GSAP not loaded, using fallback transition');
+            this.processTerrainDataFallback(data);
+            return;
+        }
+        
+        const tweenEngine = typeof gsap !== 'undefined' ? gsap : TweenMax;
+        
+        console.log('[TERRAIN] Starting GSAP terrain morphing animation');
         
         // ========================================
-        // SETUP VERTEX TRANSITIONS
+        // GSAP ANIMATION FOR EACH VERTEX
         // ========================================
         data.coords.forEach(coord => {
             const [x, y, z] = coord;
@@ -1729,38 +1764,85 @@ class AnimationsManager {
                 const vertex = this.pointsPlot[x][z];
                 const targetY = (y - (data.lowest_point || 0)) * this.particleDistance * 0.8;
                 
-                // Initialize transition properties
-                vertex.transitionStart = vertex.currentY;
-                vertex.transitionTarget = targetY;
-                vertex.inTransition = true;
-                vertex.transitionStartTime = startTime + vertex.delay;
-                vertex.velocity = 0;
+                // Store reference to geometry for updates
+                const geometry = this.mountainGeometry;
+                const positions = geometry.getAttribute('position').array;
+                const vertexIndex = vertex.index;
+                
+                // GSAP tween - exactly like CodePen
+                tweenEngine.to(vertex, {
+                    currentY: targetY,
+                    duration: 1.5,
+                    ease: "power3.out",
+                    onUpdate: () => {
+                        // Update the buffer geometry position
+                        positions[vertexIndex * 3 + 1] = vertex.currentY;
+                        geometry.getAttribute('position').needsUpdate = true;
+                    }
+                });
             }
         });
         
-        // ========================================
-        // CONFIGURE TRANSITION TIMING
-        // ========================================
-        this.terrainTransition.startTime = startTime;
-        this.terrainTransition.duration = 2500;
+        // Mark transition as complete after animation duration
+        this.terrainTransition.inProgress = true;
+        setTimeout(() => {
+            this.terrainTransition.inProgress = false;
+            console.log('[TERRAIN] GSAP terrain transition complete');
+        }, 1600);
+    }
+    
+    // ========================================
+    // FALLBACK TRANSITION (without GSAP)
+    // ========================================
+    processTerrainDataFallback(data) {
+        if (!this.mountainParticles || !data.coords) return;
         
-        console.log('[TERRAIN] Starting smooth terrain morphing animation');
+        const startTime = performance.now();
+        const transitionDuration = 1500;
+        
+        data.coords.forEach(coord => {
+            const [x, y, z] = coord;
+            
+            if (this.pointsPlot[x]?.[z]) {
+                const vertex = this.pointsPlot[x][z];
+                const targetY = (y - (data.lowest_point || 0)) * this.particleDistance * 0.8;
+                
+                vertex.transitionStart = vertex.currentY;
+                vertex.transitionTarget = targetY;
+                vertex.inTransition = true;
+                vertex.transitionStartTime = startTime + (Math.random() * 30);
+                vertex.transitionDuration = transitionDuration;
+            }
+        });
+        
+        this.terrainTransition.startTime = startTime;
+        this.terrainTransition.duration = transitionDuration + 200;
+        console.log('[TERRAIN] Using fallback terrain transition');
     }
     
     // ========================================
     // UPDATE TERRAIN TRANSITION
     // ========================================
     // Called each frame to animate vertex positions
+    // Uses Power3.easeOut easing like GSAP for fluid motion
     // ========================================
     updateTerrainTransition() {
         if (!this.terrainTransition.inProgress || !this.mountainGeometry) return;
         
         const positions = this.mountainGeometry.getAttribute('position').array;
         const colors = this.mountainGeometry.getAttribute('color').array;
-        const currentTime = Date.now();
+        const currentTime = performance.now();
         
         let needsUpdate = false;
         let allComplete = true;
+        
+        // ========================================
+        // GSAP POWER3.EASEOUT FUNCTION
+        // ========================================
+        // Replicates the smooth deceleration of GSAP's Power3.easeOut
+        const power3EaseOut = (t) => {
+            return 1 - Math.pow(1 - t, 3);
+        };
         
         // ========================================
         // UPDATE ALL VERTICES IN TRANSITION
@@ -1777,36 +1859,32 @@ class AnimationsManager {
                     }
                     
                     const elapsed = currentTime - vertex.transitionStartTime;
-                    const progress = Math.min(elapsed / this.terrainTransition.duration, 1);
+                    const duration = vertex.transitionDuration || this.terrainTransition.duration;
+                    const progress = Math.min(elapsed / duration, 1);
                     
                     // ========================================
-                    // SMOOTH EASING WITH MOMENTUM
+                    // POWER3.EASEOUT INTERPOLATION (GSAP-style)
                     // ========================================
-                    // Use ease-out-cubic for natural deceleration
-                    const easeOut = 1 - Math.pow(1 - progress, 3);
+                    const eased = power3EaseOut(progress);
                     
-                    // Calculate target position with easing
-                    const targetY = vertex.transitionStart + 
-                                  (vertex.transitionTarget - vertex.transitionStart) * easeOut;
-                    
-                    // Add slight overshoot and settle for organic feel
-                    const overshoot = Math.sin(progress * Math.PI) * 0.02;
-                    const finalY = targetY * (1 + overshoot);
+                    // Calculate interpolated Y position
+                    const newY = vertex.transitionStart + 
+                                (vertex.transitionTarget - vertex.transitionStart) * eased;
                     
                     // ========================================
                     // UPDATE POSITION
                     // ========================================
-                    positions[vertex.index * 3 + 1] = finalY;
-                    vertex.currentY = finalY;
+                    positions[vertex.index * 3 + 1] = newY;
+                    vertex.currentY = newY;
                     
                     // ========================================
-                    // COLOR FADE EFFECT
+                    // SUBTLE COLOR PULSE DURING TRANSITION
                     // ========================================
-                    // Fade through blue during transition
-                    const fadeProgress = Math.sin(progress * Math.PI);
-                    colors[vertex.index * 3] = 1.0 - (fadeProgress * 0.3);
-                    colors[vertex.index * 3 + 1] = 1.0 - (fadeProgress * 0.2);
-                    colors[vertex.index * 3 + 2] = 1.0;
+                    // Brief blue tint that fades to white
+                    const colorPulse = Math.sin(progress * Math.PI) * 0.15;
+                    colors[vertex.index * 3] = 1.0 - colorPulse;     // R
+                    colors[vertex.index * 3 + 1] = 1.0 - colorPulse * 0.5; // G
+                    colors[vertex.index * 3 + 2] = 1.0;              // B stays full
                     
                     needsUpdate = true;
                     
@@ -1816,7 +1894,7 @@ class AnimationsManager {
                     if (progress >= 1) {
                         vertex.inTransition = false;
                         vertex.targetY = vertex.transitionTarget;
-                        // Reset color to white
+                        // Reset color to pure white
                         colors[vertex.index * 3] = 1.0;
                         colors[vertex.index * 3 + 1] = 1.0;
                         colors[vertex.index * 3 + 2] = 1.0;
