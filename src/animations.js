@@ -1,12 +1,24 @@
-
 /**
  * ============================
- * ANIMATIONS MANAGER MODULE V8 - PURE WHITE ETHEREAL BRAIN
+ * ANIMATIONS MANAGER MODULE V8
  * ============================
- * Brain visualization in pure white, ethereal/transparent style
+ * Handles all animations and visual effects
+ * - Stellar Intro sequence (5 phases)
+ * - 3D Terrain visualization
+ * - Ethereal Brain visualization
+ * - Page transitions
+ * - Performance optimization for low-end devices
+ * 
+ * CRITICAL: All audio resources are preloaded by loaderManager
+ * This ensures smooth playback without lag during intro sequence
  */
 
+
 class AnimationsManager {
+
+    // ========================================
+    // CONSTRUCTOR - INITIAL STATE SETUP
+    // ========================================
     constructor() {
         this.animationQueue = [];
         this.isAnimating = false;
@@ -19,6 +31,10 @@ class AnimationsManager {
         this.currentPhase = 0;
         
         // Performance optimization flags
+
+    // ========================================
+    // DEVICE DETECTION & OPTIMIZATION
+    // ========================================
         this.isLowPowerMode = this.detectLowPowerDevice();
         this.shouldUseOptimizedMode = window.innerWidth <= 768 || this.isLowPowerMode;
         
@@ -191,7 +207,7 @@ class AnimationsManager {
             },
             'coldeliseran': {
                 name: 'coldeliseran',
-                label: 'COL DE L\'ISERAN',
+                label: "COL DE L'ISERAN",
                 geoInfo: {
                     coords: '45.4167°N 6.9333°E',
                     elevation: '2,770m',
@@ -254,7 +270,7 @@ class AnimationsManager {
                     population: '~52,000 (N. VAN)',
                     discovery: 'TRAIL EST. 1981',
                     facts: [
-                        'Known as Mother Nature\'s Stairmaster',
+                        "Known as Mother Nature's Stairmaster",
                         '2,830 steps to summit',
                         '~100,000 hikers annually',
                         'Record time: 23 minutes'
@@ -303,7 +319,7 @@ class AnimationsManager {
                 geoInfo: {
                     coords: '30.3285°N 35.4444°E',
                     elevation: '810m - 1,350m',
-                    region: 'MA\'AN, JORDAN',
+                    region: "MA'AN, JORDAN",
                     climate: 'HOT DESERT',
                     population: '~32,000 (WADI MUSA)',
                     discovery: 'REDISCOVERED 1812',
@@ -392,8 +408,8 @@ class AnimationsManager {
             { label: 'CEREBELLUM', value: 'MOTOR COORDINATION: RECALIBRATING', delay: 2400 },
             { label: 'TEMPORAL LOBE', value: 'AUDITORY PROCESSING: ACTIVE', delay: 2800 },
             { label: 'OCCIPITAL LOBE', value: 'VISUAL CORTEX: 94% FUNCTIONALITY', delay: 3200 },
-            { label: 'BROCA\'S AREA', value: 'SPEECH PRODUCTION: ONLINE', delay: 3600 },
-            { label: 'WERNICKE\'S AREA', value: 'LANGUAGE COMPREHENSION: ACTIVE', delay: 4000 },
+            { label: "BROCA'S AREA", value: 'SPEECH PRODUCTION: ONLINE', delay: 3600 },
+            { label: "WERNICKE'S AREA", value: 'LANGUAGE COMPREHENSION: ACTIVE', delay: 4000 },
             { label: 'CREATIVE CORTEX', value: 'DIVERGENT THINKING: EXCEPTIONAL', delay: 4400 },
             { label: 'DOPAMINE LEVELS', value: '127% OF BASELINE - ELEVATED', delay: 4800 },
             { label: 'SEROTONIN SYNC', value: 'MOOD REGULATION: BALANCED', delay: 5200 },
@@ -412,6 +428,10 @@ class AnimationsManager {
     // UTILITY & INITIALIZATION
     // ========================================
     
+
+    // ========================================
+    // DEVICE DETECTION & OPTIMIZATION
+    // ========================================
     detectLowPowerDevice() {
         return navigator.hardwareConcurrency <= 2 || 
                navigator.connection?.effectiveType === 'slow-2g' ||
@@ -419,31 +439,39 @@ class AnimationsManager {
                navigator.deviceMemory < 4;
     }
 
+
+    // ========================================
+    // INITIALIZATION METHOD
+    // ========================================
     init() {
         if (this.initialized) {
-            console.log('⚠️ Animations already initialized, skipping');
+            console.log('[ANIMATIONS] Animations already initialized, skipping');
             return;
         }
         
-        console.log('🎬 Animations Manager V8 Ethereal Brain initializing...');
-        console.log(`📱 Device mode: ${this.shouldUseOptimizedMode ? 'Optimized' : 'Full'}`);
+        console.log('[ANIMATIONS] Animations Manager V8 Ethereal Brain initializing...');
+        console.log(`[DEVICE] Device mode: ${this.shouldUseOptimizedMode ? 'Optimized' : 'Full'}`);
         
         this.cacheElements();
 
         if (!this.elements.stellarIntro) {
-            console.error('❌ stellarIntro element not found! Cannot start intro.');
+            console.error('[ERROR] stellarIntro element not found! Cannot start intro.');
             return;
         }
 
-        console.log('🚀 Starting Stellar Intro V8 Ethereal Brain...');
+        console.log('[ANIMATIONS] Starting Stellar Intro V8 Ethereal Brain...');
         
         // Start intro sequence
         setTimeout(() => {
+
+    // ========================================
+    // STELLAR INTRO - MAIN ENTRY POINT
+    // ========================================
             this.startStellarIntro();
         }, 1000);
 
         this.initialized = true;
-        console.log('✅ Animations Manager V8 Ethereal Brain initialized');
+        console.log('[ANIMATIONS] Animations Manager V8 Ethereal Brain initialized');
     }
     
     cacheElements() {
@@ -486,7 +514,7 @@ class AnimationsManager {
             mainNav: document.getElementById('mainNav')
         };
 
-        console.log('🔍 Elements found:', {
+        console.log('[ANIMATIONS] Elements found:', {
             stellarIntro: !!this.elements.stellarIntro,
             terrainCanvas: !!this.elements.terrainCanvas,
             brainCanvas: !!this.elements.brainCanvas
@@ -497,6 +525,12 @@ class AnimationsManager {
     // AUDIO MANAGEMENT
     // ========================================
     
+
+    // ========================================
+    // AUDIO PRELOADING
+    // Note: Audio files are preloaded by loaderManager
+    // This method creates Audio objects from cached resources
+    // ========================================
     preloadStellarAudio() {
         const loadAudio = (src, volume) => {
             const audio = new Audio(src);
@@ -532,9 +566,9 @@ class AnimationsManager {
                 }
             });
             
-            console.log('🎵 Stellar audio preloaded with SFX');
+            console.log('[ANIMATIONS] Stellar audio preloaded with SFX');
         } catch (error) {
-            console.error('❌ Audio preload error:', error);
+            console.error('[ERROR] Audio preload error:', error);
         }
     }
     
@@ -543,7 +577,7 @@ class AnimationsManager {
         
         this.sfxPlayed[sfxName] = true;
         this.playAudio(this.stellarAudio.sfx[sfxName]);
-        console.log(`🔊 SFX played: ${sfxName}`);
+        console.log(`[AUDIO] SFX played: ${sfxName}`);
     }
     
     playAudio(audioElement) {
@@ -598,7 +632,17 @@ class AnimationsManager {
     // MAIN INTRO SEQUENCE
     // ========================================
     
+
+    // ========================================
+    // STELLAR INTRO - MAIN ENTRY POINT
+    // ========================================
     async startStellarIntro() {
+
+    // ========================================
+    // AUDIO PRELOADING
+    // Note: Audio files are preloaded by loaderManager
+    // This method creates Audio objects from cached resources
+    // ========================================
         this.preloadStellarAudio();
         this.setupSkipListener();
         
@@ -621,7 +665,7 @@ class AnimationsManager {
     
     async playStellarPhase1() {
         return new Promise((resolve) => {
-            console.log('📍 Phase 1: Voice Authentication');
+            console.log('[ANIMATIONS] Phase 1: Voice Authentication');
             this.currentPhase = 1;
             
             const phaseVoice = this.elements.phaseVoice;
@@ -690,7 +734,7 @@ class AnimationsManager {
     
     async playStellarPhase2() {
         return new Promise((resolve) => {
-            console.log('📍 Phase 2: Data Visualization');
+            console.log('[ANIMATIONS] Phase 2: Data Visualization');
             this.currentPhase = 2;
             
             const phaseData = this.elements.phaseData;
@@ -809,7 +853,7 @@ class AnimationsManager {
     
     async playStellarPhase3() {
         return new Promise((resolve) => {
-            console.log('📍 Phase 3: Optimized Terrain Visualization');
+            console.log('[ANIMATIONS] Phase 3: Optimized Terrain Visualization');
             this.currentPhase = 3;
             
             const phaseGlobe = this.elements.phaseGlobe;
@@ -837,6 +881,10 @@ class AnimationsManager {
             
             setTimeout(() => {
                 if (!this.introSkipped) {
+
+    // ========================================
+    // CLEANUP METHODS
+    // ========================================
                     this.cleanupTerrain();
                     phaseGlobe.classList.remove('active');
                 }
@@ -1232,7 +1280,7 @@ class AnimationsManager {
             
             this.loadNextTerrain(this.currentTerrainKey);
             
-            console.log('🌍 Optimized terrain system initialized');
+            console.log('[ANIMATIONS] Optimized terrain system initialized');
             
         } catch (error) {
             console.error('Terrain system error:', error);
@@ -1305,7 +1353,7 @@ class AnimationsManager {
         }
         
         this.currentTerrainKey = key;
-        console.log(`🏔️ Loading terrain: ${location.label}`);
+        console.log(`[TERRAIN] Loading terrain: ${location.label}`);
         
         if (this.elements.terrainLocation) {
             this.elements.terrainLocation.textContent = location.label;
@@ -1359,7 +1407,7 @@ class AnimationsManager {
         this.terrainTransition.startTime = startTime;
         this.terrainTransition.duration = 3000; // 3 seconds transition
         
-        console.log('🔄 Starting smooth terrain transition');
+        console.log('[ANIMATIONS] Starting smooth terrain transition');
     }
     
     updateTerrainTransition() {
@@ -1404,7 +1452,7 @@ class AnimationsManager {
         // End transition
         if (progress >= 1) {
             this.terrainTransition.inProgress = false;
-            console.log('✅ Terrain transition complete');
+            console.log('[ANIMATIONS] Terrain transition complete');
         }
     }
     
@@ -1460,7 +1508,7 @@ class AnimationsManager {
     
     async playStellarPhase4() {
         return new Promise((resolve) => {
-            console.log('📍 Phase 4: Ethereal White Brain Visualization');
+            console.log('[ANIMATIONS] Phase 4: Ethereal White Brain Visualization');
             this.currentPhase = 4;
             
             const phaseBody = this.elements.phaseBody;
@@ -1586,7 +1634,7 @@ class AnimationsManager {
             // Start animation
             this.animateBrain();
             
-            console.log('🧠 Ethereal brain visualization initialized');
+            console.log('[ANIMATIONS] Ethereal brain visualization initialized');
             
         } catch (error) {
             console.error('Brain visualization error:', error);
@@ -1691,7 +1739,7 @@ class AnimationsManager {
                 this.brainMesh = object;
                 this.brainScene.add(object);
                 
-                console.log(`✅ Ethereal brain model loaded: ${modelPath}`);
+                console.log(`[SUCCESS] Ethereal brain model loaded: ${modelPath}`);
             },
             (progress) => {
                 console.log(`Loading brain: ${Math.round((progress.loaded / progress.total) * 100)}%`);
@@ -1946,7 +1994,7 @@ class AnimationsManager {
     }
     
     createEtherealFallbackBrain() {
-        console.log('🔄 Creating ethereal fallback brain');
+        console.log('[ANIMATIONS] Creating ethereal fallback brain');
         
         const group = new THREE.Group();
         
@@ -1997,7 +2045,7 @@ class AnimationsManager {
         // Create ethereal effects for fallback too
         this.createEtherealEffects();
         
-        console.log('✅ Ethereal fallback brain created');
+        console.log('[ANIMATIONS] Ethereal fallback brain created');
     }
     
     cleanupMesh(mesh) {
@@ -2192,7 +2240,7 @@ class AnimationsManager {
     
     async playStellarPhase5() {
         return new Promise((resolve) => {
-            console.log('📍 Phase 5: Boarding Pass');
+            console.log('[ANIMATIONS] Phase 5: Boarding Pass');
             this.currentPhase = 5;
             
             const phaseBoarding = this.elements.phaseBoarding;
@@ -2298,6 +2346,10 @@ class AnimationsManager {
         }
         
         this.stopAllAudio();
+
+    // ========================================
+    // CLEANUP METHODS
+    // ========================================
         this.cleanupTerrain();
         this.cleanupBrain();
         this.transitionFromStellarToMain();
@@ -2308,7 +2360,7 @@ class AnimationsManager {
     // ========================================
     
     transitionFromStellarToMain() {
-        console.log('🎬 Transitioning to main...');
+        console.log('[ANIMATIONS] Transitioning to main...');
         
         this.cleanupSkipFunctionality();
         
@@ -2323,7 +2375,7 @@ class AnimationsManager {
             this.showMainContent();
             this.performFinalCleanup();
             
-            console.log('✅ Intro complete, transition finished');
+            console.log('[ANIMATIONS] Intro complete, transition finished');
         }, 1200);
     }
     
@@ -2361,6 +2413,10 @@ class AnimationsManager {
     
     performFinalCleanup() {
         this.stopAllAudio();
+
+    // ========================================
+    // CLEANUP METHODS
+    // ========================================
         this.cleanupTerrain();
         this.cleanupBrain();
         
@@ -2415,9 +2471,13 @@ class AnimationsManager {
         this.brainControls = null;
         this.brainRegions = {};
         
-        console.log('🗑️ Brain cleanup complete');
+        console.log('[ANIMATIONS] Brain cleanup complete');
     }
     
+
+    // ========================================
+    // CLEANUP METHODS
+    // ========================================
     cleanupTerrain() {
         if (this.terrainAnimationFrame) {
             cancelAnimationFrame(this.terrainAnimationFrame);
@@ -2442,7 +2502,7 @@ class AnimationsManager {
         this.pointsPlot = [];
         this.terrainTransition.inProgress = false;
         
-        console.log('🗑️ Terrain cleanup complete');
+        console.log('[ANIMATIONS] Terrain cleanup complete');
     }
 
     // ========================================
@@ -2623,19 +2683,23 @@ class AnimationsManager {
     }
 
     destroy() {
-        console.log('🗑️ Destroying AnimationsManager...');
+        console.log('[ANIMATIONS] Destroying AnimationsManager...');
         
         this.animationQueue = [];
         this.rafCallbacks.clear();
         this.isAnimating = false;
         
         this.stopAllAudio();
+
+    // ========================================
+    // CLEANUP METHODS
+    // ========================================
         this.cleanupTerrain();
         this.cleanupBrain();
         this.cleanupSkipFunctionality();
         
         this.initialized = false;
-        console.log('✅ AnimationsManager destroyed');
+        console.log('[ANIMATIONS] AnimationsManager destroyed');
     }
 }
 
