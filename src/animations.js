@@ -397,16 +397,16 @@ class AnimationsManager {
         this.brainParticles = null;
         this.neuralConnections = null;
         
-        // Brain models from YOUR folder
+  
         this.brainModels = {
-            'complete': '/src/model-3d/brain-antre.obj',
-            'low': '/src/model-3d/brain_vertex_low.obj',
-            'parts_assembled': '/src/model-3d/brain-parts-big.obj',
+            'complete': './src/model-3d/brain-antre.obj',
+            'low': './src/model-3d/brain_vertex_low.obj',
+            'parts_assembled': './src/model-3d/brain-parts-big.obj',
             'parts_separated': {
-                'part04': '/src/model-3d/brain-parts-big_04.OBJ',
-                'part06': '/src/model-3d/brain-parts-big_06.OBJ',
-                'part07': '/src/model-3d/brain-parts-big_07.OBJ',
-                'part08': '/src/model-3d/brain-parts-big_08.OBJ'
+                'part04': './src/model-3d/brain-parts-big_04.OBJ',
+                'part06': './src/model-3d/brain-parts-big_06.OBJ',
+                'part07': './src/model-3d/brain-parts-big_07.OBJ',
+                'part08': './src/model-3d/brain-parts-big_08.OBJ'
             }
         };
         
