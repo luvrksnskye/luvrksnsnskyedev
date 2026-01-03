@@ -64,6 +64,10 @@ class AnimationsManager {
             affirmation: false
         };
         
+        // Voice audio control - prevent overlapping
+        this.currentVoiceAudio = null;
+        this.isVoicePlaying = false;
+        
         // Volume levels
         this.volumes = {
             bgMusic: 0.25,
@@ -595,6 +599,36 @@ class AnimationsManager {
         ) || Promise.resolve();
     }
     
+    // Play voice audio with overlap prevention
+    playVoiceAudio(audioElement) {
+        if (!audioElement) return Promise.resolve();
+        
+        // Stop current voice if playing
+        if (this.currentVoiceAudio && !this.currentVoiceAudio.paused) {
+            console.log('[AUDIO] Stopping previous voice audio to prevent overlap');
+            this.currentVoiceAudio.pause();
+            this.currentVoiceAudio.currentTime = 0;
+        }
+        
+        this.currentVoiceAudio = audioElement;
+        this.isVoicePlaying = true;
+        
+        // Set up ended event to clear state
+        const onEnded = () => {
+            this.isVoicePlaying = false;
+            this.currentVoiceAudio = null;
+            audioElement.removeEventListener('ended', onEnded);
+        };
+        
+        audioElement.addEventListener('ended', onEnded);
+        
+        return audioElement.play().catch(err => {
+            console.log('Voice audio play blocked:', err.message);
+            this.isVoicePlaying = false;
+            this.currentVoiceAudio = null;
+        }) || Promise.resolve();
+    }
+    
     stopAllAudio() {
         Object.values(this.stellarAudio).forEach(audio => {
             if (typeof audio === 'object' && audio !== null) {
@@ -687,7 +721,7 @@ class AnimationsManager {
             setTimeout(() => {
                 if (this.introSkipped) return resolve();
                 
-                this.playAudio(this.stellarAudio.voiceIntro);
+                this.playVoiceAudio(this.stellarAudio.voiceIntro);
                 
                 if (this.stellarAudio.voiceIntro) {
                     this.stellarAudio.voiceIntro.addEventListener('timeupdate', () => this.updateSubtitlesPhase1());
@@ -758,7 +792,7 @@ class AnimationsManager {
             setTimeout(() => {
                 if (this.introSkipped) return resolve();
                 
-                this.playAudio(this.stellarAudio.voiceDataDisplay);
+                this.playVoiceAudio(this.stellarAudio.voiceDataDisplay);
                 
                 if (this.stellarAudio.voiceDataDisplay) {
                     this.stellarAudio.voiceDataDisplay.addEventListener('timeupdate', () => this.updateSubtitlesPhase2());
@@ -883,23 +917,137 @@ class AnimationsManager {
             
             this.animateGlobeData();
             
+            // Play voice audio
             setTimeout(() => {
-                if (this.introSkipped) return;
-                this.playAudio(this.stellarAudio.voiceDataEarth);
-            }, 3000);
-            
-            setTimeout(() => {
-                if (!this.introSkipped) {
-
-    // ========================================
-    // CLEANUP METHODS
-    // ========================================
-                    this.cleanupTerrain();
-                    phaseGlobe.classList.remove('active');
+                if (this.introSkipped) return resolve();
+                
+                this.playVoiceAudio(this.stellarAudio.voiceDataEarth);
+                
+                // Wait for voice to finish, then show continue button
+                if (this.stellarAudio.voiceDataEarth) {
+                    this.stellarAudio.voiceDataEarth.onended = () => {
+                        if (this.introSkipped) return;
+                        
+                        // Show continue button after voice finishes
+                        this.showContinueButton(phaseGlobe, () => {
+                            // User clicked continue
+                            this.cleanupTerrain();
+                            phaseGlobe.classList.remove('active');
+                            resolve();
+                        });
+                    };
                 }
-                resolve();
-            }, 162000);
+            }, 3000);
         });
+    }
+    
+    // ========================================
+    // CONTINUE BUTTON FOR MANUAL PROGRESSION
+    // ========================================
+    showContinueButton(container, onContinue) {
+        // Create continue button if it doesn't exist
+        let continueBtn = document.getElementById('phase3ContinueBtn');
+        
+        if (!continueBtn) {
+            continueBtn = document.createElement('button');
+            continueBtn.id = 'phase3ContinueBtn';
+            continueBtn.className = 'phase-continue-btn';
+            continueBtn.innerHTML = `
+                <span class="continue-icon">▶</span>
+                <span class="continue-text">CONTINUE</span>
+            `;
+            container.appendChild(continueBtn);
+            
+            // Add styles
+            this.injectContinueButtonStyles();
+        }
+        
+        // Show button with animation
+        setTimeout(() => {
+            continueBtn.classList.add('visible');
+        }, 500);
+        
+        // Handle click
+        const handleClick = () => {
+            continueBtn.classList.remove('visible');
+            setTimeout(() => {
+                continueBtn.remove();
+                onContinue();
+            }, 300);
+        };
+        
+        continueBtn.addEventListener('click', handleClick, { once: true });
+        
+        console.log('[ANIMATIONS] Continue button displayed');
+    }
+    
+    injectContinueButtonStyles() {
+        if (document.getElementById('continueButtonStyles')) return;
+        
+        const style = document.createElement('style');
+        style.id = 'continueButtonStyles';
+        style.textContent = `
+            .phase-continue-btn {
+                position: absolute;
+                bottom: 80px;
+                left: 50%;
+                transform: translateX(-50%) translateY(20px);
+                background: rgba(255, 255, 255, 0.1);
+                border: 2px solid rgba(255, 255, 255, 0.4);
+                color: rgba(255, 255, 255, 0.9);
+                padding: 15px 40px;
+                font-family: 'SV-Tech', 'Courier New', monospace;
+                font-size: 0.9rem;
+                letter-spacing: 0.2em;
+                cursor: pointer;
+                z-index: 100;
+                backdrop-filter: blur(10px);
+                opacity: 0;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+            
+            .phase-continue-btn.visible {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            
+            .phase-continue-btn:hover {
+                background: rgba(255, 255, 255, 0.2);
+                border-color: rgba(255, 255, 255, 0.7);
+                transform: translateX(-50%) translateY(-2px);
+                box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+            }
+            
+            .phase-continue-btn:active {
+                transform: translateX(-50%) translateY(0);
+            }
+            
+            .continue-icon {
+                font-size: 1rem;
+                animation: pulseIcon 2s ease-in-out infinite;
+            }
+            
+            .continue-text {
+                font-weight: 600;
+            }
+            
+            @keyframes pulseIcon {
+                0%, 100% { opacity: 0.6; }
+                50% { opacity: 1; }
+            }
+            
+            @media (max-width: 768px) {
+                .phase-continue-btn {
+                    bottom: 60px;
+                    padding: 12px 30px;
+                    font-size: 0.75rem;
+                }
+            }
+        `;
+        document.head.appendChild(style);
     }
     
     createGeoInfoPanels() {
@@ -1803,7 +1951,7 @@ class AnimationsManager {
             setTimeout(() => {
                 if (this.introSkipped) return resolve();
                 
-                this.playAudio(this.stellarAudio.voiceDataUser);
+                this.playVoiceAudio(this.stellarAudio.voiceDataUser);
                 
                 if (this.stellarAudio.voiceDataUser) {
                     this.stellarAudio.voiceDataUser.addEventListener('timeupdate', () => this.updateSubtitlesPhase4());
@@ -2520,7 +2668,7 @@ class AnimationsManager {
             if (!phaseBoarding) return resolve();
             
             phaseBoarding.classList.add('active');
-            this.playAudio(this.stellarAudio.voiceFinal);
+            this.playVoiceAudio(this.stellarAudio.voiceFinal);
             
             setTimeout(() => {
                 this.elements.boardingWrapper?.classList.add('visible');
