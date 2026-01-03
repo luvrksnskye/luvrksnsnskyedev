@@ -24,7 +24,8 @@ class LanguagesManager {
             { name: 'Vue.js', icon: '/src/assets/vue-icon.png', level: 'Intermediate', proficiency: 70 },
             { name: 'Next.js', icon: '/src/assets/nextjs-icon.png', level: 'Advanced', proficiency: 88 },
             { name: 'Bootstrap', icon: '/src/assets/bootstrap-icon.png', level: 'Advanced', proficiency: 85 },
-            { name: 'Python', icon: '/src/assets/python-icon.png', level: 'Advanced', proficiency: 80 }
+            { name: 'Python', icon: '/src/assets/python-icon.png', level: 'Advanced', proficiency: 80 },
+            { name: 'Rust', icon: '/src/assets/rust-icon.png', level: 'Intermediate', proficiency: 60 }
         ];
 
         if (document.readyState === 'loading') {
