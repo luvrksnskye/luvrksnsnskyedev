@@ -399,14 +399,14 @@ class AnimationsManager {
         
         // Brain models from YOUR folder
         this.brainModels = {
-            'complete': './src/model-3d/brain-antre.obj',
-            'low': './src/model-3d/brain_vertex_low.obj',
-            'parts_assembled': './src/model-3d/brain-parts-big.obj',
+            'complete': './model-3d/brain-antre.obj',
+            'low': './model-3d/brain_vertex_low.obj',
+            'parts_assembled': './model-3d/brain-parts-big.obj',
             'parts_separated': {
-                'part04': './src/model-3d/brain-parts-big_04.OBJ',
-                'part06': './src/model-3d/brain-parts-big_06.OBJ',
-                'part07': './src/model-3d/brain-parts-big_07.OBJ',
-                'part08': './src/model-3d/brain-parts-big_08.OBJ'
+                'part04': './model-3d/brain-parts-big_04.OBJ',
+                'part06': './model-3d/brain-parts-big_06.OBJ',
+                'part07': './model-3d/brain-parts-big_07.OBJ',
+                'part08': './model-3d/brain-parts-big_08.OBJ'
             }
         };
         
@@ -542,25 +542,25 @@ class AnimationsManager {
         };
 
         try {
-            this.stellarAudio.bgMusic = loadAudio('./src/sfx/INTROx_song.mp3', this.volumes.bgMusic);
-            this.stellarAudio.bgMusicLoop = loadAudio('./src/sfx/INTROx_AFTER_loop.mp3', this.volumes.bgMusicLoop);
+            this.stellarAudio.bgMusic = loadAudio('./sfx/INTROx_song.mp3', this.volumes.bgMusic);
+            this.stellarAudio.bgMusicLoop = loadAudio('./sfx/INTROx_AFTER_loop.mp3', this.volumes.bgMusicLoop);
             this.stellarAudio.bgMusicLoop.loop = true;
             
-            this.stellarAudio.voiceIntro = loadAudio('./src/starvortex_assets/voice_intro.mp3', this.volumes.voiceIntro);
-            this.stellarAudio.voiceDataDisplay = loadAudio('./src/starvortex_assets/voice-data-display.mp3', this.volumes.voiceDataDisplay);
-            this.stellarAudio.voiceDataEarth = loadAudio('./src/starvortex_assets/voice-data-earth.mp3', this.volumes.voiceDataDisplay);
-            this.stellarAudio.voiceDataUser = loadAudio('./src/starvortex_assets/voice-data-user.mp3', this.volumes.voiceDataUser);
-            this.stellarAudio.voiceFinal = loadAudio('./src/starvortex_assets/voice-final.mp3', this.volumes.voiceFinal);
+            this.stellarAudio.voiceIntro = loadAudio('./starvortex_assets/voice_intro.mp3', this.volumes.voiceIntro);
+            this.stellarAudio.voiceDataDisplay = loadAudio('./starvortex_assets/voice-data-display.mp3', this.volumes.voiceDataDisplay);
+            this.stellarAudio.voiceDataEarth = loadAudio('./starvortex_assets/voice-data-earth.mp3', this.volumes.voiceDataDisplay);
+            this.stellarAudio.voiceDataUser = loadAudio('./starvortex_assets/voice-data-user.mp3', this.volumes.voiceDataUser);
+            this.stellarAudio.voiceFinal = loadAudio('./starvortex_assets/voice-final.mp3', this.volumes.voiceFinal);
             
             this.stellarAudio.transitions = [
-                loadAudio('./src/sfx/FX_flow_transition_data-tech.mp3', this.volumes.transition),
-                loadAudio('./src/sfx/FX_Transition.mp3', this.volumes.transition)
+                loadAudio('./sfx/FX_flow_transition_data-tech.mp3', this.volumes.transition),
+                loadAudio('./sfx/FX_Transition.mp3', this.volumes.transition)
             ];
             
-            this.stellarAudio.sfx.textRollover = loadAudio('./src/sfx/UI_menu_text_rollover_2.mp3', this.volumes.sfx);
-            this.stellarAudio.sfx.scanZoom = loadAudio('./src/sfx/scan-zoom.wav', this.volumes.sfx);
-            this.stellarAudio.sfx.textAnimation = loadAudio('./src/sfx/FX_text_animation_loop.mp3', this.volumes.sfx);
-            this.stellarAudio.sfx.affirmation = loadAudio('./src/sfx/affirmation-tech.wav', this.volumes.sfx);
+            this.stellarAudio.sfx.textRollover = loadAudio('./sfx/UI_menu_text_rollover_2.mp3', this.volumes.sfx);
+            this.stellarAudio.sfx.scanZoom = loadAudio('./sfx/scan-zoom.wav', this.volumes.sfx);
+            this.stellarAudio.sfx.textAnimation = loadAudio('./sfx/FX_text_animation_loop.mp3', this.volumes.sfx);
+            this.stellarAudio.sfx.affirmation = loadAudio('./sfx/affirmation-tech.wav', this.volumes.sfx);
             
             this.stellarAudio.bgMusic.addEventListener('ended', () => {
                 if (!this.introSkipped) {
