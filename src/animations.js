@@ -397,7 +397,7 @@ class AnimationsManager {
         this.brainParticles = null;
         this.neuralConnections = null;
         
-        // Brain models from YOUR folder
+    
         this.brainModels = {
             'complete': './model-3d/brain-antre.obj',
             'low': './model-3d/brain_vertex_low.obj',
