@@ -128,7 +128,16 @@ class AnimationsManager {
             currentHeight: 0,
             targetHeight: 0,
             startTime: 0,
-            duration: 3000
+            duration: 2500
+        };
+        
+        // Camera transition state
+        this.cameraTransition = {
+            active: false,
+            startTime: 0,
+            duration: 2500,
+            startPos: {},
+            targetPos: {}
         };
         
         // Multi-terrain system
@@ -1238,6 +1247,11 @@ class AnimationsManager {
         type();
     }
     
+    // ========================================
+    // TERRAIN INITIALIZATION
+    // ========================================
+    // Sets up the 3D scene, camera, and particle grid
+    // ========================================
     initOptimizedTerrainSystem() {
         const canvas = this.elements.terrainCanvas;
         
@@ -1245,10 +1259,15 @@ class AnimationsManager {
             canvas.width = canvas.offsetWidth || window.innerWidth;
             canvas.height = canvas.offsetHeight || window.innerHeight;
             
-            // Scene setup
+            // ========================================
+            // SCENE SETUP
+            // ========================================
             this.threeScene = new THREE.Scene();
             this.threeScene.fog = new THREE.Fog(0x111111, 15000, 20000);
             
+            // ========================================
+            // CAMERA CONFIGURATION
+            // ========================================
             this.threeCamera = new THREE.PerspectiveCamera(
                 this.shouldUseOptimizedMode ? 8 : 10,
                 canvas.width / canvas.height,
@@ -1257,6 +1276,13 @@ class AnimationsManager {
             );
             this.threeCamera.position.set(0, 8000, -15000);
             
+            // Store initial camera position for smooth transitions
+            this.cameraStartPosition = { x: 0, y: 8000, z: -15000 };
+            this.cameraTargetPosition = { x: 0, y: 8000, z: -15000 };
+            
+            // ========================================
+            // RENDERER SETUP
+            // ========================================
             this.threeRenderer = new THREE.WebGLRenderer({
                 canvas: canvas,
                 antialias: !this.shouldUseOptimizedMode,
@@ -1267,17 +1293,32 @@ class AnimationsManager {
             this.threeRenderer.setClearColor(0x000000, 0);
             this.threeRenderer.shadowMap.enabled = false;
             
+            // ========================================
+            // ORBIT CONTROLS
+            // ========================================
             if (THREE.OrbitControls) {
                 this.threeControls = new THREE.OrbitControls(this.threeCamera, this.threeRenderer.domElement);
                 this.threeControls.autoRotate = true;
                 this.threeControls.autoRotateSpeed = 0.08;
                 this.threeControls.enableDamping = true;
-                this.threeControls.dampingFactor = 0.03;
+                this.threeControls.dampingFactor = 0.05;
+                this.threeControls.minDistance = 5000;
+                this.threeControls.maxDistance = 30000;
             }
             
+            // ========================================
+            // CREATE TERRAIN GRID
+            // ========================================
             this.createOptimizedTerrain();
+            
+            // ========================================
+            // START ANIMATION LOOP
+            // ========================================
             this.animateTerrain();
             
+            // ========================================
+            // LOAD FIRST TERRAIN
+            // ========================================
             this.loadNextTerrain(this.currentTerrainKey);
             
             console.log('[ANIMATIONS] Optimized terrain system initialized');
@@ -1288,17 +1329,32 @@ class AnimationsManager {
         }
     }
     
+    // ========================================
+    // TERRAIN GRID CREATION
+    // ========================================
+    // Creates the particle grid with optimized vertex management
+    // ========================================
     createOptimizedTerrain() {
+        // ========================================
+        // GRID DIMENSIONS
+        // ========================================
         const totalX = this.shouldUseOptimizedMode ? 100 : 120;
         const totalZ = this.shouldUseOptimizedMode ? 100 : 120;
         this.particleDistance = 30;
         
+        // ========================================
+        // PARTICLE BUFFER ALLOCATION
+        // ========================================
         const particleCount = totalX * totalZ;
         const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
         
         this.pointsPlot = [];
         let index = 0;
         
+        // ========================================
+        // POPULATE VERTEX GRID
+        // ========================================
         for (let x = 0; x < totalX; x++) {
             const xplot = x - Math.round((totalX - 1) / 2);
             const zArray = [];
@@ -1306,10 +1362,17 @@ class AnimationsManager {
             for (let z = 0; z < totalZ; z++) {
                 const zplot = z - Math.round((totalZ - 1) / 2);
                 
+                // Position
                 positions[index * 3] = x * this.particleDistance - this.particleDistance * (totalX - 1) / 2;
                 positions[index * 3 + 1] = 0;
                 positions[index * 3 + 2] = z * this.particleDistance - this.particleDistance * (totalZ - 1) / 2;
                 
+                // Initial color (white)
+                colors[index * 3] = 1.0;
+                colors[index * 3 + 1] = 1.0;
+                colors[index * 3 + 2] = 1.0;
+                
+                // Store vertex data with transition properties
                 zArray[zplot] = {
                     x: xplot,
                     z: zplot,
@@ -1318,31 +1381,55 @@ class AnimationsManager {
                     currentY: 0,
                     transitionStart: 0,
                     transitionTarget: 0,
-                    inTransition: false
+                    inTransition: false,
+                    velocity: 0,
+                    delay: Math.random() * 200
                 };
                 index++;
             }
             this.pointsPlot[xplot] = zArray;
         }
         
+        // ========================================
+        // GEOMETRY SETUP
+        // ========================================
         this.mountainGeometry = new THREE.BufferGeometry();
         this.mountainGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        this.mountainGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
         
+        // ========================================
+        // MATERIAL WITH COLOR SUPPORT
+        // ========================================
         const material = new THREE.PointsMaterial({
-            color: 0xffffff,
             size: this.shouldUseOptimizedMode ? 1.2 : 1.5,
             sizeAttenuation: false,
             transparent: true,
-            opacity: 0.8
+            opacity: 0.8,
+            vertexColors: true,
+            blending: THREE.AdditiveBlending
         });
         
+        // ========================================
+        // CREATE PARTICLE SYSTEM
+        // ========================================
         this.mountainParticles = new THREE.Points(this.mountainGeometry, material);
         this.mountainParticles.position.y = -500;
         this.threeScene.add(this.mountainParticles);
     }
     
+    // ========================================
+    // TERRAIN LOADING WITH SMOOTH TRANSITIONS
+    // ========================================
+    // Loads new terrain data and initiates smooth morphing
+    // ========================================
     async loadNextTerrain(terrainKey = null) {
-        if (this.terrainTransition.inProgress) return;
+        // ========================================
+        // VALIDATE REQUEST
+        // ========================================
+        if (this.terrainTransition.inProgress) {
+            console.log('[TERRAIN] Transition in progress, ignoring request');
+            return;
+        }
         
         const key = terrainKey || this.currentTerrainKey;
         const location = this.terrainLocations[key];
@@ -1352,9 +1439,15 @@ class AnimationsManager {
             return;
         }
         
+        // ========================================
+        // UPDATE CURRENT TERRAIN
+        // ========================================
         this.currentTerrainKey = key;
         console.log(`[TERRAIN] Loading terrain: ${location.label}`);
         
+        // ========================================
+        // UPDATE UI ELEMENTS
+        // ========================================
         if (this.elements.terrainLocation) {
             this.elements.terrainLocation.textContent = location.label;
         }
@@ -1364,10 +1457,24 @@ class AnimationsManager {
             selector.value = key;
         }
         
+        // ========================================
+        // MARK TRANSITION AS ACTIVE
+        // ========================================
         this.terrainTransition.inProgress = true;
         
+        // ========================================
+        // DISPLAY GEOGRAPHIC INFO
+        // ========================================
         this.displayGeoInfo(location.geoInfo);
         
+        // ========================================
+        // ANIMATE CAMERA TO NEW VIEW
+        // ========================================
+        this.animateCameraTransition();
+        
+        // ========================================
+        // LOAD TERRAIN DATA
+        // ========================================
         try {
             const response = await fetch(`${this.baseURL}_terrain/${location.name}.json?v=2`);
             
@@ -1380,15 +1487,93 @@ class AnimationsManager {
             
         } catch (error) {
             console.error(`Error loading terrain ${location.name}:`, error);
+            this.terrainTransition.inProgress = false;
         }
     }
     
+    // ========================================
+    // CAMERA TRANSITION ANIMATION
+    // ========================================
+    // Smoothly moves camera for cinematic effect
+    // ========================================
+    animateCameraTransition() {
+        if (!this.threeCamera) return;
+        
+        // ========================================
+        // SETUP CAMERA MOVEMENT
+        // ========================================
+        this.cameraTransition.active = true;
+        this.cameraTransition.startTime = Date.now();
+        
+        // Store current position
+        this.cameraTransition.startPos = {
+            x: this.threeCamera.position.x,
+            y: this.threeCamera.position.y,
+            z: this.threeCamera.position.z
+        };
+        
+        // Calculate new dynamic position based on terrain
+        const variation = (Math.random() - 0.5) * 3000;
+        this.cameraTransition.targetPos = {
+            x: variation,
+            y: 8000 + (Math.random() - 0.5) * 2000,
+            z: -15000 + (Math.random() - 0.5) * 2000
+        };
+        
+        console.log('[TERRAIN] Starting camera transition');
+    }
+    
+    // ========================================
+    // UPDATE CAMERA POSITION
+    // ========================================
+    // Called each frame to smoothly interpolate camera
+    // ========================================
+    updateCameraTransition() {
+        if (!this.cameraTransition.active || !this.threeCamera) return;
+        
+        const elapsed = Date.now() - this.cameraTransition.startTime;
+        const progress = Math.min(elapsed / this.cameraTransition.duration, 1);
+        
+        // ========================================
+        // SMOOTH EASING FUNCTION
+        // ========================================
+        // Ease in-out cubic for smooth start and end
+        const eased = progress < 0.5
+            ? 4 * progress * progress * progress
+            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+        
+        // ========================================
+        // INTERPOLATE POSITION
+        // ========================================
+        this.threeCamera.position.x = this.cameraTransition.startPos.x + 
+            (this.cameraTransition.targetPos.x - this.cameraTransition.startPos.x) * eased;
+        this.threeCamera.position.y = this.cameraTransition.startPos.y + 
+            (this.cameraTransition.targetPos.y - this.cameraTransition.startPos.y) * eased;
+        this.threeCamera.position.z = this.cameraTransition.startPos.z + 
+            (this.cameraTransition.targetPos.z - this.cameraTransition.startPos.z) * eased;
+        
+        // ========================================
+        // END TRANSITION
+        // ========================================
+        if (progress >= 1) {
+            this.cameraTransition.active = false;
+            console.log('[TERRAIN] Camera transition complete');
+        }
+    }
+    
+    // ========================================
+    // PROCESS TERRAIN DATA
+    // ========================================
+    // Initiates smooth morphing animation to new heights
+    // ========================================
     processTerrainDataWithTransition(data) {
         if (!this.mountainParticles || !data.coords) return;
         
-        const positions = this.mountainGeometry.getAttribute('position').array;
         const startTime = Date.now();
         
+        // ========================================
+        // SETUP VERTEX TRANSITIONS
+        // ========================================
         data.coords.forEach(coord => {
             const [x, y, z] = coord;
             
@@ -1396,67 +1581,130 @@ class AnimationsManager {
                 const vertex = this.pointsPlot[x][z];
                 const targetY = (y - (data.lowest_point || 0)) * this.particleDistance * 0.8;
                 
-                // Start transition for this vertex
+                // Initialize transition properties
                 vertex.transitionStart = vertex.currentY;
                 vertex.transitionTarget = targetY;
                 vertex.inTransition = true;
-                vertex.transitionStartTime = startTime;
+                vertex.transitionStartTime = startTime + vertex.delay;
+                vertex.velocity = 0;
             }
         });
         
+        // ========================================
+        // CONFIGURE TRANSITION TIMING
+        // ========================================
         this.terrainTransition.startTime = startTime;
-        this.terrainTransition.duration = 3000; // 3 seconds transition
+        this.terrainTransition.duration = 2500;
         
-        console.log('[ANIMATIONS] Starting smooth terrain transition');
+        console.log('[TERRAIN] Starting smooth terrain morphing animation');
     }
     
+    // ========================================
+    // UPDATE TERRAIN TRANSITION
+    // ========================================
+    // Called each frame to animate vertex positions
+    // ========================================
     updateTerrainTransition() {
         if (!this.terrainTransition.inProgress || !this.mountainGeometry) return;
         
         const positions = this.mountainGeometry.getAttribute('position').array;
+        const colors = this.mountainGeometry.getAttribute('color').array;
         const currentTime = Date.now();
-        const elapsed = currentTime - this.terrainTransition.startTime;
-        const progress = Math.min(elapsed / this.terrainTransition.duration, 1);
         
         let needsUpdate = false;
+        let allComplete = true;
         
-        // Smooth easing function
-        const easeOut = 1 - Math.pow(1 - progress, 3);
-        
-        // Update all vertices in transition
+        // ========================================
+        // UPDATE ALL VERTICES IN TRANSITION
+        // ========================================
         for (let x in this.pointsPlot) {
             for (let z in this.pointsPlot[x]) {
                 const vertex = this.pointsPlot[x][z];
                 
                 if (vertex.inTransition) {
-                    const currentY = vertex.transitionStart + 
-                                    (vertex.transitionTarget - vertex.transitionStart) * easeOut;
+                    // Check if this vertex's delayed start time has arrived
+                    if (currentTime < vertex.transitionStartTime) {
+                        allComplete = false;
+                        continue;
+                    }
                     
-                    positions[vertex.index * 3 + 1] = currentY;
-                    vertex.currentY = currentY;
+                    const elapsed = currentTime - vertex.transitionStartTime;
+                    const progress = Math.min(elapsed / this.terrainTransition.duration, 1);
+                    
+                    // ========================================
+                    // SMOOTH EASING WITH MOMENTUM
+                    // ========================================
+                    // Use ease-out-cubic for natural deceleration
+                    const easeOut = 1 - Math.pow(1 - progress, 3);
+                    
+                    // Calculate target position with easing
+                    const targetY = vertex.transitionStart + 
+                                  (vertex.transitionTarget - vertex.transitionStart) * easeOut;
+                    
+                    // Add slight overshoot and settle for organic feel
+                    const overshoot = Math.sin(progress * Math.PI) * 0.02;
+                    const finalY = targetY * (1 + overshoot);
+                    
+                    // ========================================
+                    // UPDATE POSITION
+                    // ========================================
+                    positions[vertex.index * 3 + 1] = finalY;
+                    vertex.currentY = finalY;
+                    
+                    // ========================================
+                    // COLOR FADE EFFECT
+                    // ========================================
+                    // Fade through blue during transition
+                    const fadeProgress = Math.sin(progress * Math.PI);
+                    colors[vertex.index * 3] = 1.0 - (fadeProgress * 0.3);
+                    colors[vertex.index * 3 + 1] = 1.0 - (fadeProgress * 0.2);
+                    colors[vertex.index * 3 + 2] = 1.0;
+                    
                     needsUpdate = true;
                     
-                    // Mark as complete if transition is done
+                    // ========================================
+                    // MARK AS COMPLETE
+                    // ========================================
                     if (progress >= 1) {
                         vertex.inTransition = false;
                         vertex.targetY = vertex.transitionTarget;
+                        // Reset color to white
+                        colors[vertex.index * 3] = 1.0;
+                        colors[vertex.index * 3 + 1] = 1.0;
+                        colors[vertex.index * 3 + 2] = 1.0;
+                    } else {
+                        allComplete = false;
                     }
                 }
             }
         }
         
+        // ========================================
+        // APPLY UPDATES TO GPU
+        // ========================================
         if (needsUpdate) {
             this.mountainGeometry.getAttribute('position').needsUpdate = true;
+            this.mountainGeometry.getAttribute('color').needsUpdate = true;
         }
         
-        // End transition
-        if (progress >= 1) {
+        // ========================================
+        // END TRANSITION WHEN ALL COMPLETE
+        // ========================================
+        if (allComplete) {
             this.terrainTransition.inProgress = false;
-            console.log('[ANIMATIONS] Terrain transition complete');
+            console.log('[TERRAIN] Terrain transition complete');
         }
     }
     
+    // ========================================
+    // TERRAIN ANIMATION LOOP
+    // ========================================
+    // Main render loop for terrain visualization
+    // ========================================
     animateTerrain() {
+        // ========================================
+        // CHECK IF SHOULD CONTINUE
+        // ========================================
         if (!this.threeRenderer || this.currentPhase !== 3 || this.introSkipped) {
             if (this.terrainAnimationFrame) {
                 cancelAnimationFrame(this.terrainAnimationFrame);
@@ -1465,15 +1713,40 @@ class AnimationsManager {
             return;
         }
         
+        // ========================================
+        // REQUEST NEXT FRAME
+        // ========================================
         this.terrainAnimationFrame = requestAnimationFrame(() => this.animateTerrain());
         
+        // ========================================
+        // UPDATE CONTROLS
+        // ========================================
         this.threeControls?.update();
         
-        // Update terrain transition if active
+        // ========================================
+        // UPDATE CAMERA TRANSITION
+        // ========================================
+        if (this.cameraTransition.active) {
+            this.updateCameraTransition();
+        }
+        
+        // ========================================
+        // UPDATE TERRAIN MORPHING
+        // ========================================
         if (this.terrainTransition.inProgress) {
             this.updateTerrainTransition();
         }
         
+        // ========================================
+        // SUBTLE AMBIENT ROTATION
+        // ========================================
+        if (this.mountainParticles && !this.cameraTransition.active) {
+            this.mountainParticles.rotation.y += 0.0002;
+        }
+        
+        // ========================================
+        // RENDER SCENE
+        // ========================================
         if (this.threeScene && this.threeCamera) {
             this.threeRenderer.render(this.threeScene, this.threeCamera);
         }
