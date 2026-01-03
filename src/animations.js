@@ -458,28 +458,23 @@ class AnimationsManager {
     // ========================================
     init() {
         if (this.initialized) {
-            console.log('[ANIMATIONS] Animations already initialized, skipping');
+            console.log('[ANIMATIONS] Already initialized, skipping');
             return;
         }
         
-        console.log('[ANIMATIONS] Animations Manager V8 Ethereal Brain initializing...');
-        console.log(`[DEVICE] Device mode: ${this.shouldUseOptimizedMode ? 'Optimized' : 'Full'}`);
+        console.log('[ANIMATIONS] Animations Manager V8 Ethereal Brain initializing');
+        console.log('[DEVICE] Mode:', this.shouldUseOptimizedMode ? 'Optimized' : 'Full');
         
         this.cacheElements();
 
         if (!this.elements.stellarIntro) {
-            console.error('[ERROR] stellarIntro element not found! Cannot start intro.');
+            console.error('[ERROR] stellarIntro element not found');
             return;
         }
 
-        console.log('[ANIMATIONS] Starting Stellar Intro V8 Ethereal Brain...');
+        console.log('[ANIMATIONS] Starting Stellar Intro V8 Ethereal Brain');
         
-        // Start intro sequence
         setTimeout(() => {
-
-    // ========================================
-    // STELLAR INTRO - MAIN ENTRY POINT
-    // ========================================
             this.startStellarIntro();
         }, 1000);
 
@@ -492,12 +487,10 @@ class AnimationsManager {
             stellarIntro: document.getElementById('stellarIntro'),
             skipIndicator: document.getElementById('skipIndicator'),
             
-            // Phase 1
             phaseVoice: document.getElementById('phaseVoice'),
             subtitleText: document.getElementById('subtitleText'),
             frequencyBars: document.querySelectorAll('.freq-bar'),
             
-            // Phase 2
             phaseData: document.getElementById('phaseData'),
             dataSubtitle: document.getElementById('dataSubtitle'),
             scanProgress: document.getElementById('scanProgress'),
@@ -505,21 +498,17 @@ class AnimationsManager {
             percentNum: document.getElementById('percentNum'),
             statusBox: document.getElementById('statusBox'),
             
-            // Phase 3
             phaseGlobe: document.getElementById('phaseGlobe'),
             terrainCanvas: document.getElementById('terrainCanvas'),
             terrainLocation: document.getElementById('terrainLocation'),
             
-            // Phase 4
             phaseBody: document.getElementById('phaseBody'),
             brainCanvas: document.getElementById('brainCanvas'),
             bodySubtitle: document.getElementById('bodySubtitle'),
             
-            // Phase 5
             phaseBoarding: document.getElementById('phaseBoarding'),
             boardingWrapper: document.querySelector('.boarding-wrapper'),
             
-            // Main screens
             mainScreen: document.getElementById('mainScreen'),
             homeScreen: document.getElementById('homeScreen'),
             aboutScreen: document.getElementById('aboutScreen'),
@@ -527,7 +516,7 @@ class AnimationsManager {
             mainNav: document.getElementById('mainNav')
         };
 
-        console.log('[ANIMATIONS] Elements found:', {
+        console.log('[ANIMATIONS] Elements cached:', {
             stellarIntro: !!this.elements.stellarIntro,
             terrainCanvas: !!this.elements.terrainCanvas,
             brainCanvas: !!this.elements.brainCanvas
@@ -586,11 +575,13 @@ class AnimationsManager {
     }
     
     playSFX(sfxName) {
-        if (this.sfxPlayed[sfxName] || !this.stellarAudio.sfx[sfxName]) return;
+        if (this.sfxPlayed[sfxName] || !this.stellarAudio.sfx[sfxName]) {
+            return;
+        }
         
         this.sfxPlayed[sfxName] = true;
         this.playAudio(this.stellarAudio.sfx[sfxName]);
-        console.log(`[AUDIO] SFX played: ${sfxName}`);
+        console.log('[AUDIO] SFX played:', sfxName);
     }
     
     playAudio(audioElement) {
@@ -603,9 +594,8 @@ class AnimationsManager {
     playVoiceAudio(audioElement) {
         if (!audioElement) return Promise.resolve();
         
-        // Stop current voice if playing
         if (this.currentVoiceAudio && !this.currentVoiceAudio.paused) {
-            console.log('[AUDIO] Stopping previous voice audio to prevent overlap');
+            console.log('[AUDIO] Stopping previous voice to prevent overlap');
             this.currentVoiceAudio.pause();
             this.currentVoiceAudio.currentTime = 0;
         }
@@ -613,7 +603,6 @@ class AnimationsManager {
         this.currentVoiceAudio = audioElement;
         this.isVoicePlaying = true;
         
-        // Set up ended event to clear state
         const onEnded = () => {
             this.isVoicePlaying = false;
             this.currentVoiceAudio = null;
@@ -623,10 +612,11 @@ class AnimationsManager {
         audioElement.addEventListener('ended', onEnded);
         
         return audioElement.play().catch(err => {
-            console.log('Voice audio play blocked:', err.message);
+            console.log('[AUDIO] Voice play blocked:', err.message);
             this.isVoicePlaying = false;
             this.currentVoiceAudio = null;
-        }) || Promise.resolve();
+            return Promise.resolve();
+        });
     }
     
     stopAllAudio() {
@@ -734,12 +724,14 @@ class AnimationsManager {
                             resolve();
                         }, 1500);
                     };
+                } else {
+                    setTimeout(() => {
+                        if (!this.introSkipped) {
+                            phaseVoice.classList.remove('active');
+                        }
+                        resolve();
+                    }, 20000);
                 }
-                
-                setTimeout(() => {
-                    if (!this.introSkipped) resolve();
-                }, 22000);
-                
             }, 1000);
         });
     }
@@ -805,12 +797,14 @@ class AnimationsManager {
                             resolve();
                         }, 2000);
                     };
+                } else {
+                    setTimeout(() => {
+                        if (!this.introSkipped) {
+                            phaseData.classList.remove('active');
+                        }
+                        resolve();
+                    }, 50000);
                 }
-                
-                setTimeout(() => {
-                    if (!this.introSkipped) resolve();
-                }, 55000);
-                
             }, 2000);
         });
     }
@@ -907,35 +901,38 @@ class AnimationsManager {
             
             setTimeout(() => this.playSFX('textAnimation'), 2000);
             
-            // Create geo info panels
             this.createGeoInfoPanels();
             
-            // Initialize terrain system with smooth transitions
             if (this.elements.terrainCanvas && window.THREE) {
                 this.initOptimizedTerrainSystem();
             }
             
             this.animateGlobeData();
             
-            // Play voice audio
             setTimeout(() => {
                 if (this.introSkipped) return resolve();
                 
                 this.playVoiceAudio(this.stellarAudio.voiceDataEarth);
                 
-                // Wait for voice to finish, then show continue button
                 if (this.stellarAudio.voiceDataEarth) {
                     this.stellarAudio.voiceDataEarth.onended = () => {
-                        if (this.introSkipped) return;
+                        if (this.introSkipped) return resolve();
                         
-                        // Show continue button after voice finishes
                         this.showContinueButton(phaseGlobe, () => {
-                            // User clicked continue
                             this.cleanupTerrain();
                             phaseGlobe.classList.remove('active');
                             resolve();
                         });
                     };
+                } else {
+                    setTimeout(() => {
+                        if (this.introSkipped) return resolve();
+                        this.showContinueButton(phaseGlobe, () => {
+                            this.cleanupTerrain();
+                            phaseGlobe.classList.remove('active');
+                            resolve();
+                        });
+                    }, 15000);
                 }
             }, 3000);
         });
@@ -2042,12 +2039,14 @@ class AnimationsManager {
                             resolve();
                         }, 2000);
                     };
+                } else {
+                    setTimeout(() => {
+                        if (!this.introSkipped) {
+                            phaseBody.classList.remove('active');
+                        }
+                        resolve();
+                    }, 32000);
                 }
-                
-                setTimeout(() => {
-                    if (!this.introSkipped) resolve();
-                }, 35000);
-                
             }, 1500);
         });
     }
@@ -2761,11 +2760,14 @@ class AnimationsManager {
                         resolve();
                     }, 3000);
                 };
+            } else {
+                setTimeout(() => {
+                    if (!this.introSkipped) {
+                        phaseBoarding.classList.remove('active');
+                    }
+                    resolve();
+                }, 15000);
             }
-            
-            setTimeout(() => {
-                if (!this.introSkipped) resolve();
-            }, 18000);
         });
     }
 
@@ -2930,28 +2932,38 @@ class AnimationsManager {
     // ========================================
     
     cleanupBrain() {
+        console.log('[ANIMATIONS] Cleaning up brain');
+        
         if (this.brainAnimationFrame) {
             cancelAnimationFrame(this.brainAnimationFrame);
             this.brainAnimationFrame = null;
         }
         
-        if (this.brainMesh) {
-            this.brainScene?.remove(this.brainMesh);
+        if (this.brainMesh && this.brainScene) {
+            this.brainScene.remove(this.brainMesh);
             this.cleanupMesh(this.brainMesh);
             this.brainMesh = null;
         }
         
-        if (this.brainParticles) {
-            this.brainScene?.remove(this.brainParticles);
-            this.brainParticles.geometry.dispose();
-            this.brainParticles.material.dispose();
+        if (this.brainParticles && this.brainScene) {
+            this.brainScene.remove(this.brainParticles);
+            if (this.brainParticles.geometry) {
+                this.brainParticles.geometry.dispose();
+            }
+            if (this.brainParticles.material) {
+                this.brainParticles.material.dispose();
+            }
             this.brainParticles = null;
         }
         
-        if (this.neuralConnections) {
-            this.brainScene?.remove(this.neuralConnections);
-            this.neuralConnections.geometry.dispose();
-            this.neuralConnections.material.dispose();
+        if (this.neuralConnections && this.brainScene) {
+            this.brainScene.remove(this.neuralConnections);
+            if (this.neuralConnections.geometry) {
+                this.neuralConnections.geometry.dispose();
+            }
+            if (this.neuralConnections.material) {
+                this.neuralConnections.material.dispose();
+            }
             this.neuralConnections = null;
         }
         
@@ -2965,9 +2977,13 @@ class AnimationsManager {
             this.brainRenderer = null;
         }
         
+        if (this.brainControls) {
+            this.brainControls.dispose();
+            this.brainControls = null;
+        }
+        
         this.brainScene = null;
         this.brainCamera = null;
-        this.brainControls = null;
         this.brainRegions = {};
         
         console.log('[ANIMATIONS] Brain cleanup complete');
@@ -2978,26 +2994,39 @@ class AnimationsManager {
     // CLEANUP METHODS
     // ========================================
     cleanupTerrain() {
+        console.log('[ANIMATIONS] Cleaning up terrain');
+        
         if (this.terrainAnimationFrame) {
             cancelAnimationFrame(this.terrainAnimationFrame);
             this.terrainAnimationFrame = null;
         }
         
         if (this.mountainParticles) {
-            if (this.mountainGeometry) this.mountainGeometry.dispose();
-            if (this.mountainParticles.material) this.mountainParticles.material.dispose();
-            this.threeScene?.remove(this.mountainParticles);
+            if (this.mountainGeometry) {
+                this.mountainGeometry.dispose();
+                this.mountainGeometry = null;
+            }
+            if (this.mountainParticles.material) {
+                this.mountainParticles.material.dispose();
+            }
+            if (this.threeScene) {
+                this.threeScene.remove(this.mountainParticles);
+            }
+            this.mountainParticles = null;
         }
         
         if (this.threeRenderer) {
             this.threeRenderer.dispose();
+            this.threeRenderer = null;
+        }
+        
+        if (this.threeControls) {
+            this.threeControls.dispose();
+            this.threeControls = null;
         }
         
         this.threeScene = null;
         this.threeCamera = null;
-        this.threeControls = null;
-        this.mountainGeometry = null;
-        this.mountainParticles = null;
         this.pointsPlot = [];
         this.terrainTransition.inProgress = false;
         
@@ -3182,20 +3211,20 @@ class AnimationsManager {
     }
 
     destroy() {
-        console.log('[ANIMATIONS] Destroying AnimationsManager...');
+        console.log('[ANIMATIONS] Destroying AnimationsManager');
         
         this.animationQueue = [];
         this.rafCallbacks.clear();
         this.isAnimating = false;
         
         this.stopAllAudio();
-
-    // ========================================
-    // CLEANUP METHODS
-    // ========================================
         this.cleanupTerrain();
         this.cleanupBrain();
         this.cleanupSkipFunctionality();
+        
+        if (this.elements) {
+            this.elements = null;
+        }
         
         this.initialized = false;
         console.log('[ANIMATIONS] AnimationsManager destroyed');
