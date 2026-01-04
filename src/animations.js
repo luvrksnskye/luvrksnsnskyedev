@@ -1,3 +1,4 @@
+
 /**
  * ============================
  * ANIMATIONS MANAGER MODULE V8
@@ -150,7 +151,7 @@ class AnimationsManager {
                 name: 'everest',
                 label: 'MOUNT EVEREST',
                 geoInfo: {
-                    coords: '27.9881Â°N 86.9250Â°E',
+                    coords: '27.9881°N 86.9250°E',
                     elevation: '8,849m',
                     region: 'HIMALAYAS, NEPAL/TIBET',
                     climate: 'ALPINE ARCTIC',
@@ -168,7 +169,7 @@ class AnimationsManager {
                 name: 'k2',
                 label: 'K2 PEAK',
                 geoInfo: {
-                    coords: '35.8833Â°N 76.5167Â°E',
+                    coords: '35.8833°N 76.5167°E',
                     elevation: '8,611m',
                     region: 'KARAKORAM, PAKISTAN/CHINA',
                     climate: 'EXTREME ALPINE',
@@ -186,7 +187,7 @@ class AnimationsManager {
                 name: 'kangchenjunga',
                 label: 'KANGCHENJUNGA',
                 geoInfo: {
-                    coords: '27.7025Â°N 88.1475Â°E',
+                    coords: '27.7025°N 88.1475°E',
                     elevation: '8,586m',
                     region: 'HIMALAYAS, NEPAL/INDIA',
                     climate: 'ALPINE MONSOON',
@@ -204,7 +205,7 @@ class AnimationsManager {
                 name: 'everest-valley',
                 label: 'KHUMBU GLACIER',
                 geoInfo: {
-                    coords: '27.9659Â°N 86.7797Â°E',
+                    coords: '27.9659°N 86.7797°E',
                     elevation: '5,364m',
                     region: 'KHUMBU, NEPAL',
                     climate: 'HIGH ALTITUDE VALLEY',
@@ -222,7 +223,7 @@ class AnimationsManager {
                 name: 'coldeliseran',
                 label: "COL DE L'ISERAN",
                 geoInfo: {
-                    coords: '45.4167Â°N 6.9333Â°E',
+                    coords: '45.4167°N 6.9333°E',
                     elevation: '2,770m',
                     region: 'FRENCH ALPS',
                     climate: 'ALPINE MEDITERRANEAN',
@@ -240,7 +241,7 @@ class AnimationsManager {
                 name: 'athabasca',
                 label: 'ATHABASCA GLACIER',
                 geoInfo: {
-                    coords: '52.2167Â°N 117.2333Â°W',
+                    coords: '52.2167°N 117.2333°W',
                     elevation: '1,900m - 3,450m',
                     region: 'ROCKY MOUNTAINS, CANADA',
                     climate: 'SUBARCTIC GLACIAL',
@@ -258,7 +259,7 @@ class AnimationsManager {
                 name: 'franzjosefglacier',
                 label: 'FRANZ JOSEF GLACIER',
                 geoInfo: {
-                    coords: '43.4667Â°S 170.1833Â°E',
+                    coords: '43.4667°S 170.1833°E',
                     elevation: '300m - 2,700m',
                     region: 'SOUTH ISLAND, NEW ZEALAND',
                     climate: 'TEMPERATE MARITIME',
@@ -276,7 +277,7 @@ class AnimationsManager {
                 name: 'grouse',
                 label: 'GROUSE GRIND',
                 geoInfo: {
-                    coords: '49.3833Â°N 123.0833Â°W',
+                    coords: '49.3833°N 123.0833°W',
                     elevation: '1,127m',
                     region: 'NORTH VANCOUVER, CANADA',
                     climate: 'PACIFIC MARITIME',
@@ -294,8 +295,8 @@ class AnimationsManager {
                 name: 'jotunheimen',
                 label: 'JOTUNHEIMEN',
                 geoInfo: {
-                    coords: '61.6333Â°N 8.3000Â°E',
-                    elevation: '2,469m (GALDHÃ˜PIGGEN)',
+                    coords: '61.6333°N 8.3000°E',
+                    elevation: '2,469m (GALDHØPIGGEN)',
                     region: 'SOUTHERN NORWAY',
                     climate: 'ALPINE TUNDRA',
                     population: 'UNINHABITED',
@@ -312,7 +313,7 @@ class AnimationsManager {
                 name: 'lakecomo',
                 label: 'LAKE COMO',
                 geoInfo: {
-                    coords: '46.0167Â°N 9.2667Â°E',
+                    coords: '46.0167°N 9.2667°E',
                     elevation: '198m (LAKE SURFACE)',
                     region: 'LOMBARDY, ITALY',
                     climate: 'HUMID SUBTROPICAL',
@@ -330,7 +331,7 @@ class AnimationsManager {
                 name: 'petra',
                 label: 'PETRA',
                 geoInfo: {
-                    coords: '30.3285Â°N 35.4444Â°E',
+                    coords: '30.3285°N 35.4444°E',
                     elevation: '810m - 1,350m',
                     region: "MA'AN, JORDAN",
                     climate: 'HOT DESERT',
@@ -348,7 +349,7 @@ class AnimationsManager {
                 name: 'sanfrancisco',
                 label: 'SAN FRANCISCO',
                 geoInfo: {
-                    coords: '37.7749Â°N 122.4194Â°W',
+                    coords: '37.7749°N 122.4194°W',
                     elevation: '0m - 280m',
                     region: 'CALIFORNIA, USA',
                     climate: 'MEDITERRANEAN',
@@ -364,9 +365,9 @@ class AnimationsManager {
             },
             'valparaiso': {
                 name: 'valparaiso',
-                label: 'VALPARAÃSO',
+                label: 'VALPARAÍSO',
                 geoInfo: {
-                    coords: '33.0472Â°S 71.6127Â°W',
+                    coords: '33.0472°S 71.6127°W',
                     elevation: '0m - 500m',
                     region: 'CENTRAL CHILE',
                     climate: 'MEDITERRANEAN',
@@ -981,7 +982,7 @@ class AnimationsManager {
             continueBtn.id = 'phase3ContinueBtn';
             continueBtn.className = 'phase-continue-btn';
             continueBtn.innerHTML = `
-                <span class="continue-icon">â–¶</span>
+                <span class="continue-icon">▶</span>
                 <span class="continue-text">CONTINUE</span>
             `;
             container.appendChild(continueBtn);
@@ -1090,7 +1091,7 @@ class AnimationsManager {
             selectorPanel.className = 'terrain-selector-panel';
             selectorPanel.innerHTML = `
                 <div class="selector-header">
-                    <span class="selector-icon">â—ˆ</span>
+                    <span class="selector-icon">▣</span>
                     <span class="selector-title">SELECT TERRAIN</span>
                 </div>
                 <select id="terrainSelector" class="terrain-select">
@@ -1106,7 +1107,7 @@ class AnimationsManager {
                     <option value="lakecomo">Lake Como</option>
                     <option value="petra">Petra</option>
                     <option value="sanfrancisco">San Francisco</option>
-                    <option value="valparaiso">ValparaÃ­so</option>
+                    <option value="valparaiso">Valparaíso</option>
                 </select>
                 <div class="selector-hint">EXPLORE EARTH'S TERRAIN</div>
             `;
@@ -1126,7 +1127,7 @@ class AnimationsManager {
             leftPanel.className = 'geo-info-panel left';
             leftPanel.innerHTML = `
                 <div class="geo-panel-header">
-                    <span class="geo-icon">â—‰</span>
+                    <span class="geo-icon">◉</span>
                     <span class="geo-title">LOCATION DATA</span>
                 </div>
                 <div class="geo-content" id="geoContentLeft"></div>
@@ -1141,7 +1142,7 @@ class AnimationsManager {
             rightPanel.className = 'geo-info-panel right';
             rightPanel.innerHTML = `
                 <div class="geo-panel-header">
-                    <span class="geo-icon">â—Ž</span>
+                    <span class="geo-icon">✧</span>
                     <span class="geo-title">TERRAIN FACTS</span>
                 </div>
                 <div class="geo-content" id="geoContentRight"></div>
@@ -1396,7 +1397,7 @@ class AnimationsManager {
             
             setTimeout(() => {
                 div.classList.add('visible');
-                this.typewriterEffect(`geoFact${i}`, `â€¢ ${fact}`, 25);
+                this.typewriterEffect(`geoFact${i}`, `• ${fact}`, 25);
             }, 2500 + (i * 600));
         });
     }
@@ -2108,46 +2109,17 @@ class AnimationsManager {
         transitionAudio.volume = 0.35;
         this.playAudio(transitionAudio);
         
-        // Hide ALL geographic UI elements
-        const globeHeader = document.querySelector('.globe-header');
-        const globePanels = document.querySelectorAll('.globe-panel');
-        const globeFooter = document.querySelector('.globe-footer');
-        const dataStreams = document.querySelectorAll('.data-stream');
-        const hudFrames = document.querySelectorAll('.hud-corner-frame');
+        // Animate panel transition with scramble effect
+        this.animatePanelTransition();
         
-        // Fade out geographic UI
-        [globeHeader, globeFooter].forEach(el => {
-            if (el) {
-                el.style.opacity = '0';
-                el.style.pointerEvents = 'none';
-                el.style.transition = 'opacity 0.4s ease';
-            }
-        });
-        
-        globePanels.forEach(p => {
-            p.style.opacity = '0';
-            p.style.pointerEvents = 'none';
-            p.style.transition = 'opacity 0.4s ease';
-        });
-        
-        dataStreams.forEach(s => {
-            if (s) s.style.opacity = '0';
-        });
-        
-        hudFrames.forEach(f => {
-            if (f) f.style.opacity = '0';
-        });
+        // Hide geographic UI elements with scramble animation
+        this.scrambleAndHideGeoPanels();
         
         // Keep canvas visible but prepare for Chicago
         if (this.elements.terrainCanvas) {
             this.elements.terrainCanvas.style.opacity = '1';
             this.elements.terrainCanvas.style.visibility = 'visible';
-            this.elements.terrainCanvas.style.zIndex = '5';
-            console.log('[CHICAGO] Canvas ready:', {
-                opacity: this.elements.terrainCanvas.style.opacity,
-                visibility: this.elements.terrainCanvas.style.visibility,
-                display: this.elements.terrainCanvas.style.display
-            });
+            this.elements.terrainCanvas.style.zIndex = '15';
         }
         
         // Show Chicago panel
@@ -2155,7 +2127,7 @@ class AnimationsManager {
             panel.classList.add('active');
             this.chicagoActive = true;
             
-            // Initialize 3D
+            // Initialize 3D with new camera position
             setTimeout(() => {
                 if (window.THREE && this.elements.terrainCanvas) {
                     console.log('[CHICAGO] Starting 3D initialization');
@@ -2168,9 +2140,123 @@ class AnimationsManager {
                 }
             }, 100);
             
-            // Start narrative
+            // Start narrative with scramble animation
             this.startChicagoNarrative();
         }, 400);
+    }
+    
+    animatePanelTransition() {
+        const panel = this.elements.chicagoPanel;
+        if (!panel) return;
+        
+        // Add scramble animation styles
+        if (!document.getElementById('scrambleAnimationStyles')) {
+            const style = document.createElement('style');
+            style.id = 'scrambleAnimationStyles';
+            style.textContent = `
+                @keyframes scramble {
+                    0% { opacity: 0; transform: translateY(-10px) scale(0.95); }
+                    50% { opacity: 0.5; transform: translateY(5px) scale(1.05); }
+                    100% { opacity: 1; transform: translateY(0) scale(1); }
+                }
+                .scramble-in {
+                    animation: scramble 0.6s ease-out forwards;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Animate panel elements
+        const elements = panel.querySelectorAll('.chicago-title, .chicago-subtitle, .chicago-close, .narrative-line');
+        elements.forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(-10px) scale(0.95)';
+            
+            setTimeout(() => {
+                el.classList.add('scramble-in');
+            }, 100 + index * 100);
+        });
+    }
+    
+    scrambleAndHideGeoPanels() {
+        const geoPanels = [
+            document.getElementById('geoInfoLeft'),
+            document.getElementById('geoInfoRight'),
+            document.getElementById('terrainSelectorPanel'),
+            ...document.querySelectorAll('.globe-panel'),
+            document.querySelector('.globe-header'),
+            document.querySelector('.globe-footer')
+        ].filter(Boolean);
+        
+        geoPanels.forEach((panel, index) => {
+            if (!panel) return;
+            
+            // Scramble animation before hiding
+            panel.style.opacity = '1';
+            panel.style.transform = 'scale(1)';
+            
+            setTimeout(() => {
+                panel.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                panel.style.opacity = '0';
+                panel.style.transform = 'scale(0.9) translateY(20px)';
+                panel.style.pointerEvents = 'none';
+                
+                // Scramble text effect
+                this.scrambleTextEffect(panel, () => {
+                    setTimeout(() => {
+                        panel.style.visibility = 'hidden';
+                    }, 400);
+                });
+            }, index * 100);
+        });
+        
+        // Hide data streams and HUD frames
+        const dataStreams = document.querySelectorAll('.data-stream');
+        const hudFrames = document.querySelectorAll('.hud-corner-frame');
+        
+        [...dataStreams, ...hudFrames].forEach(el => {
+            if (el) {
+                el.style.transition = 'opacity 0.4s ease';
+                el.style.opacity = '0';
+            }
+        });
+    }
+    
+    scrambleTextEffect(element, callback) {
+        const textElements = element.querySelectorAll('span, div, p, h1, h2, h3, h4');
+        
+        textElements.forEach(el => {
+            if (el.textContent && el.textContent.trim()) {
+                const originalText = el.textContent;
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+                let scrambleCount = 0;
+                const maxScrambles = 8;
+                
+                const scramble = () => {
+                    if (scrambleCount >= maxScrambles) {
+                        el.textContent = originalText;
+                        if (callback) callback();
+                        return;
+                    }
+                    
+                    let scrambled = '';
+                    for (let i = 0; i < originalText.length; i++) {
+                        if (originalText[i] === ' ') {
+                            scrambled += ' ';
+                        } else {
+                            scrambled += chars[Math.floor(Math.random() * chars.length)];
+                        }
+                    }
+                    
+                    el.textContent = scrambled;
+                    scrambleCount++;
+                    
+                    setTimeout(scramble, 40);
+                };
+                
+                setTimeout(scramble, Math.random() * 200);
+            }
+        });
     }
     
     closeChicagoView() {
@@ -2179,7 +2265,7 @@ class AnimationsManager {
         
         console.log('[CHICAGO] Closing Chicago wireframe view');
         
-        // Hide Chicago panel
+        // Hide Chicago panel with reverse animation
         panel.classList.remove('active');
         this.chicagoActive = false;
         this.currentChicagoLine = 0;
@@ -2187,42 +2273,17 @@ class AnimationsManager {
         // Cleanup 3D first
         this.cleanupChicago();
         
-        // Restore ALL geographic UI elements
+        // Restore geographic UI with scramble animation
         setTimeout(() => {
-            const globeHeader = document.querySelector('.globe-header');
-            const globePanels = document.querySelectorAll('.globe-panel');
-            const globeFooter = document.querySelector('.globe-footer');
-            const dataStreams = document.querySelectorAll('.data-stream');
-            const hudFrames = document.querySelectorAll('.hud-corner-frame');
-            
-            [globeHeader, globeFooter].forEach(el => {
-                if (el) {
-                    el.style.opacity = '1';
-                    el.style.pointerEvents = 'auto';
-                }
-            });
-            
-            globePanels.forEach(p => {
-                p.style.opacity = '1';
-                p.style.pointerEvents = 'auto';
-                p.style.visibility = 'visible';
-            });
-            
-            dataStreams.forEach(s => {
-                if (s) s.style.opacity = '1';
-            });
-            
-            hudFrames.forEach(f => {
-                if (f) f.style.opacity = '1';
-            });
-            
-            // Restore terrain canvas
-            if (this.elements.terrainCanvas) {
-                this.elements.terrainCanvas.style.opacity = '1';
-                this.elements.terrainCanvas.style.visibility = 'visible';
-                this.elements.terrainCanvas.style.zIndex = '1';
-            }
-        }, 400);
+            this.scrambleAndShowGeoPanels();
+        }, 200);
+        
+        // Restore terrain canvas
+        if (this.elements.terrainCanvas) {
+            this.elements.terrainCanvas.style.opacity = '1';
+            this.elements.terrainCanvas.style.visibility = 'visible';
+            this.elements.terrainCanvas.style.zIndex = '1';
+        }
         
         // Restart terrain animation if still in phase 3
         if (this.currentPhase === 3 && !this.introSkipped) {
@@ -2233,6 +2294,47 @@ class AnimationsManager {
                 }
             }, 800);
         }
+    }
+    
+    scrambleAndShowGeoPanels() {
+        const geoPanels = [
+            document.getElementById('geoInfoLeft'),
+            document.getElementById('geoInfoRight'),
+            document.getElementById('terrainSelectorPanel'),
+            ...document.querySelectorAll('.globe-panel'),
+            document.querySelector('.globe-header'),
+            document.querySelector('.globe-footer')
+        ].filter(Boolean);
+        
+        geoPanels.forEach((panel, index) => {
+            if (!panel) return;
+            
+            panel.style.visibility = 'visible';
+            panel.style.opacity = '0';
+            panel.style.transform = 'scale(0.9) translateY(-20px)';
+            
+            setTimeout(() => {
+                panel.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                panel.style.opacity = '1';
+                panel.style.transform = 'scale(1) translateY(0)';
+                panel.style.pointerEvents = 'auto';
+                
+                // Scramble text effect in reverse
+                this.scrambleTextEffect(panel, null);
+            }, 100 + index * 150);
+        });
+        
+        // Restore data streams and HUD frames
+        const dataStreams = document.querySelectorAll('.data-stream');
+        const hudFrames = document.querySelectorAll('.hud-corner-frame');
+        
+        [...dataStreams, ...hudFrames].forEach(el => {
+            if (el) {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                }, 500);
+            }
+        });
     }
     
     initChicago3D() {
@@ -2255,14 +2357,18 @@ class AnimationsManager {
             this.chicagoScene = new THREE.Scene();
             this.chicagoScene.background = new THREE.Color(0x000000);
             
-            // Camera
+            // Camera - ADJUSTED FOR BETTER POSITION
             this.chicagoCamera = new THREE.PerspectiveCamera(
-                50,
+                45, // Wider field of view
                 canvas.width / canvas.height,
                 0.1,
-                10000
+                50000 // Much larger far plane for big model
             );
-            this.chicagoCamera.position.set(0, 500, 1000);
+            
+            // Position camera to see the large model - CHANGED POSITION
+            // Based on vertex data: model spans from -3100 to ~20000
+            // Center is approximately at (0, 0, 0) after centering
+            this.chicagoCamera.position.set(0, 10000, 25000); // Much higher and farther back
             this.chicagoCamera.lookAt(0, 0, 0);
             
             console.log('[CHICAGO] Camera positioned:', this.chicagoCamera.position);
@@ -2283,7 +2389,7 @@ class AnimationsManager {
             
             this.chicagoRenderer.setClearColor(0x000000, 1);
             
-            // Controls
+            // Controls with better settings for large model
             if (THREE.OrbitControls) {
                 this.chicagoControls = new THREE.OrbitControls(
                     this.chicagoCamera, 
@@ -2292,24 +2398,27 @@ class AnimationsManager {
                 this.chicagoControls.enableDamping = true;
                 this.chicagoControls.dampingFactor = 0.05;
                 this.chicagoControls.autoRotate = true;
-                this.chicagoControls.autoRotateSpeed = 0.5;
-                console.log('[CHICAGO] Controls initialized');
+                this.chicagoControls.autoRotateSpeed = 0.3;
+                this.chicagoControls.minDistance = 5000;
+                this.chicagoControls.maxDistance = 50000;
+                this.chicagoControls.maxPolarAngle = Math.PI / 2;
+                console.log('[CHICAGO] Controls initialized with large model settings');
             }
             
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            // Lighting - brighter for better visibility
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
             this.chicagoScene.add(ambientLight);
             
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.4);
-            directionalLight.position.set(100, 200, 100);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+            directionalLight.position.set(1000, 2000, 1000);
             this.chicagoScene.add(directionalLight);
             
             console.log('[CHICAGO] Lights added');
             
-            // Load Chicago model
+            // Load Chicago model with better scaling
             this.loadChicagoModel();
             
-            // Start animation immediately (even before model loads)
+            // Start animation immediately
             this.animateChicago();
             
             console.log('[CHICAGO] 3D initialization complete');
@@ -2339,27 +2448,40 @@ class AnimationsManager {
                     (object) => {
                         console.log('[CHICAGO] Model loaded successfully');
                         
-                        // Make it wireframe
+                        // Make it wireframe with better visibility
                         object.traverse((child) => {
                             if (child instanceof THREE.Mesh) {
                                 child.material = new THREE.MeshBasicMaterial({
                                     color: 0xff0000,
                                     wireframe: true,
                                     transparent: true,
-                                    opacity: 0.7
+                                    opacity: 0.8, // More visible
+                                    linewidth: 1
                                 });
                             }
                         });
                         
-                        // Center and scale
+                        // Calculate bounding box for proper centering and scaling
                         const box = new THREE.Box3().setFromObject(object);
                         const center = box.getCenter(new THREE.Vector3());
+                        const size = box.getSize(new THREE.Vector3());
+                        
+                        console.log('[CHICAGO] Model dimensions:', {
+                            min: box.min,
+                            max: box.max,
+                            size: size,
+                            center: center
+                        });
+                        
+                        // Center the model
                         object.position.sub(center);
                         
-                        const size = box.getSize(new THREE.Vector3());
-                        const maxDim = Math.max(size.x, size.y, size.z);
-                        const scale = 500 / maxDim;
-                        object.scale.setScalar(scale);
+                        // Scale - based on the vertex data
+                        // Model is VERY large (15000x20000 units), scale down significantly
+                        const scaleFactor = 0.05; // Scale down to 5% of original size
+                        object.scale.setScalar(scaleFactor);
+                        
+                        console.log('[CHICAGO] Model scaled by:', scaleFactor);
                         
                         // Remove old mesh if exists
                         if (this.chicagoMesh) {
@@ -2368,6 +2490,9 @@ class AnimationsManager {
                         
                         this.chicagoMesh = object;
                         this.chicagoScene.add(object);
+                        
+                        // Adjust camera to see entire model
+                        this.adjustCameraForModel(box, scaleFactor);
                     },
                     (progress) => {
                         const percent = Math.round((progress.loaded / progress.total) * 100);
@@ -2395,18 +2520,22 @@ class AnimationsManager {
                                     color: 0xff0000,
                                     wireframe: true,
                                     transparent: true,
-                                    opacity: 0.7
+                                    opacity: 0.8
                                 });
                             }
                         });
                         
                         const box = new THREE.Box3().setFromObject(object);
                         const center = box.getCenter(new THREE.Vector3());
+                        const size = box.getSize(new THREE.Vector3());
+                        
+                        console.log('[CHICAGO] Fallback model dimensions:', size);
+                        
                         object.position.sub(center);
                         
-                        const size = box.getSize(new THREE.Vector3());
+                        // Scale down for visibility
                         const maxDim = Math.max(size.x, size.y, size.z);
-                        const scale = 500 / maxDim;
+                        const scale = 5000 / maxDim; // Much smaller scale
                         object.scale.setScalar(scale);
                         
                         if (this.chicagoMesh) {
@@ -2415,6 +2544,8 @@ class AnimationsManager {
                         
                         this.chicagoMesh = object;
                         this.chicagoScene.add(object);
+                        
+                        this.adjustCameraForModel(box, scale);
                     },
                     undefined,
                     (error) => {
@@ -2426,30 +2557,60 @@ class AnimationsManager {
         );
     }
     
+    adjustCameraForModel(box, scale) {
+        if (!this.chicagoCamera || !box) return;
+        
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const scaledSize = maxDim * scale;
+        
+        console.log('[CHICAGO] Scaled model size:', scaledSize);
+        
+        // Adjust camera based on model size
+        const cameraDistance = scaledSize * 1.5;
+        this.chicagoCamera.position.set(0, cameraDistance * 0.7, cameraDistance);
+        this.chicagoCamera.lookAt(0, 0, 0);
+        
+        // Update controls limits
+        if (this.chicagoControls) {
+            this.chicagoControls.minDistance = scaledSize * 0.5;
+            this.chicagoControls.maxDistance = scaledSize * 3;
+            this.chicagoControls.target.set(0, 0, 0);
+            this.chicagoControls.update();
+        }
+        
+        console.log('[CHICAGO] Camera adjusted for model size:', {
+            position: this.chicagoCamera.position,
+            distance: cameraDistance
+        });
+    }
+    
     createChicagoFallback() {
         console.log('[CHICAGO] Creating fallback wireframe city');
         
         const group = new THREE.Group();
         const material = new THREE.LineBasicMaterial({ 
             color: 0xff0000, 
-            transparent: false, 
-            opacity: 1.0
+            linewidth: 1
         });
         
-        // Create grid of buildings
-        for (let x = -5; x <= 5; x++) {
-            for (let z = -5; z <= 5; z++) {
-                const height = 20 + Math.random() * 80;
-                const width = 10 + Math.random() * 15;
+        // Create grid of buildings - larger and more spread out
+        for (let x = -8; x <= 8; x++) {
+            for (let z = -8; z <= 8; z++) {
+                const height = 100 + Math.random() * 300;
+                const width = 30 + Math.random() * 40;
                 
                 const geometry = new THREE.BoxGeometry(width, height, width);
                 const edges = new THREE.EdgesGeometry(geometry);
                 const building = new THREE.LineSegments(edges, material);
                 
-                building.position.set(x * 40, height / 2, z * 40);
+                building.position.set(x * 80, height / 2, z * 80);
                 group.add(building);
             }
         }
+        
+        // Center the fallback city
+        group.position.y = -50;
         
         if (this.chicagoMesh) {
             this.chicagoScene.remove(this.chicagoMesh);
@@ -2459,7 +2620,10 @@ class AnimationsManager {
         this.chicagoScene.add(group);
         
         console.log('[CHICAGO] Fallback city created with', group.children.length, 'buildings');
-        console.log('[CHICAGO] Scene objects:', this.chicagoScene.children.length);
+        
+        // Adjust camera for fallback
+        this.chicagoCamera.position.set(0, 500, 1200);
+        this.chicagoCamera.lookAt(0, 0, 0);
     }
     
     animateChicago() {
@@ -2491,61 +2655,70 @@ class AnimationsManager {
     }
     
     startChicagoNarrative() {
-        const line1 = document.getElementById('narrativeLine1');
-        const line2 = document.getElementById('narrativeLine2');
-        const line3 = document.getElementById('narrativeLine3');
+        const narrativeElement = this.elements.chicagoNarrative;
+        if (!narrativeElement) return;
         
-        if (!line1 || !line2 || !line3) return;
+        // Clear existing content
+        narrativeElement.innerHTML = '';
         
-        // Split narrative into 3-line groups
-        const narrativeGroups = [
-            [
-                "The Chicago Collapse occurred in 2067 when the infrastructure system failed simultaneously.",
-                "More than 300,000 people were trapped in the lower levels during the Dark Floods.",
-                "Corporations abandoned the central district, leaving it in the hands of criminal factions."
-            ],
-            [
-                "Now it is known as 'The Gray Zone' - a place where law has no meaning.",
-                "Data shows constant criminal activity: organized theft, data trafficking, illegal experiments.",
-                "Only the desperate or those with nothing to lose venture into central Chicago."
-            ],
-            [
-                "Your ship must avoid this zone. No rescue is available if you enter.",
-                "Security systems are offline. Emergency protocols have failed.",
-                "This area is quarantined indefinitely. Entry is forbidden by Stellar Command."
-            ]
-        ];
+        // Create individual line elements
+        this.chicagoNarrativeLines.forEach((line, index) => {
+            const lineElement = document.createElement('div');
+            lineElement.className = 'narrative-line';
+            lineElement.textContent = line;
+            lineElement.style.opacity = '0';
+            lineElement.style.transform = 'translateX(-20px)';
+            narrativeElement.appendChild(lineElement);
+        });
         
-        let currentGroup = 0;
+        // Animate lines sequentially with scramble effect
+        const lines = narrativeElement.querySelectorAll('.narrative-line');
+        let currentLine = 0;
         
-        const showGroup = () => {
-            if (!this.chicagoActive || this.introSkipped) return;
+        const animateNextLine = () => {
+            if (!this.chicagoActive || this.introSkipped || currentLine >= lines.length) return;
             
-            const group = narrativeGroups[currentGroup];
+            const line = lines[currentLine];
             
-            // Fade out all lines
-            [line1, line2, line3].forEach(line => {
-                line.classList.remove('visible');
+            // Scramble animation before revealing
+            this.scrambleTextEffect(line, () => {
+                // Reveal line
+                setTimeout(() => {
+                    line.style.transition = 'all 0.5s ease-out';
+                    line.style.opacity = '1';
+                    line.style.transform = 'translateX(0)';
+                    
+                    // Move to next line
+                    currentLine++;
+                    
+                    if (currentLine < lines.length) {
+                        setTimeout(animateNextLine, 3000); // Wait before next line
+                    } else {
+                        // Loop animation
+                        setTimeout(() => {
+                            // Fade out all lines
+                            lines.forEach(l => {
+                                l.style.transition = 'opacity 0.5s ease';
+                                l.style.opacity = '0';
+                            });
+                            
+                            // Restart after fade out
+                            setTimeout(() => {
+                                lines.forEach(l => {
+                                    l.style.opacity = '0';
+                                    l.style.transform = 'translateX(-20px)';
+                                });
+                                currentLine = 0;
+                                setTimeout(animateNextLine, 1000);
+                            }, 500);
+                        }, 5000); // Wait before restarting
+                    }
+                }, 500);
             });
-            
-            setTimeout(() => {
-                // Update text
-                line1.textContent = group[0];
-                line2.textContent = group[1];
-                line3.textContent = group[2];
-                
-                // Fade in with delays
-                setTimeout(() => line1.classList.add('visible'), 100);
-                setTimeout(() => line2.classList.add('visible'), 300);
-                setTimeout(() => line3.classList.add('visible'), 500);
-                
-                // Move to next group
-                currentGroup = (currentGroup + 1) % narrativeGroups.length;
-                setTimeout(showGroup, 8000);
-            }, 600);
         };
         
-        setTimeout(showGroup, 500);
+        // Start animation
+        setTimeout(animateNextLine, 500);
     }
     
     cleanupChicago() {
@@ -3155,7 +3328,7 @@ class AnimationsManager {
             infoPanel.className = 'brain-tech-panel';
             infoPanel.innerHTML = `
                 <div class="brain-panel-header">
-                    <span class="brain-icon">â¬¡</span>
+                    <span class="brain-icon">⚡</span>
                     <span class="brain-title">NEURAL ANALYSIS</span>
                 </div>
                 <div class="brain-tech-content" id="brainTechContent"></div>
