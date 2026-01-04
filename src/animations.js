@@ -383,7 +383,7 @@ class AnimationsManager {
             }
         };
         
-        this.currentTerrainKey = 'coldeliseran';
+        this.currentTerrainKey = 'franzjosefglacier';
         this.baseURL = 'https://s3.ca-central-1.amazonaws.com/kevinnewcombe/three-terrain/';
         
         // Brain 3D references - ETHEREAL WHITE
@@ -2074,7 +2074,7 @@ class AnimationsManager {
         setTimeout(updateFromCurrentTerrain, 1000);
     }
 // ========================================
-// CHICAGO 3D WIREFRAME SYSTEM
+// CHICAGO 3D WIREFRAME SYSTEM - GIANT SCALE
 // ========================================
 
 setupChicagoButton() {
@@ -2121,9 +2121,11 @@ openChicagoView() {
         this.elements.terrainCanvas.style.zIndex = '15';
     }
     
-    // Show Chicago panel
+    // Show Chicago panel with proper z-index
     setTimeout(() => {
         panel.classList.add('active');
+        // Ensure Chicago panel is above the 3D canvas
+        panel.style.zIndex = '20';
         this.chicagoActive = true;
         
         // Initialize 3D with new camera position
@@ -2161,6 +2163,21 @@ animatePanelTransition() {
             .scramble-in {
                 animation: scramble 0.6s ease-out forwards;
             }
+            
+            /* Ensure Chicago panel elements are above 3D canvas */
+            .chicago-panel {
+                z-index: 20 !important;
+            }
+            .chicago-panel * {
+                z-index: 21 !important;
+            }
+            .chicago-title,
+            .chicago-subtitle,
+            .chicago-close,
+            .narrative-line {
+                z-index: 22 !important;
+                position: relative;
+            }
         `;
         document.head.appendChild(style);
     }
@@ -2170,6 +2187,9 @@ animatePanelTransition() {
     elements.forEach((el, index) => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(-10px) scale(0.95)';
+        // Ensure each element has proper z-index
+        el.style.zIndex = '22';
+        el.style.position = 'relative';
         setTimeout(() => {
             el.classList.add('scramble-in');
         }, 100 + index * 100);
@@ -2261,6 +2281,8 @@ closeChicagoView() {
     
     // Hide Chicago panel with reverse animation
     panel.classList.remove('active');
+    // Reset z-index
+    panel.style.zIndex = '';
     this.chicagoActive = false;
     this.currentChicagoLine = 0;
     
@@ -2338,7 +2360,7 @@ initChicago3D() {
     }
     
     try {
-        console.log('[CHICAGO] Initializing Chicago 3D wireframe');
+        console.log('[CHICAGO] Initializing Chicago 3D wireframe - GIANT SCALE');
         
         // Stop terrain animation first
         if (this.terrainAnimationFrame) {
@@ -2355,19 +2377,19 @@ initChicago3D() {
         this.chicagoScene = new THREE.Scene();
         this.chicagoScene.background = new THREE.Color(0x000000);
         
-        // Camera - OPTIMIZED FOR CENTER POSITIONING
+        // Camera - HELICOPTER VIEW SETUP
         this.chicagoCamera = new THREE.PerspectiveCamera(
-            60, // Field of view
+            75, // Wider field of view for helicopter effect
             canvasWidth / canvasHeight,
-            0.1,
-            100000
+            1,
+            500000 // Increased far plane for giant scale
         );
         
-        // Position camera for centered view
-        this.chicagoCamera.position.set(0, 2000, 3000);
+        // Position camera low for helicopter view - MUCH CLOSER TO GIANT MODEL
+        this.chicagoCamera.position.set(0, 800, 1200);
         this.chicagoCamera.lookAt(0, 0, 0);
         
-        console.log('[CHICAGO] Camera positioned:', this.chicagoCamera.position);
+        console.log('[CHICAGO] Helicopter camera positioned:', this.chicagoCamera.position);
         
         // Setup renderer with proper dimensions
         if (this.threeRenderer) {
@@ -2388,37 +2410,53 @@ initChicago3D() {
         
         this.chicagoRenderer.setClearColor(0x000000, 1);
         
-        // Controls optimized for model viewing
+        // Controls optimized for HELICOPTER NAVIGATION
         if (THREE.OrbitControls) {
             this.chicagoControls = new THREE.OrbitControls(
                 this.chicagoCamera, 
                 this.chicagoRenderer.domElement
             );
             this.chicagoControls.enableDamping = true;
-            this.chicagoControls.dampingFactor = 0.05;
-            this.chicagoControls.autoRotate = true;
-            this.chicagoControls.autoRotateSpeed = 0.5;
-            this.chicagoControls.minDistance = 500;
-            this.chicagoControls.maxDistance = 10000;
-            this.chicagoControls.maxPolarAngle = Math.PI / 2;
+            this.chicagoControls.dampingFactor = 0.03;
+            this.chicagoControls.autoRotate = false; // Disabled for helicopter control
+            this.chicagoControls.enableZoom = true;
+            this.chicagoControls.enablePan = true;
+            this.chicagoControls.enableRotate = true;
+            
+            // HELICOPTER VIEW CONSTRAINTS
+            this.chicagoControls.minDistance = 50;     // Very close for detail
+            this.chicagoControls.maxDistance = 50000;  // Very far for overview
+            this.chicagoControls.maxPolarAngle = Math.PI * 0.9; // Almost ground level
+            this.chicagoControls.minPolarAngle = Math.PI * 0.1;  // High angle view
+            
+            // Movement speed
+            this.chicagoControls.rotateSpeed = 0.3;
+            this.chicagoControls.zoomSpeed = 1.0;
+            this.chicagoControls.panSpeed = 1.5;
+            
             this.chicagoControls.target.set(0, 0, 0);
             
-            console.log('[CHICAGO] Controls initialized');
+            console.log('[CHICAGO] Helicopter controls initialized');
         }
         
-        // Enhanced lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+        // Enhanced lighting for giant model
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
         this.chicagoScene.add(ambientLight);
         
-        const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight1.position.set(1000, 2000, 1000);
+        const directionalLight1 = new THREE.DirectionalLight(0xffffff, 1.0);
+        directionalLight1.position.set(10000, 20000, 10000);
         this.chicagoScene.add(directionalLight1);
         
-        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
-        directionalLight2.position.set(-1000, 1000, -1000);
+        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.6);
+        directionalLight2.position.set(-10000, 10000, -10000);
         this.chicagoScene.add(directionalLight2);
         
-        console.log('[CHICAGO] Lights added');
+        // Additional lights for giant scale
+        const directionalLight3 = new THREE.DirectionalLight(0x00ff41, 0.4);
+        directionalLight3.position.set(0, 15000, 0);
+        this.chicagoScene.add(directionalLight3);
+        
+        console.log('[CHICAGO] Giant scale lights added');
         
         // Load Chicago model
         this.loadChicagoModel();
@@ -2426,7 +2464,7 @@ initChicago3D() {
         // Start animation
         this.animateChicago();
         
-        console.log('[CHICAGO] 3D initialization complete');
+        console.log('[CHICAGO] Giant scale 3D initialization complete');
         
     } catch (error) {
         console.error('[CHICAGO] Error initializing 3D:', error);
@@ -2438,7 +2476,7 @@ loadChicagoModel() {
     const loader = new THREE.OBJLoader();
     const mtlLoader = new THREE.MTLLoader();
     
-    console.log('[CHICAGO] Loading Chicago wireframe model');
+    console.log('[CHICAGO] Loading Chicago wireframe model - GIANT SCALE');
     
     // Try loading with MTL first
     mtlLoader.load(
@@ -2460,13 +2498,13 @@ loadOBJModel(loader, objPath) {
     loader.load(
         objPath,
         (object) => {
-            console.log('[CHICAGO] Model loaded successfully');
+            console.log('[CHICAGO] Model loaded successfully - APPLYING GIANT SCALE');
             this.processLoadedModel(object);
         },
         (progress) => {
             if (progress.total > 0) {
                 const percent = Math.round((progress.loaded / progress.total) * 100);
-                console.log('[CHICAGO] Loading model:', percent + '%');
+                console.log('[CHICAGO] Loading giant model:', percent + '%');
             }
         },
         (error) => {
@@ -2477,7 +2515,7 @@ loadOBJModel(loader, objPath) {
             loader.load(
                 '/src/model_3d/Downtown_Chicago_Wireframe_Map.obj',
                 (object) => {
-                    console.log('[CHICAGO] Alternative model loaded');
+                    console.log('[CHICAGO] Alternative model loaded - APPLYING GIANT SCALE');
                     this.processLoadedModel(object);
                 },
                 undefined,
@@ -2491,15 +2529,15 @@ loadOBJModel(loader, objPath) {
 }
 
 processLoadedModel(object) {
-    // Apply wireframe material to all meshes
+    // Apply wireframe material to all meshes with enhanced appearance
     object.traverse((child) => {
         if (child instanceof THREE.Mesh) {
             child.material = new THREE.MeshBasicMaterial({
                 color: 0x00ff41, // Matrix green
                 wireframe: true,
                 transparent: true,
-                opacity: 0.9,
-                linewidth: 2
+                opacity: 0.95,
+                linewidth: 3 // Thicker lines for giant scale
             });
         }
     });
@@ -2509,7 +2547,7 @@ processLoadedModel(object) {
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
     
-    console.log('[CHICAGO] Model dimensions:', {
+    console.log('[CHICAGO] Original model dimensions:', {
         min: box.min.toArray(),
         max: box.max.toArray(),
         size: size.toArray(),
@@ -2519,20 +2557,28 @@ processLoadedModel(object) {
     // Center the model at origin
     object.position.sub(center);
     
-    // Smart scaling based on model size
+    // GIANT SCALING - MASSIVE SIZE
     const maxDimension = Math.max(size.x, size.y, size.z);
     let scaleFactor;
     
+    // Force giant scale regardless of original size
     if (maxDimension > 10000) {
-        scaleFactor = 1500 / maxDimension; // Scale large models to 1500 units
+        scaleFactor = 50000 / maxDimension; // Make huge models GIGANTIC (50km scale)
     } else if (maxDimension > 1000) {
-        scaleFactor = 800 / maxDimension;  // Scale medium models to 800 units
+        scaleFactor = 35000 / maxDimension; // Make large models GIGANTIC (35km scale)  
+    } else if (maxDimension > 100) {
+        scaleFactor = 25000 / maxDimension; // Make medium models GIGANTIC (25km scale)
     } else {
-        scaleFactor = 400 / maxDimension;  // Scale small models to 400 units
+        scaleFactor = 15000 / maxDimension; // Make small models GIGANTIC (15km scale)
+    }
+    
+    // Ensure minimum giant scale
+    if (scaleFactor < 100) {
+        scaleFactor = 100; // Minimum 100x scale
     }
     
     object.scale.setScalar(scaleFactor);
-    console.log('[CHICAGO] Model scaled by:', scaleFactor);
+    console.log('[CHICAGO] GIANT MODEL SCALING APPLIED:', scaleFactor);
     
     // Remove old mesh if exists
     if (this.chicagoMesh) {
@@ -2542,78 +2588,90 @@ processLoadedModel(object) {
     this.chicagoMesh = object;
     this.chicagoScene.add(object);
     
-    // Adjust camera and controls for the scaled model
-    this.adjustCameraForModel(size, scaleFactor);
+    // Adjust camera for GIANT helicopter view
+    this.adjustCameraForGiantModel(size, scaleFactor);
 }
 
-adjustCameraForModel(originalSize, scaleFactor) {
+adjustCameraForGiantModel(originalSize, scaleFactor) {
     if (!this.chicagoCamera) return;
     
     const scaledSize = Math.max(originalSize.x, originalSize.y, originalSize.z) * scaleFactor;
-    console.log('[CHICAGO] Scaled model size:', scaledSize);
+    console.log('[CHICAGO] GIANT scaled model size:', scaledSize);
     
-    // Position camera to view the entire model
-    const cameraDistance = scaledSize * 2.5;
+    // Position camera for HELICOPTER VIEW of giant model
+    const helicopterHeight = scaledSize * 0.15; // Low helicopter height
+    const helicopterDistance = scaledSize * 0.25; // Close distance for detail
+    
     this.chicagoCamera.position.set(
-        cameraDistance * 0.7, 
-        cameraDistance * 0.8, 
-        cameraDistance
+        helicopterDistance * 0.8, 
+        helicopterHeight, 
+        helicopterDistance
     );
     this.chicagoCamera.lookAt(0, 0, 0);
     
-    // Update controls
+    // Update controls for GIANT MODEL NAVIGATION
     if (this.chicagoControls) {
-        this.chicagoControls.minDistance = scaledSize * 0.5;
-        this.chicagoControls.maxDistance = scaledSize * 5;
+        this.chicagoControls.minDistance = scaledSize * 0.02;  // Very close zoom
+        this.chicagoControls.maxDistance = scaledSize * 3.0;   // Far overview
         this.chicagoControls.target.set(0, 0, 0);
+        
+        // Enhanced movement for giant scale
+        this.chicagoControls.rotateSpeed = 0.2;
+        this.chicagoControls.zoomSpeed = 1.5;
+        this.chicagoControls.panSpeed = 2.0;
+        
         this.chicagoControls.update();
     }
     
-    console.log('[CHICAGO] Camera adjusted for model:', {
+    console.log('[CHICAGO] HELICOPTER CAMERA positioned for giant model:', {
         position: this.chicagoCamera.position.toArray(),
-        distance: cameraDistance,
-        scaledSize: scaledSize
+        helicopterHeight: helicopterHeight,
+        scaledSize: scaledSize,
+        minDistance: scaledSize * 0.02,
+        maxDistance: scaledSize * 3.0
     });
 }
 
 createChicagoFallback() {
-    console.log('[CHICAGO] Creating fallback wireframe city');
+    console.log('[CHICAGO] Creating GIANT fallback wireframe city');
     
     const group = new THREE.Group();
     const material = new THREE.LineBasicMaterial({ 
         color: 0x00ff41, 
-        linewidth: 2 
+        linewidth: 4  // Thicker lines for giant scale
     });
     
-    // Create a more impressive fallback city
-    const buildingCount = 12;
+    // Create MASSIVE fallback city
+    const buildingCount = 25; // More buildings
+    const buildingSpacing = 800; // Much larger spacing
+    
     for (let x = -buildingCount/2; x <= buildingCount/2; x++) {
         for (let z = -buildingCount/2; z <= buildingCount/2; z++) {
-            if (x === 0 && z === 0) continue; // Leave center empty
+            if (Math.abs(x) < 3 && Math.abs(z) < 3) continue; // Larger center area
             
-            const height = 50 + Math.random() * 200;
-            const width = 20 + Math.random() * 30;
-            const depth = 20 + Math.random() * 30;
+            const height = 500 + Math.random() * 2000;  // Much taller buildings
+            const width = 200 + Math.random() * 400;    // Much wider buildings
+            const depth = 200 + Math.random() * 400;    // Much deeper buildings
             
             const geometry = new THREE.BoxGeometry(width, height, depth);
             const edges = new THREE.EdgesGeometry(geometry);
             const building = new THREE.LineSegments(edges, material);
             
             building.position.set(
-                x * 60, 
+                x * buildingSpacing, 
                 height / 2, 
-                z * 60
+                z * buildingSpacing
             );
             
             group.add(building);
         }
     }
     
-    // Add ground grid
-    const gridSize = 800;
-    const gridDivisions = 20;
+    // Add GIANT ground grid
+    const gridSize = buildingCount * buildingSpacing * 1.2;
+    const gridDivisions = 50;
     const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, 0x00ff41, 0x00ff41);
-    gridHelper.material.opacity = 0.3;
+    gridHelper.material.opacity = 0.2;
     gridHelper.material.transparent = true;
     group.add(gridHelper);
     
@@ -2627,18 +2685,23 @@ createChicagoFallback() {
     this.chicagoMesh = group;
     this.chicagoScene.add(group);
     
-    // Adjust camera for fallback
-    this.chicagoCamera.position.set(300, 400, 600);
+    // Position camera for GIANT fallback helicopter view
+    const citySize = buildingCount * buildingSpacing;
+    this.chicagoCamera.position.set(citySize * 0.3, citySize * 0.15, citySize * 0.4);
     this.chicagoCamera.lookAt(0, 0, 0);
     
     if (this.chicagoControls) {
-        this.chicagoControls.minDistance = 200;
-        this.chicagoControls.maxDistance = 1500;
+        this.chicagoControls.minDistance = citySize * 0.05;
+        this.chicagoControls.maxDistance = citySize * 2;
         this.chicagoControls.target.set(0, 0, 0);
         this.chicagoControls.update();
     }
     
-    console.log('[CHICAGO] Fallback city created with', group.children.length - 1, 'buildings');
+    console.log('[CHICAGO] GIANT fallback city created:', {
+        buildings: group.children.length - 1,
+        citySize: citySize,
+        cameraPosition: this.chicagoCamera.position.toArray()
+    });
 }
 
 animateChicago() {
@@ -2658,9 +2721,13 @@ animateChicago() {
         this.chicagoControls.update();
     }
     
-    // Gentle rotation
-    if (this.chicagoMesh) {
-        this.chicagoMesh.rotation.y += 0.002;
+    // Very subtle rotation for giant model (optional)
+    if (this.chicagoMesh && this.chicagoControls && !this.chicagoControls.autoRotate) {
+        // Only rotate if user isn't actively controlling
+        if (!this.chicagoControls.enabled || 
+            (Date.now() - (this.lastUserInteraction || 0)) > 5000) {
+            this.chicagoMesh.rotation.y += 0.0005; // Very slow rotation
+        }
     }
     
     // Render
@@ -2673,16 +2740,33 @@ startChicagoNarrative() {
     const narrativeElement = this.elements.chicagoNarrative;
     if (!narrativeElement) return;
     
+    // Ensure narrative element has proper z-index
+    narrativeElement.style.zIndex = '23';
+    narrativeElement.style.position = 'relative';
+    
     // Clear existing content
     narrativeElement.innerHTML = '';
     
+    // Giant scale narrative lines
+    const giantScaleNarrative = [
+        "CHICAGO METROPOLITAN WIREFRAME LOADED",
+        "SCALE: GIGANTIC - HELICOPTER VIEW ACTIVE", 
+        "NAVIGATE THROUGH THE URBAN GRID",
+        "ZOOM TO EXPLORE ARCHITECTURAL DETAILS",
+        "PAN TO DISCOVER CITY SECTORS",
+        "ROTATE FOR OPTIMAL VIEWING ANGLES",
+        "MATRIX VISUALIZATION: FULLY OPERATIONAL"
+    ];
+    
     // Create individual line elements
-    this.chicagoNarrativeLines.forEach((line, index) => {
+    giantScaleNarrative.forEach((line, index) => {
         const lineElement = document.createElement('div');
         lineElement.className = 'narrative-line';
         lineElement.textContent = line;
         lineElement.style.opacity = '0';
         lineElement.style.transform = 'translateX(-20px)';
+        lineElement.style.zIndex = '24';
+        lineElement.style.position = 'relative';
         narrativeElement.appendChild(lineElement);
     });
     
@@ -2706,7 +2790,7 @@ startChicagoNarrative() {
                 // Move to next line
                 currentLine++;
                 if (currentLine < lines.length) {
-                    setTimeout(animateNextLine, 3000);
+                    setTimeout(animateNextLine, 2500);
                 } else {
                     // Loop animation
                     setTimeout(() => {
@@ -2725,7 +2809,7 @@ startChicagoNarrative() {
                             currentLine = 0;
                             setTimeout(animateNextLine, 1000);
                         }, 500);
-                    }, 5000);
+                    }, 4000);
                 }
             }, 500);
         });
@@ -2736,7 +2820,7 @@ startChicagoNarrative() {
 }
 
 cleanupChicago() {
-    console.log('[CHICAGO] Cleaning up Chicago visualization');
+    console.log('[CHICAGO] Cleaning up Chicago GIANT visualization');
     
     if (this.chicagoAnimationFrame) {
         cancelAnimationFrame(this.chicagoAnimationFrame);
