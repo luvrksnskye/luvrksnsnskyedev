@@ -131,7 +131,7 @@
                     <div class="core-pulse"></div>
                 </div>
                 
-            
+                
             </div>
             
             <!-- Subtitle display -->
@@ -381,6 +381,14 @@
                 <div class="data-stream stream-left"></div>
                 <div class="data-stream stream-right"></div>
                 
+                <!-- Chicago Button (Top Right Corner) -->
+                <button class="observe-city-btn" id="observeCityBtn">
+                    <span class="btn-brackets">[</span>
+                    <span class="btn-text">OBSERVE URBAN BLUEPRINTS</span>
+                    <span class="btn-brackets">]</span>
+                    <div class="btn-scanline"></div>
+                </button>
+                
                 <div class="globe-header">
                     <div class="globe-header-left">
                         <div class="globe-icon">
@@ -472,58 +480,78 @@
                     </div>
                     <div class="globe-footer-info">
                         <span class="loading-text" id="terrainLoading">LOADING TERRAIN DATA...</span>
-                        <button class="observe-city-btn" id="observeCityBtn">
-                            <span class="btn-brackets">[</span>
-                            <span class="btn-text">OBSERVE URBAN BLUEPRINTS</span>
-                            <span class="btn-brackets">]</span>
-                            <div class="btn-scanline"></div>
-                        </button>
                     </div>
                 </div>
                 
-                <!-- Chicago Wireframe Panel (Hidden initially) -->
+                <!-- Chicago Wireframe Panel (Overlays everything) -->
                 <div class="chicago-panel" id="chicagoPanel">
-                    <div class="chicago-header">
-                        <img src="/src/starvortex_assets/arrow_left_or_right.png" class="chicago-arrow" alt="">
-                        <span class="chicago-title">DOWNTOWN CHICAGO - WIREFRAME ANALYSIS</span>
-                        <button class="chicago-close" id="chicagoCloseBtn">RETURN</button>
+                    <!-- Close button -->
+                    <button class="chicago-close" id="chicagoCloseBtn">
+                        <span class="close-bracket">[</span>
+                        <span>RETURN TO TERRAIN</span>
+                        <span class="close-bracket">]</span>
+                    </button>
+                    
+                    <!-- Chicago title header -->
+                    <div class="chicago-title-bar">
+                        <div class="title-line"></div>
+                        <span class="chicago-main-title">DOWNTOWN CHICAGO - WIREFRAME ANALYSIS</span>
+                        <div class="title-line"></div>
                     </div>
-                    <div class="chicago-info-grid">
-                        <div class="chicago-info-block">
-                            <span class="chicago-label">ZONE</span>
-                            <span class="chicago-value">CENTRAL DISTRICT</span>
+                    
+                    <!-- Left Panel: Narrative -->
+                    <div class="chicago-narrative-panel">
+                        <div class="narrative-header">
+                            <span class="narrative-icon">!</span>
+                            <span class="narrative-title">HISTORICAL ANALYSIS</span>
                         </div>
-                        <div class="chicago-info-block">
-                            <span class="chicago-label">STATUS</span>
-                            <span class="chicago-value warning">RED ZONE</span>
-                        </div>
-                        <div class="chicago-info-block">
-                            <span class="chicago-label">POPULATION</span>
-                            <span class="chicago-value">1.2M RESIDENTS</span>
-                        </div>
-                        <div class="chicago-info-block">
-                            <span class="chicago-label">CRIME INDEX</span>
-                            <span class="chicago-value danger">CRITICAL 94%</span>
-                        </div>
-                        <div class="chicago-info-block">
-                            <span class="chicago-label">SECURITY LEVEL</span>
-                            <span class="chicago-value danger">COMPROMISED</span>
-                        </div>
-                        <div class="chicago-info-block">
-                            <span class="chicago-label">RADIATION</span>
-                            <span class="chicago-value warning">3.7 mSv/yr</span>
-                        </div>
-                        <div class="chicago-info-block">
-                            <span class="chicago-label">INFRASTRUCTURE</span>
-                            <span class="chicago-value warning">31% FUNCTIONAL</span>
-                        </div>
-                        <div class="chicago-info-block">
-                            <span class="chicago-label">QUARANTINE</span>
-                            <span class="chicago-value danger">ACTIVE</span>
+                        <div class="narrative-content" id="chicagoNarrativeContent">
+                            <p class="narrative-line" id="narrativeLine1"></p>
+                            <p class="narrative-line" id="narrativeLine2"></p>
+                            <p class="narrative-line" id="narrativeLine3"></p>
                         </div>
                     </div>
-                    <div class="chicago-narrative" id="chicagoNarrative">
-                        <p class="narrative-line"></p>
+                    
+                    <!-- Right Panel: Technical Data -->
+                    <div class="chicago-data-panel">
+                        <div class="data-panel-header">
+                            <span class="data-icon">+</span>
+                            <span class="data-title">ZONE STATUS</span>
+                        </div>
+                        <div class="data-blocks">
+                            <div class="chicago-info-block">
+                                <span class="chicago-label">ZONE</span>
+                                <span class="chicago-value">CENTRAL DISTRICT</span>
+                            </div>
+                            <div class="chicago-info-block">
+                                <span class="chicago-label">STATUS</span>
+                                <span class="chicago-value warning">RED ZONE</span>
+                            </div>
+                            <div class="chicago-info-block">
+                                <span class="chicago-label">POPULATION</span>
+                                <span class="chicago-value">1.2M RESIDENTS</span>
+                            </div>
+                            <div class="chicago-info-block">
+                                <span class="chicago-label">CRIME INDEX</span>
+                                <span class="chicago-value danger">CRITICAL 94%</span>
+                            </div>
+                            <div class="chicago-info-block">
+                                <span class="chicago-label">SECURITY LEVEL</span>
+                                <span class="chicago-value danger">COMPROMISED</span>
+                            </div>
+                            <div class="chicago-info-block">
+                                <span class="chicago-label">RADIATION</span>
+                                <span class="chicago-value warning">3.7 mSv/yr</span>
+                            </div>
+                            <div class="chicago-info-block">
+                                <span class="chicago-label">INFRASTRUCTURE</span>
+                                <span class="chicago-value warning">31% FUNCTIONAL</span>
+                            </div>
+                            <div class="chicago-info-block">
+                                <span class="chicago-label">QUARANTINE</span>
+                                <span class="chicago-value danger">ACTIVE</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

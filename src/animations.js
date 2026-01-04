@@ -2101,34 +2101,84 @@ class AnimationsManager {
         const panel = this.elements.chicagoPanel;
         if (!panel) return;
         
+        console.log('[CHICAGO] Opening Chicago wireframe view');
+        
         // Play transition sound
         const transitionAudio = new Audio('/src/sfx/FX_flow_transition_data-tech.mp3');
         transitionAudio.volume = 0.35;
         this.playAudio(transitionAudio);
         
-        // Show panel
-        panel.classList.add('active');
-        this.chicagoActive = true;
+        // Hide geographic panels
+        const globePanels = document.querySelectorAll('.globe-panel');
+        globePanels.forEach(p => {
+            p.style.opacity = '0';
+            p.style.visibility = 'hidden';
+            p.style.transition = 'all 0.4s ease';
+        });
         
-        // Initialize 3D if available
-        if (window.THREE && this.elements.terrainCanvas) {
-            this.initChicago3D();
+        // Hide terrain canvas temporarily
+        if (this.elements.terrainCanvas) {
+            this.elements.terrainCanvas.style.opacity = '0';
+            this.elements.terrainCanvas.style.transition = 'opacity 0.4s ease';
         }
         
-        // Start narrative
-        this.startChicagoNarrative();
+        // Show Chicago panel
+        setTimeout(() => {
+            panel.classList.add('active');
+            this.chicagoActive = true;
+            
+            // Initialize 3D if available
+            if (window.THREE && this.elements.terrainCanvas) {
+                // Reuse terrain canvas for Chicago
+                setTimeout(() => {
+                    if (this.elements.terrainCanvas) {
+                        this.elements.terrainCanvas.style.opacity = '1';
+                    }
+                    this.initChicago3D();
+                }, 400);
+            }
+            
+            // Start narrative
+            this.startChicagoNarrative();
+        }, 400);
     }
     
     closeChicagoView() {
         const panel = this.elements.chicagoPanel;
         if (!panel) return;
         
+        console.log('[CHICAGO] Closing Chicago wireframe view');
+        
+        // Hide Chicago panel
         panel.classList.remove('active');
         this.chicagoActive = false;
         this.currentChicagoLine = 0;
         
+        // Restore geographic panels
+        setTimeout(() => {
+            const globePanels = document.querySelectorAll('.globe-panel');
+            globePanels.forEach(p => {
+                p.style.opacity = '1';
+                p.style.visibility = 'visible';
+            });
+            
+            // Restore terrain canvas
+            if (this.elements.terrainCanvas) {
+                this.elements.terrainCanvas.style.opacity = '1';
+            }
+        }, 400);
+        
         // Cleanup 3D
         this.cleanupChicago();
+        
+        // Restart terrain animation if still in phase 3
+        if (this.currentPhase === 3 && !this.introSkipped) {
+            setTimeout(() => {
+                if (this.threeRenderer && this.threeScene && this.threeCamera) {
+                    this.animateTerrain();
+                }
+            }, 600);
+        }
     }
     
     initChicago3D() {
@@ -2343,34 +2393,61 @@ class AnimationsManager {
     }
     
     startChicagoNarrative() {
-        const narrativeEl = this.elements.chicagoNarrative?.querySelector('.narrative-line');
-        if (!narrativeEl) return;
+        const line1 = document.getElementById('narrativeLine1');
+        const line2 = document.getElementById('narrativeLine2');
+        const line3 = document.getElementById('narrativeLine3');
         
-        this.currentChicagoLine = 0;
+        if (!line1 || !line2 || !line3) return;
         
-        const showNextLine = () => {
+        // Split narrative into 3-line groups
+        const narrativeGroups = [
+            [
+                "The Chicago Collapse occurred in 2067 when the infrastructure system failed simultaneously.",
+                "More than 300,000 people were trapped in the lower levels during the Dark Floods.",
+                "Corporations abandoned the central district, leaving it in the hands of criminal factions."
+            ],
+            [
+                "Now it is known as 'The Gray Zone' - a place where law has no meaning.",
+                "Data shows constant criminal activity: organized theft, data trafficking, illegal experiments.",
+                "Only the desperate or those with nothing to lose venture into central Chicago."
+            ],
+            [
+                "Your ship must avoid this zone. No rescue is available if you enter.",
+                "Security systems are offline. Emergency protocols have failed.",
+                "This area is quarantined indefinitely. Entry is forbidden by Stellar Command."
+            ]
+        ];
+        
+        let currentGroup = 0;
+        
+        const showGroup = () => {
             if (!this.chicagoActive || this.introSkipped) return;
-            if (this.currentChicagoLine >= this.chicagoNarrativeLines.length) {
-                this.currentChicagoLine = 0;
-            }
             
-            const line = this.chicagoNarrativeLines[this.currentChicagoLine];
+            const group = narrativeGroups[currentGroup];
             
-            // Fade out
-            narrativeEl.style.opacity = '0';
-            narrativeEl.style.transform = 'translateY(10px)';
+            // Fade out all lines
+            [line1, line2, line3].forEach(line => {
+                line.classList.remove('visible');
+            });
             
             setTimeout(() => {
-                narrativeEl.textContent = line;
-                narrativeEl.style.opacity = '1';
-                narrativeEl.style.transform = 'translateY(0)';
+                // Update text
+                line1.textContent = group[0];
+                line2.textContent = group[1];
+                line3.textContent = group[2];
                 
-                this.currentChicagoLine++;
-                setTimeout(showNextLine, 6000);
+                // Fade in with delays
+                setTimeout(() => line1.classList.add('visible'), 100);
+                setTimeout(() => line2.classList.add('visible'), 300);
+                setTimeout(() => line3.classList.add('visible'), 500);
+                
+                // Move to next group
+                currentGroup = (currentGroup + 1) % narrativeGroups.length;
+                setTimeout(showGroup, 8000);
             }, 600);
         };
         
-        setTimeout(showNextLine, 500);
+        setTimeout(showGroup, 500);
     }
     
     cleanupChicago() {
