@@ -131,6 +131,7 @@
                     <div class="core-pulse"></div>
                 </div>
                 
+            
             </div>
             
             <!-- Subtitle display -->
@@ -369,6 +370,17 @@
             
             <!-- Globe HUD Overlay -->
             <div class="globe-hud">
+                <!-- Sci-Fi HUD Elements -->
+                <div class="hud-scanlines"></div>
+                <div class="hud-corner-frame tl"></div>
+                <div class="hud-corner-frame tr"></div>
+                <div class="hud-corner-frame bl"></div>
+                <div class="hud-corner-frame br"></div>
+                
+                <!-- Data Streams -->
+                <div class="data-stream stream-left"></div>
+                <div class="data-stream stream-right"></div>
+                
                 <div class="globe-header">
                     <div class="globe-header-left">
                         <div class="globe-icon">
@@ -378,6 +390,9 @@
                             </svg>
                         </div>
                         <span class="globe-label">GLOBAL TERRAIN SCAN</span>
+                        <div class="data-ticker" id="dataTicker">
+                            <span class="ticker-text"></span>
+                        </div>
                     </div>
                     <div class="globe-header-right">
                         <span class="globe-status">MAPPING</span>
@@ -404,6 +419,18 @@
                             <span class="panel-label">TERRAIN</span>
                             <span class="panel-value" id="globeTerrain">ANALYZING</span>
                         </div>
+                        <div class="panel-item">
+                            <span class="panel-label">TEMPERATURE</span>
+                            <span class="panel-value" id="globeTemp">--°C</span>
+                        </div>
+                        <div class="panel-item">
+                            <span class="panel-label">ATMOSPHERIC PRESSURE</span>
+                            <span class="panel-value" id="globePressure">-- hPa</span>
+                        </div>
+                        <div class="panel-item">
+                            <span class="panel-label">MAGNETIC FIELD</span>
+                            <span class="panel-value" id="globeMagnetic">-- μT</span>
+                        </div>
                     </div>
                     
                     <div class="globe-panel right">
@@ -424,6 +451,18 @@
                             <span class="panel-label">CREATIVITY</span>
                             <span class="panel-value success">0.3% ACTIVE</span>
                         </div>
+                        <div class="panel-item">
+                            <span class="panel-label">DATA BANDWIDTH</span>
+                            <span class="panel-value">847.2 ZB/s</span>
+                        </div>
+                        <div class="panel-item">
+                            <span class="panel-label">ORBITAL DEBRIS</span>
+                            <span class="panel-value warning">128M OBJECTS</span>
+                        </div>
+                        <div class="panel-item">
+                            <span class="panel-label">CLIMATE INDEX</span>
+                            <span class="panel-value warning">UNSTABLE</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -433,6 +472,58 @@
                     </div>
                     <div class="globe-footer-info">
                         <span class="loading-text" id="terrainLoading">LOADING TERRAIN DATA...</span>
+                        <button class="observe-city-btn" id="observeCityBtn">
+                            <span class="btn-brackets">[</span>
+                            <span class="btn-text">OBSERVE URBAN BLUEPRINTS</span>
+                            <span class="btn-brackets">]</span>
+                            <div class="btn-scanline"></div>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Chicago Wireframe Panel (Hidden initially) -->
+                <div class="chicago-panel" id="chicagoPanel">
+                    <div class="chicago-header">
+                        <img src="/src/starvortex_assets/arrow_left_or_right.png" class="chicago-arrow" alt="">
+                        <span class="chicago-title">DOWNTOWN CHICAGO - WIREFRAME ANALYSIS</span>
+                        <button class="chicago-close" id="chicagoCloseBtn">RETURN</button>
+                    </div>
+                    <div class="chicago-info-grid">
+                        <div class="chicago-info-block">
+                            <span class="chicago-label">ZONE</span>
+                            <span class="chicago-value">CENTRAL DISTRICT</span>
+                        </div>
+                        <div class="chicago-info-block">
+                            <span class="chicago-label">STATUS</span>
+                            <span class="chicago-value warning">RED ZONE</span>
+                        </div>
+                        <div class="chicago-info-block">
+                            <span class="chicago-label">POPULATION</span>
+                            <span class="chicago-value">1.2M RESIDENTS</span>
+                        </div>
+                        <div class="chicago-info-block">
+                            <span class="chicago-label">CRIME INDEX</span>
+                            <span class="chicago-value danger">CRITICAL 94%</span>
+                        </div>
+                        <div class="chicago-info-block">
+                            <span class="chicago-label">SECURITY LEVEL</span>
+                            <span class="chicago-value danger">COMPROMISED</span>
+                        </div>
+                        <div class="chicago-info-block">
+                            <span class="chicago-label">RADIATION</span>
+                            <span class="chicago-value warning">3.7 mSv/yr</span>
+                        </div>
+                        <div class="chicago-info-block">
+                            <span class="chicago-label">INFRASTRUCTURE</span>
+                            <span class="chicago-value warning">31% FUNCTIONAL</span>
+                        </div>
+                        <div class="chicago-info-block">
+                            <span class="chicago-label">QUARANTINE</span>
+                            <span class="chicago-value danger">ACTIVE</span>
+                        </div>
+                    </div>
+                    <div class="chicago-narrative" id="chicagoNarrative">
+                        <p class="narrative-line"></p>
                     </div>
                 </div>
             </div>
