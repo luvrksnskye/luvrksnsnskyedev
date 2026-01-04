@@ -2108,18 +2108,46 @@ class AnimationsManager {
         transitionAudio.volume = 0.35;
         this.playAudio(transitionAudio);
         
-        // Hide geographic panels
+        // Hide ALL geographic UI elements
+        const globeHeader = document.querySelector('.globe-header');
         const globePanels = document.querySelectorAll('.globe-panel');
-        globePanels.forEach(p => {
-            p.style.opacity = '0';
-            p.style.visibility = 'hidden';
-            p.style.transition = 'all 0.4s ease';
+        const globeFooter = document.querySelector('.globe-footer');
+        const dataStreams = document.querySelectorAll('.data-stream');
+        const hudFrames = document.querySelectorAll('.hud-corner-frame');
+        
+        // Fade out geographic UI
+        [globeHeader, globeFooter].forEach(el => {
+            if (el) {
+                el.style.opacity = '0';
+                el.style.pointerEvents = 'none';
+                el.style.transition = 'opacity 0.4s ease';
+            }
         });
         
-        // Hide terrain canvas temporarily
+        globePanels.forEach(p => {
+            p.style.opacity = '0';
+            p.style.pointerEvents = 'none';
+            p.style.transition = 'opacity 0.4s ease';
+        });
+        
+        dataStreams.forEach(s => {
+            if (s) s.style.opacity = '0';
+        });
+        
+        hudFrames.forEach(f => {
+            if (f) f.style.opacity = '0';
+        });
+        
+        // Keep canvas visible but prepare for Chicago
         if (this.elements.terrainCanvas) {
-            this.elements.terrainCanvas.style.opacity = '0';
-            this.elements.terrainCanvas.style.transition = 'opacity 0.4s ease';
+            this.elements.terrainCanvas.style.opacity = '1';
+            this.elements.terrainCanvas.style.visibility = 'visible';
+            this.elements.terrainCanvas.style.zIndex = '5';
+            console.log('[CHICAGO] Canvas ready:', {
+                opacity: this.elements.terrainCanvas.style.opacity,
+                visibility: this.elements.terrainCanvas.style.visibility,
+                display: this.elements.terrainCanvas.style.display
+            });
         }
         
         // Show Chicago panel
@@ -2127,16 +2155,18 @@ class AnimationsManager {
             panel.classList.add('active');
             this.chicagoActive = true;
             
-            // Initialize 3D if available
-            if (window.THREE && this.elements.terrainCanvas) {
-                // Reuse terrain canvas for Chicago
-                setTimeout(() => {
-                    if (this.elements.terrainCanvas) {
-                        this.elements.terrainCanvas.style.opacity = '1';
-                    }
+            // Initialize 3D
+            setTimeout(() => {
+                if (window.THREE && this.elements.terrainCanvas) {
+                    console.log('[CHICAGO] Starting 3D initialization');
                     this.initChicago3D();
-                }, 400);
-            }
+                } else {
+                    console.error('[CHICAGO] Missing requirements:', {
+                        THREE: !!window.THREE,
+                        canvas: !!this.elements.terrainCanvas
+                    });
+                }
+            }, 100);
             
             // Start narrative
             this.startChicagoNarrative();
@@ -2154,86 +2184,139 @@ class AnimationsManager {
         this.chicagoActive = false;
         this.currentChicagoLine = 0;
         
-        // Restore geographic panels
+        // Cleanup 3D first
+        this.cleanupChicago();
+        
+        // Restore ALL geographic UI elements
         setTimeout(() => {
+            const globeHeader = document.querySelector('.globe-header');
             const globePanels = document.querySelectorAll('.globe-panel');
+            const globeFooter = document.querySelector('.globe-footer');
+            const dataStreams = document.querySelectorAll('.data-stream');
+            const hudFrames = document.querySelectorAll('.hud-corner-frame');
+            
+            [globeHeader, globeFooter].forEach(el => {
+                if (el) {
+                    el.style.opacity = '1';
+                    el.style.pointerEvents = 'auto';
+                }
+            });
+            
             globePanels.forEach(p => {
                 p.style.opacity = '1';
+                p.style.pointerEvents = 'auto';
                 p.style.visibility = 'visible';
+            });
+            
+            dataStreams.forEach(s => {
+                if (s) s.style.opacity = '1';
+            });
+            
+            hudFrames.forEach(f => {
+                if (f) f.style.opacity = '1';
             });
             
             // Restore terrain canvas
             if (this.elements.terrainCanvas) {
                 this.elements.terrainCanvas.style.opacity = '1';
+                this.elements.terrainCanvas.style.visibility = 'visible';
+                this.elements.terrainCanvas.style.zIndex = '1';
             }
         }, 400);
-        
-        // Cleanup 3D
-        this.cleanupChicago();
         
         // Restart terrain animation if still in phase 3
         if (this.currentPhase === 3 && !this.introSkipped) {
             setTimeout(() => {
                 if (this.threeRenderer && this.threeScene && this.threeCamera) {
+                    console.log('[TERRAIN] Restarting terrain animation');
                     this.animateTerrain();
                 }
-            }, 600);
+            }, 800);
         }
     }
     
     initChicago3D() {
         const canvas = this.elements.terrainCanvas;
-        if (!canvas) return;
+        if (!canvas) {
+            console.error('[CHICAGO] Canvas not found');
+            return;
+        }
         
         try {
             console.log('[CHICAGO] Initializing Chicago 3D wireframe');
             
-            // Reuse existing scene or create new one
-            if (!this.chicagoScene) {
-                this.chicagoScene = new THREE.Scene();
-                this.chicagoScene.background = new THREE.Color(0x000000);
-                
-                // Camera
-                this.chicagoCamera = new THREE.PerspectiveCamera(
-                    50,
-                    canvas.width / canvas.height,
-                    0.1,
-                    10000
-                );
-                this.chicagoCamera.position.set(0, 500, 1000);
-                
-                // Renderer (reuse terrain renderer)
-                this.chicagoRenderer = this.threeRenderer;
-                
-                // Controls
-                if (THREE.OrbitControls) {
-                    this.chicagoControls = new THREE.OrbitControls(
-                        this.chicagoCamera, 
-                        this.chicagoRenderer.domElement
-                    );
-                    this.chicagoControls.enableDamping = true;
-                    this.chicagoControls.dampingFactor = 0.05;
-                    this.chicagoControls.autoRotate = true;
-                    this.chicagoControls.autoRotateSpeed = 0.5;
-                }
-                
-                // Lighting
-                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-                this.chicagoScene.add(ambientLight);
-                
-                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.4);
-                directionalLight.position.set(100, 200, 100);
-                this.chicagoScene.add(directionalLight);
+            // Stop terrain animation first
+            if (this.terrainAnimationFrame) {
+                cancelAnimationFrame(this.terrainAnimationFrame);
+                this.terrainAnimationFrame = null;
             }
+            
+            // Create new scene for Chicago
+            this.chicagoScene = new THREE.Scene();
+            this.chicagoScene.background = new THREE.Color(0x000000);
+            
+            // Camera
+            this.chicagoCamera = new THREE.PerspectiveCamera(
+                50,
+                canvas.width / canvas.height,
+                0.1,
+                10000
+            );
+            this.chicagoCamera.position.set(0, 500, 1000);
+            this.chicagoCamera.lookAt(0, 0, 0);
+            
+            console.log('[CHICAGO] Camera positioned:', this.chicagoCamera.position);
+            
+            // Reuse existing renderer or create new one
+            if (this.threeRenderer) {
+                this.chicagoRenderer = this.threeRenderer;
+                console.log('[CHICAGO] Reusing existing renderer');
+            } else {
+                this.chicagoRenderer = new THREE.WebGLRenderer({
+                    canvas: canvas,
+                    antialias: true,
+                    alpha: false
+                });
+                this.chicagoRenderer.setSize(canvas.width, canvas.height);
+                console.log('[CHICAGO] Created new renderer');
+            }
+            
+            this.chicagoRenderer.setClearColor(0x000000, 1);
+            
+            // Controls
+            if (THREE.OrbitControls) {
+                this.chicagoControls = new THREE.OrbitControls(
+                    this.chicagoCamera, 
+                    this.chicagoRenderer.domElement
+                );
+                this.chicagoControls.enableDamping = true;
+                this.chicagoControls.dampingFactor = 0.05;
+                this.chicagoControls.autoRotate = true;
+                this.chicagoControls.autoRotateSpeed = 0.5;
+                console.log('[CHICAGO] Controls initialized');
+            }
+            
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            this.chicagoScene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.4);
+            directionalLight.position.set(100, 200, 100);
+            this.chicagoScene.add(directionalLight);
+            
+            console.log('[CHICAGO] Lights added');
             
             // Load Chicago model
             this.loadChicagoModel();
             
-            // Start animation
+            // Start animation immediately (even before model loads)
             this.animateChicago();
+            
+            console.log('[CHICAGO] 3D initialization complete');
             
         } catch (error) {
             console.error('[CHICAGO] Error initializing 3D:', error);
+            this.createChicagoFallback();
         }
     }
     
@@ -2245,14 +2328,14 @@ class AnimationsManager {
         
         // Load MTL first
         mtlLoader.load(
-            '/src/model_3d/Downtown Chicago_Wireframe_Map.mtl',
+            '/src/model_3d/Downtown_Chicago_Wireframe_Map.mtl',
             (materials) => {
                 materials.preload();
                 
                 // Load OBJ with materials
                 loader.setMaterials(materials);
                 loader.load(
-                    '/src/model_3d/Downtown Chicago_Wireframe_Map.obj',
+                    '/src/model_3d/Downtown_Chicago_Wireframe_Map.obj',
                     (object) => {
                         console.log('[CHICAGO] Model loaded successfully');
                         
@@ -2349,8 +2432,8 @@ class AnimationsManager {
         const group = new THREE.Group();
         const material = new THREE.LineBasicMaterial({ 
             color: 0xff0000, 
-            transparent: true, 
-            opacity: 0.6 
+            transparent: false, 
+            opacity: 1.0
         });
         
         // Create grid of buildings
@@ -2368,8 +2451,15 @@ class AnimationsManager {
             }
         }
         
+        if (this.chicagoMesh) {
+            this.chicagoScene.remove(this.chicagoMesh);
+        }
+        
         this.chicagoMesh = group;
         this.chicagoScene.add(group);
+        
+        console.log('[CHICAGO] Fallback city created with', group.children.length, 'buildings');
+        console.log('[CHICAGO] Scene objects:', this.chicagoScene.children.length);
     }
     
     animateChicago() {
@@ -2377,6 +2467,7 @@ class AnimationsManager {
             if (this.chicagoAnimationFrame) {
                 cancelAnimationFrame(this.chicagoAnimationFrame);
                 this.chicagoAnimationFrame = null;
+                console.log('[CHICAGO] Animation stopped');
             }
             return;
         }
@@ -2384,10 +2475,17 @@ class AnimationsManager {
         this.chicagoAnimationFrame = requestAnimationFrame(() => this.animateChicago());
         
         // Update controls
-        this.chicagoControls?.update();
+        if (this.chicagoControls) {
+            this.chicagoControls.update();
+        }
+        
+        // Rotate mesh if it exists
+        if (this.chicagoMesh) {
+            this.chicagoMesh.rotation.y += 0.001;
+        }
         
         // Render
-        if (this.chicagoScene && this.chicagoCamera) {
+        if (this.chicagoScene && this.chicagoCamera && this.chicagoRenderer) {
             this.chicagoRenderer.render(this.chicagoScene, this.chicagoCamera);
         }
     }
