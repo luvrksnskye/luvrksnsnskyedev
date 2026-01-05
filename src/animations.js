@@ -2697,54 +2697,35 @@ openChicagoView() {
     transitionAudio.volume = 0.35;
     this.playAudio(transitionAudio);
     
-    // SECUENCIA DE TRANSICIÓN SUAVE CON FADE OUT/IN:
+    // SECUENCIA DE TRANSICIÓN SUAVE:
     
     // PASO 1: Fade out Globe HUD and geo panels
     if (globeHud) {
-        globeHud.style.transition = 'opacity 0.6s ease-out';
-        globeHud.style.opacity = '0';
+        globeHud.classList.add('hidden');
     }
-    geoPanels.forEach(p => {
-        p.style.transition = 'opacity 0.6s ease-out';
-        p.style.opacity = '0';
-    });
+    geoPanels.forEach(p => p.classList.remove('visible'));
 
-    // PASO 2: Fade out terrain canvas completamente
+    // PASO 2: Dim terrain canvas (0.8s)
     if (terrainCanvas) {
-        terrainCanvas.style.transition = 'opacity 0.8s ease-out';
-        terrainCanvas.style.opacity = '0';
+        terrainCanvas.classList.add('hidden');
     }
     
-    // PASO 3: Después del fade out completo (900ms), ocultar elementos y preparar chicago
+    // PASO 3: Después de 500ms, activar Chicago canvas con blur fade
     setTimeout(() => {
-        if (globeHud) {
-            globeHud.classList.add('hidden');
-        }
-        geoPanels.forEach(p => p.classList.remove('visible'));
-        if (terrainCanvas) {
-            terrainCanvas.classList.add('hidden');
-        }
-        
-        // PASO 4: Fade in Chicago canvas suavemente
-        chicagoCanvas.style.opacity = '0';
-        chicagoCanvas.style.visibility = 'visible';
         chicagoCanvas.classList.add('active');
+        chicagoCanvas.style.opacity = '1';
+        chicagoCanvas.style.visibility = 'visible';
         
+        // Iniciar 3D
         setTimeout(() => {
-            chicagoCanvas.style.transition = 'opacity 0.8s ease-in';
-            chicagoCanvas.style.opacity = '1';
-            
-            // Iniciar 3D
-            setTimeout(() => {
-                if (window.THREE) {
-                    console.log('[CHICAGO] Starting 3D initialization');
-                    this.initChicago3D();
-                }
-            }, 100);
-        }, 50);
-    }, 900);
+            if (window.THREE) {
+                console.log('[CHICAGO] Starting 3D initialization');
+                this.initChicago3D();
+            }
+        }, 100);
+    }, 500);
     
-    // PASO 5: Después del fade in completo (1800ms total), mostrar panel
+    // PASO 4: Después de 800ms, mostrar panel (permite que CSS maneje stagger)
     setTimeout(() => {
         panel.classList.add('active');
         this.bringPanelsToFront();
@@ -2754,7 +2735,7 @@ openChicagoView() {
             this.showSurvivorPanel();
         }, 1500); // Delay aumentado para asegurar transición suave
 
-    }, 1800);
+    }, 800);
     
     console.log('[CHICAGO] Smooth transition sequence initiated');
 }
@@ -2920,9 +2901,9 @@ closeChicagoView() {
     // Hide Survivor Messages Panel
     this.hideSurvivorPanel();
 
-    // SECUENCIA DE SALIDA SUAVE CON FADE OUT/IN:
+    // SECUENCIA DE SALIDA SUAVE:
     
-    // PASO 1: Añadir clase closing para transición rápida del panel
+    // PASO 1: Añadir clase closing para transición rápida
     panel.classList.add('closing');
     
     // PASO 2: Después de 300ms, remover panel
@@ -2930,54 +2911,30 @@ closeChicagoView() {
         panel.classList.remove('active', 'closing');
     }, 300);
     
-    // PASO 3: Fade out Chicago canvas suavemente
+    // PASO 3: Fade out Chicago canvas
     setTimeout(() => {
-        chicagoCanvas.style.transition = 'opacity 0.8s ease-out';
+        chicagoCanvas.classList.remove('active');
         chicagoCanvas.style.opacity = '0';
     }, 400);
     
-    // PASO 4: Después del fade out completo (1300ms), ocultar chicago y preparar geo
+    // PASO 4: Después de 800ms, restaurar terrain y globe HUD
     setTimeout(() => {
-        chicagoCanvas.classList.remove('active');
-        chicagoCanvas.style.visibility = 'hidden';
-        
-        // Preparar terrain canvas para fade in
         if (terrainCanvas) {
             terrainCanvas.classList.remove('hidden');
-            terrainCanvas.style.opacity = '0';
-            
-            setTimeout(() => {
-                terrainCanvas.style.transition = 'opacity 0.8s ease-in';
-                terrainCanvas.style.opacity = '1';
-            }, 50);
         }
         
-        // Fade in globe HUD y geo panels
         if (globeHud) {
             globeHud.classList.remove('hidden');
-            globeHud.style.opacity = '0';
-            setTimeout(() => {
-                globeHud.style.transition = 'opacity 0.6s ease-in';
-                globeHud.style.opacity = '1';
-            }, 100);
         }
-        
-        geoPanels.forEach((p, i) => {
-            p.classList.add('visible');
-            p.style.opacity = '0';
-            setTimeout(() => {
-                p.style.transition = 'opacity 0.6s ease-in';
-                p.style.opacity = '1';
-            }, 100 + (i * 100));
-        });
-    }, 1300);
+        geoPanels.forEach(p => p.classList.add('visible'));
+    }, 800);
     
-    // PASO 5: Limpiar visualización 3D después de la transición completa
+    // PASO 5: Limpiar visualización 3D
     setTimeout(() => {
         if (typeof this.cleanupChicago === 'function') {
             this.cleanupChicago();
         }
-    }, 2200);
+    }, 1200);
     
     console.log('[CHICAGO] Smooth exit transition complete');
 }
@@ -3053,12 +3010,14 @@ initChicago3D() {
         // Model dimensions: X: ~15000, Y: 0 (flat), Z: ~20000
         // Model center: (710, 0, 2037)
         
-this.chicagoCamera.position.set(
-    1800,   // X → costado
-    6000,   // Y → MUY alta
-    -8000   // Z → lejos
+        // Position: Low altitude, looking across the map at an angle
+       this.chicagoCamera.position.set(
+         2000,   // X → a un costado
+         2500,   // Y → bien arriba
+        -4000   // Z → detrás del mapa
 );
 
+// Mira al centro, pero abajo
 this.chicagoCamera.lookAt(
     710,    // centro X
     0,      // suelo
