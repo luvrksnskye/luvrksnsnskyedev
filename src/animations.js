@@ -566,6 +566,12 @@ class AnimationsManager {
     // ========================================
     
     createSurvivorMessagesPanel() {
+        // Evitar crear el panel múltiples veces
+        if (this.survivorPanel && document.getElementById('survivorMessagesPanel')) {
+            console.log('[ANIMATIONS] Survivor panel already exists, skipping creation');
+            return;
+        }
+        
         const panel = document.createElement('div');
         panel.id = 'survivorMessagesPanel';
         panel.className = 'survivor-messages-panel';
@@ -714,14 +720,34 @@ class AnimationsManager {
     }
     
     setupPanelEventListeners() {
+        console.log('[SURVIVOR_PANEL] Setting up event listeners...');
+        
         const closeBtn = document.getElementById('closeSurvivorPanel');
         if (closeBtn) {
-            closeBtn.addEventListener('click', () => this.hideSurvivorPanel());
+            // Remover listeners previos si existen
+            closeBtn.replaceWith(closeBtn.cloneNode(true));
+            const newCloseBtn = document.getElementById('closeSurvivorPanel');
+            newCloseBtn.addEventListener('click', () => {
+                console.log('[SURVIVOR_PANEL] Close button clicked');
+                this.hideSurvivorPanel();
+            });
+            console.log('[SURVIVOR_PANEL] Close button listener attached');
+        } else {
+            console.error('[SURVIVOR_PANEL] Close button not found!');
         }
         
         const playPauseBtn = document.getElementById('playPauseBtn');
         if (playPauseBtn) {
-            playPauseBtn.addEventListener('click', () => this.toggleMessagePlayback());
+            // Remover listeners previos si existen
+            playPauseBtn.replaceWith(playPauseBtn.cloneNode(true));
+            const newPlayPauseBtn = document.getElementById('playPauseBtn');
+            newPlayPauseBtn.addEventListener('click', () => {
+                console.log('[SURVIVOR_PANEL] Play/Pause button clicked');
+                this.toggleMessagePlayback();
+            });
+            console.log('[SURVIVOR_PANEL] Play/Pause button listener attached');
+        } else {
+            console.error('[SURVIVOR_PANEL] Play/Pause button not found!');
         }
     }
     
@@ -755,9 +781,14 @@ class AnimationsManager {
     
     playMessage() {
         const message = this.messages[this.currentMessageIndex];
-        if (!message) return;
+        if (!message) {
+            console.error('[MESSAGES] No message selected');
+            return;
+        }
         
         console.log('[MESSAGES] Playing message:', message.title);
+        console.log('[MESSAGES] Message type:', message.type);
+        console.log('[MESSAGES] Survivor audio loaded:', !!this.survivorAudio.voice);
         
         this.isMessagePlaying = true;
         
@@ -770,8 +801,21 @@ class AnimationsManager {
             `;
         }
         
-        if (message.type === 'survivor' && this.survivorAudio.voice) {
-            this.playSurvivorAudioSequence();
+        if (message.type === 'survivor') {
+            if (this.survivorAudio.voice) {
+                console.log('[MESSAGES] Starting survivor audio sequence');
+                this.playSurvivorAudioSequence();
+            } else {
+                console.error('[MESSAGES] Survivor voice audio not loaded!');
+                this.isMessagePlaying = false;
+                if (playPauseBtn) {
+                    playPauseBtn.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    `;
+                }
+            }
         }
     }
     
@@ -1050,17 +1094,20 @@ class AnimationsManager {
         
         try {
             this.survivorAudio.voice = loadAudio('/src/sfx/survivor_voice.oga', 0.8);
+            this.survivorAudio.bcommsOn = loadAudio('/src/sfx/bcomms-on.mp3', 0.4);
             this.survivorAudio.lifesupportOn = loadAudio('/src/sfx/lifesupport-on.mp3', 0.4);
             
             // Event listeners for successful load
             Object.entries(this.survivorAudio).forEach(([key, audio]) => {
-                audio.addEventListener('canplaythrough', () => {
-                    console.log(`[AUDIO] Survivor audio loaded: ${key}`);
-                });
-                
-                audio.addEventListener('error', (e) => {
-                    console.error(`[AUDIO] Error loading survivor audio ${key}:`, e);
-                });
+                if (audio && audio.addEventListener) {
+                    audio.addEventListener('canplaythrough', () => {
+                        console.log(`[AUDIO] Survivor audio loaded: ${key}`);
+                    });
+                    
+                    audio.addEventListener('error', (e) => {
+                        console.error(`[AUDIO] Error loading survivor audio ${key}:`, e);
+                    });
+                }
             });
             
             console.log('[AUDIO] Survivor audio preload initiated');
@@ -2650,35 +2697,54 @@ openChicagoView() {
     transitionAudio.volume = 0.35;
     this.playAudio(transitionAudio);
     
-    // SECUENCIA DE TRANSICIÓN SUAVE:
+    // SECUENCIA DE TRANSICIÓN SUAVE CON FADE OUT/IN:
     
     // PASO 1: Fade out Globe HUD and geo panels
     if (globeHud) {
-        globeHud.classList.add('hidden');
+        globeHud.style.transition = 'opacity 0.6s ease-out';
+        globeHud.style.opacity = '0';
     }
-    geoPanels.forEach(p => p.classList.remove('visible'));
+    geoPanels.forEach(p => {
+        p.style.transition = 'opacity 0.6s ease-out';
+        p.style.opacity = '0';
+    });
 
-    // PASO 2: Dim terrain canvas (0.8s)
+    // PASO 2: Fade out terrain canvas completamente
     if (terrainCanvas) {
-        terrainCanvas.classList.add('hidden');
+        terrainCanvas.style.transition = 'opacity 0.8s ease-out';
+        terrainCanvas.style.opacity = '0';
     }
     
-    // PASO 3: Después de 500ms, activar Chicago canvas con blur fade
+    // PASO 3: Después del fade out completo (900ms), ocultar elementos y preparar chicago
     setTimeout(() => {
-        chicagoCanvas.classList.add('active');
-        chicagoCanvas.style.opacity = '1';
-        chicagoCanvas.style.visibility = 'visible';
+        if (globeHud) {
+            globeHud.classList.add('hidden');
+        }
+        geoPanels.forEach(p => p.classList.remove('visible'));
+        if (terrainCanvas) {
+            terrainCanvas.classList.add('hidden');
+        }
         
-        // Iniciar 3D
+        // PASO 4: Fade in Chicago canvas suavemente
+        chicagoCanvas.style.opacity = '0';
+        chicagoCanvas.style.visibility = 'visible';
+        chicagoCanvas.classList.add('active');
+        
         setTimeout(() => {
-            if (window.THREE) {
-                console.log('[CHICAGO] Starting 3D initialization');
-                this.initChicago3D();
-            }
-        }, 100);
-    }, 500);
+            chicagoCanvas.style.transition = 'opacity 0.8s ease-in';
+            chicagoCanvas.style.opacity = '1';
+            
+            // Iniciar 3D
+            setTimeout(() => {
+                if (window.THREE) {
+                    console.log('[CHICAGO] Starting 3D initialization');
+                    this.initChicago3D();
+                }
+            }, 100);
+        }, 50);
+    }, 900);
     
-    // PASO 4: Después de 800ms, mostrar panel (permite que CSS maneje stagger)
+    // PASO 5: Después del fade in completo (1800ms total), mostrar panel
     setTimeout(() => {
         panel.classList.add('active');
         this.bringPanelsToFront();
@@ -2688,7 +2754,7 @@ openChicagoView() {
             this.showSurvivorPanel();
         }, 1500); // Delay aumentado para asegurar transición suave
 
-    }, 800);
+    }, 1800);
     
     console.log('[CHICAGO] Smooth transition sequence initiated');
 }
@@ -2854,9 +2920,9 @@ closeChicagoView() {
     // Hide Survivor Messages Panel
     this.hideSurvivorPanel();
 
-    // SECUENCIA DE SALIDA SUAVE:
+    // SECUENCIA DE SALIDA SUAVE CON FADE OUT/IN:
     
-    // PASO 1: Añadir clase closing para transición rápida
+    // PASO 1: Añadir clase closing para transición rápida del panel
     panel.classList.add('closing');
     
     // PASO 2: Después de 300ms, remover panel
@@ -2864,30 +2930,54 @@ closeChicagoView() {
         panel.classList.remove('active', 'closing');
     }, 300);
     
-    // PASO 3: Fade out Chicago canvas
+    // PASO 3: Fade out Chicago canvas suavemente
     setTimeout(() => {
-        chicagoCanvas.classList.remove('active');
+        chicagoCanvas.style.transition = 'opacity 0.8s ease-out';
         chicagoCanvas.style.opacity = '0';
     }, 400);
     
-    // PASO 4: Después de 800ms, restaurar terrain y globe HUD
+    // PASO 4: Después del fade out completo (1300ms), ocultar chicago y preparar geo
     setTimeout(() => {
+        chicagoCanvas.classList.remove('active');
+        chicagoCanvas.style.visibility = 'hidden';
+        
+        // Preparar terrain canvas para fade in
         if (terrainCanvas) {
             terrainCanvas.classList.remove('hidden');
+            terrainCanvas.style.opacity = '0';
+            
+            setTimeout(() => {
+                terrainCanvas.style.transition = 'opacity 0.8s ease-in';
+                terrainCanvas.style.opacity = '1';
+            }, 50);
         }
         
+        // Fade in globe HUD y geo panels
         if (globeHud) {
             globeHud.classList.remove('hidden');
+            globeHud.style.opacity = '0';
+            setTimeout(() => {
+                globeHud.style.transition = 'opacity 0.6s ease-in';
+                globeHud.style.opacity = '1';
+            }, 100);
         }
-        geoPanels.forEach(p => p.classList.add('visible'));
-    }, 800);
+        
+        geoPanels.forEach((p, i) => {
+            p.classList.add('visible');
+            p.style.opacity = '0';
+            setTimeout(() => {
+                p.style.transition = 'opacity 0.6s ease-in';
+                p.style.opacity = '1';
+            }, 100 + (i * 100));
+        });
+    }, 1300);
     
-    // PASO 5: Limpiar visualización 3D
+    // PASO 5: Limpiar visualización 3D después de la transición completa
     setTimeout(() => {
         if (typeof this.cleanupChicago === 'function') {
             this.cleanupChicago();
         }
-    }, 1200);
+    }, 2200);
     
     console.log('[CHICAGO] Smooth exit transition complete');
 }
@@ -2963,14 +3053,12 @@ initChicago3D() {
         // Model dimensions: X: ~15000, Y: 0 (flat), Z: ~20000
         // Model center: (710, 0, 2037)
         
-        // Position: Low altitude, looking across the map at an angle
-       this.chicagoCamera.position.set(
-         2000,   // X → a un costado
-         2500,   // Y → bien arriba
-        -4000   // Z → detrás del mapa
+this.chicagoCamera.position.set(
+    1800,   // X → costado
+    6000,   // Y → MUY alta
+    -8000   // Z → lejos
 );
 
-// Mira al centro, pero abajo
 this.chicagoCamera.lookAt(
     710,    // centro X
     0,      // suelo
