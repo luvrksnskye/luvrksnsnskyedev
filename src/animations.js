@@ -568,61 +568,61 @@ class AnimationsManager {
     
     createSurvivorMessagesPanel() {
         // Evitar crear el panel múltiples veces
-        if (this.survivorPanel && document.getElementById('survivorMessagesPanel')) {
+        if (this.survivorPanel && document.getElementById('sp-survivorMessagesPanel')) {
             console.log('[ANIMATIONS] Survivor panel already exists, skipping creation');
             return;
         }
         
         const panel = document.createElement('div');
-        panel.id = 'survivorMessagesPanel';
-        panel.className = 'survivor-messages-panel';
+        panel.id = 'sp-survivorMessagesPanel';
+        panel.className = 'sp-survivor-messages-panel';
         
         // ONLY set initial hidden state - let CSS handle everything else
         panel.style.visibility = 'hidden';
         
         panel.innerHTML = `
-            <div class="panel-header">
-                <div class="header-top">
-                    <span class="panel-icon">▣</span>
-                    <span class="panel-title">TRANSMISSIONS</span>
-                    <button class="panel-close-btn" id="closeSurvivorPanel">✕</button>
+            <div class="sp-panel-header">
+                <div class="sp-header-top">
+                    <span class="sp-panel-icon">▣</span>
+                    <span class="sp-panel-title">TRANSMISSIONS</span>
+                    <button class="sp-panel-close-btn" id="sp-closeSurvivorPanel">✕</button>
                 </div>
-                <div class="header-status">
-                    <span class="status-indicator"></span>
-                    <span class="status-text">RECEIVING SIGNALS</span>
+                <div class="sp-header-status">
+                    <span class="sp-status-indicator"></span>
+                    <span class="sp-status-text">RECEIVING SIGNALS</span>
                 </div>
             </div>
             
-            <div class="panel-content">
-                <div class="messages-list" id="messagesList">
+            <div class="sp-panel-content">
+                <div class="sp-messages-list" id="sp-messagesList">
                     <!-- Messages will be populated here -->
                 </div>
             </div>
             
-            <div class="panel-player" id="messagePlayer">
-                <div class="player-info">
-                    <div class="player-title" id="playerTitle">No transmission selected</div>
-                    <div class="player-meta">
-                        <span id="playerLocation"></span>
-                        <span id="playerTimestamp"></span>
+            <div class="sp-panel-player" id="sp-messagePlayer">
+                <div class="sp-player-info">
+                    <div class="sp-player-title" id="sp-playerTitle">No transmission selected</div>
+                    <div class="sp-player-meta">
+                        <span id="sp-playerLocation"></span>
+                        <span id="sp-playerTimestamp"></span>
                     </div>
                 </div>
-                <div class="player-controls">
-                    <button class="control-btn" id="playPauseBtn">
+                <div class="sp-player-controls">
+                    <button class="sp-control-btn" id="sp-playPauseBtn">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M8 5v14l11-7z"/>
                         </svg>
                     </button>
-                    <div class="player-progress">
-                        <div class="progress-bar" id="progressBar"></div>
+                    <div class="sp-player-progress">
+                        <div class="sp-progress-bar" id="sp-progressBar"></div>
                     </div>
-                    <div class="player-time">
-                        <span id="currentTime">00:00</span>
+                    <div class="sp-player-time">
+                        <span id="sp-currentTime">00:00</span>
                         <span>/</span>
-                        <span id="totalTime">00:00</span>
+                        <span id="sp-totalTime">00:00</span>
                     </div>
                 </div>
-                <div class="player-transcript" id="playerTranscript"></div>
+                <div class="sp-player-transcript" id="sp-playerTranscript"></div>
             </div>
         `;
         
@@ -689,29 +689,29 @@ class AnimationsManager {
     }
     
     populateMessages() {
-        const messagesList = document.getElementById('messagesList');
+        const messagesList = document.getElementById('sp-messagesList');
         if (!messagesList) return;
         
         messagesList.innerHTML = '';
         
         this.messages.forEach((message, index) => {
             const messageCard = document.createElement('div');
-            messageCard.className = `message-card ${message.type}`;
+            messageCard.className = `sp-message-card ${message.type}`;
             messageCard.dataset.index = index;
             
             const icon = message.type === 'survivor' ? '▣' : '//';
             
             messageCard.innerHTML = `
-                <div class="message-header">
-                    <span class="message-icon">${icon}</span>
-                    <span class="message-type">${message.type.toUpperCase()}</span>
-                    <span class="message-status ${message.status.toLowerCase().replace(' ', '-')}">${message.status}</span>
+                <div class="sp-message-header">
+                    <span class="sp-message-icon">${icon}</span>
+                    <span class="sp-message-type">${message.type.toUpperCase()}</span>
+                    <span class="sp-message-status sp-${message.status.toLowerCase().replace(' ', '-')}">${message.status}</span>
                 </div>
-                <div class="message-title">${message.title}</div>
-                <div class="message-subtitle">${message.subtitle}</div>
-                <div class="message-meta">
-                    <span class="message-location"> ◈ ${message.location}</span>
-                    <span class="message-timestamp"> // ${message.timestamp}</span>
+                <div class="sp-message-title">${message.title}</div>
+                <div class="sp-message-subtitle">${message.subtitle}</div>
+                <div class="sp-message-meta">
+                    <span class="sp-message-location"> ◈ ${message.location}</span>
+                    <span class="sp-message-timestamp"> // ${message.timestamp}</span>
                 </div>
             `;
             
@@ -723,11 +723,11 @@ class AnimationsManager {
     setupPanelEventListeners() {
         console.log('[SURVIVOR_PANEL] Setting up event listeners...');
         
-        const closeBtn = document.getElementById('closeSurvivorPanel');
+        const closeBtn = document.getElementById('sp-closeSurvivorPanel');
         if (closeBtn) {
             // Remover listeners previos si existen
             closeBtn.replaceWith(closeBtn.cloneNode(true));
-            const newCloseBtn = document.getElementById('closeSurvivorPanel');
+            const newCloseBtn = document.getElementById('sp-closeSurvivorPanel');
             newCloseBtn.addEventListener('click', () => {
                 console.log('[SURVIVOR_PANEL] Close button clicked');
                 this.hideSurvivorPanel();
@@ -737,11 +737,11 @@ class AnimationsManager {
             console.error('[SURVIVOR_PANEL] Close button not found!');
         }
         
-        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playPauseBtn = document.getElementById('sp-playPauseBtn');
         if (playPauseBtn) {
             // Remover listeners previos si existen
             playPauseBtn.replaceWith(playPauseBtn.cloneNode(true));
-            const newPlayPauseBtn = document.getElementById('playPauseBtn');
+            const newPlayPauseBtn = document.getElementById('sp-playPauseBtn');
             newPlayPauseBtn.addEventListener('click', () => {
                 console.log('[SURVIVOR_PANEL] Play/Pause button clicked');
                 this.toggleMessagePlayback();
@@ -758,14 +758,14 @@ class AnimationsManager {
         this.currentMessageIndex = index;
         const message = this.messages[index];
         
-        document.querySelectorAll('.message-card').forEach((card, i) => {
-            card.classList.toggle('active', i === index);
+        document.querySelectorAll('.sp-message-card').forEach((card, i) => {
+            card.classList.toggle('sp-active', i === index);
         });
         
-        document.getElementById('playerTitle').textContent = message.title;
-        document.getElementById('playerLocation').textContent = message.location;
-        document.getElementById('playerTimestamp').textContent = message.timestamp;
-        document.getElementById('playerTranscript').textContent = message.transcript;
+        document.getElementById('sp-playerTitle').textContent = message.title;
+        document.getElementById('sp-playerLocation').textContent = message.location;
+        document.getElementById('sp-playerTimestamp').textContent = message.timestamp;
+        document.getElementById('sp-playerTranscript').textContent = message.transcript;
         
         this.stopMessagePlayback();
         
@@ -794,7 +794,7 @@ class AnimationsManager {
         
         this.isMessagePlaying = true;
         
-        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playPauseBtn = document.getElementById('sp-playPauseBtn');
         if (playPauseBtn) {
             playPauseBtn.innerHTML = `
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -838,7 +838,7 @@ class AnimationsManager {
         
         this.isMessagePlaying = false;
         
-        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playPauseBtn = document.getElementById('sp-playPauseBtn');
         if (playPauseBtn) {
             playPauseBtn.innerHTML = `
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -861,7 +861,7 @@ class AnimationsManager {
         this.survivorPanel.style.zIndex = '999999999999';
         
         // Add visible class FIRST (CSS will handle the animation)
-        this.survivorPanel.classList.add('visible');
+        this.survivorPanel.classList.add('sp-visible');
         
         // CRITICAL: Force pointer-events to auto for clicks to work
         this.survivorPanel.style.pointerEvents = 'auto';
@@ -891,7 +891,7 @@ class AnimationsManager {
     
     hideSurvivorPanel() {
         if (this.survivorPanel) {
-            this.survivorPanel.classList.remove('visible');
+            this.survivorPanel.classList.remove('sp-visible');
             this.stopMessagePlayback();
             
             // Restore Chicago canvas pointer-events
@@ -974,7 +974,7 @@ class AnimationsManager {
             this.isMessagePlaying = false;
             this.currentPlayingAudio = null;
             
-            const playPauseBtn = document.getElementById('playPauseBtn');
+            const playPauseBtn = document.getElementById('sp-playPauseBtn');
             if (playPauseBtn) {
                 playPauseBtn.innerHTML = `
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">

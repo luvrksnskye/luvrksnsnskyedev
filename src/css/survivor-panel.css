@@ -1,5 +1,6 @@
 /* ========================================
    SURVIVOR MESSAGES PANEL - CHICAGO UI STYLE
+   Prefijo único: sp- (survivor-panel)
    ======================================== */
 
 /* Custom Fonts */
@@ -9,10 +10,10 @@
 }
 
 :root {
-    --data-font: 'SV-Tech', 'Courier New', monospace;
+    --sp-data-font: 'SV-Tech', 'Courier New', monospace;
 }
 
-.survivor-messages-panel {
+.sp-survivor-messages-panel {
     position: fixed;
     bottom: 20px;
     left: 50%;
@@ -34,16 +35,16 @@
     
     z-index: 999999999999;
     
-    font-family: var(--data-font);
+    font-family: var(--sp-data-font);
 }
 
-.survivor-messages-panel.visible {
+.sp-survivor-messages-panel.sp-visible {
     opacity: 1;
     pointer-events: auto;
-    animation: slideUpPanel 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: sp-slideUpPanel 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-@keyframes slideUpPanel {
+@keyframes sp-slideUpPanel {
     0% {
         opacity: 0;
         transform: translateX(-50%) translateY(30px);
@@ -55,7 +56,7 @@
 }
 
 /* Panel Header - Left Side */
-.panel-header {
+.sp-panel-header {
     width: 180px;
     padding: 16px;
     border-right: 1px solid rgba(255, 255, 255, 0.2);
@@ -66,28 +67,28 @@
     position: relative;
 }
 
-.header-top {
+.sp-header-top {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.panel-icon {
+.sp-panel-icon {
     font-size: 20px;
     color: rgba(255, 255, 255, 0.7);
     text-align: left;
 }
 
-.panel-title {
+.sp-panel-title {
     color: rgba(255, 255, 255, 0.9);
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 2px;
-    font-family: var(--data-font);
+    font-family: var(--sp-data-font);
     text-align: left;
 }
 
-.panel-close-btn {
+.sp-panel-close-btn {
     width: 100%;
     height: 32px;
     
@@ -101,34 +102,34 @@
     cursor: pointer;
     transition: all 0.2s ease;
     
-    font-family: var(--data-font);
+    font-family: var(--sp-data-font);
     letter-spacing: 1px;
 }
 
-.panel-close-btn:hover {
+.sp-panel-close-btn:hover {
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.7);
 }
 
-.panel-close-btn:active {
+.sp-panel-close-btn:active {
     transform: scale(0.98);
 }
 
-.header-status {
+.sp-header-status {
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
-.status-indicator {
+.sp-status-indicator {
     width: 6px;
     height: 6px;
     background: rgba(255, 255, 255, 0.8);
     border-radius: 50%;
-    animation: blinkIndicator 1.5s ease-in-out infinite;
+    animation: sp-blinkIndicator 1.5s ease-in-out infinite;
 }
 
-@keyframes blinkIndicator {
+@keyframes sp-blinkIndicator {
     0%, 50% {
         opacity: 1;
     }
@@ -137,15 +138,15 @@
     }
 }
 
-.status-text {
+.sp-status-text {
     color: rgba(255, 255, 255, 0.6);
     font-size: 8px;
     letter-spacing: 1px;
-    font-family: var(--data-font);
+    font-family: var(--sp-data-font);
 }
 
 /* Panel Content - Middle - Messages List */
-.panel-content {
+.sp-panel-content {
     flex: 1;
     overflow-x: auto;
     overflow-y: hidden;
@@ -156,33 +157,33 @@
     position: relative;
 }
 
-.panel-content::-webkit-scrollbar {
+.sp-panel-content::-webkit-scrollbar {
     height: 6px;
     background: rgba(0, 0, 0, 0.8);
 }
 
-.panel-content::-webkit-scrollbar-track {
+.sp-panel-content::-webkit-scrollbar-track {
     background: rgba(0, 0, 0, 0.8);
 }
 
-.panel-content::-webkit-scrollbar-thumb {
+.sp-panel-content::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.3);
     transition: background 0.2s ease;
 }
 
-.panel-content::-webkit-scrollbar-thumb:hover {
+.sp-panel-content::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.5);
 }
 
 /* Messages List - Horizontal */
-.messages-list {
+.sp-messages-list {
     display: flex;
     flex-direction: row;
     gap: 12px;
     min-width: min-content;
 }
 
-.message-card {
+.sp-message-card {
     width: 260px;
     min-width: 260px;
     padding: 12px;
@@ -198,18 +199,18 @@
     gap: 8px;
 }
 
-.message-card:hover {
+.sp-message-card:hover {
     background: rgba(255, 255, 255, 0.03);
     border-color: rgba(255, 255, 255, 0.5);
 }
 
-.message-card.active {
+.sp-message-card.sp-active {
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.8);
     box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05);
 }
 
-.message-header {
+.sp-message-header {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -217,25 +218,25 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.message-card.active .message-header {
+.sp-message-card.sp-active .sp-message-header {
     border-bottom-color: rgba(255, 255, 255, 0.4);
 }
 
-.message-icon {
+.sp-message-icon {
     font-size: 10px;
     color: rgba(255, 255, 255, 0.6);
 }
 
-.message-type {
+.sp-message-type {
     flex: 1;
     color: rgba(255, 255, 255, 0.8);
     font-size: 9px;
     letter-spacing: 1px;
     font-weight: 600;
-    font-family: var(--data-font);
+    font-family: var(--sp-data-font);
 }
 
-.message-status {
+.sp-message-status {
     padding: 2px 6px;
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.4);
@@ -244,14 +245,14 @@
     font-size: 7px;
     font-weight: 600;
     letter-spacing: 0.5px;
-    font-family: var(--data-font);
+    font-family: var(--sp-data-font);
 }
 
-.message-status.priority-alert {
-    animation: blinkPriority 0.8s ease-in-out infinite;
+.sp-message-status.sp-priority-alert {
+    animation: sp-blinkPriority 0.8s ease-in-out infinite;
 }
 
-@keyframes blinkPriority {
+@keyframes sp-blinkPriority {
     0%, 50% {
         opacity: 1;
     }
@@ -260,37 +261,37 @@
     }
 }
 
-.message-title {
+.sp-message-title {
     color: rgba(255, 255, 255, 0.9);
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.5px;
-    font-family: var(--data-font);
+    font-family: var(--sp-data-font);
 }
 
-.message-subtitle {
+.sp-message-subtitle {
     color: rgba(255, 255, 255, 0.5);
     font-size: 10px;
-    font-family: var(--data-font);
+    font-family: var(--sp-data-font);
     font-style: italic;
 }
 
-.message-meta {
+.sp-message-meta {
     display: flex;
     flex-direction: column;
     gap: 3px;
 }
 
-.message-location,
-.message-timestamp {
+.sp-message-location,
+.sp-message-timestamp {
     color: rgba(255, 255, 255, 0.5);
     font-size: 8px;
-    font-family: var(--data-font);
+    font-family: var(--sp-data-font);
     letter-spacing: 0.3px;
 }
 
 /* Panel Player - Right Side */
-.panel-player {
+.sp-panel-player {
     width: 300px;
     padding: 16px;
     border-left: 1px solid rgba(255, 255, 255, 0.2);
@@ -301,36 +302,36 @@
     position: relative;
 }
 
-.player-info {
+.sp-player-info {
     padding-bottom: 8px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.player-title {
+.sp-player-title {
     color: rgba(255, 255, 255, 0.9);
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 1px;
     margin-bottom: 6px;
-    font-family: var(--data-font);
+    font-family: var(--sp-data-font);
 }
 
-.player-meta {
+.sp-player-meta {
     display: flex;
     gap: 10px;
     color: rgba(255, 255, 255, 0.6);
     font-size: 8px;
-    font-family: var(--data-font);
+    font-family: var(--sp-data-font);
     letter-spacing: 0.3px;
 }
 
-.player-controls {
+.sp-player-controls {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.control-btn {
+.sp-control-btn {
     width: 32px;
     height: 32px;
     
@@ -349,16 +350,16 @@
     flex-shrink: 0;
 }
 
-.control-btn:hover {
+.sp-control-btn:hover {
     border-color: rgba(255, 255, 255, 0.7);
     background: rgba(255, 255, 255, 0.05);
 }
 
-.control-btn:active {
+.sp-control-btn:active {
     transform: scale(0.95);
 }
 
-.player-progress {
+.sp-player-progress {
     flex: 1;
     height: 6px;
     background: rgba(0, 0, 0, 0.8);
@@ -367,23 +368,23 @@
     position: relative;
 }
 
-.progress-bar {
+.sp-progress-bar {
     height: 100%;
     width: 0%;
     background: rgba(255, 255, 255, 0.6);
     transition: width 0.1s linear;
 }
 
-.player-time {
+.sp-player-time {
     color: rgba(255, 255, 255, 0.7);
     font-size: 9px;
     white-space: nowrap;
-    font-family: var(--data-font);
+    font-family: var(--sp-data-font);
     letter-spacing: 0.5px;
     flex-shrink: 0;
 }
 
-.player-transcript {
+.sp-player-transcript {
     padding: 10px;
     background: rgba(0, 0, 0, 0.7);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -391,7 +392,7 @@
     color: rgba(255, 255, 255, 0.7);
     font-size: 9px;
     line-height: 1.4;
-    font-family: var(--data-font);
+    font-family: var(--sp-data-font);
     letter-spacing: 0.2px;
     
     height: 70px;
@@ -400,49 +401,49 @@
     position: relative;
 }
 
-.player-transcript::-webkit-scrollbar {
+.sp-player-transcript::-webkit-scrollbar {
     width: 4px;
     background: rgba(0, 0, 0, 0.8);
 }
 
-.player-transcript::-webkit-scrollbar-track {
+.sp-player-transcript::-webkit-scrollbar-track {
     background: rgba(0, 0, 0, 0.8);
 }
 
-.player-transcript::-webkit-scrollbar-thumb {
+.sp-player-transcript::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.4);
 }
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    .survivor-messages-panel {
+    .sp-survivor-messages-panel {
         width: 95%;
         height: 180px;
     }
     
-    .panel-header {
+    .sp-panel-header {
         width: 160px;
     }
     
-    .panel-player {
+    .sp-panel-player {
         width: 260px;
     }
     
-    .message-card {
+    .sp-message-card {
         width: 240px;
         min-width: 240px;
     }
 }
 
 @media (max-width: 768px) {
-    .survivor-messages-panel {
+    .sp-survivor-messages-panel {
         flex-direction: column;
         height: auto;
         max-height: 80vh;
         width: 95%;
     }
     
-    .panel-header {
+    .sp-panel-header {
         width: 100%;
         border-right: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -451,42 +452,42 @@
         padding: 12px;
     }
     
-    .header-top {
+    .sp-header-top {
         flex-direction: row;
         flex: 1;
         align-items: center;
     }
     
-    .panel-icon {
+    .sp-panel-icon {
         font-size: 16px;
     }
     
-    .panel-title {
+    .sp-panel-title {
         font-size: 10px;
         text-align: left;
     }
     
-    .panel-close-btn {
+    .sp-panel-close-btn {
         width: 70px;
         height: 28px;
     }
     
-    .panel-content {
+    .sp-panel-content {
         max-height: 200px;
         overflow-y: auto;
         overflow-x: hidden;
     }
     
-    .messages-list {
+    .sp-messages-list {
         flex-direction: column;
     }
     
-    .message-card {
+    .sp-message-card {
         width: 100%;
         min-width: 100%;
     }
     
-    .panel-player {
+    .sp-panel-player {
         width: 100%;
         border-left: none;
         border-top: 1px solid rgba(255, 255, 255, 0.2);
