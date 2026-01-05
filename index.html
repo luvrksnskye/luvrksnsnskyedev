@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="/src/css/work.css">
     <link rel="stylesheet" href="/src/css/responsive.css">
     <link rel="stylesheet" href="/src/css/intro.css">
+    <link rel="stylesheet" href="/src/css/survivor-panel.css">
 
 </head>
 
@@ -130,8 +131,6 @@
                     <div class="core-ring ring-3"></div>
                     <div class="core-pulse"></div>
                 </div>
-                
-            
             </div>
             
             <!-- Subtitle display -->
@@ -365,8 +364,11 @@
     <!-- Phase 3: Globe/Terrain Visualization -->
     <div class="intro-phase phase-globe" id="phaseGlobe">
         <div class="globe-container">
-            <!-- Canvas para Three.js Terrain - CENTRADO -->
+            <!-- Canvas for Three.js Terrain (CENTERED) -->
             <canvas id="terrainCanvas" class="centered-canvas"></canvas>
+            
+            <!-- Canvas for Chicago Wireframe (SEPARATED, hidden by default) -->
+            <canvas id="chicagoCanvas" class="centered-canvas chicago-canvas"></canvas>
             
             <!-- Globe HUD Overlay -->
             <div class="globe-hud">
@@ -389,168 +391,99 @@
                     <div class="btn-scanline"></div>
                 </button>
                 
-                <div class="globe-header">
-                    <div class="globe-header-left">
-                        <div class="globe-icon">
-                            <svg viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"/>
-                                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" fill="none" stroke="currentColor" stroke-width="1"/>
-                            </svg>
-                        </div>
-                        <span class="globe-label">GLOBAL TERRAIN SCAN</span>
-                        <div class="data-ticker" id="dataTicker">
-                            <span class="ticker-text"></span>
-                        </div>
-                    </div>
-                    <div class="globe-header-right">
-                        <span class="globe-status">MAPPING</span>
-                        <div class="status-blink"></div>
-                    </div>
-                </div>
-                
-                <div class="globe-data-panels">
-                    <div class="globe-panel left">
-                        <div class="panel-title">LOCATION DATA</div>
-                        <div class="panel-item">
-                            <span class="panel-label">COORDINATES</span>
-                            <span class="panel-value" id="globeCoords">00.0000°N 00.0000°E</span>
-                        </div>
-                        <div class="panel-item">
-                            <span class="panel-label">SECTOR</span>
-                            <span class="panel-value" id="globeSector">SCANNING...</span>
-                        </div>
-                        <div class="panel-item">
-                            <span class="panel-label">ELEVATION</span>
-                            <span class="panel-value" id="globeElev">0m</span>
-                        </div>
-                        <div class="panel-item">
-                            <span class="panel-label">TERRAIN</span>
-                            <span class="panel-value" id="globeTerrain">ANALYZING</span>
-                        </div>
-                        <div class="panel-item">
-                            <span class="panel-label">TEMPERATURE</span>
-                            <span class="panel-value" id="globeTemp">--°C</span>
-                        </div>
-                        <div class="panel-item">
-                            <span class="panel-label">ATMOSPHERIC PRESSURE</span>
-                            <span class="panel-value" id="globePressure">-- hPa</span>
-                        </div>
-                        <div class="panel-item">
-                            <span class="panel-label">MAGNETIC FIELD</span>
-                            <span class="panel-value" id="globeMagnetic">-- μT</span>
-                        </div>
-                    </div>
-                    
-                    <div class="globe-panel right">
-                        <div class="panel-title">EARTH STATUS 2090</div>
-                        <div class="panel-item">
-                            <span class="panel-label">POPULATION</span>
-                            <span class="panel-value">12.4B</span>
-                        </div>
-                        <div class="panel-item">
-                            <span class="panel-label">SIGNAL DENSITY</span>
-                            <span class="panel-value warning">CRITICAL</span>
-                        </div>
-                        <div class="panel-item">
-                            <span class="panel-label">NOISE LEVEL</span>
-                            <span class="panel-value">98.7%</span>
-                        </div>
-                        <div class="panel-item">
-                            <span class="panel-label">CREATIVITY</span>
-                            <span class="panel-value success">0.3% ACTIVE</span>
-                        </div>
-                        <div class="panel-item">
-                            <span class="panel-label">DATA BANDWIDTH</span>
-                            <span class="panel-value">847.2 ZB/s</span>
-                        </div>
-                        <div class="panel-item">
-                            <span class="panel-label">ORBITAL DEBRIS</span>
-                            <span class="panel-value warning">128M OBJECTS</span>
-                        </div>
-                        <div class="panel-item">
-                            <span class="panel-label">CLIMATE INDEX</span>
-                            <span class="panel-value warning">UNSTABLE</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="globe-footer">
-                    <div class="scan-line-container">
-                        <div class="scan-line"></div>
-                    </div>
-                    <div class="globe-footer-info">
-                        <span class="loading-text" id="terrainLoading">LOADING TERRAIN DATA...</span>
-                    </div>
-                </div>
-                
-                <!-- Chicago Wireframe Panel (Overlays everything) -->
-                <div class="chicago-panel" id="chicagoPanel">
-                    <!-- Close button -->
-                    <button class="chicago-close" id="chicagoCloseBtn">
-                        <span class="close-bracket">[</span>
-                        <span>RETURN TO TERRAIN</span>
-                        <span class="close-bracket">]</span>
-                    </button>
-                    
-                    <!-- Chicago title header -->
-                    <div class="chicago-title-bar">
-                        <div class="title-line"></div>
-                        <span class="chicago-main-title">DOWNTOWN CHICAGO - WIREFRAME ANALYSIS</span>
-                        <div class="title-line"></div>
-                    </div>
-                    
-                    <!-- Left Panel: Narrative -->
-                    <div class="chicago-narrative-panel">
-                        <div class="narrative-header">
-                            <span class="narrative-icon">◈</span>
-                            <span class="narrative-title">HISTORICAL ANALYSIS</span>
-                        </div>
-                        <div class="narrative-content" id="chicagoNarrativeContent">
-                            <p class="narrative-line" id="narrativeLine1"></p>
-                            <p class="narrative-line" id="narrativeLine2"></p>
-                            <p class="narrative-line" id="narrativeLine3"></p>
-                        </div>
-                    </div>
-                    
-                    <!-- Right Panel: Technical Data -->
-                    <div class="chicago-data-panel">
-                        <div class="data-panel-header">
-                            <span class="data-icon">◎</span>
-                            <span class="data-title">ZONE STATUS</span>
-                        </div>
-                        <div class="data-blocks">
-                            <div class="chicago-info-block">
-                                <span class="chicago-label">ZONE</span>
-                                <span class="chicago-value">CENTRAL DISTRICT</span>
-                            </div>
-                            <div class="chicago-info-block">
-                                <span class="chicago-label">STATUS</span>
-                                <span class="chicago-value warning">RED ZONE</span>
-                            </div>
-                            <div class="chicago-info-block">
-                                <span class="chicago-label">POPULATION</span>
-                                <span class="chicago-value">1.2M RESIDENTS</span>
-                            </div>
-                            <div class="chicago-info-block">
-                                <span class="chicago-label">CRIME INDEX</span>
-                                <span class="chicago-value danger">CRITICAL 94%</span>
-                            </div>
-                            <div class="chicago-info-block">
-                                <span class="chicago-label">SECURITY LEVEL</span>
-                                <span class="chicago-value danger">COMPROMISED</span>
-                            </div>
-                            <div class="chicago-info-block">
-                                <span class="chicago-label">RADIATION</span>
-                                <span class="chicago-value warning">3.7 mSv/yr</span>
-                            </div>
-                            <div class="chicago-info-block">
-                                <span class="chicago-label">INFRASTRUCTURE</span>
-                                <span class="chicago-value warning">31% FUNCTIONAL</span>
-                            </div>
-                            <div class="chicago-info-block">
-                                <span class="chicago-label">QUARANTINE</span>
-                                <span class="chicago-value danger">ACTIVE</span>
-                            </div>
+               <!-- Chicago Wireframe Panel (Overlays everything) -->
+               <div class="chicago-panel" id="chicagoPanel">
+                   <!-- Close button -->
+                   <button class="chicago-close" id="chicagoCloseBtn">
+                       <span class="close-bracket">[</span>
+                       <span>RETURN TO TERRAIN</span>
+                       <span class="close-bracket">]</span>
+                   </button>
+
+                   <!-- Chicago title header -->
+                   <div class="chicago-title-bar">
+                       <div class="title-line"></div>
+                       <span class="chicago-main-title">DOWNTOWN CHICAGO - WIREFRAME ANALYSIS</span>
+                       <div class="title-line"></div>
+                   </div>
+                   
+                   <!-- Left Panel: Technical Data About Catastrophe -->
+                   <div class="chicago-narrative-panel">
+                       <div class="narrative-header">
+                           <span class="narrative-icon">◈</span>
+                           <span class="narrative-title">CATASTROPHE DATA</span>
+                       </div>
+                       <div class="narrative-content" id="chicagoNarrativeContent">
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">INCIDENT DATE</span>
+                               <span class="chicago-value danger">MARCH 17, 2087</span>
+                           </div>
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">EVENT TYPE</span>
+                               <span class="chicago-value">INFRASTRUCTURE COLLAPSE</span>
+                           </div>
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">TRIGGER</span>
+                               <span class="chicago-value warning">POWER GRID FAILURE</span>
+                           </div>
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">CASUALTIES</span>
+                               <span class="chicago-value danger">~340,000</span>
+                           </div>
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">DISPLACED</span>
+                               <span class="chicago-value warning">~850,000</span>
+                           </div>
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">DURATION</span>
+                               <span class="chicago-value">72 HOURS CRITICAL</span>
+                           </div>
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">RECOVERY</span>
+                               <span class="chicago-value danger">ONGOING</span>
+                           </div>
+                       </div>
+                   </div>
+                   
+                   <!-- Right Panel: Technical Zone Status -->
+                   <div class="chicago-data-panel">
+                       <div class="data-panel-header">
+                           <span class="data-icon">◎</span>
+                           <span class="data-title">ZONE STATUS</span>
+                       </div>
+                       <div class="data-blocks">
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">ZONE</span>
+                               <span class="chicago-value">CENTRAL DISTRICT</span>
+                           </div>
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">STATUS</span>
+                               <span class="chicago-value warning">RED ZONE</span>
+                           </div>
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">POPULATION</span>
+                               <span class="chicago-value">1.2M RESIDENTS</span>
+                           </div>
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">CRIME INDEX</span>
+                               <span class="chicago-value danger">CRITICAL 94%</span>
+                           </div>
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">SECURITY LEVEL</span>
+                               <span class="chicago-value danger">COMPROMISED</span>
+                           </div>
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">RADIATION</span>
+                               <span class="chicago-value warning">3.7 mSv/yr</span>
+                           </div>
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">INFRASTRUCTURE</span>
+                               <span class="chicago-value warning">31% FUNCTIONAL</span>
+                           </div>
+                           <div class="chicago-info-block">
+                               <span class="chicago-label">QUARANTINE</span>
+                               <span class="chicago-value danger">ACTIVE</span>
+                               </div>
                         </div>
                     </div>
                 </div>
@@ -561,7 +494,7 @@
     <!-- Phase 4: Brain Visualization -->
     <div class="intro-phase phase-body" id="phaseBody">
         <div class="body-container">
-            <!-- Canvas para Cerebro 3D -->
+            <!-- Canvas for 3D Brain -->
             <canvas id="brainCanvas" class="centered-canvas"></canvas>
             
             <!-- Brain Scan HUD -->
@@ -658,7 +591,7 @@
                     <div class="journey-section">
                         <div class="journey-from">
                             <div class="journey-label">FROM</div>
-                            <div class="journey-value">UKNOWN</div>
+                            <div class="journey-value">UNKNOWN</div>
                         </div>
                         <div class="journey-arrow">
                             <svg viewBox="0 0 24 24">

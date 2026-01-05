@@ -398,6 +398,14 @@ class AnimationsManager {
         this.brainParticles = null;
         this.neuralConnections = null;
         
+        // Survivor Audio (NEW - Added for survivor message button)
+        this.survivorAudio = {
+            voice: null,
+            bcommsOn: null,
+            lifesupportOn: null
+        };
+        this.survivorAudioPlaying = false;
+        
         // Chicago 3D Wireframe
         this.chicagoScene = null;
         this.chicagoCamera = null;
@@ -407,18 +415,7 @@ class AnimationsManager {
         this.chicagoAnimationFrame = null;
         this.chicagoActive = false;
         
-        this.chicagoNarrativeLines = [
-            "The Chicago Collapse occurred in 2067 when the infrastructure system failed simultaneously.",
-            "More than 300,000 people were trapped in the lower levels during the Dark Floods.",
-            "Corporations abandoned the central district, leaving it in the hands of criminal factions.",
-            "Now it is known as 'The Gray Zone' - a place where law has no meaning.",
-            "Data shows constant criminal activity: organized theft, data trafficking, illegal experiments.",
-            "Only the desperate or those with nothing to lose venture into central Chicago.",
-            "Your ship must avoid this zone. No rescue is available if you enter."
-        ];
-        
-        this.currentChicagoLine = 0;
-    
+        // Brain 3D model paths
         this.brainModels = {
             'complete': '/src/model_3d/brain-antre.obj',
             'low': '/src/model_3d/brain_vertex_low.obj',
@@ -521,6 +518,7 @@ class AnimationsManager {
             
             phaseGlobe: document.getElementById('phaseGlobe'),
             terrainCanvas: document.getElementById('terrainCanvas'),
+            chicagoCanvas: document.getElementById('chicagoCanvas'),
             terrainLocation: document.getElementById('terrainLocation'),
             observeCityBtn: document.getElementById('observeCityBtn'),
             chicagoPanel: document.getElementById('chicagoPanel'),
@@ -540,14 +538,362 @@ class AnimationsManager {
             contactScreen: document.getElementById('contactScreen'),
             mainNav: document.getElementById('mainNav')
         };
+        // Dynamically create survivor audio button
+        this.elements.survivorAudioBtn = this.createSurvivorAudioButton();
 
         console.log('[ANIMATIONS] Elements cached:', {
             stellarIntro: !!this.elements.stellarIntro,
             terrainCanvas: !!this.elements.terrainCanvas,
+            chicagoCanvas: !!this.elements.chicagoCanvas,
             brainCanvas: !!this.elements.brainCanvas,
             observeCityBtn: !!this.elements.observeCityBtn,
-            chicagoPanel: !!this.elements.chicagoPanel
+            chicagoPanel: !!this.elements.chicagoPanel,
+            survivorAudioBtn: !!this.elements.survivorAudioBtn
         });
+    }
+
+    // ========================================
+    // CREATES DYNAMIC SURVIVOR AUDIO BUTTON
+    // ========================================
+    createSurvivorAudioButton() {
+        // Legacy method - now creates the full panel instead
+        this.createSurvivorMessagesPanel();
+        return document.getElementById('survivorAudioBtn'); // Return dummy element for compatibility
+    }
+    
+    // ========================================
+    // SURVIVOR MESSAGES PANEL
+    // ========================================
+    
+    createSurvivorMessagesPanel() {
+        const panel = document.createElement('div');
+        panel.id = 'survivorMessagesPanel';
+        panel.className = 'survivor-messages-panel';
+        
+        // ONLY set initial hidden state - let CSS handle everything else
+        panel.style.visibility = 'hidden';
+        
+        panel.innerHTML = `
+            <div class="panel-header">
+                <div class="header-top">
+                    <span class="panel-icon">▣</span>
+                    <span class="panel-title">TRANSMISSIONS</span>
+                    <button class="panel-close-btn" id="closeSurvivorPanel">✕</button>
+                </div>
+                <div class="header-status">
+                    <span class="status-indicator"></span>
+                    <span class="status-text">RECEIVING SIGNALS</span>
+                </div>
+            </div>
+            
+            <div class="panel-content">
+                <div class="messages-list" id="messagesList">
+                    <!-- Messages will be populated here -->
+                </div>
+            </div>
+            
+            <div class="panel-player" id="messagePlayer">
+                <div class="player-info">
+                    <div class="player-title" id="playerTitle">No transmission selected</div>
+                    <div class="player-meta">
+                        <span id="playerLocation"></span>
+                        <span id="playerTimestamp"></span>
+                    </div>
+                </div>
+                <div class="player-controls">
+                    <button class="control-btn" id="playPauseBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    </button>
+                    <div class="player-progress">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <div class="player-time">
+                        <span id="currentTime">00:00</span>
+                        <span>/</span>
+                        <span id="totalTime">00:00</span>
+                    </div>
+                </div>
+                <div class="player-transcript" id="playerTranscript"></div>
+            </div>
+        `;
+        
+        document.body.appendChild(panel);
+        this.survivorPanel = panel;
+        
+        // Create dummy button element for compatibility
+        const dummyBtn = document.createElement('button');
+        dummyBtn.id = 'survivorAudioBtn';
+        dummyBtn.style.display = 'none';
+        document.body.appendChild(dummyBtn);
+        
+        // Initialize messages data
+        this.messages = [
+            {
+                id: 1,
+                type: 'survivor',
+                title: 'SURVIVOR TRANSMISSION',
+                subtitle: ' ▄▖▜▚┣',
+                location: 'Unknown',
+                timestamp: '2090.03.14 - 08:42',
+                audioPath: '/src/sfx/survivor_voice.oga',
+                transcript: "---",
+                status: 'AUTHENTICATED'
+            },
+            {
+                id: 2,
+                type: 'news',
+                title: 'EMERGENCY BROADCAST',
+                subtitle: 'Global Crisis Alert',
+                location: 'New York, NY',
+                timestamp: '2090.03.13 - 23:15',
+                audioPath: '/src/sfx/news-broadcast-1.mp3',
+                transcript: "---",
+                status: 'PRIORITY ALERT'
+            },
+            {
+                id: 3,
+                type: 'survivor',
+                title: 'SURVIVOR TRANSMISSION',
+                subtitle: 'LOST DATA ▞▟▘▝',
+                location: 'Unknown',
+                timestamp: '2090.03.15 - 14:28',
+                audioPath: '/src/sfx/lost-data-voice.oga',
+                transcript: "▀▖┗▛▄▖▜▚┣ ▜▚┗┣┗┫┓┏┓ ▛▄▖┅┗▖. ┣┗┏▛▄▖▜┏┣ ▚ ▖▞┣┗▖┗┣. ┣┗▖┃▀▚▗┏┏┓. ▖┛▀┗▞┃┏▄ ▛┏┗▄▖▜▚┣ ┅▖┗━▖ ▖┓┫▞┣ ▚ ▛▄┅┗▖ ▚ ▖▞┣┗▖┗┣ ▚┛▘▞━▖┅",
+                status: 'AUTHENTICATED'
+            }
+        ];
+        
+        this.currentMessageIndex = 0;
+        this.isMessagePlaying = false;
+        
+        // Populate messages
+        this.populateMessages();
+        
+        // Setup event listeners
+        this.setupPanelEventListeners();
+        
+        // Start hidden using visibility (not opacity to avoid transition conflicts)
+        panel.style.visibility = 'hidden';
+        panel.style.pointerEvents = 'none';
+        
+        console.log('[ANIMATIONS] Survivor Messages Panel created (initially hidden with visibility)');
+    }
+    
+    populateMessages() {
+        const messagesList = document.getElementById('messagesList');
+        if (!messagesList) return;
+        
+        messagesList.innerHTML = '';
+        
+        this.messages.forEach((message, index) => {
+            const messageCard = document.createElement('div');
+            messageCard.className = `message-card ${message.type}`;
+            messageCard.dataset.index = index;
+            
+            const icon = message.type === 'survivor' ? '▣' : '//';
+            
+            messageCard.innerHTML = `
+                <div class="message-header">
+                    <span class="message-icon">${icon}</span>
+                    <span class="message-type">${message.type.toUpperCase()}</span>
+                    <span class="message-status ${message.status.toLowerCase().replace(' ', '-')}">${message.status}</span>
+                </div>
+                <div class="message-title">${message.title}</div>
+                <div class="message-subtitle">${message.subtitle}</div>
+                <div class="message-meta">
+                    <span class="message-location"> ◈ ${message.location}</span>
+                    <span class="message-timestamp"> // ${message.timestamp}</span>
+                </div>
+            `;
+            
+            messageCard.addEventListener('click', () => this.selectMessage(index));
+            messagesList.appendChild(messageCard);
+        });
+    }
+    
+    setupPanelEventListeners() {
+        const closeBtn = document.getElementById('closeSurvivorPanel');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.hideSurvivorPanel());
+        }
+        
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        if (playPauseBtn) {
+            playPauseBtn.addEventListener('click', () => this.toggleMessagePlayback());
+        }
+    }
+    
+    selectMessage(index) {
+        if (index < 0 || index >= this.messages.length) return;
+        
+        this.currentMessageIndex = index;
+        const message = this.messages[index];
+        
+        document.querySelectorAll('.message-card').forEach((card, i) => {
+            card.classList.toggle('active', i === index);
+        });
+        
+        document.getElementById('playerTitle').textContent = message.title;
+        document.getElementById('playerLocation').textContent = message.location;
+        document.getElementById('playerTimestamp').textContent = message.timestamp;
+        document.getElementById('playerTranscript').textContent = message.transcript;
+        
+        this.stopMessagePlayback();
+        
+        console.log(`[MESSAGES] Selected message ${index + 1}: ${message.title}`);
+    }
+    
+    toggleMessagePlayback() {
+        if (this.isMessagePlaying) {
+            this.stopMessagePlayback();
+        } else {
+            this.playMessage();
+        }
+    }
+    
+    playMessage() {
+        const message = this.messages[this.currentMessageIndex];
+        if (!message) return;
+        
+        console.log('[MESSAGES] Playing message:', message.title);
+        
+        this.isMessagePlaying = true;
+        
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        if (playPauseBtn) {
+            playPauseBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                </svg>
+            `;
+        }
+        
+        if (message.type === 'survivor' && this.survivorAudio.voice) {
+            this.playSurvivorAudioSequence();
+        }
+    }
+    
+    stopMessagePlayback() {
+        console.log('[MESSAGES] Stopping message playback');
+        
+        this.isMessagePlaying = false;
+        
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        if (playPauseBtn) {
+            playPauseBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+            `;
+        }
+        
+        this.stopSurvivorAudio();
+    }
+    
+    showSurvivorPanel() {
+        if (!this.survivorPanel) {
+            this.createSurvivorMessagesPanel();
+        }
+        
+        console.log('[SURVIVOR_PANEL] Showing panel with CSS animation...');
+        
+        // CRITICAL: Ensure panel is above everything
+        this.survivorPanel.style.zIndex = '999999999999';
+        
+        // Add visible class FIRST (CSS will handle the animation)
+        this.survivorPanel.classList.add('visible');
+        
+        // CRITICAL: Force pointer-events to auto for clicks to work
+        this.survivorPanel.style.pointerEvents = 'auto';
+        
+        // Force visibility to override the initial hidden state
+        this.survivorPanel.style.visibility = 'visible';
+        
+        // Ensure Chicago canvas doesn't block clicks
+        const chicagoCanvas = this.elements.chicagoCanvas;
+        if (chicagoCanvas) {
+            chicagoCanvas.style.pointerEvents = 'none';
+        }
+        
+        // Small delay to ensure CSS transition works
+        requestAnimationFrame(() => {
+            this.survivorPanel.style.removeProperty('visibility');
+            // Keep pointer-events auto
+            this.survivorPanel.style.pointerEvents = 'auto';
+        });
+        
+        if (this.messages.length > 0) {
+            this.selectMessage(0);
+        }
+        
+        console.log('[ANIMATIONS] Survivor Messages Panel shown - clicks enabled');
+    }
+    
+    hideSurvivorPanel() {
+        if (this.survivorPanel) {
+            this.survivorPanel.classList.remove('visible');
+            this.stopMessagePlayback();
+            
+            // Restore Chicago canvas pointer-events
+            const chicagoCanvas = this.elements.chicagoCanvas;
+            if (chicagoCanvas) {
+                chicagoCanvas.style.pointerEvents = 'auto';
+            }
+        }
+    }
+    
+    playSurvivorAudioSequence() {
+        if (!this.survivorAudio.voice) {
+            console.error('[AUDIO] Survivor voice not loaded');
+            return;
+        }
+        
+        console.log('[AUDIO] Starting survivor message sequence');
+        
+        if (this.survivorAudio.bcommsOn) {
+            this.survivorAudio.bcommsOn.currentTime = 0;
+            this.survivorAudio.bcommsOn.play().catch(e => console.error('[AUDIO] bcomms error:', e));
+            
+            setTimeout(() => {
+                if (this.survivorAudio.lifesupportOn) {
+                    this.survivorAudio.lifesupportOn.currentTime = 0;
+                    this.survivorAudio.lifesupportOn.play().catch(e => console.error('[AUDIO] lifesupport error:', e));
+                    
+                    setTimeout(() => {
+                        this.playVoiceMessageFromPanel();
+                    }, 1000);
+                } else {
+                    this.playVoiceMessageFromPanel();
+                }
+            }, 1000);
+        } else {
+            this.playVoiceMessageFromPanel();
+        }
+    }
+    
+    playVoiceMessageFromPanel() {
+        this.survivorAudio.voice.currentTime = 0;
+        this.survivorAudio.voice.play().catch(e => {
+            console.error('[AUDIO] Voice playback error:', e);
+        });
+        
+        this.survivorAudioPlaying = true;
+        
+        this.survivorAudio.voice.onended = () => {
+            this.survivorAudioPlaying = false;
+            this.isMessagePlaying = false;
+            
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            if (playPauseBtn) {
+                playPauseBtn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                `;
+            }
+        };
     }
 
     // ========================================
@@ -689,6 +1035,179 @@ class AnimationsManager {
     }
 
     // ========================================
+    // SURVIVOR AUDIO FUNCTIONS (NEW)
+    // ========================================
+    
+    preloadSurvivorAudio() {
+        console.log('[AUDIO] Preloading survivor audio files...');
+        
+        const loadAudio = (src, volume) => {
+            const audio = new Audio(src);
+            audio.volume = volume;
+            audio.preload = 'auto';
+            return audio;
+        };
+        
+        try {
+            this.survivorAudio.voice = loadAudio('/src/sfx/survivor_voice.oga', 0.8);
+            this.survivorAudio.lifesupportOn = loadAudio('/src/sfx/lifesupport-on.mp3', 0.4);
+            
+            // Event listeners for successful load
+            Object.entries(this.survivorAudio).forEach(([key, audio]) => {
+                audio.addEventListener('canplaythrough', () => {
+                    console.log(`[AUDIO] Survivor audio loaded: ${key}`);
+                });
+                
+                audio.addEventListener('error', (e) => {
+                    console.error(`[AUDIO] Error loading survivor audio ${key}:`, e);
+                });
+            });
+            
+            console.log('[AUDIO] Survivor audio preload initiated');
+        } catch (error) {
+            console.error('[ERROR] Survivor audio preload error:', error);
+        }
+    }
+    
+    setupSurvivorAudioButton() {
+        const btn = this.elements.survivorAudioBtn;
+        if (!btn) {
+            console.warn('[AUDIO] Survivor audio button not found');
+            return;
+        }
+        
+        btn.addEventListener('click', () => {
+            if (this.survivorAudioPlaying) {
+                this.stopSurvivorAudio();
+            } else {
+                this.playSurvivorAudio();
+            }
+        });
+        
+        console.log('[AUDIO] Survivor audio button setup complete');
+    }
+    
+    playSurvivorAudio() {
+        if (!this.survivorAudio.voice) {
+            console.error('[AUDIO] Survivor voice audio not loaded');
+            return;
+        }
+        
+        const btn = this.elements.survivorAudioBtn;
+        
+        console.log('[AUDIO] Starting survivor message sequence');
+        
+        // SEQUENCE: Play sounds ONE BY ONE, not simultaneously
+        
+        // Step 1: Play bcomms-on SFX
+        if (this.survivorAudio.bcommsOn) {
+            this.survivorAudio.bcommsOn.currentTime = 0;
+            this.survivorAudio.bcommsOn.play().catch(e => {
+                console.error('[AUDIO] Error playing bcomms-on:', e);
+            });
+            
+            // Wait for bcomms-on to finish or after 1 second
+            const bcommsOnDuration = this.survivorAudio.bcommsOn.duration || 1;
+            
+            setTimeout(() => {
+                // Step 2: Play lifesupport-on SFX
+                if (this.survivorAudio.lifesupportOn) {
+                    this.survivorAudio.lifesupportOn.currentTime = 0;
+                    this.survivorAudio.lifesupportOn.play().catch(e => {
+                        console.error('[AUDIO] Error playing lifesupport-on:', e);
+                    });
+                    
+                    const lifesupportOnDuration = this.survivorAudio.lifesupportOn.duration || 1;
+                    
+                    setTimeout(() => {
+                        // Step 3: Play voice message
+                        this.playVoiceMessage();
+                    }, lifesupportOnDuration * 1000);
+                } else {
+                    // If lifesupport not available, play voice after 500ms
+                    setTimeout(() => {
+                        this.playVoiceMessage();
+                    }, 500);
+                }
+            }, bcommsOnDuration * 1000);
+        } else {
+            // If bcomms not available, start sequence with lifesupport or voice
+            if (this.survivorAudio.lifesupportOn) {
+                this.survivorAudio.lifesupportOn.currentTime = 0;
+                this.survivorAudio.lifesupportOn.play().catch(e => {
+                    console.error('[AUDIO] Error playing lifesupport-on:', e);
+                });
+                
+                const lifesupportOnDuration = this.survivorAudio.lifesupportOn.duration || 1;
+                
+                setTimeout(() => {
+                    this.playVoiceMessage();
+                }, lifesupportOnDuration * 1000);
+            } else {
+                // If no SFX available, play voice immediately
+                this.playVoiceMessage();
+            }
+        }
+    }
+    
+    playVoiceMessage() {
+        const btn = this.elements.survivorAudioBtn;
+        
+        this.survivorAudio.voice.currentTime = 0;
+        this.survivorAudio.voice.play().catch(e => {
+            console.error('[AUDIO] Error playing survivor voice:', e);
+        });
+        
+        this.survivorAudioPlaying = true;
+        btn?.classList.add('playing');
+        
+        // Update button text
+        const textElement = btn?.querySelector('.audio-text');
+        if (textElement) {
+            textElement.textContent = 'LISTENING...';
+        }
+        
+        console.log('[AUDIO] Playing survivor voice message');
+        
+        // When audio ends
+        this.survivorAudio.voice.onended = () => {
+            this.survivorAudioPlaying = false;
+            btn?.classList.remove('playing');
+            if (textElement) {
+                textElement.textContent = 'LISTEN MESSAGE';
+            }
+            console.log('[AUDIO] Survivor voice message ended');
+        };
+    }
+    
+    stopSurvivorAudio() {
+        // Stop all survivor audio
+        if (this.survivorAudio.voice && !this.survivorAudio.voice.paused) {
+            this.survivorAudio.voice.pause();
+            this.survivorAudio.voice.currentTime = 0;
+        }
+        if (this.survivorAudio.bcommsOn && !this.survivorAudio.bcommsOn.paused) {
+            this.survivorAudio.bcommsOn.pause();
+            this.survivorAudio.bcommsOn.currentTime = 0;
+        }
+        if (this.survivorAudio.lifesupportOn && !this.survivorAudio.lifesupportOn.paused) {
+            this.survivorAudio.lifesupportOn.pause();
+            this.survivorAudio.lifesupportOn.currentTime = 0;
+        }
+        
+        const btn = this.elements.survivorAudioBtn;
+        this.survivorAudioPlaying = false;
+        btn?.classList.remove('playing');
+        
+        const textElement = btn?.querySelector('.audio-text');
+        if (textElement) {
+            textElement.textContent = 'LISTEN MESSAGE';
+        }
+        
+        console.log('[AUDIO] Survivor audio stopped');
+    }
+
+    // ========================================
     // MAIN INTRO SEQUENCE
     // ========================================
     
@@ -704,7 +1223,9 @@ class AnimationsManager {
     // This method creates Audio objects from cached resources
     // ========================================
         this.preloadStellarAudio();
+        this.preloadSurvivorAudio();  // NEW - Preload survivor audio
         this.setupSkipListener();
+        this.setupSurvivorAudioButton();  // NEW - Setup survivor audio button
         
         await this.playAudio(this.stellarAudio.bgMusic);
         
@@ -2074,7 +2595,7 @@ class AnimationsManager {
         setTimeout(updateFromCurrentTerrain, 1000);
     }
 // ========================================
-// CHICAGO 3D WIREFRAME SYSTEM - GIANT SCALE
+// CHICAGO 3D WIREFRAME SYSTEM - COMPLETE
 // ========================================
 
 setupChicagoButton() {
@@ -2099,51 +2620,97 @@ setupChicagoButton() {
 
 openChicagoView() {
     const panel = this.elements.chicagoPanel;
-    if (!panel) return;
+    const chicagoCanvas = this.elements.chicagoCanvas;
+    const terrainCanvas = this.elements.terrainCanvas;
+    const globeHud = document.querySelector('.globe-hud');
     
-    console.log('[CHICAGO] Opening Chicago wireframe view');
+    // NEW: Get geo panels
+    const geoPanels = [
+        document.getElementById('terrainSelectorPanel'),
+        document.getElementById('geoInfoLeft'),
+        document.getElementById('geoInfoRight')
+    ].filter(Boolean);
+
+    if (!panel || !chicagoCanvas) {
+        console.error('[CHICAGO] Required elements not found');
+        return;
+    }
+    
+    console.log('[CHICAGO] Opening Chicago with smooth transitions');
+    this.chicagoActive = true;
+    
+    // CORRECCIÓN: Crear el panel de sobrevivientes ANTES de la transición
+    if (!this.survivorPanel || !document.getElementById('survivorMessagesPanel')) {
+        console.log('[CHICAGO] Creating survivor panel before transition');
+        this.createSurvivorMessagesPanel();
+    }
     
     // Play transition sound
     const transitionAudio = new Audio('/src/sfx/FX_flow_transition_data-tech.mp3');
     transitionAudio.volume = 0.35;
     this.playAudio(transitionAudio);
     
-    // Animate panel transition with scramble effect
-    this.animatePanelTransition();
+    // SECUENCIA DE TRANSICIÓN SUAVE:
     
-    // Hide geographic UI elements with scramble animation
-    this.scrambleAndHideGeoPanels();
-    
-    // Keep canvas visible but prepare for Chicago
-    if (this.elements.terrainCanvas) {
-        this.elements.terrainCanvas.style.opacity = '1';
-        this.elements.terrainCanvas.style.visibility = 'visible';
-        this.elements.terrainCanvas.style.zIndex = '15';
+    // PASO 1: Fade out Globe HUD and geo panels
+    if (globeHud) {
+        globeHud.classList.add('hidden');
+    }
+    geoPanels.forEach(p => p.classList.remove('visible'));
+
+    // PASO 2: Dim terrain canvas (0.8s)
+    if (terrainCanvas) {
+        terrainCanvas.classList.add('hidden');
     }
     
-    // Show Chicago panel with proper z-index
+    // PASO 3: Después de 500ms, activar Chicago canvas con blur fade
     setTimeout(() => {
-        panel.classList.add('active');
-        // Ensure Chicago panel is above the 3D canvas
-        panel.style.zIndex = '20';
-        this.chicagoActive = true;
+        chicagoCanvas.classList.add('active');
+        chicagoCanvas.style.opacity = '1';
+        chicagoCanvas.style.visibility = 'visible';
         
-        // Initialize 3D with new camera position
+        // Iniciar 3D
         setTimeout(() => {
-            if (window.THREE && this.elements.terrainCanvas) {
+            if (window.THREE) {
                 console.log('[CHICAGO] Starting 3D initialization');
                 this.initChicago3D();
-            } else {
-                console.error('[CHICAGO] Missing requirements:', {
-                    THREE: !!window.THREE,
-                    canvas: !!this.elements.terrainCanvas
-                });
             }
         }, 100);
+    }, 500);
+    
+    // PASO 4: Después de 800ms, mostrar panel (permite que CSS maneje stagger)
+    setTimeout(() => {
+        panel.classList.add('active');
+        this.bringPanelsToFront();
         
-        // Start narrative with scramble animation
-        this.startChicagoNarrative();
-    }, 400);
+        // CORRECCIÓN: Mostrar panel después de asegurar que existe
+        setTimeout(() => {
+            this.showSurvivorPanel();
+        }, 1500); // Delay aumentado para asegurar transición suave
+
+    }, 800);
+    
+    console.log('[CHICAGO] Smooth transition sequence initiated');
+}
+
+
+// New function to bring panels to front
+bringPanelsToFront() {
+    // Ensure all Chicago panels are above canvas
+    const chicagoElements = [
+        this.elements.chicagoPanel,
+        document.querySelector('.chicago-narrative-panel'),
+        document.querySelector('.chicago-close'),
+        document.querySelector('.narrative-header'),
+        document.getElementById('chicagoNarrativeContent')
+    ].filter(Boolean);
+    
+    chicagoElements.forEach((element, index) => {
+        if (element) {
+            element.style.zIndex = '101';
+            element.style.pointerEvents = 'auto';
+        }
+    });
 }
 
 animatePanelTransition() {
@@ -2163,32 +2730,16 @@ animatePanelTransition() {
             .scramble-in {
                 animation: scramble 0.6s ease-out forwards;
             }
-            
-            /* Ensure Chicago panel elements are above 3D canvas */
-            .chicago-panel {
-                z-index: 20 !important;
-            }
-            .chicago-panel * {
-                z-index: 21 !important;
-            }
-            .chicago-title,
-            .chicago-subtitle,
-            .chicago-close,
-            .narrative-line {
-                z-index: 22 !important;
-                position: relative;
-            }
         `;
         document.head.appendChild(style);
     }
     
     // Animate panel elements
-    const elements = panel.querySelectorAll('.chicago-title, .chicago-subtitle, .chicago-close, .narrative-line');
+    const elements = panel.querySelectorAll('.chicago-title, .chicago-subtitle, .chicago-close, .narrative-line, .narrative-header, .narrative-content');
     elements.forEach((el, index) => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(-10px) scale(0.95)';
-        // Ensure each element has proper z-index
-        el.style.zIndex = '22';
+        el.style.zIndex = '102';
         el.style.position = 'relative';
         setTimeout(() => {
             el.classList.add('scramble-in');
@@ -2209,7 +2760,6 @@ scrambleAndHideGeoPanels() {
     geoPanels.forEach((panel, index) => {
         if (!panel) return;
         
-        // Scramble animation before hiding
         panel.style.opacity = '1';
         panel.style.transform = 'scale(1)';
         
@@ -2219,7 +2769,6 @@ scrambleAndHideGeoPanels() {
             panel.style.transform = 'scale(0.9) translateY(20px)';
             panel.style.pointerEvents = 'none';
             
-            // Scramble text effect
             this.scrambleTextEffect(panel, () => {
                 setTimeout(() => {
                     panel.style.visibility = 'hidden';
@@ -2275,42 +2824,74 @@ scrambleTextEffect(element, callback) {
 
 closeChicagoView() {
     const panel = this.elements.chicagoPanel;
-    if (!panel) return;
+    const chicagoCanvas = this.elements.chicagoCanvas;
+    const terrainCanvas = this.elements.terrainCanvas;
+    const globeHud = document.querySelector('.globe-hud');
     
-    console.log('[CHICAGO] Closing Chicago wireframe view');
+    // NEW: Get geo panels
+    const geoPanels = [
+        document.getElementById('terrainSelectorPanel'),
+        document.getElementById('geoInfoLeft'),
+        document.getElementById('geoInfoRight')
+    ].filter(Boolean);
+
+    if (!panel || !chicagoCanvas) {
+        console.error('[CHICAGO] Required elements not found');
+        return;
+    }
     
-    // Hide Chicago panel with reverse animation
-    panel.classList.remove('active');
-    // Reset z-index
-    panel.style.zIndex = '';
+    console.log('[CHICAGO] Closing Chicago with smooth transitions');
     this.chicagoActive = false;
-    this.currentChicagoLine = 0;
     
-    // Cleanup 3D first
-    this.cleanupChicago();
+    // Play transition sound
+    const transitionAudio = new Audio('/src/sfx/FX_flow_transition_data-tech.mp3');
+    transitionAudio.volume = 0.35;
+    this.playAudio(transitionAudio);
     
-    // Restore geographic UI with scramble animation
+    // Remove survivor audio button
+    this.stopSurvivorAudio(); // Stop audio if playing when closing view
+    
+    // Hide Survivor Messages Panel
+    this.hideSurvivorPanel();
+
+    // SECUENCIA DE SALIDA SUAVE:
+    
+    // PASO 1: Añadir clase closing para transición rápida
+    panel.classList.add('closing');
+    
+    // PASO 2: Después de 300ms, remover panel
     setTimeout(() => {
-        this.scrambleAndShowGeoPanels();
-    }, 200);
+        panel.classList.remove('active', 'closing');
+    }, 300);
     
-    // Restore terrain canvas
-    if (this.elements.terrainCanvas) {
-        this.elements.terrainCanvas.style.opacity = '1';
-        this.elements.terrainCanvas.style.visibility = 'visible';
-        this.elements.terrainCanvas.style.zIndex = '1';
-    }
+    // PASO 3: Fade out Chicago canvas
+    setTimeout(() => {
+        chicagoCanvas.classList.remove('active');
+        chicagoCanvas.style.opacity = '0';
+    }, 400);
     
-    // Restart terrain animation if still in phase 3
-    if (this.currentPhase === 3 && !this.introSkipped) {
-        setTimeout(() => {
-            if (this.threeRenderer && this.threeScene && this.threeCamera) {
-                console.log('[TERRAIN] Restarting terrain animation');
-                this.animateTerrain();
-            }
-        }, 800);
-    }
+    // PASO 4: Después de 800ms, restaurar terrain y globe HUD
+    setTimeout(() => {
+        if (terrainCanvas) {
+            terrainCanvas.classList.remove('hidden');
+        }
+        
+        if (globeHud) {
+            globeHud.classList.remove('hidden');
+        }
+        geoPanels.forEach(p => p.classList.add('visible'));
+    }, 800);
+    
+    // PASO 5: Limpiar visualización 3D
+    setTimeout(() => {
+        if (typeof this.cleanupChicago === 'function') {
+            this.cleanupChicago();
+        }
+    }, 1200);
+    
+    console.log('[CHICAGO] Smooth exit transition complete');
 }
+
 
 scrambleAndShowGeoPanels() {
     const geoPanels = [
@@ -2335,7 +2916,6 @@ scrambleAndShowGeoPanels() {
             panel.style.transform = 'scale(1) translateY(0)';
             panel.style.pointerEvents = 'auto';
             
-            // Scramble text effect in reverse
             this.scrambleTextEffect(panel, null);
         }, 100 + index * 150);
     });
@@ -2353,20 +2933,14 @@ scrambleAndShowGeoPanels() {
 }
 
 initChicago3D() {
-    const canvas = this.elements.terrainCanvas;
+    const canvas = this.elements.chicagoCanvas;
     if (!canvas) {
-        console.error('[CHICAGO] Canvas not found');
+        console.error('[CHICAGO] Chicago canvas not found');
         return;
     }
     
     try {
-        console.log('[CHICAGO] Initializing Chicago 3D wireframe - GIANT SCALE');
-        
-        // Stop terrain animation first
-        if (this.terrainAnimationFrame) {
-            cancelAnimationFrame(this.terrainAnimationFrame);
-            this.terrainAnimationFrame = null;
-        }
+        console.log('[CHICAGO] Initializing Chicago 3D wireframe map');
         
         // Get canvas dimensions
         const rect = canvas.getBoundingClientRect();
@@ -2377,69 +2951,79 @@ initChicago3D() {
         this.chicagoScene = new THREE.Scene();
         this.chicagoScene.background = new THREE.Color(0x000000);
         
-        // Camera - HELICOPTER VIEW SETUP
+        // Camera - LOW ANGLE DRONE VIEW for flat map
         this.chicagoCamera = new THREE.PerspectiveCamera(
-            75, // Wider field of view for helicopter effect
+            85,  // Wider FOV for dramatic perspective
             canvasWidth / canvasHeight,
             1,
-            500000 // Increased far plane for giant scale
+            100000  // Far enough to see the whole map
         );
         
-        // Position camera low for helicopter view - MUCH CLOSER TO GIANT MODEL
-        this.chicagoCamera.position.set(0, 800, 1200);
-        this.chicagoCamera.lookAt(0, 0, 0);
+        // CRITICAL: Position camera LOW and at an ANGLE for flat map
+        // Model dimensions: X: ~15000, Y: 0 (flat), Z: ~20000
+        // Model center: (710, 0, 2037)
         
-        console.log('[CHICAGO] Helicopter camera positioned:', this.chicagoCamera.position);
+        // Position: Low altitude, looking across the map at an angle
+       this.chicagoCamera.position.set(
+         2000,   // X → a un costado
+         2500,   // Y → bien arriba
+        -4000   // Z → detrás del mapa
+);
+
+// Mira al centro, pero abajo
+this.chicagoCamera.lookAt(
+    710,    // centro X
+    0,      // suelo
+    2037    // centro Z
+);
+
         
-        // Setup renderer with proper dimensions
-        if (this.threeRenderer) {
-            this.chicagoRenderer = this.threeRenderer;
-            this.chicagoRenderer.setSize(canvasWidth, canvasHeight);
-            console.log('[CHICAGO] Reusing existing renderer');
-        } else {
-            this.chicagoRenderer = new THREE.WebGLRenderer({ 
-                canvas: canvas, 
-                antialias: true, 
-                alpha: false,
-                precision: 'highp'
-            });
-            this.chicagoRenderer.setSize(canvasWidth, canvasHeight);
-            this.chicagoRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            console.log('[CHICAGO] Created new renderer');
-        }
         
+        // Create NEW renderer for Chicago canvas
+        this.chicagoRenderer = new THREE.WebGLRenderer({ 
+            canvas: canvas, 
+            antialias: true, 
+            alpha: false,
+            precision: 'highp'
+        });
+        this.chicagoRenderer.setSize(canvasWidth, canvasHeight);
+        this.chicagoRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         this.chicagoRenderer.setClearColor(0x000000, 1);
+        console.log('[CHICAGO] Created new renderer for Chicago canvas');
         
-        // Controls optimized for HELICOPTER NAVIGATION
+        // Controls - OPTIMIZED for flat map exploration
         if (THREE.OrbitControls) {
             this.chicagoControls = new THREE.OrbitControls(
                 this.chicagoCamera, 
                 this.chicagoRenderer.domElement
             );
             this.chicagoControls.enableDamping = true;
-            this.chicagoControls.dampingFactor = 0.03;
-            this.chicagoControls.autoRotate = false; // Disabled for helicopter control
+            this.chicagoControls.dampingFactor = 0.08;
+            this.chicagoControls.autoRotate = false;
             this.chicagoControls.enableZoom = true;
             this.chicagoControls.enablePan = true;
             this.chicagoControls.enableRotate = true;
             
-            // HELICOPTER VIEW CONSTRAINTS
-            this.chicagoControls.minDistance = 50;     // Very close for detail
-            this.chicagoControls.maxDistance = 50000;  // Very far for overview
-            this.chicagoControls.maxPolarAngle = Math.PI * 0.9; // Almost ground level
-            this.chicagoControls.minPolarAngle = Math.PI * 0.1;  // High angle view
+            // Distance range for exploring the flat map
+            this.chicagoControls.minDistance = 100;      // Can get very close
+            this.chicagoControls.maxDistance = 15000;    // Can see whole map
             
-            // Movement speed
-            this.chicagoControls.rotateSpeed = 0.3;
-            this.chicagoControls.zoomSpeed = 1.0;
-            this.chicagoControls.panSpeed = 1.5;
+            // Angle limits - prevent going below ground or straight up
+            this.chicagoControls.maxPolarAngle = Math.PI * 0.48;  // Don't go below horizon
+            this.chicagoControls.minPolarAngle = Math.PI * 0.1;   // Can look up
             
-            this.chicagoControls.target.set(0, 0, 0);
+            // Responsive controls for smooth navigation
+            this.chicagoControls.rotateSpeed = 0.6;
+            this.chicagoControls.zoomSpeed = 1.2;
+            this.chicagoControls.panSpeed = 1.8;
             
-            console.log('[CHICAGO] Helicopter controls initialized');
+            // Target center of map
+            this.chicagoControls.target.set(710, 0, 2037);
+            
+            console.log('[CHICAGO] Controls optimized for flat map navigation');
         }
         
-        // Enhanced lighting for giant model
+        // Enhanced lighting
         const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
         this.chicagoScene.add(ambientLight);
         
@@ -2451,12 +3035,11 @@ initChicago3D() {
         directionalLight2.position.set(-10000, 10000, -10000);
         this.chicagoScene.add(directionalLight2);
         
-        // Additional lights for giant scale
         const directionalLight3 = new THREE.DirectionalLight(0x00ff41, 0.4);
         directionalLight3.position.set(0, 15000, 0);
         this.chicagoScene.add(directionalLight3);
         
-        console.log('[CHICAGO] Giant scale lights added');
+        console.log('[CHICAGO] Lights added');
         
         // Load Chicago model
         this.loadChicagoModel();
@@ -2464,7 +3047,7 @@ initChicago3D() {
         // Start animation
         this.animateChicago();
         
-        console.log('[CHICAGO] Giant scale 3D initialization complete');
+        console.log('[CHICAGO] 3D initialization complete');
         
     } catch (error) {
         console.error('[CHICAGO] Error initializing 3D:', error);
@@ -2478,7 +3061,6 @@ loadChicagoModel() {
     
     console.log('[CHICAGO] Loading Chicago wireframe model - GIANT SCALE');
     
-    // Try loading with MTL first
     mtlLoader.load(
         '/src/model_3d/Downtown_Chicago_Wireframe_Map.mtl',
         (materials) => {
@@ -2504,45 +3086,29 @@ loadOBJModel(loader, objPath) {
         (progress) => {
             if (progress.total > 0) {
                 const percent = Math.round((progress.loaded / progress.total) * 100);
-                console.log('[CHICAGO] Loading giant model:', percent + '%');
+                console.log('[CHICAGO] Loading model:', percent + '%');
             }
         },
         (error) => {
             console.error('[CHICAGO] Error loading model:', error);
-            console.log('[CHICAGO] Trying alternative filename...');
-            
-            // Try alternative filename
-            loader.load(
-                '/src/model_3d/Downtown_Chicago_Wireframe_Map.obj',
-                (object) => {
-                    console.log('[CHICAGO] Alternative model loaded - APPLYING GIANT SCALE');
-                    this.processLoadedModel(object);
-                },
-                undefined,
-                (error) => {
-                    console.error('[CHICAGO] All model loading attempts failed:', error);
-                    this.createChicagoFallback();
-                }
-            );
+            this.createChicagoFallback();
         }
     );
 }
 
 processLoadedModel(object) {
-    // Apply wireframe material to all meshes with enhanced appearance
     object.traverse((child) => {
         if (child instanceof THREE.Mesh) {
             child.material = new THREE.MeshBasicMaterial({
-                color: 0x00ff41, // Matrix green
+                color: 0x00ff41,
                 wireframe: true,
                 transparent: true,
                 opacity: 0.95,
-                linewidth: 3 // Thicker lines for giant scale
+                linewidth: 3
             });
         }
     });
     
-    // Calculate proper bounding box and center the model
     const box = new THREE.Box3().setFromObject(object);
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
@@ -2554,33 +3120,28 @@ processLoadedModel(object) {
         center: center.toArray()
     });
     
-    // Center the model at origin
     object.position.sub(center);
     
-    // GIANT SCALING - MASSIVE SIZE
     const maxDimension = Math.max(size.x, size.y, size.z);
     let scaleFactor;
     
-    // Force giant scale regardless of original size
     if (maxDimension > 10000) {
-        scaleFactor = 50000 / maxDimension; // Make huge models GIGANTIC (50km scale)
+        scaleFactor = 50000 / maxDimension;
     } else if (maxDimension > 1000) {
-        scaleFactor = 35000 / maxDimension; // Make large models GIGANTIC (35km scale)  
+        scaleFactor = 35000 / maxDimension;
     } else if (maxDimension > 100) {
-        scaleFactor = 25000 / maxDimension; // Make medium models GIGANTIC (25km scale)
+        scaleFactor = 25000 / maxDimension;
     } else {
-        scaleFactor = 15000 / maxDimension; // Make small models GIGANTIC (15km scale)
+        scaleFactor = 15000 / maxDimension;
     }
     
-    // Ensure minimum giant scale
     if (scaleFactor < 100) {
-        scaleFactor = 100; // Minimum 100x scale
+        scaleFactor = 100;
     }
     
     object.scale.setScalar(scaleFactor);
     console.log('[CHICAGO] GIANT MODEL SCALING APPLIED:', scaleFactor);
     
-    // Remove old mesh if exists
     if (this.chicagoMesh) {
         this.chicagoScene.remove(this.chicagoMesh);
     }
@@ -2588,7 +3149,6 @@ processLoadedModel(object) {
     this.chicagoMesh = object;
     this.chicagoScene.add(object);
     
-    // Adjust camera for GIANT helicopter view
     this.adjustCameraForGiantModel(size, scaleFactor);
 }
 
@@ -2596,39 +3156,47 @@ adjustCameraForGiantModel(originalSize, scaleFactor) {
     if (!this.chicagoCamera) return;
     
     const scaledSize = Math.max(originalSize.x, originalSize.y, originalSize.z) * scaleFactor;
-    console.log('[CHICAGO] GIANT scaled model size:', scaledSize);
+    console.log('[CHICAGO] Scaled model size:', scaledSize);
     
-    // Position camera for HELICOPTER VIEW of giant model
-    const helicopterHeight = scaledSize * 0.15; // Low helicopter height
-    const helicopterDistance = scaledSize * 0.25; // Close distance for detail
+    // DRONE/LOW-ANGLE CAMERA for flat map
+    // Much lower altitude for immersive perspective
+    const droneHeight = scaledSize * 0.02;      // Very low - 2% of model size
+    const droneDistance = scaledSize * 0.10;    // Close to map - 10% of model size
     
+    // Position camera low and at angle
     this.chicagoCamera.position.set(
-        helicopterDistance * 0.8, 
-        helicopterHeight, 
-        helicopterDistance
+        0,              // Centered horizontally
+        droneHeight,    // LOW altitude
+        -droneDistance  // Behind, looking forward
     );
-    this.chicagoCamera.lookAt(0, 0, 0);
     
-    // Update controls for GIANT MODEL NAVIGATION
+    // Look at center of map, slightly elevated
+    this.chicagoCamera.lookAt(0, droneHeight * 0.2, 0);
+    
     if (this.chicagoControls) {
-        this.chicagoControls.minDistance = scaledSize * 0.02;  // Very close zoom
-        this.chicagoControls.maxDistance = scaledSize * 3.0;   // Far overview
-        this.chicagoControls.target.set(0, 0, 0);
+        // Allow getting very close and pulling back far
+        this.chicagoControls.minDistance = scaledSize * 0.01;  // Can get VERY close
+        this.chicagoControls.maxDistance = scaledSize * 0.8;   // Can pull back to see map
+        this.chicagoControls.target.set(0, 0, 0);  // Target ground level
         
-        // Enhanced movement for giant scale
-        this.chicagoControls.rotateSpeed = 0.2;
+        // Faster controls for responsive navigation
+        this.chicagoControls.rotateSpeed = 0.4;
         this.chicagoControls.zoomSpeed = 1.5;
         this.chicagoControls.panSpeed = 2.0;
+        
+        // Limit angles to prevent going underground
+        this.chicagoControls.maxPolarAngle = Math.PI * 0.48; // Don't go below horizon
+        this.chicagoControls.minPolarAngle = Math.PI * 0.05; // Can look up
         
         this.chicagoControls.update();
     }
     
-    console.log('[CHICAGO] HELICOPTER CAMERA positioned for giant model:', {
+    console.log('[CHICAGO] DRONE CAMERA positioned:', {
         position: this.chicagoCamera.position.toArray(),
-        helicopterHeight: helicopterHeight,
-        scaledSize: scaledSize,
-        minDistance: scaledSize * 0.02,
-        maxDistance: scaledSize * 3.0
+        droneHeight: droneHeight,
+        droneDistance: droneDistance,
+        minDistance: scaledSize * 0.01,
+        maxDistance: scaledSize * 0.8
     });
 }
 
@@ -2638,20 +3206,19 @@ createChicagoFallback() {
     const group = new THREE.Group();
     const material = new THREE.LineBasicMaterial({ 
         color: 0x00ff41, 
-        linewidth: 4  // Thicker lines for giant scale
+        linewidth: 4
     });
     
-    // Create MASSIVE fallback city
-    const buildingCount = 25; // More buildings
-    const buildingSpacing = 800; // Much larger spacing
+    const buildingCount = 25;
+    const buildingSpacing = 800;
     
     for (let x = -buildingCount/2; x <= buildingCount/2; x++) {
         for (let z = -buildingCount/2; z <= buildingCount/2; z++) {
-            if (Math.abs(x) < 3 && Math.abs(z) < 3) continue; // Larger center area
+            if (Math.abs(x) < 3 && Math.abs(z) < 3) continue;
             
-            const height = 500 + Math.random() * 2000;  // Much taller buildings
-            const width = 200 + Math.random() * 400;    // Much wider buildings
-            const depth = 200 + Math.random() * 400;    // Much deeper buildings
+            const height = 500 + Math.random() * 2000;
+            const width = 200 + Math.random() * 400;
+            const depth = 200 + Math.random() * 400;
             
             const geometry = new THREE.BoxGeometry(width, height, depth);
             const edges = new THREE.EdgesGeometry(geometry);
@@ -2667,7 +3234,6 @@ createChicagoFallback() {
         }
     }
     
-    // Add GIANT ground grid
     const gridSize = buildingCount * buildingSpacing * 1.2;
     const gridDivisions = 50;
     const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, 0x00ff41, 0x00ff41);
@@ -2675,7 +3241,6 @@ createChicagoFallback() {
     gridHelper.material.transparent = true;
     group.add(gridHelper);
     
-    // Center the group
     group.position.set(0, 0, 0);
     
     if (this.chicagoMesh) {
@@ -2685,19 +3250,18 @@ createChicagoFallback() {
     this.chicagoMesh = group;
     this.chicagoScene.add(group);
     
-    // Position camera for GIANT fallback helicopter view
     const citySize = buildingCount * buildingSpacing;
-    this.chicagoCamera.position.set(citySize * 0.3, citySize * 0.15, citySize * 0.4);
-    this.chicagoCamera.lookAt(0, 0, 0);
+    this.chicagoCamera.position.set(citySize * 0.2, citySize * 0.1, citySize * 0.3);
+    this.chicagoCamera.lookAt(0, 100, 0);
     
     if (this.chicagoControls) {
-        this.chicagoControls.minDistance = citySize * 0.05;
-        this.chicagoControls.maxDistance = citySize * 2;
-        this.chicagoControls.target.set(0, 0, 0);
+        this.chicagoControls.minDistance = citySize * 0.03;
+        this.chicagoControls.maxDistance = citySize * 1.5;
+        this.chicagoControls.target.set(0, 100, 0);
         this.chicagoControls.update();
     }
     
-    console.log('[CHICAGO] GIANT fallback city created:', {
+    console.log('[CHICAGO] Fallback city created:', {
         buildings: group.children.length - 1,
         citySize: citySize,
         cameraPosition: this.chicagoCamera.position.toArray()
@@ -2716,111 +3280,27 @@ animateChicago() {
     
     this.chicagoAnimationFrame = requestAnimationFrame(() => this.animateChicago());
     
-    // Update controls
     if (this.chicagoControls) {
         this.chicagoControls.update();
     }
     
-    // Very subtle rotation for giant model (optional)
     if (this.chicagoMesh && this.chicagoControls && !this.chicagoControls.autoRotate) {
-        // Only rotate if user isn't actively controlling
         if (!this.chicagoControls.enabled || 
             (Date.now() - (this.lastUserInteraction || 0)) > 5000) {
-            this.chicagoMesh.rotation.y += 0.0005; // Very slow rotation
+            this.chicagoMesh.rotation.y += 0.0005;
         }
     }
     
-    // Render
     if (this.chicagoScene && this.chicagoCamera && this.chicagoRenderer) {
         this.chicagoRenderer.render(this.chicagoScene, this.chicagoCamera);
     }
 }
 
-startChicagoNarrative() {
-    const narrativeElement = this.elements.chicagoNarrative;
-    if (!narrativeElement) return;
-    
-    // Ensure narrative element has proper z-index
-    narrativeElement.style.zIndex = '23';
-    narrativeElement.style.position = 'relative';
-    
-    // Clear existing content
-    narrativeElement.innerHTML = '';
-    
-    // Giant scale narrative lines
-    const giantScaleNarrative = [
-        "CHICAGO METROPOLITAN WIREFRAME LOADED",
-        "SCALE: GIGANTIC - HELICOPTER VIEW ACTIVE", 
-        "NAVIGATE THROUGH THE URBAN GRID",
-        "ZOOM TO EXPLORE ARCHITECTURAL DETAILS",
-        "PAN TO DISCOVER CITY SECTORS",
-        "ROTATE FOR OPTIMAL VIEWING ANGLES",
-        "MATRIX VISUALIZATION: FULLY OPERATIONAL"
-    ];
-    
-    // Create individual line elements
-    giantScaleNarrative.forEach((line, index) => {
-        const lineElement = document.createElement('div');
-        lineElement.className = 'narrative-line';
-        lineElement.textContent = line;
-        lineElement.style.opacity = '0';
-        lineElement.style.transform = 'translateX(-20px)';
-        lineElement.style.zIndex = '24';
-        lineElement.style.position = 'relative';
-        narrativeElement.appendChild(lineElement);
-    });
-    
-    // Animate lines sequentially with scramble effect
-    const lines = narrativeElement.querySelectorAll('.narrative-line');
-    let currentLine = 0;
-    
-    const animateNextLine = () => {
-        if (!this.chicagoActive || this.introSkipped || currentLine >= lines.length) return;
-        
-        const line = lines[currentLine];
-        
-        // Scramble animation before revealing
-        this.scrambleTextEffect(line, () => {
-            // Reveal line
-            setTimeout(() => {
-                line.style.transition = 'all 0.5s ease-out';
-                line.style.opacity = '1';
-                line.style.transform = 'translateX(0)';
-                
-                // Move to next line
-                currentLine++;
-                if (currentLine < lines.length) {
-                    setTimeout(animateNextLine, 2500);
-                } else {
-                    // Loop animation
-                    setTimeout(() => {
-                        // Fade out all lines
-                        lines.forEach(l => {
-                            l.style.transition = 'opacity 0.5s ease';
-                            l.style.opacity = '0';
-                        });
-                        
-                        // Restart after fade out
-                        setTimeout(() => {
-                            lines.forEach(l => {
-                                l.style.opacity = '0';
-                                l.style.transform = 'translateX(-20px)';
-                            });
-                            currentLine = 0;
-                            setTimeout(animateNextLine, 1000);
-                        }, 500);
-                    }, 4000);
-                }
-            }, 500);
-        });
-    };
-    
-    // Start animation
-    setTimeout(animateNextLine, 500);
-}
+
+    // startChicagoNarrative() and typewriterEffectForLine() removed - using static HTML
 
 cleanupChicago() {
-    console.log('[CHICAGO] Cleaning up Chicago GIANT visualization');
+    console.log('[CHICAGO] Cleaning up Chicago visualization');
     
     if (this.chicagoAnimationFrame) {
         cancelAnimationFrame(this.chicagoAnimationFrame);
@@ -2830,7 +3310,6 @@ cleanupChicago() {
     if (this.chicagoMesh && this.chicagoScene) {
         this.chicagoScene.remove(this.chicagoMesh);
         
-        // Dispose of geometry and materials
         this.chicagoMesh.traverse((child) => {
             if (child instanceof THREE.Mesh) {
                 if (child.geometry) child.geometry.dispose();
@@ -3705,12 +4184,14 @@ cleanupChicago() {
         }
         
         this.stopAllAudio();
+        this.stopSurvivorAudio();  // NEW - Stop survivor audio if playing
 
     // ========================================
     // CLEANUP METHODS
     // ========================================
         this.cleanupTerrain();
         this.cleanupBrain();
+        this.cleanupChicago();  // NEW - Cleanup Chicago if active
         this.transitionFromStellarToMain();
     }
 
@@ -3722,6 +4203,8 @@ cleanupChicago() {
         console.log('[ANIMATIONS] Transitioning to main...');
         
         this.cleanupSkipFunctionality();
+        this.stopSurvivorAudio();  // NEW - Stop survivor audio if playing
+        this.cleanupChicago();  // NEW - Cleanup Chicago if active
         
         this.fadeOutMusic(1200);
         
