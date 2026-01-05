@@ -400,11 +400,12 @@ class AnimationsManager {
         
         // Survivor Audio (NEW - Added for survivor message button)
         this.survivorAudio = {
-            voice: null,
+            voices: {}, // Almacenará múltiples audios de voces por ID de mensaje
             bcommsOn: null,
             lifesupportOn: null
         };
         this.survivorAudioPlaying = false;
+        this.currentPlayingAudio = null; // Track which audio is currently playing
         
         // Chicago 3D Wireframe
         this.chicagoScene = null;
@@ -787,8 +788,9 @@ class AnimationsManager {
         }
         
         console.log('[MESSAGES] Playing message:', message.title);
+        console.log('[MESSAGES] Message ID:', message.id);
         console.log('[MESSAGES] Message type:', message.type);
-        console.log('[MESSAGES] Survivor audio loaded:', !!this.survivorAudio.voice);
+        console.log('[MESSAGES] Available survivor voices:', Object.keys(this.survivorAudio.voices));
         
         this.isMessagePlaying = true;
         
@@ -802,11 +804,12 @@ class AnimationsManager {
         }
         
         if (message.type === 'survivor') {
-            if (this.survivorAudio.voice) {
-                console.log('[MESSAGES] Starting survivor audio sequence');
-                this.playSurvivorAudioSequence();
+            const voiceAudio = this.survivorAudio.voices[message.id];
+            if (voiceAudio) {
+                console.log('[MESSAGES] Starting survivor audio sequence for message ID:', message.id);
+                this.playSurvivorAudioSequence(message.id);
             } else {
-                console.error('[MESSAGES] Survivor voice audio not loaded!');
+                console.error('[MESSAGES] Survivor voice audio not loaded for message ID:', message.id);
                 this.isMessagePlaying = false;
                 if (playPauseBtn) {
                     playPauseBtn.innerHTML = `
@@ -815,6 +818,17 @@ class AnimationsManager {
                         </svg>
                     `;
                 }
+            }
+        } else if (message.type === 'news') {
+            // Para mensajes de noticias, podrías cargar un audio diferente
+            console.log('[MESSAGES] News message - audio not implemented yet');
+            this.isMessagePlaying = false;
+            if (playPauseBtn) {
+                playPauseBtn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                `;
             }
         }
     }
@@ -888,46 +902,77 @@ class AnimationsManager {
         }
     }
     
-    playSurvivorAudioSequence() {
-        if (!this.survivorAudio.voice) {
-            console.error('[AUDIO] Survivor voice not loaded');
+    playSurvivorAudioSequence(messageId) {
+        const voiceAudio = this.survivorAudio.voices[messageId];
+        
+        if (!voiceAudio) {
+            console.error('[AUDIO] Survivor voice not loaded for message ID:', messageId);
             return;
         }
         
-        console.log('[AUDIO] Starting survivor message sequence');
+        console.log('[AUDIO] Starting survivor message sequence for message ID:', messageId);
         
+        // SECUENCIA: reproducir UNO DESPUÉS DEL OTRO
         if (this.survivorAudio.bcommsOn) {
+            console.log('[AUDIO] Step 1: Playing bcomms-on...');
             this.survivorAudio.bcommsOn.currentTime = 0;
             this.survivorAudio.bcommsOn.play().catch(e => console.error('[AUDIO] bcomms error:', e));
             
-            setTimeout(() => {
+            // Esperar a que termine bcomms-on
+            this.survivorAudio.bcommsOn.onended = () => {
+                console.log('[AUDIO] Step 2: bcomms-on finished, playing lifesupport-on...');
+                
                 if (this.survivorAudio.lifesupportOn) {
                     this.survivorAudio.lifesupportOn.currentTime = 0;
                     this.survivorAudio.lifesupportOn.play().catch(e => console.error('[AUDIO] lifesupport error:', e));
                     
-                    setTimeout(() => {
-                        this.playVoiceMessageFromPanel();
-                    }, 1000);
+                    // Esperar a que termine lifesupport-on
+                    this.survivorAudio.lifesupportOn.onended = () => {
+                        console.log('[AUDIO] Step 3: lifesupport-on finished, playing voice...');
+                        this.playVoiceMessageFromPanel(voiceAudio, messageId);
+                    };
                 } else {
-                    this.playVoiceMessageFromPanel();
+                    // Si no hay lifesupport, reproducir voz directamente
+                    this.playVoiceMessageFromPanel(voiceAudio, messageId);
                 }
-            }, 1000);
+            };
+        } else if (this.survivorAudio.lifesupportOn) {
+            // Si no hay bcomms, empezar con lifesupport
+            console.log('[AUDIO] Step 1: Playing lifesupport-on...');
+            this.survivorAudio.lifesupportOn.currentTime = 0;
+            this.survivorAudio.lifesupportOn.play().catch(e => console.error('[AUDIO] lifesupport error:', e));
+            
+            this.survivorAudio.lifesupportOn.onended = () => {
+                console.log('[AUDIO] Step 2: lifesupport-on finished, playing voice...');
+                this.playVoiceMessageFromPanel(voiceAudio, messageId);
+            };
         } else {
-            this.playVoiceMessageFromPanel();
+            // Si no hay SFX, reproducir voz directamente
+            this.playVoiceMessageFromPanel(voiceAudio, messageId);
         }
     }
     
-    playVoiceMessageFromPanel() {
-        this.survivorAudio.voice.currentTime = 0;
-        this.survivorAudio.voice.play().catch(e => {
+    playVoiceMessageFromPanel(voiceAudio, messageId) {
+        console.log('[AUDIO] Playing voice for message ID:', messageId);
+        
+        // Stop any currently playing audio
+        if (this.currentPlayingAudio && !this.currentPlayingAudio.paused) {
+            this.currentPlayingAudio.pause();
+            this.currentPlayingAudio.currentTime = 0;
+        }
+        
+        this.currentPlayingAudio = voiceAudio;
+        voiceAudio.currentTime = 0;
+        voiceAudio.play().catch(e => {
             console.error('[AUDIO] Voice playback error:', e);
         });
         
         this.survivorAudioPlaying = true;
         
-        this.survivorAudio.voice.onended = () => {
+        voiceAudio.onended = () => {
             this.survivorAudioPlaying = false;
             this.isMessagePlaying = false;
+            this.currentPlayingAudio = null;
             
             const playPauseBtn = document.getElementById('playPauseBtn');
             if (playPauseBtn) {
@@ -937,6 +982,8 @@ class AnimationsManager {
                     </svg>
                 `;
             }
+            
+            console.log('[AUDIO] Voice message ended for message ID:', messageId);
         };
     }
 
@@ -1093,22 +1140,39 @@ class AnimationsManager {
         };
         
         try {
-            this.survivorAudio.voice = loadAudio('/src/sfx/survivor_voice.oga', 0.8);
+            // Cargar los 3 audios de sobrevivientes (basado en los mensajes)
+            this.survivorAudio.voices[1] = loadAudio('/src/sfx/survivor_voice.oga', 0.8);
+            this.survivorAudio.voices[3] = loadAudio('/src/sfx/lost-data-voice.oga', 0.8);
+            
+            // SFX de comunicaciones
             this.survivorAudio.bcommsOn = loadAudio('/src/sfx/bcomms-on.mp3', 0.4);
             this.survivorAudio.lifesupportOn = loadAudio('/src/sfx/lifesupport-on.mp3', 0.4);
             
-            // Event listeners for successful load
-            Object.entries(this.survivorAudio).forEach(([key, audio]) => {
+            // Event listeners for successful load - voices
+            Object.entries(this.survivorAudio.voices).forEach(([id, audio]) => {
                 if (audio && audio.addEventListener) {
                     audio.addEventListener('canplaythrough', () => {
-                        console.log(`[AUDIO] Survivor audio loaded: ${key}`);
+                        console.log(`[AUDIO] Survivor voice ${id} loaded`);
                     });
                     
                     audio.addEventListener('error', (e) => {
-                        console.error(`[AUDIO] Error loading survivor audio ${key}:`, e);
+                        console.error(`[AUDIO] Error loading survivor voice ${id}:`, e);
                     });
                 }
             });
+            
+            // Event listeners for SFX
+            if (this.survivorAudio.bcommsOn) {
+                this.survivorAudio.bcommsOn.addEventListener('canplaythrough', () => {
+                    console.log('[AUDIO] bcomms-on SFX loaded');
+                });
+            }
+            
+            if (this.survivorAudio.lifesupportOn) {
+                this.survivorAudio.lifesupportOn.addEventListener('canplaythrough', () => {
+                    console.log('[AUDIO] lifesupport-on SFX loaded');
+                });
+            }
             
             console.log('[AUDIO] Survivor audio preload initiated');
         } catch (error) {
@@ -1228,11 +1292,15 @@ class AnimationsManager {
     }
     
     stopSurvivorAudio() {
-        // Stop all survivor audio
-        if (this.survivorAudio.voice && !this.survivorAudio.voice.paused) {
-            this.survivorAudio.voice.pause();
-            this.survivorAudio.voice.currentTime = 0;
-        }
+        // Stop all survivor voice audios
+        Object.values(this.survivorAudio.voices).forEach(audio => {
+            if (audio && !audio.paused) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        });
+        
+        // Stop SFX
         if (this.survivorAudio.bcommsOn && !this.survivorAudio.bcommsOn.paused) {
             this.survivorAudio.bcommsOn.pause();
             this.survivorAudio.bcommsOn.currentTime = 0;
@@ -1244,6 +1312,7 @@ class AnimationsManager {
         
         const btn = this.elements.survivorAudioBtn;
         this.survivorAudioPlaying = false;
+        this.currentPlayingAudio = null;
         btn?.classList.remove('playing');
         
         const textElement = btn?.querySelector('.audio-text');
