@@ -42,7 +42,6 @@ class AnimationsManager {
         // Stellar Intro Audio
         this.stellarAudio = {
             bgMusic: null,
-            bgMusicLoop: null,
             voiceIntro: null,
             voiceDataDisplay: null,
             voiceDataEarth: null,
@@ -72,7 +71,6 @@ class AnimationsManager {
         // Volume levels
         this.volumes = {
             bgMusic: 0.25,
-            bgMusicLoop: 0.20,
             voiceIntro: 0.75,
             voiceDataDisplay: 0.75,
             voiceDataUser: 0.75,
@@ -981,15 +979,16 @@ class AnimationsManager {
     // This method creates Audio objects from cached resources
     // ========================================
     preloadStellarAudio() {
-        const loadAudio = (src, volume) => {
+        const loadAudio = (src, volume, loop = false) => {
             const audio = new Audio(src);
             audio.volume = volume;
             audio.preload = 'metadata';
+            audio.loop = loop;
             return audio;
         };
 
         try {
-            this.stellarAudio.bgMusic = loadAudio('/src/sfx/Isolated_System.mp3', this.volumes.bgMusic);
+            this.stellarAudio.bgMusic = loadAudio('/src/sfx/Isolated_System.ogg', this.volumes.bgMusic, true);
             
             this.stellarAudio.voiceIntro = loadAudio('/src/starvortex_assets/voice_intro.mp3', this.volumes.voiceIntro);
             this.stellarAudio.voiceDataDisplay = loadAudio('/src/starvortex_assets/voice-data-display.mp3', this.volumes.voiceDataDisplay);
@@ -1007,12 +1006,6 @@ class AnimationsManager {
             this.stellarAudio.sfx.textAnimation = loadAudio('/src/sfx/FX_text_animation_loop.mp3', this.volumes.sfx);
             this.stellarAudio.sfx.affirmation = loadAudio('/src/sfx/affirmation-tech.wav', this.volumes.sfx);
             
-            this.stellarAudio.bgMusic.addEventListener('ended', () => {
-                if (!this.introSkipped) {
-                    this.playAudio(this.stellarAudio.bgMusicLoop);
-                }
-            });
-            
             console.log('[ANIMATIONS] Stellar audio preloaded with SFX');
         } catch (error) {
             console.error('[ERROR] Audio preload error:', error);
@@ -1029,7 +1022,14 @@ class AnimationsManager {
         console.log('[AUDIO] SFX played:', sfxName);
     }
     
+    isAudioPlaying(audioElement) {
+        return audioElement && audioElement.currentTime > 0 && !audioElement.paused && !audioElement.ended && audioElement.readyState > 2;
+    }
+
     playAudio(audioElement) {
+        if (this.isAudioPlaying(audioElement)) {
+            return Promise.resolve();
+        }
         return audioElement?.play().catch(err => 
             console.log('Audio play blocked:', err.message)
         ) || Promise.resolve();
@@ -1086,9 +1086,7 @@ class AnimationsManager {
     }
     
     fadeOutMusic(duration = 1000) {
-        const music = (this.stellarAudio.bgMusicLoop && !this.stellarAudio.bgMusicLoop.paused) 
-            ? this.stellarAudio.bgMusicLoop 
-            : this.stellarAudio.bgMusic;
+        const music = this.stellarAudio.bgMusic;
             
         if (!music || music.paused) return;
         
