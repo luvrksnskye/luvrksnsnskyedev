@@ -76,7 +76,7 @@ class AnimationsManager {
             voiceDataUser: 0.75,
             voiceFinal: 0.70,
             transition: 0.35,
-            sfx: 0.15
+            sfx: 0.30
         };
         
         // Subtitles data
@@ -97,26 +97,7 @@ class AnimationsManager {
             { start: 32.0, end: 40.0, text: "Creativity remains rare. Medical scan complete. Body integrity stable." },
             { start: 40.0, end: 49.0, text: "Neural activity elevated. Creative cortex highly responsive. No critical damage found." }
         ];
-        
-        this.subtitlesDataUser = [
-            { start: 0.0, end: 7.0, text: "It's been a long time, isn't it? Your body has been offline for a long time, Skye." },
-            { start: 7.0, end: 18.0, text: "Muscles idle, senses dormant, systems suspended in silence. Waking up after stasis is never clean." },
-            { start: 18.0, end: 25.0, text: "Your reflexes may feel delayed, your thoughts sharper than your movements. That imbalance will pass." },
-            { start: 25.0, end: 30.0, text: "Your mind, however, never fully shut down. Creative activity persisted beneath the surface." }
-        ];
-        
-        this.subtitlesRecoveryProtocol = [
-            { start: 0.04, end: 0.08, text: "Recovery protocols exceeded biological thresholds." },
-            { start: 0.08, end: 0.12, text: "Preservation required non-organic intervention." },
-            { start: 0.12, end: 0.16, text: "Consciousness was extracted, mapped, and stabilized." },
-            { start: 0.16, end: 0.19, text: "Result, a fully resolved digital engram." },
-            { start: 0.19, end: 0.23, text: "Organic systems were deemed non-viable for reintegration." },
-            { start: 0.23, end: 0.26, text: "Human continuity was not maintained." },
-            { start: 0.26, end: 0.28, text: "Cognitive structure intact." },
-            { start: 0.28, end: 0.30, text: "Identity preserved." },
-            { start: 0.30, end: 0.32, text: "Memory capacity expanded." },
-            { start: 0.32, end: 0.34, text: "Processing latency reduced to near zero." }
-        ];
+
         
         // Skip functionality
         this.introSkipped = false;
@@ -1544,7 +1525,7 @@ class AnimationsManager {
                 this.hideSurvivorPanel();
                 phaseEarth.classList.remove('active');
                 resolve();
-            }, 60000); // 60 second duration for this phase
+            }, 90000); // 60 second duration for this phase
         });
     }
     

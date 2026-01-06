@@ -390,49 +390,302 @@
   </div>
 
   <!-- PHASE 3b: EARTH VISUALIZATION (CATASTROPHE) -->
-  <div class="intro-phase phase-earth" id="phaseEarth">
-    <div class="earth-container">
-      <div class="earth-panel-left">
-        <div class="panel-header">
-          <h2 class="panel-title">// STATUS</h2>
+<!-- PHASE 3b: EARTH VISUALIZATION (CATASTROPHE) -->
+<div class="intro-phase phase-earth" id="phaseEarth">
+  <!-- Earth Header HUD -->
+  <div class="earth-header-hud">
+    <div class="earth-header-top">
+      <div class="header-section-left">
+        <div class="system-status">
+          <span class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.5V9M15 7.5L9 6V8L15 9M7 18A2 2 0 0 1 5 16H3V14H5C5 12.9 5.9 12 7 12S9 12.9 9 14V16C9 17.1 8.1 18 7 18Z"/>
+              <circle cx="12" cy="16" r="2"/>
+            </svg>
+          </span>
+          <span class="status-text">ACTIVE</span>
         </div>
-        <div class="panel-content">
-          <div class="data-item">
-            <span class="data-label">SIGNAL</span>
-            <span class="data-value">STABLE</span>
+        <div class="timestamp">
+          <span class="timestamp-label">UTC</span>
+          <span class="timestamp-value" id="earth-timestamp">--:--:--</span>
+        </div>
+      </div>
+      
+      <div class="header-section-center">
+        <div class="mission-title">
+          <div class="title-line"></div>
+          <h1 class="main-title">◢ PLANETARY SURVEILLANCE ◤</h1>
+          <div class="title-line"></div>
+        </div>
+        <div class="mission-subtitle">
+          <span class="bracket">⟨</span>
+          <span class="subtitle-text">CATASTROPHIC EVENT MONITORING</span>
+          <span class="bracket">⟩</span>
+        </div>
+      </div>
+      
+      <div class="header-section-right">
+        <div class="network-status">
+          <span class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M1 9L9 5L13 6.89L22.39 3.6L23 5.4L14 8.69L9 7L3 10L1 9M6 12L2 14L4 15L8 13L6 12M22 11.5C22 11.78 21.97 12.05 21.92 12.31L20.5 12.5L21.92 12.69C21.97 12.95 22 13.22 22 13.5C22 15.71 20.21 17.5 18 17.5C17.81 17.5 17.62 17.47 17.45 17.43L16.87 16.85C16.91 16.9 16.95 16.95 17 17C17.55 17 18 16.55 18 16S17.55 15 17 15 16 15.45 16 16C16 16.05 16.05 16.09 16.1 16.13L15.52 16.71C15.36 16.5 15.19 16.31 15 16.14V14.5C15.58 14.19 16 13.61 16 13C16 12.17 15.33 11.5 14.5 11.5S13 12.17 13 13C13 13.61 13.42 14.19 14 14.5V16.14C13.64 16.37 13.32 16.66 13.07 17H12V19H15.5C16.88 19 18 17.88 18 16.5C18 16.41 17.99 16.32 17.98 16.23L18.87 15.34C19.24 15.06 19.55 14.71 19.78 14.31L20.5 14.5C20.19 15.89 19.11 17 17.78 17.5L18.22 18.5C20.11 17.91 21.5 16.11 21.78 14H22.72C22.25 18.58 18.58 22.25 14 22.72V21.78C17.39 21.32 20.18 18.61 20.72 15.22H20.5L19.78 15.69C19.55 15.29 19.24 14.94 18.87 14.66L17.98 15.77C17.99 15.68 18 15.59 18 15.5C18 14.12 16.88 13 15.5 13H12V11H13.07C13.32 10.34 13.64 9.63 14 9.86V11.5C13.42 11.81 13 12.39 13 13C13 13.83 13.67 14.5 14.5 14.5S16 13.83 16 13C16 12.39 15.58 11.81 15 11.5V9.86C15.19 9.69 15.36 9.5 15.52 9.29L16.1 9.87C16.05 9.91 16 9.95 16 10C16 10.55 16.45 11 17 11S18 10.55 18 10 17.55 9 17 9C16.95 9 16.91 9.1 16.87 9.15L16.29 8.57C16.47 8.38 16.62 8.19 16.74 7.98L17.45 8.69C17.62 8.65 17.81 8.62 18 8.62C20.21 8.62 22 10.41 22 12.62Z"/>
+            </svg>
+          </span>
+          <span class="network-text">UPLINK</span>
+        </div>
+        <div class="security-level">
+          <span class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11C15.4,11 16,11.4 16,12V16C16,16.6 15.6,17 15,17H9C8.4,17 8,16.6 8,16V12C8,11.4 8.4,11 9,11V10C9,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.2,9.2 10.2,10V11H13.8V10C13.8,9.2 12.8,8.2 12,8.2Z"/>
+            </svg>
+          </span>
+          <span class="security-text">CLASSIFIED</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="earth-header-bottom">
+      <div class="scan-progress-container">
+        <div class="scan-label">⟪ ORBITAL SCAN PROGRESS ⟫</div>
+        <div class="scan-bar">
+          <div class="scan-fill" id="earth-scan-progress"></div>
+          <div class="scan-glow"></div>
+        </div>
+        <div class="scan-percentage" id="earth-scan-percent">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="earth-container">
+    <!-- Left Panel - Enhanced -->
+    <div class="earth-panel-left">
+      <div class="panel-header-enhanced">
+        <div class="tech-icon panel-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/>
+          </svg>
+        </div>
+        <div class="panel-title-group">
+          <h2 class="panel-title">SYSTEM STATUS</h2>
+          <div class="panel-subtitle">PRIMARY SENSORS</div>
+        </div>
+        <div class="panel-status-dot"></div>
+      </div>
+      
+      <div class="panel-content-enhanced">
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z"/>
+            </svg>
           </div>
-          <div class="data-item">
-            <span class="data-label">ORBIT</span>
-            <span class="data-value">SYNCHRONOUS</span>
+          <div class="data-info">
+            <span class="data-label">SIGNAL STRENGTH</span>
+            <span class="data-value status-ok">98.7% STABLE</span>
+            <div class="data-bar">
+              <div class="bar-fill" style="width: 98.7%;"></div>
+            </div>
           </div>
-          <div class="data-item">
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,2A2,2 0 0,1 14,4C14,4.74 13.6,5.39 13,5.73V7H14A7,7 0 0,1 21,14H22A1,1 0 0,1 23,15V18A1,1 0 0,1 22,19H21A7,7 0 0,1 14,26H10A7,7 0 0,1 3,19H2A1,1 0 0,1 1,18V15A1,1 0 0,1 2,14H3A7,7 0 0,1 10,7H11V5.73C10.4,5.39 10,4.74 10,4A2,2 0 0,1 12,2M12,4A0,0 0 0,0 12,4A0,0 0 0,0 12,4M7,9A5,5 0 0,0 2,14V17H3A5,5 0 0,0 8,22H16A5,5 0 0,0 21,17H22V14A5,5 0 0,0 17,9H7M8,11H16A3,3 0 0,1 19,14V15H18A3,3 0 0,1 15,12H9A3,3 0 0,1 6,15H5V14A3,3 0 0,1 8,11Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">ORBITAL STATUS</span>
+            <span class="data-value status-ok">SYNCHRONOUS</span>
+            <div class="data-detail">ALT: 35,786 KM</div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.42 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.42 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
             <span class="data-label">LIFE SIGNS</span>
-            <span class="data-value">DETECTED</span>
+            <span class="data-value status-warning">7.8B DETECTED</span>
+            <div class="data-detail">BIOSIG: NOMINAL</div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M15 13V5A3 3 0 0 0 9 5V13A5 5 0 1 0 15 13M12 4A1 1 0 0 1 13 5V8H11V5A1 1 0 0 1 12 4Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">SURFACE TEMP</span>
+            <span class="data-value status-warning">+1.2°C ANOMALY</span>
+            <div class="data-detail">TREND: RISING</div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,2C13.1,2 14,2.9 14,4C14,5.1 13.1,6 12,6C10.9,6 10,5.1 10,4C10,2.9 10.9,2 12,2ZM21,9V7L15,7.5V9M15,7.5L9,6V8L15,9M7,18A2,2 0 0,1 5,16H3V14H5C5,12.9 5.9,12 7,12S9,12.9 9,14V16C9,17.1 8.1,18 7,18Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">ENERGY LEVELS</span>
+            <span class="data-value status-critical">FLUCTUATING</span>
+            <div class="data-detail">SOURCE: UNKNOWN</div>
           </div>
         </div>
       </div>
-      <canvas id="earthCanvas" class="centered-canvas"></canvas>
-      <div class="earth-panel-right">
-        <div class="panel-header">
-          <h2 class="panel-title">// DATA</h2>
+      
+      <div class="panel-footer">
+        <div class="footer-status">
+          <span class="status-dots">
+            <span class="dot active"></span>
+            <span class="dot active"></span>
+            <span class="dot warning"></span>
+          </span>
+          <span class="footer-text">3/5 NOMINAL</span>
         </div>
-        <div class="panel-content">
-          <div class="data-item">
+      </div>
+    </div>
+
+    <!-- Earth Canvas -->
+    <canvas id="earthCanvas" class="centered-canvas"></canvas>
+
+    <!-- Right Panel - Enhanced -->
+    <div class="earth-panel-right">
+      <div class="panel-header-enhanced">
+        <div class="tech-icon panel-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22S19,14.25 19,9A7,7 0 0,0 12,2Z"/>
+          </svg>
+        </div>
+        <div class="panel-title-group">
+          <h2 class="panel-title">EVENT DATA</h2>
+          <div class="panel-subtitle">CATASTROPHIC ANALYSIS</div>
+        </div>
+        <div class="panel-status-dot warning"></div>
+      </div>
+      
+      <div class="panel-content-enhanced">
+        <div class="data-block critical">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">THREAT LEVEL</span>
+            <span class="data-value status-critical">EXTREME</span>
+            <div class="data-detail">CLASS: GLOBAL</div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16,6L18.29,8.29L13.41,13.17L9.41,9.17L2,16.59L3.41,18L9.41,12L13.41,16L19.71,9.71L22,12V6H16Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
             <span class="data-label">MAGNITUDE</span>
-            <span class="data-value" id="earth-mag-data">__</span>
+            <span class="data-value" id="earth-mag-data">CALCULATING...</span>
+            <div class="data-detail">SCALE: RICHTER</div>
           </div>
-          <div class="data-item">
-            <span class="data-label">REGION</span>
-            <span class="data-value" id="earth-region-data">__</span>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,2C13.1,2 14,2.9 14,4C14,5.1 13.1,6 12,6C10.9,6 10,5.1 10,4C10,2.9 10.9,2 12,2ZM21,9V7L15,7.5V9M15,7.5L9,6V8L15,9M7,18A2,2 0 0,1 5,16H3V14H5C5,12.9 5.9,12 7,12S9,12.9 9,14V16C9,17.1 8.1,18 7,18Z"/>
+            </svg>
           </div>
-          <div class="data-item">
-            <span class="data-label">YEAR</span>
-            <span class="data-value" id="earth-year-data">__</span>
+          <div class="data-info">
+            <span class="data-label">EPICENTER</span>
+            <span class="data-value" id="earth-region-data">SCANNING...</span>
+            <div class="data-detail">COORD: PENDING</div>
           </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19M19,6H5V5H19V6Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">TIMESTAMP</span>
+            <span class="data-value" id="earth-year-data">ANALYZING...</span>
+            <div class="data-detail">TZ: UNIVERSAL</div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">CASUALTIES</span>
+            <span class="data-value status-critical" id="earth-casualties">ESTIMATING...</span>
+            <div class="data-detail">CONF: HIGH</div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M11,7H13V13H11V7M11,15H13V17H11V15Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">ALERT STATUS</span>
+            <span class="data-value status-critical">CODE RED</span>
+            <div class="data-detail">AUTO: TRIGGERED</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="panel-footer">
+        <div class="footer-status">
+          <span class="status-dots">
+            <span class="dot critical"></span>
+            <span class="dot critical"></span>
+            <span class="dot critical"></span>
+          </span>
+          <span class="footer-text">CRITICAL</span>
         </div>
       </div>
     </div>
   </div>
+  
+  <!-- Bottom HUD Bar -->
+  <div class="earth-bottom-hud">
+    <div class="bottom-left">
+      <span class="hud-text">◤ GLOBAL MONITORING STATION</span>
+      <span class="hud-divider">⬢</span>
+      <span class="hud-text">DEFCON 1</span>
+    </div>
+    <div class="bottom-center">
+      <div class="pulse-indicator">
+        <span class="pulse-dot"></span>
+        <span class="pulse-text">LIVE FEED</span>
+      </div>
+    </div>
+    <div class="bottom-right">
+      <span class="hud-text">CLEARANCE: OMEGA</span>
+      <span class="hud-divider">⬢</span>
+      <span class="hud-text">◥ CLASSIFIED</span>
+    </div>
+  </div>
+</div>
+</div>
+<
 
   <!-- PHASE 4: BRAIN VISUALIZATION -->
   <div class="intro-phase phase-body" id="phaseBody">
