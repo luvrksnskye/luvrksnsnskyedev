@@ -1525,7 +1525,7 @@ class AnimationsManager {
                 this.hideSurvivorPanel();
                 phaseEarth.classList.remove('active');
                 resolve();
-            }, 80000); // 60 second duration for this phase
+            }, 60000); // 60 second duration for this phase
         });
     }
     
