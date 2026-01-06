@@ -424,14 +424,14 @@ class AnimationsManager {
         
         // Brain 3D model paths
         this.brainModels = {
-            'complete': '/src/model_3d/brain-antre.obj',
-            'low': '/src/model_3d/brain_vertex_low.obj',
-            'parts_assembled': '/src/model_3d/brain-parts-big.obj',
+            'complete': 'src/model_3d/brain-antre.obj',
+            'low': 'src/model_3d/brain_vertex_low.obj',
+            'parts_assembled': 'src/model_3d/brain-parts-big.obj',
             'parts_separated': {
-                'part04': '/src/model_3d/brain-parts-big_04.OBJ',
-                'part06': '/src/model_3d/brain-parts-big_06.OBJ',
-                'part07': '/src/model_3d/brain-parts-big_07.OBJ',
-                'part08': '/src/model_3d/brain-parts-big_08.OBJ'
+                'part04': 'src/model_3d/brain-parts-big_04.OBJ',
+                'part06': 'src/model_3d/brain-parts-big_06.OBJ',
+                'part07': 'src/model_3d/brain-parts-big_07.OBJ',
+                'part08': 'src/model_3d/brain-parts-big_08.OBJ'
             }
         };
         
