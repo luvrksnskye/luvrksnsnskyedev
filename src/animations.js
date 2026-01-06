@@ -990,8 +990,6 @@ class AnimationsManager {
 
         try {
             this.stellarAudio.bgMusic = loadAudio('/src/sfx/Isolated_System.mp3', this.volumes.bgMusic);
-            this.stellarAudio.bgMusicLoop = loadAudio('/src/sfx/Isolated_System.mp3', this.volumes.bgMusicLoop);
-            this.stellarAudio.bgMusicLoop.loop = true;
             
             this.stellarAudio.voiceIntro = loadAudio('/src/starvortex_assets/voice_intro.mp3', this.volumes.voiceIntro);
             this.stellarAudio.voiceDataDisplay = loadAudio('/src/starvortex_assets/voice-data-display.mp3', this.volumes.voiceDataDisplay);
