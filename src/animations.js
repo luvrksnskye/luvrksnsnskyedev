@@ -105,6 +105,19 @@ class AnimationsManager {
             { start: 25.0, end: 30.0, text: "Your mind, however, never fully shut down. Creative activity persisted beneath the surface." }
         ];
         
+        this.subtitlesRecoveryProtocol = [
+            { start: 0.04, end: 0.08, text: "Recovery protocols exceeded biological thresholds." },
+            { start: 0.08, end: 0.12, text: "Preservation required non-organic intervention." },
+            { start: 0.12, end: 0.16, text: "Consciousness was extracted, mapped, and stabilized." },
+            { start: 0.16, end: 0.19, text: "Result, a fully resolved digital engram." },
+            { start: 0.19, end: 0.23, text: "Organic systems were deemed non-viable for reintegration." },
+            { start: 0.23, end: 0.26, text: "Human continuity was not maintained." },
+            { start: 0.26, end: 0.28, text: "Cognitive structure intact." },
+            { start: 0.28, end: 0.30, text: "Identity preserved." },
+            { start: 0.30, end: 0.32, text: "Memory capacity expanded." },
+            { start: 0.32, end: 0.34, text: "Processing latency reduced to near zero." }
+        ];
+        
         // Skip functionality
         this.introSkipped = false;
         this.skipHandler = null;
@@ -1003,6 +1016,9 @@ class AnimationsManager {
             }
             if (!this.stellarAudio.voiceDataUser) {
                 this.stellarAudio.voiceDataUser = loadAudio('/src/starvortex_assets/voice-data-user.mp3', this.volumes.voiceDataUser);
+            }
+            if (!this.stellarAudio.voiceRecoveryProtocol) {
+                this.stellarAudio.voiceRecoveryProtocol = loadAudio('/src/starvortex_assets/voice_recovery-protocol.ogg', this.volumes.voiceDataUser); // Using voiceDataUser volume
             }
             if (!this.stellarAudio.voiceFinal) {
                 this.stellarAudio.voiceFinal = loadAudio('/src/starvortex_assets/voice-final.mp3', this.volumes.voiceFinal);
@@ -3065,13 +3081,8 @@ class AnimationsManager {
                 if (this.stellarAudio.voiceDataUser) {
                     this.stellarAudio.voiceDataUser.addEventListener('timeupdate', () => this.updateSubtitlesPhase4());
                     this.stellarAudio.voiceDataUser.onended = () => {
-                        setTimeout(() => {
-                            if (!this.introSkipped) {
-                                this.elements.bodySubtitle?.classList.remove('visible');
-                                phaseBody.classList.remove('active');
-                            }
-                            resolve();
-                        }, 2000);
+                        // After voiceDataUser, transition to recovery protocol
+                        this.playBrainRecoveryPhase(resolve);
                     };
                 } else {
                     setTimeout(() => {
@@ -3083,6 +3094,41 @@ class AnimationsManager {
                 }
             }, 1500);
         });
+    }
+
+    async playBrainRecoveryPhase(resolve) {
+        console.log('[ANIMATIONS] Brain Recovery Phase initiated');
+        const phaseBody = this.elements.phaseBody;
+        const bodySubtitle = this.elements.bodySubtitle;
+
+        // Ensure subtitle area is clear before starting new subtitles
+        if (bodySubtitle) bodySubtitle.textContent = '';
+
+        if (!this.stellarAudio.voiceRecoveryProtocol) {
+            console.warn('[ANIMATIONS] voiceRecoveryProtocol not loaded, skipping recovery phase');
+            if (!this.introSkipped) {
+                phaseBody.classList.remove('active');
+            }
+            return resolve();
+        }
+
+        // Play the recovery protocol audio
+        this.playVoiceAudio(this.stellarAudio.voiceRecoveryProtocol);
+
+        // Update subtitles for recovery protocol
+        this.stellarAudio.voiceRecoveryProtocol.addEventListener('timeupdate', () => this.updateSubtitlesRecoveryProtocol());
+
+        // When recovery protocol audio ends, finalize phase 4
+        this.stellarAudio.voiceRecoveryProtocol.onended = () => {
+            console.log('[ANIMATIONS] Brain Recovery Protocol audio ended, finalizing Phase 4');
+            setTimeout(() => {
+                if (!this.introSkipped) {
+                    bodySubtitle?.classList.remove('visible');
+                    phaseBody.classList.remove('active'); // Turn off the brain phase
+                }
+                resolve(); // Resolve the promise for playStellarPhase4
+            }, 1500); // Small delay before resolving
+        };
     }
     
     updateSubtitlesPhase4() {
@@ -3099,6 +3145,25 @@ class AnimationsManager {
         if (currentSub && bodySubtitle.textContent !== currentSub.text) {
             bodySubtitle.textContent = currentSub.text;
             bodySubtitle.classList.add('visible');
+        }
+    }
+    
+    updateSubtitlesRecoveryProtocol() {
+        if (this.introSkipped || !this.stellarAudio.voiceRecoveryProtocol) return;
+        
+        const currentTime = this.stellarAudio.voiceRecoveryProtocol.currentTime;
+        const bodySubtitle = this.elements.bodySubtitle;
+        if (!bodySubtitle) return;
+        
+        const currentSub = this.subtitlesRecoveryProtocol.find(sub =>
+            currentTime >= sub.start && currentTime < sub.end
+        );
+        
+        if (currentSub && bodySubtitle.textContent !== currentSub.text) {
+            bodySubtitle.textContent = currentSub.text;
+            bodySubtitle.classList.add('visible');
+        } else if (currentTime >= this.subtitlesRecoveryProtocol[this.subtitlesRecoveryProtocol.length - 1].end) {
+            bodySubtitle.classList.remove('visible');
         }
     }
     
