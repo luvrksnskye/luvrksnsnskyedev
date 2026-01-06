@@ -988,23 +988,49 @@ class AnimationsManager {
         };
 
         try {
-            this.stellarAudio.bgMusic = loadAudio('/src/sfx/Isolated_System.ogg', this.volumes.bgMusic, true);
+            if (!this.stellarAudio.bgMusic) {
+                this.stellarAudio.bgMusic = loadAudio('/src/sfx/Isolated_System.ogg', this.volumes.bgMusic, true);
+            }
             
-            this.stellarAudio.voiceIntro = loadAudio('/src/starvortex_assets/voice_intro.mp3', this.volumes.voiceIntro);
-            this.stellarAudio.voiceDataDisplay = loadAudio('/src/starvortex_assets/voice-data-display.mp3', this.volumes.voiceDataDisplay);
-            this.stellarAudio.voiceDataEarth = loadAudio('/src/starvortex_assets/voice-data-earth.mp3', this.volumes.voiceDataDisplay);
-            this.stellarAudio.voiceDataUser = loadAudio('/src/starvortex_assets/voice-data-user.mp3', this.volumes.voiceDataUser);
-            this.stellarAudio.voiceFinal = loadAudio('/src/starvortex_assets/voice-final.mp3', this.volumes.voiceFinal);
+            if (!this.stellarAudio.voiceIntro) {
+                this.stellarAudio.voiceIntro = loadAudio('/src/starvortex_assets/voice_intro.mp3', this.volumes.voiceIntro);
+            }
+            if (!this.stellarAudio.voiceDataDisplay) {
+                this.stellarAudio.voiceDataDisplay = loadAudio('/src/starvortex_assets/voice-data-display.mp3', this.volumes.voiceDataDisplay);
+            }
+            if (!this.stellarAudio.voiceDataEarth) {
+                this.stellarAudio.voiceDataEarth = loadAudio('/src/starvortex_assets/voice-data-earth.mp3', this.volumes.voiceDataDisplay);
+            }
+            if (!this.stellarAudio.voiceDataUser) {
+                this.stellarAudio.voiceDataUser = loadAudio('/src/starvortex_assets/voice-data-user.mp3', this.volumes.voiceDataUser);
+            }
+            if (!this.stellarAudio.voiceFinal) {
+                this.stellarAudio.voiceFinal = loadAudio('/src/starvortex_assets/voice-final.mp3', this.volumes.voiceFinal);
+            }
             
-            this.stellarAudio.transitions = [
-                loadAudio('/src/sfx/FX_flow_transition_data-tech.mp3', this.volumes.transition),
-                loadAudio('/src/sfx/FX_Transition.mp3', this.volumes.transition)
-            ];
+            // Transitions and SFX also need to be checked, as they are arrays/objects.
+            // For transitions, we might need a more sophisticated check or just create them always if they are meant to be re-playable short effects.
+            // For now, let's just make sure the main background music and voices are not duplicated.
+            // If the transitions and sfx are causing issues, we can address them later.
+            if (!this.stellarAudio.transitions || this.stellarAudio.transitions.length === 0) {
+                this.stellarAudio.transitions = [
+                    loadAudio('/src/sfx/FX_flow_transition_data-tech.mp3', this.volumes.transition),
+                    loadAudio('/src/sfx/FX_Transition.mp3', this.volumes.transition)
+                ];
+            }
             
-            this.stellarAudio.sfx.textRollover = loadAudio('/src/sfx/UI_menu_text_rollover_2.mp3', this.volumes.sfx);
-            this.stellarAudio.sfx.scanZoom = loadAudio('/src/sfx/scan-zoom.wav', this.volumes.sfx);
-            this.stellarAudio.sfx.textAnimation = loadAudio('/src/sfx/FX_text_animation_loop.mp3', this.volumes.sfx);
-            this.stellarAudio.sfx.affirmation = loadAudio('/src/sfx/affirmation-tech.wav', this.volumes.sfx);
+            if (!this.stellarAudio.sfx.textRollover) {
+                this.stellarAudio.sfx.textRollover = loadAudio('/src/sfx/UI_menu_text_rollover_2.mp3', this.volumes.sfx);
+            }
+            if (!this.stellarAudio.sfx.scanZoom) {
+                this.stellarAudio.sfx.scanZoom = loadAudio('/src/sfx/scan-zoom.wav', this.volumes.sfx);
+            }
+            if (!this.stellarAudio.sfx.textAnimation) {
+                this.stellarAudio.sfx.textAnimation = loadAudio('/src/sfx/FX_text_animation_loop.mp3', this.volumes.sfx);
+            }
+            if (!this.stellarAudio.sfx.affirmation) {
+                this.stellarAudio.sfx.affirmation = loadAudio('/src/sfx/affirmation-tech.wav', this.volumes.sfx);
+            }
             
             console.log('[ANIMATIONS] Stellar audio preloaded with SFX');
         } catch (error) {
