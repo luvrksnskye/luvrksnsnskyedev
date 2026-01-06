@@ -6,3 +6,5 @@
 /.parcel-cache/
 /.env
 /.CNAME
+src/.DS_Store
+src/model_3d/.DS_Store

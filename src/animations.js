@@ -1,11 +1,11 @@
-
 /**
  * ============================
- * ANIMATIONS MANAGER MODULE V8
+ * ANIMATIONS MANAGER MODULE V9
  * ============================
  * Handles all animations and visual effects
  * - Stellar Intro sequence (5 phases)
  * - 3D Terrain visualization
+ * - Earth Catastrophe visualization (replaces Chicago)
  * - Ethereal Brain visualization
  * - Page transitions
  * - Performance optimization for low-end devices
@@ -101,7 +101,7 @@ class AnimationsManager {
         ];
         
         this.subtitlesDataUser = [
-            { start: 0.0, end: 7.0, text: "It's been a long time, hasn't it? Your body has been offline for a long time, Skye." },
+            { start: 0.0, end: 7.0, text: "It's been a long time, isn't it? Your body has been offline for a long time, Skye." },
             { start: 7.0, end: 18.0, text: "Muscles idle, senses dormant, systems suspended in silence. Waking up after stasis is never clean." },
             { start: 18.0, end: 25.0, text: "Your reflexes may feel delayed, your thoughts sharper than your movements. That imbalance will pass." },
             { start: 25.0, end: 30.0, text: "Your mind, however, never fully shut down. Creative activity persisted beneath the surface." }
@@ -398,7 +398,7 @@ class AnimationsManager {
         this.brainParticles = null;
         this.neuralConnections = null;
         
-        // Survivor Audio (NEW - Added for survivor message button)
+        // Survivor Audio
         this.survivorAudio = {
             voices: {}, // Almacenará múltiples audios de voces por ID de mensaje
             bcommsOn: null,
@@ -407,14 +407,9 @@ class AnimationsManager {
         this.survivorAudioPlaying = false;
         this.currentPlayingAudio = null; // Track which audio is currently playing
         
-        // Chicago 3D Wireframe
-        this.chicagoScene = null;
-        this.chicagoCamera = null;
-        this.chicagoRenderer = null;
-        this.chicagoControls = null;
-        this.chicagoMesh = null;
-        this.chicagoAnimationFrame = null;
-        this.chicagoActive = false;
+        // EARTH EARTHQUAKE VISUALIZATION SYSTEM
+        this.earthViz = null;
+        this.earthActive = false;
         
         // Brain 3D model paths
         this.brainModels = {
@@ -481,7 +476,7 @@ class AnimationsManager {
             return;
         }
         
-        console.log('[ANIMATIONS] Animations Manager V8 Ethereal Brain initializing');
+        console.log('[ANIMATIONS] Animations Manager V9 Earth Catastrophe initializing');
         console.log('[DEVICE] Mode:', this.shouldUseOptimizedMode ? 'Optimized' : 'Full');
         
         this.cacheElements();
@@ -491,14 +486,14 @@ class AnimationsManager {
             return;
         }
 
-        console.log('[ANIMATIONS] Starting Stellar Intro V8 Ethereal Brain');
+        console.log('[ANIMATIONS] Starting Stellar Intro V9 Earth Catastrophe');
         
         setTimeout(() => {
             this.startStellarIntro();
         }, 1000);
 
         this.initialized = true;
-        console.log('[ANIMATIONS] Animations Manager V8 Ethereal Brain initialized');
+        console.log('[ANIMATIONS] Animations Manager V9 Earth Catastrophe initialized');
     }
     
     cacheElements() {
@@ -519,12 +514,11 @@ class AnimationsManager {
             
             phaseGlobe: document.getElementById('phaseGlobe'),
             terrainCanvas: document.getElementById('terrainCanvas'),
-            chicagoCanvas: document.getElementById('chicagoCanvas'),
             terrainLocation: document.getElementById('terrainLocation'),
-            observeCityBtn: document.getElementById('observeCityBtn'),
-            chicagoPanel: document.getElementById('chicagoPanel'),
-            chicagoCloseBtn: document.getElementById('chicagoCloseBtn'),
-            chicagoNarrative: document.getElementById('chicagoNarrative'),
+            observeEarthBtn: document.getElementById('observeEarthBtn'), // CAMBIADO: de Chicago a Earth
+            earthPanel: document.getElementById('earthPanel'), // CAMBIADO: de Chicago a Earth
+            earthCloseBtn: document.getElementById('earthCloseBtn'), // CAMBIADO: de Chicago a Earth
+            earthDetailCanvas: document.getElementById('earthDetailCanvas'), // NUEVO: canvas para Earth
             brainCanvas: document.getElementById('brainCanvas'),
             
             phaseBody: document.getElementById('phaseBody'),
@@ -542,16 +536,14 @@ class AnimationsManager {
         // Dynamically create survivor audio button
         this.elements.survivorAudioBtn = this.createSurvivorAudioButton();
 
-        console.log('[ANIMATIONS] Elements cached:', {
-            stellarIntro: !!this.elements.stellarIntro,
-            terrainCanvas: !!this.elements.terrainCanvas,
-            chicagoCanvas: !!this.elements.chicagoCanvas,
-            brainCanvas: !!this.elements.brainCanvas,
-            observeCityBtn: !!this.elements.observeCityBtn,
-            chicagoPanel: !!this.elements.chicagoPanel,
-            survivorAudioBtn: !!this.elements.survivorAudioBtn
-        });
-    }
+         console.log('[ANIMATIONS] Elements cached:', {
+        stellarIntro: !!this.elements.stellarIntro,
+        phaseGlobe: !!this.elements.phaseGlobe,
+        phaseEarth: !!this.elements.phaseEarth, // Ahora debería ser true
+        earthCanvas: !!this.elements.earthCanvas, // Ahora debería ser true
+        terrainCanvas: !!this.elements.terrainCanvas
+    });
+}
 
     // ========================================
     // CREATES DYNAMIC SURVIVOR AUDIO BUTTON
@@ -869,12 +861,6 @@ class AnimationsManager {
         // Force visibility to override the initial hidden state
         this.survivorPanel.style.visibility = 'visible';
         
-        // Ensure Chicago canvas doesn't block clicks
-        const chicagoCanvas = this.elements.chicagoCanvas;
-        if (chicagoCanvas) {
-            chicagoCanvas.style.pointerEvents = 'none';
-        }
-        
         // Small delay to ensure CSS transition works
         requestAnimationFrame(() => {
             this.survivorPanel.style.removeProperty('visibility');
@@ -894,11 +880,8 @@ class AnimationsManager {
             this.survivorPanel.classList.remove('sp-visible');
             this.stopMessagePlayback();
             
-            // Restore Chicago canvas pointer-events
-            const chicagoCanvas = this.elements.chicagoCanvas;
-            if (chicagoCanvas) {
-                chicagoCanvas.style.pointerEvents = 'auto';
-            }
+            // Ensure pointer events are disabled
+            this.survivorPanel.style.pointerEvents = 'none';
         }
     }
     
@@ -1126,7 +1109,7 @@ class AnimationsManager {
     }
 
     // ========================================
-    // SURVIVOR AUDIO FUNCTIONS (NEW)
+    // SURVIVOR AUDIO FUNCTIONS
     // ========================================
     
     preloadSurvivorAudio() {
@@ -1180,117 +1163,6 @@ class AnimationsManager {
         }
     }
     
-    setupSurvivorAudioButton() {
-        const btn = this.elements.survivorAudioBtn;
-        if (!btn) {
-            console.warn('[AUDIO] Survivor audio button not found');
-            return;
-        }
-        
-        btn.addEventListener('click', () => {
-            if (this.survivorAudioPlaying) {
-                this.stopSurvivorAudio();
-            } else {
-                this.playSurvivorAudio();
-            }
-        });
-        
-        console.log('[AUDIO] Survivor audio button setup complete');
-    }
-    
-    playSurvivorAudio() {
-        if (!this.survivorAudio.voice) {
-            console.error('[AUDIO] Survivor voice audio not loaded');
-            return;
-        }
-        
-        const btn = this.elements.survivorAudioBtn;
-        
-        console.log('[AUDIO] Starting survivor message sequence');
-        
-        // SEQUENCE: Play sounds ONE BY ONE, not simultaneously
-        
-        // Step 1: Play bcomms-on SFX
-        if (this.survivorAudio.bcommsOn) {
-            this.survivorAudio.bcommsOn.currentTime = 0;
-            this.survivorAudio.bcommsOn.play().catch(e => {
-                console.error('[AUDIO] Error playing bcomms-on:', e);
-            });
-            
-            // Wait for bcomms-on to finish or after 1 second
-            const bcommsOnDuration = this.survivorAudio.bcommsOn.duration || 1;
-            
-            setTimeout(() => {
-                // Step 2: Play lifesupport-on SFX
-                if (this.survivorAudio.lifesupportOn) {
-                    this.survivorAudio.lifesupportOn.currentTime = 0;
-                    this.survivorAudio.lifesupportOn.play().catch(e => {
-                        console.error('[AUDIO] Error playing lifesupport-on:', e);
-                    });
-                    
-                    const lifesupportOnDuration = this.survivorAudio.lifesupportOn.duration || 1;
-                    
-                    setTimeout(() => {
-                        // Step 3: Play voice message
-                        this.playVoiceMessage();
-                    }, lifesupportOnDuration * 1000);
-                } else {
-                    // If lifesupport not available, play voice after 500ms
-                    setTimeout(() => {
-                        this.playVoiceMessage();
-                    }, 500);
-                }
-            }, bcommsOnDuration * 1000);
-        } else {
-            // If bcomms not available, start sequence with lifesupport or voice
-            if (this.survivorAudio.lifesupportOn) {
-                this.survivorAudio.lifesupportOn.currentTime = 0;
-                this.survivorAudio.lifesupportOn.play().catch(e => {
-                    console.error('[AUDIO] Error playing lifesupport-on:', e);
-                });
-                
-                const lifesupportOnDuration = this.survivorAudio.lifesupportOn.duration || 1;
-                
-                setTimeout(() => {
-                    this.playVoiceMessage();
-                }, lifesupportOnDuration * 1000);
-            } else {
-                // If no SFX available, play voice immediately
-                this.playVoiceMessage();
-            }
-        }
-    }
-    
-    playVoiceMessage() {
-        const btn = this.elements.survivorAudioBtn;
-        
-        this.survivorAudio.voice.currentTime = 0;
-        this.survivorAudio.voice.play().catch(e => {
-            console.error('[AUDIO] Error playing survivor voice:', e);
-        });
-        
-        this.survivorAudioPlaying = true;
-        btn?.classList.add('playing');
-        
-        // Update button text
-        const textElement = btn?.querySelector('.audio-text');
-        if (textElement) {
-            textElement.textContent = 'LISTENING...';
-        }
-        
-        console.log('[AUDIO] Playing survivor voice message');
-        
-        // When audio ends
-        this.survivorAudio.voice.onended = () => {
-            this.survivorAudioPlaying = false;
-            btn?.classList.remove('playing');
-            if (textElement) {
-                textElement.textContent = 'LISTEN MESSAGE';
-            }
-            console.log('[AUDIO] Survivor voice message ended');
-        };
-    }
-    
     stopSurvivorAudio() {
         // Stop all survivor voice audios
         Object.values(this.survivorAudio.voices).forEach(audio => {
@@ -1339,15 +1211,14 @@ class AnimationsManager {
     // This method creates Audio objects from cached resources
     // ========================================
         this.preloadStellarAudio();
-        this.preloadSurvivorAudio();  // NEW - Preload survivor audio
-        this.setupSkipListener();
-        this.setupSurvivorAudioButton();  // NEW - Setup survivor audio button
+        this.preloadSurvivorAudio();  // Preload survivor audio
         
         await this.playAudio(this.stellarAudio.bgMusic);
         
         if (!this.introSkipped) await this.playStellarPhase1();
         if (!this.introSkipped) await this.playStellarPhase2();
         if (!this.introSkipped) await this.playStellarPhase3();
+        if (!this.introSkipped) await this.playStellarPhaseEarth(); // NUEVA FASE EARTH
         if (!this.introSkipped) await this.playStellarPhase4();
         if (!this.introSkipped) await this.playStellarPhase5();
         
@@ -1573,9 +1444,6 @@ class AnimationsManager {
             
             this.animateGlobeData();
             
-            // Setup Chicago button
-            this.setupChicagoButton();
-            
             setTimeout(() => {
                 if (this.introSkipped) return resolve();
                 
@@ -1585,26 +1453,452 @@ class AnimationsManager {
                     this.stellarAudio.voiceDataEarth.onended = () => {
                         if (this.introSkipped) return resolve();
                         
-                        this.showContinueButton(phaseGlobe, () => {
-                            this.cleanupTerrain();
-                            this.cleanupChicago();
-                            phaseGlobe.classList.remove('active');
-                            resolve();
-                        });
+                        this.cleanupTerrain();
+                        phaseGlobe.classList.remove('active');
+                        setTimeout(() => {
+                            this.playStellarPhaseEarth().then(resolve);
+                        }, 500);
                     };
                 } else {
                     setTimeout(() => {
                         if (this.introSkipped) return resolve();
-                        this.showContinueButton(phaseGlobe, () => {
-                            this.cleanupTerrain();
-                            this.cleanupChicago();
-                            phaseGlobe.classList.remove('active');
-                            resolve();
-                        });
+                        this.cleanupTerrain();
+                        phaseGlobe.classList.remove('active');
+                        setTimeout(() => {
+                            this.playStellarPhaseEarth().then(resolve);
+                        }, 500);
                     }, 15000);
                 }
             }, 3000);
         });
+    }
+
+    async playStellarPhaseEarth() {
+        return new Promise((resolve) => {
+            console.log('[ANIMATIONS] Phase 3b: Earth Visualization');
+            this.currentPhase = 3.5;
+
+            const phaseEarth = document.getElementById('phaseEarth');
+            if (!phaseEarth) {
+                console.error('[ANIMATIONS] #phaseEarth not found!');
+                return resolve();
+            }
+
+            this.playAudio(this.stellarAudio.transitions[1]);
+            phaseEarth.classList.add('active');
+            this.showSurvivorPanel();
+
+            const canvas = document.getElementById('earthCanvas');
+            if (canvas && window.THREE) {
+                if (!this.earthViz) {
+                    this.earthViz = new EarthquakeVisualization(canvas, phaseEarth);
+                }
+                this.earthViz.start();
+            }
+
+            // After a delay, proceed to the next phase
+            setTimeout(() => {
+                if (this.introSkipped) return resolve();
+                
+                if (this.earthViz) {
+                    this.earthViz.stop();
+                }
+                this.hideSurvivorPanel();
+                phaseEarth.classList.remove('active');
+                resolve();
+            }, 60000); // 60 second duration for this phase
+        });
+    }
+    
+    // ========================================
+    // PHASE 3b: EARTH CATASTROPHE VISUALIZATION (NUEVA FASE)
+    // ========================================
+    
+    async playStellarPhase3Earth_old() {
+        return new Promise((resolve) => {
+            console.log('[ANIMATIONS] Phase 3b: Earth Catastrophe Visualization');
+            this.currentPhase = 3.5;
+            
+            // Crear o reutilizar el contenedor de Earth Catastrophe
+            let earthPhaseContainer = document.getElementById('phaseEarthCatastrophe');
+            
+            if (!earthPhaseContainer) {
+                earthPhaseContainer = document.createElement('div');
+                earthPhaseContainer.id = 'phaseEarthCatastrophe';
+                earthPhaseContainer.className = 'intro-phase phase-earth-catastrophe';
+                earthPhaseContainer.innerHTML = `
+                    <div class="earth-catastrophe-container">
+                        <div class="earth-catastrophe-panel">
+                            <div class="earth-header">
+                                <h2 class="earth-title">EARTH CATASTROPHE ANALYSIS</h2>
+                                <button class="earth-continue-btn" id="earthContinueBtn">
+                                    CONTINUE
+                                </button>
+                            </div>
+                            
+                            <div class="earth-content">
+                                <div class="earth-stats">
+                                    <div class="stat-item">
+                                        <div class="stat-label">PERIOD ANALYZED</div>
+                                        <div class="stat-value">2000 - 2090</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">TOTAL EARTHQUAKES</div>
+                                        <div class="stat-value danger" id="phaseEarthquakeCount">Loading...</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">MAX MAGNITUDE</div>
+                                        <div class="stat-value danger" id="phaseMaxMagnitude">Loading...</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">MOST AFFECTED REGION</div>
+                                        <div class="stat-value warning" id="phaseWorstRegion">Loading...</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">DEADLIEST QUAKE</div>
+                                        <div class="stat-value danger" id="phaseDeadliestQuake">Loading...</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">DATA SOURCE</div>
+                                        <div class="stat-value">USGS Earthquake Database</div>
+                                    </div>
+                                    
+                                    <div class="earth-timeline">
+                                        <h3 class="timeline-title">MAJOR EVENTS TIMELINE</h3>
+                                        <div class="timeline-item">
+                                            <div class="timeline-year">2011 Japan</div>
+                                            <div class="timeline-desc">Tohoku Earthquake & Tsunami</div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-year">2004 Indian Ocean</div>
+                                            <div class="timeline-desc">Tsunami - 230,000+ casualties</div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-year">2010 Haiti</div>
+                                            <div class="timeline-desc">7.0M - 160,000+ casualties</div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-year">2008 China</div>
+                                            <div class="timeline-desc">Sichuan Earthquake</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="earth-visual">
+                                    <canvas id="earthCatastropheCanvas"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Añadir al DOM después de stellarIntro
+                const stellarIntro = this.elements.stellarIntro;
+                stellarIntro.appendChild(earthPhaseContainer);
+                
+                // Inject CSS para la nueva fase
+                this.injectEarthPhaseStyles();
+            }
+            
+            // Inicializar Earth Catastrophe Visualization
+            const canvas = document.getElementById('earthCatastropheCanvas');
+            if (!canvas) {
+                console.error('[EARTH] Earth Catastrophe Canvas not found');
+                return resolve();
+            }
+            
+            // Crear o reutilizar visualización
+            if (!this.earthCatastropheViz) {
+                this.earthCatastropheViz = new EarthquakeVisualization(canvas, earthPhaseContainer);
+            }
+            
+            // Mostrar la fase Earth
+            earthPhaseContainer.classList.add('active');
+            
+            // Start Earth visualization
+            setTimeout(() => {
+                if (this.earthCatastropheViz.start()) {
+                    console.log('[EARTH] Earthquake visualization started successfully');
+                }
+            }, 500);
+            
+            // Setup continue button
+            const earthContinueBtn = document.getElementById('earthContinueBtn');
+            if (earthContinueBtn) {
+                const handleContinue = () => {
+                    console.log('[EARTH] Continuing to next phase');
+                    
+                    // Stop Earth visualization
+                    if (this.earthCatastropheViz) {
+                        this.earthCatastropheViz.stop();
+                    }
+                    
+                    // Remove phase
+                    earthPhaseContainer.classList.remove('active');
+                    
+                    // Cleanup
+                    setTimeout(() => {
+                        if (this.earthCatastropheViz) {
+                            this.earthCatastropheViz.destroy();
+                            this.earthCatastropheViz = null;
+                        }
+                        
+                        resolve();
+                    }, 300);
+                };
+                
+                earthContinueBtn.addEventListener('click', handleContinue, { once: true });
+            } else {
+                // Fallback: auto-continue after 15 seconds
+                setTimeout(() => {
+                    if (!this.introSkipped) {
+                        earthPhaseContainer.classList.remove('active');
+                        if (this.earthCatastropheViz) {
+                            this.earthCatastropheViz.destroy();
+                            this.earthCatastropheViz = null;
+                        }
+                        resolve();
+                    }
+                }, 15000);
+            }
+        });
+    }
+    
+    setupEarthPhaseButton() {
+        const btn = document.getElementById('observeEarthBtn');
+        if (!btn) return;
+        
+        btn.addEventListener('click', () => {
+            console.log('[EARTH] Earth catastrophe button clicked in phase 3');
+            // Esta función ahora solo sirve como interfaz visual en la fase 3
+            // La transición real ocurre a través del botón CONTINUE
+        });
+        
+        console.log('[EARTH] Earth phase button setup complete');
+    }
+    
+    injectEarthPhaseStyles() {
+        if (document.getElementById('earthPhaseStyles')) return;
+        
+        const style = document.createElement('style');
+        style.id = 'earthPhaseStyles';
+        style.textContent = `
+            .intro-phase.phase-earth-catastrophe {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #000000;
+                z-index: 100;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.8s ease;
+            }
+            
+            .intro-phase.phase-earth-catastrophe.active {
+                opacity: 1;
+                pointer-events: all;
+            }
+            
+            .earth-catastrophe-container {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(135deg, #0a0a15 0%, #1a1a2e 100%);
+            }
+            
+            .earth-catastrophe-panel {
+                width: 90%;
+                max-width: 1400px;
+                height: 85%;
+                background: rgba(10, 10, 20, 0.95);
+                border: 1px solid rgba(0, 170, 255, 0.3);
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+                box-shadow: 0 0 50px rgba(0, 170, 255, 0.1);
+                position: relative;
+            }
+            
+            .earth-header {
+                padding: 20px 30px;
+                border-bottom: 1px solid rgba(0, 170, 255, 0.2);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: rgba(0, 0, 0, 0.5);
+            }
+            
+            .earth-title {
+                font-family: 'SV-Tech', 'Courier New', monospace;
+                font-size: 1.4rem;
+                letter-spacing: 0.2em;
+                color: rgba(255, 255, 255, 0.9);
+                margin: 0;
+                font-weight: 400;
+            }
+            
+            .earth-continue-btn {
+                background: rgba(0, 170, 255, 0.1);
+                border: 1px solid rgba(0, 170, 255, 0.5);
+                color: rgba(255, 255, 255, 0.9);
+                padding: 12px 24px;
+                font-family: 'SV-Tech', 'Courier New', monospace;
+                font-size: 0.9rem;
+                letter-spacing: 0.15em;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .earth-continue-btn:hover {
+                background: rgba(0, 170, 255, 0.2);
+                border-color: rgba(0, 170, 255, 0.8);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 20px rgba(0, 170, 255, 0.2);
+            }
+            
+            .earth-content {
+                display: flex;
+                flex: 1;
+                overflow: hidden;
+            }
+            
+            .earth-stats {
+                width: 35%;
+                padding: 30px;
+                border-right: 1px solid rgba(0, 170, 255, 0.1);
+                overflow-y: auto;
+            }
+            
+            .stat-item {
+                margin-bottom: 25px;
+                padding-bottom: 15px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            }
+            
+            .stat-label {
+                font-family: 'SV-Tech', 'Courier New', monospace;
+                font-size: 0.6rem;
+                letter-spacing: 0.15em;
+                color: rgba(255, 255, 255, 0.4);
+                margin-bottom: 8px;
+                display: block;
+            }
+            
+            .stat-value {
+                font-family: 'SV-Tech', 'Courier New', monospace;
+                font-size: 1rem;
+                color: rgba(255, 255, 255, 0.9);
+                letter-spacing: 0.05em;
+            }
+            
+            .stat-value.danger {
+                color: rgba(255, 50, 50, 0.9);
+            }
+            
+            .stat-value.warning {
+                color: rgba(255, 200, 50, 0.9);
+            }
+            
+            .earth-timeline {
+                margin-top: 40px;
+            }
+            
+            .timeline-title {
+                font-family: 'SV-Tech', 'Courier New', monospace;
+                font-size: 0.9rem;
+                letter-spacing: 0.15em;
+                color: rgba(255, 255, 255, 0.7);
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .timeline-item {
+                margin-bottom: 15px;
+                padding-left: 15px;
+                border-left: 2px solid rgba(0, 170, 255, 0.5);
+            }
+            
+            .timeline-year {
+                font-family: 'SV-Tech', 'Courier New', monospace;
+                font-size: 0.8rem;
+                color: rgba(0, 170, 255, 0.9);
+                margin-bottom: 5px;
+            }
+            
+            .timeline-desc {
+                font-family: 'SV-Tech', 'Courier New', monospace;
+                font-size: 0.7rem;
+                color: rgba(255, 255, 255, 0.6);
+            }
+            
+            .earth-visual {
+                width: 65%;
+                padding: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            #earthCatastropheCanvas {
+                width: 100%;
+                height: 100%;
+                border: 1px solid rgba(0, 170, 255, 0.2);
+                background: #000;
+            }
+            
+            @media (max-width: 1200px) {
+                .earth-catastrophe-panel {
+                    flex-direction: column;
+                    height: 95%;
+                }
+                
+                .earth-content {
+                    flex-direction: column;
+                }
+                
+                .earth-stats {
+                    width: 100%;
+                    height: 40%;
+                    border-right: none;
+                    border-bottom: 1px solid rgba(0, 170, 255, 0.1);
+                }
+                
+                .earth-visual {
+                    width: 100%;
+                    height: 60%;
+                }
+            }
+            
+            @media (max-width: 768px) {
+                .earth-catastrophe-panel {
+                    width: 95%;
+                    height: 90%;
+                }
+                
+                .earth-header {
+                    flex-direction: column;
+                    gap: 15px;
+                    text-align: center;
+                }
+                
+                .earth-title {
+                    font-size: 1rem;
+                }
+                
+                .stat-value {
+                    font-size: 0.9rem;
+                }
+            }
+        `;
+        document.head.appendChild(style);
     }
     
     // ========================================
@@ -1619,7 +1913,7 @@ class AnimationsManager {
             continueBtn.id = 'phase3ContinueBtn';
             continueBtn.className = 'phase-continue-btn';
             continueBtn.innerHTML = `
-                <span class="continue-icon">▶</span>
+                <span class="continue-icon">//</span>
                 <span class="continue-text">CONTINUE</span>
             `;
             container.appendChild(continueBtn);
@@ -2710,747 +3004,12 @@ class AnimationsManager {
         
         setTimeout(updateFromCurrentTerrain, 1000);
     }
-// ========================================
-// CHICAGO 3D WIREFRAME SYSTEM - COMPLETE
-// ========================================
 
-setupChicagoButton() {
-    const btn = this.elements.observeCityBtn;
-    const panel = this.elements.chicagoPanel;
-    const closeBtn = this.elements.chicagoCloseBtn;
+    // ========================================
+    // EARTH EARTHQUAKE VISUALIZATION SYSTEM
+    // ========================================
+    // (Esta sección permanece igual, solo cambia su uso)
     
-    if (!btn || !panel) return;
-    
-    btn.addEventListener('click', () => {
-        console.log('[CHICAGO] Opening Chicago wireframe view');
-        this.openChicagoView();
-    });
-    
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            console.log('[CHICAGO] Closing Chicago wireframe view');
-            this.closeChicagoView();
-        });
-    }
-}
-
-openChicagoView() {
-    const panel = this.elements.chicagoPanel;
-    const chicagoCanvas = this.elements.chicagoCanvas;
-    const terrainCanvas = this.elements.terrainCanvas;
-    const globeHud = document.querySelector('.globe-hud');
-    
-    // NEW: Get geo panels
-    const geoPanels = [
-        document.getElementById('terrainSelectorPanel'),
-        document.getElementById('geoInfoLeft'),
-        document.getElementById('geoInfoRight')
-    ].filter(Boolean);
-
-    if (!panel || !chicagoCanvas) {
-        console.error('[CHICAGO] Required elements not found');
-        return;
-    }
-    
-    console.log('[CHICAGO] Opening Chicago with smooth transitions');
-    this.chicagoActive = true;
-    
-    // CORRECCIÓN: Crear el panel de sobrevivientes ANTES de la transición
-    if (!this.survivorPanel || !document.getElementById('survivorMessagesPanel')) {
-        console.log('[CHICAGO] Creating survivor panel before transition');
-        this.createSurvivorMessagesPanel();
-    }
-    
-    // Play transition sound
-    const transitionAudio = new Audio('/src/sfx/FX_flow_transition_data-tech.mp3');
-    transitionAudio.volume = 0.35;
-    this.playAudio(transitionAudio);
-    
-    // SECUENCIA DE TRANSICIÓN SUAVE:
-    
-    // PASO 1: Fade out Globe HUD and geo panels
-    if (globeHud) {
-        globeHud.classList.add('hidden');
-    }
-    geoPanels.forEach(p => p.classList.remove('visible'));
-
-    // PASO 2: Dim terrain canvas (0.8s)
-    if (terrainCanvas) {
-        terrainCanvas.classList.add('hidden');
-    }
-    
-    // PASO 3: Después de 500ms, activar Chicago canvas con blur fade
-    setTimeout(() => {
-        chicagoCanvas.classList.add('active');
-        chicagoCanvas.style.opacity = '1';
-        chicagoCanvas.style.visibility = 'visible';
-        
-        // Iniciar 3D
-        setTimeout(() => {
-            if (window.THREE) {
-                console.log('[CHICAGO] Starting 3D initialization');
-                this.initChicago3D();
-            }
-        }, 100);
-    }, 500);
-    
-    // PASO 4: Después de 800ms, mostrar panel (permite que CSS maneje stagger)
-    setTimeout(() => {
-        panel.classList.add('active');
-        this.bringPanelsToFront();
-        
-        // CORRECCIÓN: Mostrar panel después de asegurar que existe
-        setTimeout(() => {
-            this.showSurvivorPanel();
-        }, 1500); // Delay aumentado para asegurar transición suave
-
-    }, 800);
-    
-    console.log('[CHICAGO] Smooth transition sequence initiated');
-}
-
-
-// New function to bring panels to front
-bringPanelsToFront() {
-    // Ensure all Chicago panels are above canvas
-    const chicagoElements = [
-        this.elements.chicagoPanel,
-        document.querySelector('.chicago-narrative-panel'),
-        document.querySelector('.chicago-close'),
-        document.querySelector('.narrative-header'),
-        document.getElementById('chicagoNarrativeContent')
-    ].filter(Boolean);
-    
-    chicagoElements.forEach((element, index) => {
-        if (element) {
-            element.style.zIndex = '101';
-            element.style.pointerEvents = 'auto';
-        }
-    });
-}
-
-animatePanelTransition() {
-    const panel = this.elements.chicagoPanel;
-    if (!panel) return;
-    
-    // Add scramble animation styles
-    if (!document.getElementById('scrambleAnimationStyles')) {
-        const style = document.createElement('style');
-        style.id = 'scrambleAnimationStyles';
-        style.textContent = `
-            @keyframes scramble {
-                0% { opacity: 0; transform: translateY(-10px) scale(0.95); }
-                50% { opacity: 0.5; transform: translateY(5px) scale(1.05); }
-                100% { opacity: 1; transform: translateY(0) scale(1); }
-            }
-            .scramble-in {
-                animation: scramble 0.6s ease-out forwards;
-            }
-        `;
-        document.head.appendChild(style);
-    }
-    
-    // Animate panel elements
-    const elements = panel.querySelectorAll('.chicago-title, .chicago-subtitle, .chicago-close, .narrative-line, .narrative-header, .narrative-content');
-    elements.forEach((el, index) => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(-10px) scale(0.95)';
-        el.style.zIndex = '102';
-        el.style.position = 'relative';
-        setTimeout(() => {
-            el.classList.add('scramble-in');
-        }, 100 + index * 100);
-    });
-}
-
-scrambleAndHideGeoPanels() {
-    const geoPanels = [
-        document.getElementById('geoInfoLeft'),
-        document.getElementById('geoInfoRight'),
-        document.getElementById('terrainSelectorPanel'),
-        ...document.querySelectorAll('.globe-panel'),
-        document.querySelector('.globe-header'),
-        document.querySelector('.globe-footer')
-    ].filter(Boolean);
-    
-    geoPanels.forEach((panel, index) => {
-        if (!panel) return;
-        
-        panel.style.opacity = '1';
-        panel.style.transform = 'scale(1)';
-        
-        setTimeout(() => {
-            panel.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-            panel.style.opacity = '0';
-            panel.style.transform = 'scale(0.9) translateY(20px)';
-            panel.style.pointerEvents = 'none';
-            
-            this.scrambleTextEffect(panel, () => {
-                setTimeout(() => {
-                    panel.style.visibility = 'hidden';
-                }, 400);
-            });
-        }, index * 100);
-    });
-    
-    // Hide data streams and HUD frames
-    const dataStreams = document.querySelectorAll('.data-stream');
-    const hudFrames = document.querySelectorAll('.hud-corner-frame');
-    [...dataStreams, ...hudFrames].forEach(el => {
-        if (el) {
-            el.style.transition = 'opacity 0.4s ease';
-            el.style.opacity = '0';
-        }
-    });
-}
-
-scrambleTextEffect(element, callback) {
-    const textElements = element.querySelectorAll('span, div, p, h1, h2, h3, h4');
-    textElements.forEach(el => {
-        if (el.textContent && el.textContent.trim()) {
-            const originalText = el.textContent;
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
-            let scrambleCount = 0;
-            const maxScrambles = 8;
-            
-            const scramble = () => {
-                if (scrambleCount >= maxScrambles) {
-                    el.textContent = originalText;
-                    if (callback) callback();
-                    return;
-                }
-                
-                let scrambled = '';
-                for (let i = 0; i < originalText.length; i++) {
-                    if (originalText[i] === ' ') {
-                        scrambled += ' ';
-                    } else {
-                        scrambled += chars[Math.floor(Math.random() * chars.length)];
-                    }
-                }
-                el.textContent = scrambled;
-                scrambleCount++;
-                setTimeout(scramble, 40);
-            };
-            
-            setTimeout(scramble, Math.random() * 200);
-        }
-    });
-}
-
-closeChicagoView() {
-    const panel = this.elements.chicagoPanel;
-    const chicagoCanvas = this.elements.chicagoCanvas;
-    const terrainCanvas = this.elements.terrainCanvas;
-    const globeHud = document.querySelector('.globe-hud');
-    
-    // NEW: Get geo panels
-    const geoPanels = [
-        document.getElementById('terrainSelectorPanel'),
-        document.getElementById('geoInfoLeft'),
-        document.getElementById('geoInfoRight')
-    ].filter(Boolean);
-
-    if (!panel || !chicagoCanvas) {
-        console.error('[CHICAGO] Required elements not found');
-        return;
-    }
-    
-    console.log('[CHICAGO] Closing Chicago with smooth transitions');
-    this.chicagoActive = false;
-    
-    // Play transition sound
-    const transitionAudio = new Audio('/src/sfx/FX_flow_transition_data-tech.mp3');
-    transitionAudio.volume = 0.35;
-    this.playAudio(transitionAudio);
-    
-    // Remove survivor audio button
-    this.stopSurvivorAudio(); // Stop audio if playing when closing view
-    
-    // Hide Survivor Messages Panel
-    this.hideSurvivorPanel();
-
-    // SECUENCIA DE SALIDA SUAVE:
-    
-    // PASO 1: Añadir clase closing para transición rápida
-    panel.classList.add('closing');
-    
-    // PASO 2: Después de 300ms, remover panel
-    setTimeout(() => {
-        panel.classList.remove('active', 'closing');
-    }, 300);
-    
-    // PASO 3: Fade out Chicago canvas
-    setTimeout(() => {
-        chicagoCanvas.classList.remove('active');
-        chicagoCanvas.style.opacity = '0';
-    }, 400);
-    
-    // PASO 4: Después de 800ms, restaurar terrain y globe HUD
-    setTimeout(() => {
-        if (terrainCanvas) {
-            terrainCanvas.classList.remove('hidden');
-        }
-        
-        if (globeHud) {
-            globeHud.classList.remove('hidden');
-        }
-        geoPanels.forEach(p => p.classList.add('visible'));
-    }, 800);
-    
-    // PASO 5: Limpiar visualización 3D
-    setTimeout(() => {
-        if (typeof this.cleanupChicago === 'function') {
-            this.cleanupChicago();
-        }
-    }, 1200);
-    
-    console.log('[CHICAGO] Smooth exit transition complete');
-}
-
-
-scrambleAndShowGeoPanels() {
-    const geoPanels = [
-        document.getElementById('geoInfoLeft'),
-        document.getElementById('geoInfoRight'),
-        document.getElementById('terrainSelectorPanel'),
-        ...document.querySelectorAll('.globe-panel'),
-        document.querySelector('.globe-header'),
-        document.querySelector('.globe-footer')
-    ].filter(Boolean);
-    
-    geoPanels.forEach((panel, index) => {
-        if (!panel) return;
-        
-        panel.style.visibility = 'visible';
-        panel.style.opacity = '0';
-        panel.style.transform = 'scale(0.9) translateY(-20px)';
-        
-        setTimeout(() => {
-            panel.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-            panel.style.opacity = '1';
-            panel.style.transform = 'scale(1) translateY(0)';
-            panel.style.pointerEvents = 'auto';
-            
-            this.scrambleTextEffect(panel, null);
-        }, 100 + index * 150);
-    });
-    
-    // Restore data streams and HUD frames
-    const dataStreams = document.querySelectorAll('.data-stream');
-    const hudFrames = document.querySelectorAll('.hud-corner-frame');
-    [...dataStreams, ...hudFrames].forEach(el => {
-        if (el) {
-            setTimeout(() => {
-                el.style.opacity = '1';
-            }, 500);
-        }
-    });
-}
-
-initChicago3D() {
-    const canvas = this.elements.chicagoCanvas;
-    if (!canvas) {
-        console.error('[CHICAGO] Chicago canvas not found');
-        return;
-    }
-    
-    try {
-        console.log('[CHICAGO] Initializing Chicago 3D wireframe map');
-        
-        // Get canvas dimensions
-        const rect = canvas.getBoundingClientRect();
-        const canvasWidth = rect.width || window.innerWidth;
-        const canvasHeight = rect.height || window.innerHeight;
-        
-        // Create new scene for Chicago
-        this.chicagoScene = new THREE.Scene();
-        this.chicagoScene.background = new THREE.Color(0x000000);
-        
-        // Camera - LOW ANGLE DRONE VIEW for flat map
-        this.chicagoCamera = new THREE.PerspectiveCamera(
-            85,  // Wider FOV for dramatic perspective
-            canvasWidth / canvasHeight,
-            1,
-            100000  // Far enough to see the whole map
-        );
-        
-        // CRITICAL: Position camera LOW and at an ANGLE for flat map
-        // Model dimensions: X: ~15000, Y: 0 (flat), Z: ~20000
-        // Model center: (710, 0, 2037)
-        
-        // Position: Low altitude, looking across the map at an angle
-       this.chicagoCamera.position.set(
-         2000,   // X → a un costado
-         2500,   // Y → bien arriba
-        -4000   // Z → detrás del mapa
-);
-
-// Mira al centro, pero abajo
-this.chicagoCamera.lookAt(
-    710,    // centro X
-    0,      // suelo
-    2037    // centro Z
-);
-
-        
-        
-        // Create NEW renderer for Chicago canvas
-        this.chicagoRenderer = new THREE.WebGLRenderer({ 
-            canvas: canvas, 
-            antialias: true, 
-            alpha: false,
-            precision: 'highp'
-        });
-        this.chicagoRenderer.setSize(canvasWidth, canvasHeight);
-        this.chicagoRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        this.chicagoRenderer.setClearColor(0x000000, 1);
-        console.log('[CHICAGO] Created new renderer for Chicago canvas');
-        
-        // Controls - OPTIMIZED for flat map exploration
-        if (THREE.OrbitControls) {
-            this.chicagoControls = new THREE.OrbitControls(
-                this.chicagoCamera, 
-                this.chicagoRenderer.domElement
-            );
-            this.chicagoControls.enableDamping = true;
-            this.chicagoControls.dampingFactor = 0.08;
-            this.chicagoControls.autoRotate = false;
-            this.chicagoControls.enableZoom = true;
-            this.chicagoControls.enablePan = true;
-            this.chicagoControls.enableRotate = true;
-            
-            // Distance range for exploring the flat map
-            this.chicagoControls.minDistance = 100;      // Can get very close
-            this.chicagoControls.maxDistance = 15000;    // Can see whole map
-            
-            // Angle limits - prevent going below ground or straight up
-            this.chicagoControls.maxPolarAngle = Math.PI * 0.48;  // Don't go below horizon
-            this.chicagoControls.minPolarAngle = Math.PI * 0.1;   // Can look up
-            
-            // Responsive controls for smooth navigation
-            this.chicagoControls.rotateSpeed = 0.6;
-            this.chicagoControls.zoomSpeed = 1.2;
-            this.chicagoControls.panSpeed = 1.8;
-            
-            // Target center of map
-            this.chicagoControls.target.set(710, 0, 2037);
-            
-            console.log('[CHICAGO] Controls optimized for flat map navigation');
-        }
-        
-        // Enhanced lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
-        this.chicagoScene.add(ambientLight);
-        
-        const directionalLight1 = new THREE.DirectionalLight(0xffffff, 1.0);
-        directionalLight1.position.set(10000, 20000, 10000);
-        this.chicagoScene.add(directionalLight1);
-        
-        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.6);
-        directionalLight2.position.set(-10000, 10000, -10000);
-        this.chicagoScene.add(directionalLight2);
-        
-        const directionalLight3 = new THREE.DirectionalLight(0x00ff41, 0.4);
-        directionalLight3.position.set(0, 15000, 0);
-        this.chicagoScene.add(directionalLight3);
-        
-        console.log('[CHICAGO] Lights added');
-        
-        // Load Chicago model
-        this.loadChicagoModel();
-        
-        // Start animation
-        this.animateChicago();
-        
-        console.log('[CHICAGO] 3D initialization complete');
-        
-    } catch (error) {
-        console.error('[CHICAGO] Error initializing 3D:', error);
-        this.createChicagoFallback();
-    }
-}
-
-loadChicagoModel() {
-    const loader = new THREE.OBJLoader();
-    const mtlLoader = new THREE.MTLLoader();
-    
-    console.log('[CHICAGO] Loading Chicago wireframe model - GIANT SCALE');
-    
-    mtlLoader.load(
-        '/src/model_3d/Downtown_Chicago_Wireframe_Map.mtl',
-        (materials) => {
-            materials.preload();
-            loader.setMaterials(materials);
-            this.loadOBJModel(loader, '/src/model_3d/Downtown_Chicago_Wireframe_Map.obj');
-        },
-        undefined,
-        (error) => {
-            console.warn('[CHICAGO] MTL not found, loading OBJ only:', error);
-            this.loadOBJModel(loader, '/src/model_3d/Downtown_Chicago_Wireframe_Map.obj');
-        }
-    );
-}
-
-loadOBJModel(loader, objPath) {
-    loader.load(
-        objPath,
-        (object) => {
-            console.log('[CHICAGO] Model loaded successfully - APPLYING GIANT SCALE');
-            this.processLoadedModel(object);
-        },
-        (progress) => {
-            if (progress.total > 0) {
-                const percent = Math.round((progress.loaded / progress.total) * 100);
-                console.log('[CHICAGO] Loading model:', percent + '%');
-            }
-        },
-        (error) => {
-            console.error('[CHICAGO] Error loading model:', error);
-            this.createChicagoFallback();
-        }
-    );
-}
-
-processLoadedModel(object) {
-    object.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-            child.material = new THREE.MeshBasicMaterial({
-                color: 0x00ff41,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.95,
-                linewidth: 3
-            });
-        }
-    });
-    
-    const box = new THREE.Box3().setFromObject(object);
-    const center = box.getCenter(new THREE.Vector3());
-    const size = box.getSize(new THREE.Vector3());
-    
-    console.log('[CHICAGO] Original model dimensions:', {
-        min: box.min.toArray(),
-        max: box.max.toArray(),
-        size: size.toArray(),
-        center: center.toArray()
-    });
-    
-    object.position.sub(center);
-    
-    const maxDimension = Math.max(size.x, size.y, size.z);
-    let scaleFactor;
-    
-    if (maxDimension > 10000) {
-        scaleFactor = 50000 / maxDimension;
-    } else if (maxDimension > 1000) {
-        scaleFactor = 35000 / maxDimension;
-    } else if (maxDimension > 100) {
-        scaleFactor = 25000 / maxDimension;
-    } else {
-        scaleFactor = 15000 / maxDimension;
-    }
-    
-    if (scaleFactor < 100) {
-        scaleFactor = 100;
-    }
-    
-    object.scale.setScalar(scaleFactor);
-    console.log('[CHICAGO] GIANT MODEL SCALING APPLIED:', scaleFactor);
-    
-    if (this.chicagoMesh) {
-        this.chicagoScene.remove(this.chicagoMesh);
-    }
-    
-    this.chicagoMesh = object;
-    this.chicagoScene.add(object);
-    
-    this.adjustCameraForGiantModel(size, scaleFactor);
-}
-
-adjustCameraForGiantModel(originalSize, scaleFactor) {
-    if (!this.chicagoCamera) return;
-    
-    const scaledSize = Math.max(originalSize.x, originalSize.y, originalSize.z) * scaleFactor;
-    console.log('[CHICAGO] Scaled model size:', scaledSize);
-    
-    // DRONE/LOW-ANGLE CAMERA for flat map
-    // Much lower altitude for immersive perspective
-    const droneHeight = scaledSize * 0.02;      // Very low - 2% of model size
-    const droneDistance = scaledSize * 0.10;    // Close to map - 10% of model size
-    
-    // Position camera low and at angle
-    this.chicagoCamera.position.set(
-        0,              // Centered horizontally
-        droneHeight,    // LOW altitude
-        -droneDistance  // Behind, looking forward
-    );
-    
-    // Look at center of map, slightly elevated
-    this.chicagoCamera.lookAt(0, droneHeight * 0.2, 0);
-    
-    if (this.chicagoControls) {
-        // Allow getting very close and pulling back far
-        this.chicagoControls.minDistance = scaledSize * 0.01;  // Can get VERY close
-        this.chicagoControls.maxDistance = scaledSize * 0.8;   // Can pull back to see map
-        this.chicagoControls.target.set(0, 0, 0);  // Target ground level
-        
-        // Faster controls for responsive navigation
-        this.chicagoControls.rotateSpeed = 0.4;
-        this.chicagoControls.zoomSpeed = 1.5;
-        this.chicagoControls.panSpeed = 2.0;
-        
-        // Limit angles to prevent going underground
-        this.chicagoControls.maxPolarAngle = Math.PI * 0.48; // Don't go below horizon
-        this.chicagoControls.minPolarAngle = Math.PI * 0.05; // Can look up
-        
-        this.chicagoControls.update();
-    }
-    
-    console.log('[CHICAGO] DRONE CAMERA positioned:', {
-        position: this.chicagoCamera.position.toArray(),
-        droneHeight: droneHeight,
-        droneDistance: droneDistance,
-        minDistance: scaledSize * 0.01,
-        maxDistance: scaledSize * 0.8
-    });
-}
-
-createChicagoFallback() {
-    console.log('[CHICAGO] Creating GIANT fallback wireframe city');
-    
-    const group = new THREE.Group();
-    const material = new THREE.LineBasicMaterial({ 
-        color: 0x00ff41, 
-        linewidth: 4
-    });
-    
-    const buildingCount = 25;
-    const buildingSpacing = 800;
-    
-    for (let x = -buildingCount/2; x <= buildingCount/2; x++) {
-        for (let z = -buildingCount/2; z <= buildingCount/2; z++) {
-            if (Math.abs(x) < 3 && Math.abs(z) < 3) continue;
-            
-            const height = 500 + Math.random() * 2000;
-            const width = 200 + Math.random() * 400;
-            const depth = 200 + Math.random() * 400;
-            
-            const geometry = new THREE.BoxGeometry(width, height, depth);
-            const edges = new THREE.EdgesGeometry(geometry);
-            const building = new THREE.LineSegments(edges, material);
-            
-            building.position.set(
-                x * buildingSpacing, 
-                height / 2, 
-                z * buildingSpacing
-            );
-            
-            group.add(building);
-        }
-    }
-    
-    const gridSize = buildingCount * buildingSpacing * 1.2;
-    const gridDivisions = 50;
-    const gridHelper = new THREE.GridHelper(gridSize, gridDivisions, 0x00ff41, 0x00ff41);
-    gridHelper.material.opacity = 0.2;
-    gridHelper.material.transparent = true;
-    group.add(gridHelper);
-    
-    group.position.set(0, 0, 0);
-    
-    if (this.chicagoMesh) {
-        this.chicagoScene.remove(this.chicagoMesh);
-    }
-    
-    this.chicagoMesh = group;
-    this.chicagoScene.add(group);
-    
-    const citySize = buildingCount * buildingSpacing;
-    this.chicagoCamera.position.set(citySize * 0.2, citySize * 0.1, citySize * 0.3);
-    this.chicagoCamera.lookAt(0, 100, 0);
-    
-    if (this.chicagoControls) {
-        this.chicagoControls.minDistance = citySize * 0.03;
-        this.chicagoControls.maxDistance = citySize * 1.5;
-        this.chicagoControls.target.set(0, 100, 0);
-        this.chicagoControls.update();
-    }
-    
-    console.log('[CHICAGO] Fallback city created:', {
-        buildings: group.children.length - 1,
-        citySize: citySize,
-        cameraPosition: this.chicagoCamera.position.toArray()
-    });
-}
-
-animateChicago() {
-    if (!this.chicagoActive || !this.chicagoRenderer || this.introSkipped) {
-        if (this.chicagoAnimationFrame) {
-            cancelAnimationFrame(this.chicagoAnimationFrame);
-            this.chicagoAnimationFrame = null;
-            console.log('[CHICAGO] Animation stopped');
-        }
-        return;
-    }
-    
-    this.chicagoAnimationFrame = requestAnimationFrame(() => this.animateChicago());
-    
-    if (this.chicagoControls) {
-        this.chicagoControls.update();
-    }
-    
-    if (this.chicagoMesh && this.chicagoControls && !this.chicagoControls.autoRotate) {
-        if (!this.chicagoControls.enabled || 
-            (Date.now() - (this.lastUserInteraction || 0)) > 5000) {
-            this.chicagoMesh.rotation.y += 0.0005;
-        }
-    }
-    
-    if (this.chicagoScene && this.chicagoCamera && this.chicagoRenderer) {
-        this.chicagoRenderer.render(this.chicagoScene, this.chicagoCamera);
-    }
-}
-
-
-    // startChicagoNarrative() and typewriterEffectForLine() removed - using static HTML
-
-cleanupChicago() {
-    console.log('[CHICAGO] Cleaning up Chicago visualization');
-    
-    if (this.chicagoAnimationFrame) {
-        cancelAnimationFrame(this.chicagoAnimationFrame);
-        this.chicagoAnimationFrame = null;
-    }
-    
-    if (this.chicagoMesh && this.chicagoScene) {
-        this.chicagoScene.remove(this.chicagoMesh);
-        
-        this.chicagoMesh.traverse((child) => {
-            if (child instanceof THREE.Mesh) {
-                if (child.geometry) child.geometry.dispose();
-                if (child.material) {
-                    if (Array.isArray(child.material)) {
-                        child.material.forEach(m => m.dispose());
-                    } else {
-                        child.material.dispose();
-                    }
-                }
-            }
-        });
-        
-        this.chicagoMesh = null;
-    }
-    
-    if (this.chicagoControls) {
-        this.chicagoControls.dispose();
-        this.chicagoControls = null;
-    }
-    
-    this.chicagoScene = null;
-    this.chicagoCamera = null;
-    this.chicagoActive = false;
-}
     // ========================================
     // PHASE 4: ETHEREAL WHITE BRAIN VISUALIZATION
     // ========================================
@@ -3807,60 +3366,6 @@ cleanupChicago() {
         this.brainScene.add(aura);
     }
     
-    startBrainHighlightSequence() {
-        const regions = Object.keys(this.brainRegions);
-        if (regions.length === 0) return;
-        
-        let currentRegion = 0;
-        
-        const animateHighlights = () => {
-            if (this.introSkipped || this.currentPhase !== 4) return;
-            
-            // Reset all regions
-            regions.forEach(regionId => {
-                const region = this.brainRegions[regionId];
-                if (region) {
-                    region.highlighted = false;
-                    region.pulseIntensity = 0;
-                    region.material.opacity = region.originalOpacity;
-                    region.material.emissiveIntensity = 0.2;
-                }
-            });
-            
-            // Highlight current region
-            const currentRegionId = regions[currentRegion];
-            const region = this.brainRegions[currentRegionId];
-            if (region) {
-                region.highlighted = true;
-            }
-            
-            // Update UI scan items
-            const scanItems = document.querySelectorAll('.scan-item');
-            if (scanItems[currentRegion]) {
-                const regionNames = ['Frontal Cortex', 'Parietal Lobe', 'Temporal Lobe', 
-                                   'Occipital Lobe', 'Cerebellum', 'Brainstem'];
-                const regionName = regionNames[currentRegion % regionNames.length];
-                scanItems[currentRegion].querySelector('.scan-text').textContent = 
-                    `${regionName}: ACTIVE`;
-                scanItems[currentRegion].querySelector('.scan-dot').classList.add('success');
-                
-                // Reset previous after delay
-                if (currentRegion > 0) {
-                    setTimeout(() => {
-                        scanItems[currentRegion - 1].querySelector('.scan-dot').classList.remove('success');
-                    }, 1000);
-                }
-            }
-            
-            // Move to next region every 3 seconds
-            currentRegion = (currentRegion + 1) % regions.length;
-            
-            setTimeout(animateHighlights, 3000);
-        };
-        
-        setTimeout(animateHighlights, 1000);
-    }
-    
     animateBrain() {
         if (!this.brainRenderer || this.currentPhase !== 4 || this.introSkipped) {
             if (this.brainAnimationFrame) {
@@ -3942,76 +3447,6 @@ cleanupChicago() {
         if (this.brainScene && this.brainCamera) {
             this.brainRenderer.render(this.brainScene, this.brainCamera);
         }
-    }
-    
-    createEtherealFallbackBrain() {
-        console.log('[ANIMATIONS] Creating ethereal fallback brain');
-        
-        const group = new THREE.Group();
-        
-        // Main brain hemispheres - very transparent
-        const brainGeometry = new THREE.SphereGeometry(60, 32, 24);
-        const brainMaterial = new THREE.MeshPhongMaterial({
-            color: 0xffffff,
-            transparent: true,
-            opacity: 0.25, // Very transparent
-            shininess: 100,
-            specular: 0xffffff,
-            wireframe: true,
-            wireframeLinewidth: 0.5
-        });
-        
-        const leftHemisphere = new THREE.Mesh(brainGeometry, brainMaterial);
-        leftHemisphere.position.x = -30;
-        group.add(leftHemisphere);
-        
-        const rightHemisphere = new THREE.Mesh(brainGeometry, brainMaterial);
-        rightHemisphere.position.x = 30;
-        group.add(rightHemisphere);
-        
-        // Cerebellum
-        const cerebellumGeometry = new THREE.SphereGeometry(25, 16, 12);
-        const cerebellum = new THREE.Mesh(cerebellumGeometry, brainMaterial);
-        cerebellum.position.y = -40;
-        cerebellum.position.z = 10;
-        group.add(cerebellum);
-        
-        // Position
-        group.position.y = -20;
-        
-        this.brainMesh = group;
-        this.brainScene.add(group);
-        
-        // Store as single region
-        this.brainRegions['fallback'] = {
-            mesh: group,
-            material: brainMaterial,
-            originalOpacity: 0.25,
-            pulseIntensity: 0,
-            highlighted: false
-        };
-        
-        this.brainMaterial = brainMaterial;
-        
-        // Create ethereal effects for fallback too
-        this.createEtherealEffects();
-        
-        console.log('[ANIMATIONS] Ethereal fallback brain created');
-    }
-    
-    cleanupMesh(mesh) {
-        if (!mesh) return;
-        
-        mesh.traverse(child => {
-            if (child.geometry) child.geometry.dispose();
-            if (child.material) {
-                if (Array.isArray(child.material)) {
-                    child.material.forEach(m => m.dispose());
-                } else {
-                    child.material.dispose();
-                }
-            }
-        });
     }
     
     createBrainInfoPanel() {
@@ -4300,14 +3735,12 @@ cleanupChicago() {
         }
         
         this.stopAllAudio();
-        this.stopSurvivorAudio();  // NEW - Stop survivor audio if playing
+        this.stopSurvivorAudio();
 
-    // ========================================
-    // CLEANUP METHODS
-    // ========================================
+        // Cleanup all visualizations
         this.cleanupTerrain();
+        this.cleanupEarth();
         this.cleanupBrain();
-        this.cleanupChicago();  // NEW - Cleanup Chicago if active
         this.transitionFromStellarToMain();
     }
 
@@ -4319,8 +3752,8 @@ cleanupChicago() {
         console.log('[ANIMATIONS] Transitioning to main...');
         
         this.cleanupSkipFunctionality();
-        this.stopSurvivorAudio();  // NEW - Stop survivor audio if playing
-        this.cleanupChicago();  // NEW - Cleanup Chicago if active
+        this.stopSurvivorAudio();
+        this.cleanupEarth();
         
         this.fadeOutMusic(1200);
         
@@ -4371,11 +3804,8 @@ cleanupChicago() {
     
     performFinalCleanup() {
         this.stopAllAudio();
-
-    // ========================================
-    // CLEANUP METHODS
-    // ========================================
         this.cleanupTerrain();
+        this.cleanupEarth();
         this.cleanupBrain();
         
         if (this.terrainInterval) {
@@ -4387,6 +3817,24 @@ cleanupChicago() {
     // ========================================
     // CLEANUP FUNCTIONS
     // ========================================
+    
+    cleanupEarth() {
+        console.log('[ANIMATIONS] Cleaning up Earth visualization');
+        
+        if (this.earthViz) {
+            this.earthViz.destroy();
+            this.earthViz = null;
+        }
+        
+        if (this.earthCatastropheViz) {
+            this.earthCatastropheViz.destroy();
+            this.earthCatastropheViz = null;
+        }
+        
+        this.earthActive = false;
+        
+        console.log('[ANIMATIONS] Earth cleanup complete');
+    }
     
     cleanupBrain() {
         console.log('[ANIMATIONS] Cleaning up brain');
@@ -4404,6 +3852,8 @@ cleanupChicago() {
         
         if (this.brainParticles && this.brainScene) {
             this.brainScene.remove(this.brainParticles);
+           
+           
             if (this.brainParticles.geometry) {
                 this.brainParticles.geometry.dispose();
             }
@@ -4446,10 +3896,21 @@ cleanupChicago() {
         console.log('[ANIMATIONS] Brain cleanup complete');
     }
     
+    cleanupMesh(mesh) {
+        if (!mesh) return;
+        
+        mesh.traverse(child => {
+            if (child.geometry) child.geometry.dispose();
+            if (child.material) {
+                if (Array.isArray(child.material)) {
+                    child.material.forEach(m => m.dispose());
+                } else {
+                    child.material.dispose();
+                }
+            }
+        });
+    }
 
-    // ========================================
-    // CLEANUP METHODS
-    // ========================================
     cleanupTerrain() {
         console.log('[ANIMATIONS] Cleaning up terrain');
         
@@ -4676,6 +4137,7 @@ cleanupChicago() {
         
         this.stopAllAudio();
         this.cleanupTerrain();
+        this.cleanupEarth();
         this.cleanupBrain();
         this.cleanupSkipFunctionality();
         
@@ -4685,6 +4147,789 @@ cleanupChicago() {
         
         this.initialized = false;
         console.log('[ANIMATIONS] AnimationsManager destroyed');
+    }
+}
+
+// ========================================
+// EARTH EARTHQUAKE VISUALIZATION CLASS
+// ========================================
+
+class EarthquakeVisualization {
+    constructor(canvasElement, panelElement) {
+        this.canvas = canvasElement;
+        this.panel = panelElement;
+        
+        this.earthquakeData = [];
+        this.earthquakeStats = {
+            totalQuakes: 0,
+            maxMagnitude: 0,
+            worstRegion: '',
+            deadliestYear: ''
+        };
+        
+        // Three.js objects
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
+        this.controls = null;
+        this.earthMesh = null;
+        this.earthquakePoints = [];
+        this.animationFrame = null;
+        
+        // State
+        this.isActive = false;
+        this.isLoading = false;
+        this.isInitialized = false;
+        
+        // Performance
+        this.isLowPowerMode = this.detectLowPowerDevice();
+        this.shouldUseOptimizedMode = window.innerWidth <= 768 || this.isLowPowerMode;
+    }
+    
+    detectLowPowerDevice() {
+        return navigator.hardwareConcurrency <= 2 || 
+               navigator.connection?.effectiveType === 'slow-2g' ||
+               navigator.connection?.effectiveType === '2g' ||
+               navigator.deviceMemory < 4;
+    }
+    
+    init() {
+        console.log('[EARTH] Initializing Earthquake Visualization');
+        
+        if (!this.canvas) {
+            console.error('[EARTH] Canvas element not provided!');
+            return false;
+        }
+        
+        this.setupScene();
+        this.isInitialized = true;
+        
+        return true;
+    }
+    
+    setupScene() {
+        console.log('[EARTH] Setting up Three.js scene');
+        
+        try {
+            // Get canvas dimensions
+            const rect = this.canvas.getBoundingClientRect();
+            const width = rect.width || window.innerWidth;
+            const height = rect.height || window.innerHeight;
+            
+            // Scene
+            this.scene = new THREE.Scene();
+            this.scene.background = new THREE.Color(0x000000);
+            
+            // Camera
+            this.camera = new THREE.PerspectiveCamera(
+                60, 
+                width / height, 
+                1, 
+                100000
+            );
+            this.camera.position.set(0, 0, this.shouldUseOptimizedMode ? 12000 : 10000);
+            
+            // Renderer
+            this.renderer = new THREE.WebGLRenderer({ 
+                canvas: this.canvas,
+                antialias: !this.shouldUseOptimizedMode,
+                alpha: false,
+                powerPreference: this.shouldUseOptimizedMode ? "low-power" : "high-performance"
+            });
+            
+            this.renderer.setSize(width, height);
+            this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            this.renderer.setClearColor(0x0a0a15, 1);
+            this.renderer.shadowMap.enabled = !this.shouldUseOptimizedMode;
+            
+            // Controls
+            if (THREE.OrbitControls) {
+                this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+                this.controls.enableDamping = true;
+                this.controls.dampingFactor = 0.08;
+                this.controls.autoRotate = true;
+                this.controls.autoRotateSpeed = this.shouldUseOptimizedMode ? 0.1 : 0.2;
+                this.controls.minDistance = 3000;
+                this.controls.maxDistance = this.shouldUseOptimizedMode ? 20000 : 15000;
+                this.controls.enableZoom = true;
+                this.controls.enablePan = true;
+                this.controls.enableRotate = true;
+                this.controls.update();
+            }
+            
+            // Lighting
+            this.setupLighting();
+            
+            // Create Earth
+            this.createEarth();
+            
+            // Setup resize handler
+            this.setupResizeHandler();
+            
+            console.log('[EARTH] Three.js scene setup complete');
+            
+        } catch (error) {
+            console.error('[EARTH] Error setting up scene:', error);
+            this.createFallback();
+            return false;
+        }
+        
+        return true;
+    }
+    
+    setupLighting() {
+        // Ambient light
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+        this.scene.add(ambientLight);
+        
+        // Directional light
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(5000, 3000, 5000);
+        this.scene.add(directionalLight);
+        
+        // Point lights for better depth perception
+        if (!this.shouldUseOptimizedMode) {
+            const pointLight = new THREE.PointLight(0x00aaff, 0.3, 10000);
+            pointLight.position.set(0, 0, -5000);
+            this.scene.add(pointLight);
+        }
+    }
+    
+    createEarth() {
+        console.log('[EARTH] Creating Earth model');
+        
+        // Optimize geometry based on device capability
+        const segments = this.shouldUseOptimizedMode ? 32 : 64;
+        const radius = 2000;
+        
+        // Earth geometry
+        const earthGeometry = new THREE.SphereGeometry(radius, segments, segments);
+        
+        // Earth material
+        const earthMaterial = new THREE.MeshPhongMaterial({
+            color: 0x000000,
+            transparent: true,
+            opacity: 1,
+            wireframe: false,
+        });
+        
+        this.earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
+        this.scene.add(this.earthMesh);
+        
+        // Add atmosphere glow (only if not in optimized mode)
+        if (!this.shouldUseOptimizedMode) {
+            const atmosphereGeometry = new THREE.SphereGeometry(radius * 1.05, 32, 32);
+            const atmosphereMaterial = new THREE.MeshBasicMaterial({
+                color: 0x00aaff,
+                transparent: true,
+                opacity: 0.1,
+                side: THREE.BackSide
+            });
+            
+            const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+            this.scene.add(atmosphereMesh);
+        }
+        
+        console.log('[EARTH] Earth model created');
+    }
+    
+    async loadEarthquakeData() {
+        console.log('[EARTH] Loading earthquake data...');
+        this.isLoading = true;
+        
+        try {
+            // Try different data sources in sequence
+            await this.loadDataFromSources();
+        } catch (error) {
+            console.log('[EARTH] All data loading failed, creating simulation:', error.message);
+            this.createSimulatedData();
+        }
+        
+        this.updateUI();
+        this.isLoading = false;
+        
+        // Start animation if not already running
+        if (!this.animationFrame && this.isActive) {
+            this.animate();
+        }
+        
+        console.log('[EARTH] Earthquake data loaded successfully');
+    }
+    
+    async loadDataFromSources() {
+        const sources = [
+            { type: 'ply', path: '/src/model_3d/earthquakes.ply' },
+            { type: 'glb', path: '/src/model_3d/earthquakes_-_2000_to_2019.glb' },
+            { type: 'json', path: '/src/model_3d/earthquakes.json' }
+        ];
+        
+        for (const source of sources) {
+            try {
+                console.log(`[EARTH] Trying ${source.type} source: ${source.path}`);
+                
+                switch (source.type) {
+                    case 'ply':
+                        await this.loadPLYData(source.path);
+                        break;
+                    case 'glb':
+                        await this.loadGLBData(source.path);
+                        break;
+                    case 'json':
+                        await this.loadJSONData(source.path);
+                        break;
+                }
+                
+                // If we reach here, loading succeeded
+                console.log(`[EARTH] Successfully loaded ${source.type} data`);
+                return;
+                
+            } catch (error) {
+                console.log(`[EARTH] Failed to load ${source.type}:`, error.message);
+                continue;
+            }
+        }
+        
+        // If all sources fail
+        throw new Error('All data sources failed');
+    }
+    
+    async loadPLYData(path) {
+        return new Promise((resolve, reject) => {
+            if (!THREE.PLYLoader) {
+                reject(new Error('PLYLoader not available'));
+                return;
+            }
+            
+            const loader = new THREE.PLYLoader();
+            loader.load(
+                path,
+                (geometry) => {
+                    this.processPLYGeometry(geometry);
+                    resolve();
+                },
+                undefined,
+                (error) => {
+                    reject(error);
+                }
+            );
+        });
+    }
+    
+    async loadGLBData(path) {
+        return new Promise((resolve, reject) => {
+            if (!THREE.GLTFLoader) {
+                reject(new Error('GLTFLoader not available'));
+                return;
+            }
+            
+            const loader = new THREE.GLTFLoader();
+            loader.load(
+                path,
+                (gltf) => {
+                    this.processGLBModel(gltf.scene);
+                    resolve();
+                },
+                undefined,
+                (error) => {
+                    reject(error);
+                }
+            );
+        });
+    }
+    
+    async loadJSONData(path) {
+        const response = await fetch(path);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.earthquakes) {
+            this.earthquakeData = data.earthquakes;
+            this.earthquakeStats = data.statistics || this.calculateStatsFromData(data.earthquakes);
+            this.visualizeJSONData();
+        } else {
+            throw new Error('Invalid JSON structure');
+        }
+    }
+    
+    processPLYGeometry(geometry) {
+        // Create material
+        const material = new THREE.PointsMaterial({
+            size: this.shouldUseOptimizedMode ? 4 : 8,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending,
+            sizeAttenuation: true
+        });
+        
+        // Scale and position
+        const scale = this.shouldUseOptimizedMode ? 50 : 100;
+        geometry.scale(scale, scale, scale);
+        
+        // Create points mesh
+        const points = new THREE.Points(geometry, material);
+        points.position.set(0, 0, 0);
+        
+        this.scene.add(points);
+        this.earthquakePoints.push(points);
+        
+        // Extract statistics
+        this.extractStatsFromGeometry(geometry);
+    }
+    
+    processGLBModel(model) {
+        model.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+                // Convert mesh to points for better performance
+                const pointsMaterial = new THREE.PointsMaterial({
+                    size: this.shouldUseOptimizedMode ? 3 : 6,
+                    color: 0xff0000,
+                    transparent: true,
+                    opacity: 0.7,
+                    blending: THREE.AdditiveBlending
+                });
+                
+                const points = new THREE.Points(child.geometry, pointsMaterial);
+                points.scale.set(100, 100, 100);
+                points.position.set(0, 0, 0);
+                
+                this.scene.add(points);
+                this.earthquakePoints.push(points);
+            }
+        });
+        
+        this.earthquakeStats = {
+            totalQuakes: 10000,
+            maxMagnitude: 9.1,
+            worstRegion: 'Global Dataset',
+            deadliestYear: '2011'
+        };
+    }
+    
+    visualizeJSONData() {
+        console.log('[EARTH] Visualizing JSON earthquake data');
+        
+        const positions = [];
+        const colors = [];
+        const sizes = [];
+        
+        this.earthquakeData.forEach((quake) => {
+            // Convert lat/lon/depth to 3D coordinates
+            const coords = this.latLonToXYZ(quake.lat, quake.lon, quake.depth);
+            positions.push(coords.x, coords.y, coords.z);
+            
+            // Color based on magnitude
+            const color = this.magnitudeToColor(quake.mag);
+            colors.push(color.r, color.g, color.b);
+            
+            // Size based on magnitude
+            sizes.push(Math.max(2, quake.mag * (this.shouldUseOptimizedMode ? 1.0 : 1.5)));
+        });
+        
+        // Create geometry
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+        geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+        
+        // Create material
+        const material = new THREE.PointsMaterial({
+            size: this.shouldUseOptimizedMode ? 4 : 8,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending,
+            sizeAttenuation: true
+        });
+        
+        // Create points
+        const points = new THREE.Points(geometry, material);
+        this.scene.add(points);
+        this.earthquakePoints.push(points);
+    }
+    
+    createSimulatedData() {
+        console.log('[EARTH] Creating simulated earthquake data');
+        
+        const count = this.shouldUseOptimizedMode ? 500 : 1000;
+        const positions = [];
+        const colors = [];
+        const magnitudes = [];
+        
+        // Pacific Ring of Fire coordinates
+        const ringOfFireCoords = [
+            { lat: 61.02, lon: -147.65 }, // Alaska
+            { lat: 51.79, lon: 176.13 }, // Aleutian Islands
+            { lat: 35.36, lon: 138.73 }, // Japan
+            { lat: 23.78, lon: 121.00 }, // Taiwan
+            { lat: 14.08, lon: 120.89 }, // Philippines
+            { lat: -6.92, lon: 107.60 }, // Indonesia
+            { lat: -41.29, lon: 174.78 }, // New Zealand
+            { lat: -15.48, lon: -172.10 }, // Samoa
+            { lat: 19.43, lon: -155.29 }, // Hawaii
+            { lat: 37.77, lon: -122.42 }, // California
+            { lat: 60.98, lon: -147.00 }, // Alaska (again)
+            { lat: -17.55, lon: -149.60 }, // Tahiti
+            { lat: 52.16, lon: -176.20 }, // Aleutian Islands 2
+            { lat: 39.74, lon: 116.12 }, // Beijing area
+            { lat: -9.08, lon: 157.25 }  // Solomon Islands
+        ];
+        
+        for (let i = 0; i < count; i++) {
+            let lat, lon;
+            
+            // 70% in Ring of Fire, 30% random
+            if (i < count * 0.7 && ringOfFireCoords.length > 0) {
+                const coord = ringOfFireCoords[Math.floor(Math.random() * ringOfFireCoords.length)];
+                lat = coord.lat + (Math.random() - 0.5) * 20;
+                lon = coord.lon + (Math.random() - 0.5) * 20;
+            } else {
+                lat = (Math.random() - 0.5) * 180;
+                lon = (Math.random() - 0.5) * 360;
+            }
+            
+            const depth = Math.random() * 100;
+            const magnitude = 3 + Math.random() * 6;
+            
+            const coords = this.latLonToXYZ(lat, lon, depth);
+            positions.push(coords.x, coords.y, coords.z);
+            
+            const color = this.magnitudeToColor(magnitude);
+            colors.push(color.r, color.g, color.b);
+            magnitudes.push(magnitude);
+        }
+        
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+        
+        const material = new THREE.PointsMaterial({
+            size: this.shouldUseOptimizedMode ? 3 : 6,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.7,
+            blending: THREE.AdditiveBlending,
+            sizeAttenuation: true
+        });
+        
+        const points = new THREE.Points(geometry, material);
+        this.scene.add(points);
+        this.earthquakePoints.push(points);
+        
+        // Calculate stats
+        this.earthquakeStats = {
+            totalQuakes: count,
+            maxMagnitude: Math.max(...magnitudes),
+            worstRegion: 'Pacific Ring of Fire',
+            deadliestYear: '2011'
+        };
+    }
+    
+    latLonToXYZ(lat, lon, depth) {
+        const phi = (90 - lat) * (Math.PI / 180);
+        const theta = (lon + 180) * (Math.PI / 180);
+        const radius = 2000 - depth * 3;
+        
+        const x = radius * Math.sin(phi) * Math.cos(theta);
+        const z = radius * Math.sin(phi) * Math.sin(theta);
+        const y = radius * Math.cos(phi);
+        
+        return { x, y, z };
+    }
+    
+    magnitudeToColor(magnitude) {
+        const normalized = Math.max(0, Math.min(1, (magnitude - 3) / 6));
+        
+        if (normalized < 0.3) {
+            return { r: 0.2, g: 0.5, b: 1.0 }; // Blue for low magnitude
+        } else if (normalized < 0.6) {
+            return { r: 1.0, g: 1.0, b: 0.0 }; // Yellow for medium
+        } else {
+            return { r: 1.0, g: 0.2, b: 0.1 }; // Red for high
+        }
+    }
+    
+    extractStatsFromGeometry(geometry) {
+        const count = geometry.attributes.position ? geometry.attributes.position.count : 0;
+        
+        this.earthquakeStats = {
+            totalQuakes: count,
+            maxMagnitude: 9.1,
+            worstRegion: 'Global Dataset',
+            deadliestYear: '2011'
+        };
+    }
+    
+    calculateStatsFromData(earthquakes) {
+        let maxMag = 0;
+        let regionCounts = {};
+        
+        earthquakes.forEach(quake => {
+            maxMag = Math.max(maxMag, quake.mag || 0);
+            
+            // Simple region detection based on coordinates
+            const region = this.getRegionFromCoords(quake.lat, quake.lon);
+            regionCounts[region] = (regionCounts[region] || 0) + 1;
+        });
+        
+        // Find worst region
+        let worstRegion = '';
+        let maxCount = 0;
+        Object.entries(regionCounts).forEach(([region, count]) => {
+            if (count > maxCount) {
+                maxCount = count;
+                worstRegion = region;
+            }
+        });
+        
+        return {
+            totalQuakes: earthquakes.length,
+            maxMagnitude: maxMag,
+            worstRegion: worstRegion || 'Unknown',
+            deadliestYear: '2011' // Default
+        };
+    }
+    
+    getRegionFromCoords(lat, lon) {
+        if (lat > 20 && lat < 60 && lon > 100 && lon < 160) return 'Asia-Pacific';
+        if (lat > -60 && lat < 20 && lon > -160 && lon < -60) return 'Americas';
+        if (lat > 35 && lat < 70 && lon > -10 && lon < 40) return 'Europe';
+        if (lat > -90 && lat < -60) return 'Antarctica';
+        return 'Global';
+    }
+    
+    updateUI() {
+        // Update stats in UI
+        const statsElements = {
+            'quakeCount': this.earthquakeStats.totalQuakes?.toLocaleString() || '0',
+            'maxMagnitude': this.earthquakeStats.maxMagnitude?.toFixed(1) || '0.0',
+            'worstRegion': this.earthquakeStats.worstRegion || 'Unknown',
+            'deadliestQuake': `${this.earthquakeStats.deadliestYear || 'Unknown'} (Magnitude ${this.earthquakeStats.maxMagnitude?.toFixed(1) || '0.0'})`
+        };
+        
+        Object.entries(statsElements).forEach(([id, value]) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = value;
+            }
+        });
+        
+        console.log('[EARTH] UI updated with stats:', this.earthquakeStats);
+    }
+    
+    animate() {
+        if (!this.scene || !this.renderer || !this.camera || !this.isActive) {
+            return;
+        }
+        
+        this.animationFrame = requestAnimationFrame(() => this.animate());
+        
+        // Update controls
+        if (this.controls) {
+            this.controls.update();
+        }
+        
+        // Rotate Earth
+        if (this.earthMesh) {
+            this.earthMesh.rotation.y += this.shouldUseOptimizedMode ? 0.0005 : 0.001;
+        }
+        
+        // Animate earthquake points
+        const time = Date.now() * 0.001;
+        this.earthquakePoints.forEach((points, index) => {
+            if (points.material) {
+                // Subtle pulsing effect
+                const pulse = Math.sin(time * 2 + index) * 0.15 + 0.85;
+                points.material.opacity = 0.7 * pulse;
+                
+                // Gentle floating animation for points
+                if (points.geometry.attributes.position) {
+                    const positions = points.geometry.attributes.position.array;
+                    const count = positions.length / 3;
+                    
+                    for (let i = 0; i < count; i++) {
+                        const idx = i * 3;
+                        // Very subtle movement to create organic feel
+                        positions[idx] += Math.sin(time + i) * 0.01;
+                        positions[idx + 1] += Math.cos(time * 0.7 + i) * 0.01;
+                        positions[idx + 2] += Math.sin(time * 0.5 + i) * 0.01;
+                    }
+                    
+                    points.geometry.attributes.position.needsUpdate = true;
+                }
+            }
+        });
+        
+        // Render
+        this.renderer.render(this.scene, this.camera);
+    }
+    
+    setupResizeHandler() {
+        this.handleResize = () => {
+            if (!this.camera || !this.renderer || !this.canvas) return;
+            
+            const rect = this.canvas.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+            
+            if (width > 0 && height > 0) {
+                this.camera.aspect = width / height;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(width, height);
+            }
+        };
+        
+        // Initial resize
+        this.handleResize();
+        
+        // Listen for resize
+        window.addEventListener('resize', this.handleResize.bind(this));
+        
+        // Observe container resize
+        if (this.canvas.parentElement) {
+            this.resizeObserver = new ResizeObserver(() => {
+                this.handleResize();
+            });
+            this.resizeObserver.observe(this.canvas.parentElement);
+        }
+    }
+    
+    createFallback() {
+        console.log('[EARTH] Creating 2D fallback visualization');
+        
+        const ctx = this.canvas.getContext('2d');
+        if (!ctx) return;
+        
+        const draw = () => {
+            if (!this.isActive) return;
+            
+            const width = this.canvas.width;
+            const height = this.canvas.height;
+            
+            ctx.clearRect(0, 0, width, height);
+            
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.min(centerX, centerY) * 0.4;
+            
+            // Draw Earth
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(26, 26, 62, 0.8)';
+            ctx.fill();
+            
+            // Draw grid
+            ctx.strokeStyle = 'rgba(0, 170, 255, 0.2)';
+            ctx.lineWidth = 1;
+            
+            // Latitude lines
+            for (let i = -80; i <= 80; i += 20) {
+                const latRad = i * Math.PI / 180;
+                const y = centerY + radius * Math.sin(latRad);
+                const xRadius = radius * Math.cos(latRad);
+                
+                ctx.beginPath();
+                ctx.ellipse(centerX, y, xRadius, radius * 0.1, 0, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            
+            // Earthquake points
+            const time = Date.now() * 0.001;
+            for (let i = 0; i < 50; i++) {
+                const angle = (i / 50) * Math.PI * 2;
+                const pulse = Math.sin(time + i) * 0.5 + 0.5;
+                const distance = radius * (1 + pulse * 0.1);
+                
+                const x = centerX + Math.cos(angle) * distance;
+                const y = centerY + Math.sin(angle) * distance;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 2 + pulse * 3, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, ${150 + pulse * 105}, 0, ${0.6 + pulse * 0.2})`;
+                ctx.fill();
+            }
+            
+            requestAnimationFrame(draw);
+        };
+        
+        draw();
+    }
+    
+    start() {
+        if (!this.isInitialized) {
+            if (!this.init()) {
+                console.error('[EARTH] Failed to initialize visualization');
+                return false;
+            }
+        }
+        
+        this.isActive = true;
+        
+        // Load data if not already loaded
+        if (this.earthquakePoints.length === 0) {
+            this.loadEarthquakeData();
+        }
+        
+        // Start animation
+        if (!this.animationFrame) {
+            this.animate();
+        }
+        
+        console.log('[EARTH] Visualization started');
+        return true;
+    }
+    
+    stop() {
+        this.isActive = false;
+        
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+            this.animationFrame = null;
+        }
+        
+        console.log('[EARTH] Visualization stopped');
+    }
+    
+    destroy() {
+        this.stop();
+        
+        // Remove resize listeners
+        window.removeEventListener('resize', this.handleResize);
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect();
+        }
+        
+        // Clean up Three.js objects
+        this.earthquakePoints.forEach(points => {
+            if (points.geometry) points.geometry.dispose();
+            if (points.material) points.material.dispose();
+            if (this.scene) this.scene.remove(points);
+        });
+        
+        if (this.earthMesh) {
+            if (this.earthMesh.geometry) this.earthMesh.geometry.dispose();
+            if (this.earthMesh.material) this.earthMesh.material.dispose();
+            if (this.scene) this.scene.remove(this.earthMesh);
+        }
+        
+        if (this.controls) {
+            this.controls.dispose();
+            this.controls = null;
+        }
+        
+        if (this.renderer) {
+            this.renderer.dispose();
+            this.renderer = null;
+        }
+        
+        this.scene = null;
+        this.camera = null;
+        this.isInitialized = false;
+        
+        console.log('[EARTH] Visualization destroyed');
     }
 }
 

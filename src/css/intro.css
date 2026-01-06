@@ -1921,6 +1921,127 @@
     position: relative;
 }
 
+/* ========================================
+   PHASE 3b: EARTH VISUALIZATION
+   ======================================== */
+
+#stellarIntro .phase-earth .earth-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 40px;
+    gap: 40px;
+}
+
+#stellarIntro .phase-earth .earth-panel-left,
+#stellarIntro .phase-earth .earth-panel-right {
+    width: 250px;
+    height: 70%;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--intro-white-20);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+#stellarIntro .phase-earth.active .earth-panel-left {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.5s;
+}
+
+#stellarIntro .phase-earth.active .earth-panel-right {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.7s;
+}
+
+#stellarIntro .phase-earth .panel-header {
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--intro-white-20);
+}
+
+#stellarIntro .phase-earth .panel-title {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--intro-white-70);
+}
+
+#stellarIntro .phase-earth .panel-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#stellarIntro .phase-earth .data-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+}
+
+#stellarIntro .phase-earth .data-label {
+    color: var(--intro-white-50);
+    letter-spacing: 0.1em;
+}
+
+#stellarIntro .phase-earth .data-value {
+    color: var(--intro-white-90);
+}
+
+#stellarIntro #earthCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1; /* Behind panels */
+}
+
+#stellarIntro .phase-earth .earth-panel-left,
+#stellarIntro .phase-earth .earth-panel-right {
+    z-index: 2; /* On top of canvas */
+}
+
+#stellarIntro #phaseEarth .earth-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#stellarIntro #earthCanvas {
+    /* Dimensiones más altas y menos anchas */
+    width: 80%; /* Reduce el ancho a 60% del contenedor */
+    height: 1000vh; /* Aumenta la altura a 90% del viewport */
+    max-height: 90%; /* Máximo 90% de altura */
+    
+    /* Centrado vertical y horizontal */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    
+    /* Apariencia */
+    opacity: 0;
+    transition: opacity 1s ease, transform 1.2s ease;
+    
+    /* Asegurar que mantenga proporción */
+    object-fit: contain;
+}
+
+/* Cuando el canvas está activo/visible */
+#stellarIntro #phaseEarth.active #earthCanvas {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+
 /* Left Side */
 #stellarIntro .boarding-left {
     padding: 40px 35px;
@@ -2270,27 +2391,7 @@
 /* ========================================
    CANVAS ELEMENTS
    ======================================== */
-
-#chicagoCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    z-index: 10;
-    transition: opacity 0.6s ease, visibility 0.6s ease;
-}
-
-#chicagoCanvas.active {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-}
-
+    }
 #terrainCanvas {
     position: fixed;
     top: 0;
@@ -2305,209 +2406,4 @@
     opacity: 0.2;
 }
 
-/* ========================================
-   TRANSICIONES SUAVES - CHICAGO PANEL
-   ======================================== */
-
-/* Fade overlay para transición suave */
-.chicago-fade-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    opacity: 0;
-    visibility: hidden;
-    z-index: 9999998;
-    transition: opacity 0.8s ease, visibility 0.8s ease;
-    pointer-events: none;
-}
-
-.chicago-fade-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Globe HUD fade out cuando Chicago está activo */
-#stellarIntro .globe-hud {
-    transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-#stellarIntro .globe-hud.hidden {
-    opacity: 0;
-    transform: scale(0.95);
-    pointer-events: none;
-}
-
-/* Terrain canvas con transición suave */
-#terrainCanvas {
-    transition: opacity 0.8s ease, filter 0.8s ease;
-}
-
-#terrainCanvas.hidden {
-    opacity: 0;
-    filter: blur(10px);
-}
-
-/* Chicago canvas con transición de aparición */
-#chicagoCanvas {
-    transition: opacity 1s ease 0.3s, filter 1s ease 0.3s;
-    filter: blur(20px);
-}
-
-#chicagoCanvas.active {
-    opacity: 1;
-    visibility: visible;
-    filter: blur(0);
-}
-
-/* Chicago panel con entrada escalonada */
-#stellarIntro .chicago-panel {
-    transition: opacity 0.8s ease 0.5s, visibility 0.8s ease 0.5s;
-}
-
-#stellarIntro .chicago-panel.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Title bar con slide down */
-#stellarIntro .chicago-title-bar {
-    transform: translateX(-50%) translateY(-20px);
-    opacity: 0;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.7s;
-}
-
-#stellarIntro .chicago-panel.active .chicago-title-bar {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-}
-
-/* Close button con fade in */
-#stellarIntro .chicago-close {
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: all 0.5s ease 0.9s;
-}
-
-#stellarIntro .chicago-panel.active .chicago-close {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-/* Paneles laterales con slide desde los lados */
-#stellarIntro .chicago-narrative-panel {
-    transform: translateY(-50%) translateX(-30px);
-    opacity: 0;
-    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1) 1s;
-}
-
-#stellarIntro .chicago-panel.active .chicago-narrative-panel {
-    transform: translateY(-50%) translateX(0);
-    opacity: 1;
-}
-
-#stellarIntro .chicago-data-panel {
-    transform: translateY(-50%) translateX(30px);
-    opacity: 0;
-    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1) 1.1s;
-}
-
-#stellarIntro .chicago-panel.active .chicago-data-panel {
-    transform: translateY(-50%) translateX(0);
-    opacity: 1;
-}
-
-/* Info blocks con stagger más pronunciado */
-#stellarIntro .chicago-info-block {
-    opacity: 0;
-    transform: translateX(15px);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-#stellarIntro .chicago-panel.active .chicago-info-block {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-/* Delays escalonados para info blocks */
-#stellarIntro .chicago-panel.active .chicago-narrative-panel .chicago-info-block:nth-child(1) { 
-    transition-delay: 1.2s; 
-}
-#stellarIntro .chicago-panel.active .chicago-narrative-panel .chicago-info-block:nth-child(2) { 
-    transition-delay: 1.3s; 
-}
-#stellarIntro .chicago-panel.active .chicago-narrative-panel .chicago-info-block:nth-child(3) { 
-    transition-delay: 1.4s; 
-}
-#stellarIntro .chicago-panel.active .chicago-narrative-panel .chicago-info-block:nth-child(4) { 
-    transition-delay: 1.5s; 
-}
-#stellarIntro .chicago-panel.active .chicago-narrative-panel .chicago-info-block:nth-child(5) { 
-    transition-delay: 1.6s; 
-}
-#stellarIntro .chicago-panel.active .chicago-narrative-panel .chicago-info-block:nth-child(6) { 
-    transition-delay: 1.7s; 
-}
-#stellarIntro .chicago-panel.active .chicago-narrative-panel .chicago-info-block:nth-child(7) { 
-    transition-delay: 1.8s; 
-}
-
-#stellarIntro .chicago-panel.active .chicago-data-panel .chicago-info-block:nth-child(1) { 
-    transition-delay: 1.3s; 
-}
-#stellarIntro .chicago-panel.active .chicago-data-panel .chicago-info-block:nth-child(2) { 
-    transition-delay: 1.4s; 
-}
-#stellarIntro .chicago-panel.active .chicago-data-panel .chicago-info-block:nth-child(3) { 
-    transition-delay: 1.5s; 
-}
-#stellarIntro .chicago-panel.active .chicago-data-panel .chicago-info-block:nth-child(4) { 
-    transition-delay: 1.6s; 
-}
-#stellarIntro .chicago-panel.active .chicago-data-panel .chicago-info-block:nth-child(5) { 
-    transition-delay: 1.7s; 
-}
-#stellarIntro .chicago-panel.active .chicago-data-panel .chicago-info-block:nth-child(6) { 
-    transition-delay: 1.8s; 
-}
-#stellarIntro .chicago-panel.active .chicago-data-panel .chicago-info-block:nth-child(7) { 
-    transition-delay: 1.9s; 
-}
-#stellarIntro .chicago-panel.active .chicago-data-panel .chicago-info-block:nth-child(8) { 
-    transition-delay: 2s; 
-}
-
-/* Transición de salida (cuando se cierra) */
-#stellarIntro .chicago-panel.closing {
-    transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-
-#stellarIntro .chicago-panel.closing .chicago-narrative-panel,
-#stellarIntro .chicago-panel.closing .chicago-data-panel,
-#stellarIntro .chicago-panel.closing .chicago-title-bar,
-#stellarIntro .chicago-panel.closing .chicago-close {
-    transition-delay: 0s !important;
-    transition-duration: 0.4s !important;
-}
-
-/* Animación de entrada del canvas de Chicago */
-@keyframes chicagoCanvasFadeIn {
-    0% {
-        opacity: 0;
-        filter: blur(20px) brightness(0.5);
-    }
-    50% {
-        opacity: 0.5;
-        filter: blur(10px) brightness(0.7);
-    }
-    100% {
-        opacity: 1;
-        filter: blur(0) brightness(1);
-    }
-}
-
-#chicagoCanvas.active {
-    animation: chicagoCanvasFadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
