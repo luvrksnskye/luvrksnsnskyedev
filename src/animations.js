@@ -75,8 +75,8 @@ class AnimationsManager {
             voiceDataDisplay: 0.75,
             voiceDataUser: 0.75,
             voiceFinal: 0.70,
-            transition: 0.35,
-            sfx: 0.30
+            transition: 0.40,
+            sfx: 0.40
         };
         
         // Subtitles data
