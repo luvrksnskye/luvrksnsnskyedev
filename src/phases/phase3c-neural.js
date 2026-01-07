@@ -1,12 +1,9 @@
 /**
- * PHASE 3c: NEURAL NETWORK VISUALIZATION (COGNEX VIDI STYLE)
+ * PHASE 3c: NEURAL NETWORK VISUALIZATION
+ * COGNEX VIDI STYLE - SKYE DATA
  * 
  * Duración: 60 segundos
- * - Canvas con visualización de red neuronal estilo Cognex Vidi
- * - 12 nodos cerebrales interconectados
- * - Partículas de datos fluyendo entre nodos
- * - Paneles laterales con estadísticas
- * - Subtítulos de análisis neuronal
+ * Subtítulos ORIGINALES mantenidos
  */
 
 import BasePhase from './base-phase.js';
@@ -17,20 +14,20 @@ export default class Phase3cNeural extends BasePhase {
     constructor(manager) {
         super(manager);
         
-        // Configuración de nodos - ahora con barras estilo Cognex
+        // Configuración de nodos - datos de SKYE
         this.nodes = [
-            { id: 'prefrontal', label: 'PREFRONTAL CORTEX', x: 0.12, y: 0.15, status: 'optimal', bars: [0.8, 0.6, 0.9, 0.5, 0.7], connections: ['temporal', 'parietal', 'limbic'] },
-            { id: 'temporal', label: 'TEMPORAL LOBE', x: 0.12, y: 0.35, status: 'active', bars: [0.6, 0.8, 0.5, 0.9, 0.6], connections: ['prefrontal', 'occipital', 'limbic'] },
-            { id: 'parietal', label: 'PARIETAL LOBE', x: 0.12, y: 0.55, status: 'optimal', bars: [0.9, 0.5, 0.7, 0.6, 0.8], connections: ['prefrontal', 'occipital', 'motor'] },
-            { id: 'occipital', label: 'OCCIPITAL LOBE', x: 0.12, y: 0.75, status: 'active', bars: [0.5, 0.7, 0.8, 0.6, 0.9], connections: ['parietal', 'temporal'] },
-            { id: 'motor', label: 'MOTOR CORTEX', x: 0.28, y: 0.20, status: 'calibrating', bars: [0.7, 0.9, 0.6, 0.8], connections: ['parietal', 'cerebellum'] },
-            { id: 'cerebellum', label: 'CEREBELLUM', x: 0.28, y: 0.40, status: 'active', bars: [0.8, 0.6, 0.7, 0.9], connections: ['motor', 'brainstem'] },
-            { id: 'limbic', label: 'LIMBIC SYSTEM', x: 0.28, y: 0.60, status: 'optimal', bars: [0.6, 0.8, 0.9, 0.7], connections: ['prefrontal', 'temporal', 'hippocampus'] },
-            { id: 'hippocampus', label: 'HIPPOCAMPUS', x: 0.28, y: 0.80, status: 'recovering', bars: [0.9, 0.7, 0.6, 0.8], connections: ['limbic', 'temporal'] },
-            { id: 'brainstem', label: 'BRAINSTEM', x: 0.44, y: 0.25, status: 'optimal', bars: [0.8, 0.7, 0.9, 0.6, 0.8], connections: ['cerebellum'] },
-            { id: 'broca', label: "BROCA'S AREA", x: 0.44, y: 0.50, status: 'active', bars: [0.6, 0.9, 0.7, 0.8, 0.6], connections: ['prefrontal', 'wernicke'] },
-            { id: 'wernicke', label: "WERNICKE'S AREA", x: 0.44, y: 0.75, status: 'active', bars: [0.9, 0.6, 0.8, 0.7, 0.9], connections: ['broca', 'temporal'] },
-            { id: 'creative', label: 'CREATIVE CORTEX', x: 0.60, y: 0.35, status: 'exceptional', bars: [0.7, 0.8, 0.6, 0.9], connections: ['prefrontal', 'parietal', 'temporal'] }
+            { id: 'prefrontal', label: 'PREFRONTAL CORTEX', x: 0.25, y: 0.2, status: 'optimal', connections: ['temporal', 'parietal', 'limbic'] },
+            { id: 'temporal', label: 'TEMPORAL LOBE', x: 0.15, y: 0.5, status: 'active', connections: ['prefrontal', 'occipital', 'limbic'] },
+            { id: 'parietal', label: 'PARIETAL LOBE', x: 0.5, y: 0.25, status: 'optimal', connections: ['prefrontal', 'occipital', 'motor'] },
+            { id: 'occipital', label: 'OCCIPITAL LOBE', x: 0.75, y: 0.35, status: 'active', connections: ['parietal', 'temporal'] },
+            { id: 'motor', label: 'MOTOR CORTEX', x: 0.4, y: 0.15, status: 'calibrating', connections: ['parietal', 'cerebellum'] },
+            { id: 'cerebellum', label: 'CEREBELLUM', x: 0.65, y: 0.6, status: 'active', connections: ['motor', 'brainstem'] },
+            { id: 'limbic', label: 'LIMBIC SYSTEM', x: 0.35, y: 0.55, status: 'optimal', connections: ['prefrontal', 'temporal', 'hippocampus'] },
+            { id: 'hippocampus', label: 'HIPPOCAMPUS', x: 0.45, y: 0.7, status: 'recovering', connections: ['limbic', 'temporal'] },
+            { id: 'brainstem', label: 'BRAINSTEM', x: 0.55, y: 0.8, status: 'optimal', connections: ['cerebellum'] },
+            { id: 'broca', label: "BROCA'S AREA", x: 0.2, y: 0.35, status: 'active', connections: ['prefrontal', 'wernicke'] },
+            { id: 'wernicke', label: "WERNICKE'S AREA", x: 0.3, y: 0.65, status: 'active', connections: ['broca', 'temporal'] },
+            { id: 'creative', label: 'CREATIVE CORTEX', x: 0.6, y: 0.45, status: 'exceptional', connections: ['prefrontal', 'parietal', 'temporal'] }
         ];
         
         // Estadísticas para el panel
@@ -78,10 +75,10 @@ export default class Phase3cNeural extends BasePhase {
             phaseNeural.classList.add('active');
             
             // Inicializar visualización
-            const canvas = this.elements.neuralCanvas;
-            if (canvas) {
+            const viewport = document.getElementById('cvViewport');
+            if (viewport) {
                 this.visualization = new NeuralNetworkVisualization(
-                    canvas,
+                    viewport,
                     this.nodes,
                     this.stats
                 );
@@ -139,8 +136,8 @@ export default class Phase3cNeural extends BasePhase {
         const voiceAudio = this.audio.getAudio('voiceNeuralNetwork');
         if (!voiceAudio) return;
         
-        const neuralSubtitle = this.elements.neuralSubtitle;
-        if (!neuralSubtitle) return;
+        const subtitle = document.getElementById('cvSubtitle');
+        if (!subtitle) return;
         
         const currentTime = voiceAudio.currentTime;
         
@@ -148,11 +145,11 @@ export default class Phase3cNeural extends BasePhase {
             currentTime >= sub.start && currentTime < sub.end
         );
         
-        if (currentSub && neuralSubtitle.textContent !== currentSub.text) {
-            neuralSubtitle.textContent = currentSub.text;
-            neuralSubtitle.classList.add('visible');
+        if (currentSub && subtitle.textContent !== currentSub.text) {
+            subtitle.textContent = currentSub.text;
+            subtitle.classList.add('visible');
         } else if (!currentSub && currentTime >= this.subtitles[this.subtitles.length - 1].end) {
-            neuralSubtitle.classList.remove('visible');
+            subtitle.classList.remove('visible');
         }
     }
     
@@ -164,9 +161,9 @@ export default class Phase3cNeural extends BasePhase {
             this.subtitleInterval = null;
         }
         
-        const neuralSubtitle = this.elements.neuralSubtitle;
-        if (neuralSubtitle) {
-            neuralSubtitle.classList.remove('visible');
+        const subtitle = document.getElementById('cvSubtitle');
+        if (subtitle) {
+            subtitle.classList.remove('visible');
         }
         
         if (this.visualization) {
