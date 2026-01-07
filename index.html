@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="/src/css/intro.css">
     <link rel="stylesheet" href="/src/css/survivor-panel.css">
     <link rel="stylesheet" href="/src/css/neural-network.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
 </head>
 
@@ -691,11 +693,12 @@
 <!-- PHASE: NEURAL NETWORK VISUALIZATION -->
 <!-- me costo un webo hacer esto-->
 
+
 <div id="phaseNeuralNetwork" class="intro-phase phase-neural-network">
     
     <!-- HEADER -->
     <header class="cv-header">
-        <div class="cv-logo">COGNEX<sub>VIDI</sub></div>
+        <div class="cv-logo">COGNEX<span class="cv-logo-sub">VIDI</span></div>
         <div class="cv-operator">OPERATOR:<span>LYNCH</span></div>
         <div class="cv-header-icons">
             <div class="cv-hicon">◫</div>
@@ -707,7 +710,7 @@
         </div>
         <div class="cv-header-right">
             <div class="cv-gpus">GPUs<span>3</span></div>
-            <div>Login</div>
+            <div class="cv-login">Login</div>
         </div>
     </header>
     
@@ -716,117 +719,119 @@
         
         <!-- LEFT PANEL -->
         <aside class="cv-left">
-            <div class="cv-nums">
-                <span>486274</span>
-                <span>1792</span>
-                <span>49400864</span>
-                <span>9787754</span>
-            </div>
-            
-            <div class="cv-lbars">
-                <div class="cv-lbar-row">
-                    <div class="cv-lbar h100 bright"></div>
-                    <div class="cv-lbar h60"></div>
-                    <div class="cv-lbar h80 bright"></div>
-                    <div class="cv-lbar h40"></div>
-                    <div class="cv-lbar h100"></div>
-                </div>
-                <div class="cv-lbar-row">
-                    <div class="cv-lbar h60"></div>
-                    <div class="cv-lbar h100 bright"></div>
-                    <div class="cv-lbar h40"></div>
-                    <div class="cv-lbar h80 bright"></div>
-                    <div class="cv-lbar h60"></div>
-                </div>
-                <div class="cv-lbar-row">
-                    <div class="cv-lbar h80 bright"></div>
-                    <div class="cv-lbar h40"></div>
-                    <div class="cv-lbar h100 bright"></div>
-                    <div class="cv-lbar h60"></div>
-                    <div class="cv-lbar h80"></div>
-                </div>
-                <div class="cv-lbar-row">
-                    <div class="cv-lbar h40"></div>
-                    <div class="cv-lbar h80 bright"></div>
-                    <div class="cv-lbar h60"></div>
-                    <div class="cv-lbar h100 bright"></div>
-                    <div class="cv-lbar h40"></div>
-                </div>
-                <div class="cv-lbar-row">
-                    <div class="cv-lbar h100 bright"></div>
-                    <div class="cv-lbar h60"></div>
-                    <div class="cv-lbar h40 bright"></div>
-                    <div class="cv-lbar h80"></div>
-                    <div class="cv-lbar h100 bright"></div>
-                </div>
-                <div class="cv-lbar-row">
-                    <div class="cv-lbar h60"></div>
-                    <div class="cv-lbar h100 bright"></div>
-                    <div class="cv-lbar h80"></div>
-                    <div class="cv-lbar h40 bright"></div>
-                    <div class="cv-lbar h60"></div>
-                </div>
-                <div class="cv-lbar-row">
-                    <div class="cv-lbar h80 bright"></div>
-                    <div class="cv-lbar h40"></div>
-                    <div class="cv-lbar h100 bright"></div>
-                    <div class="cv-lbar h60"></div>
-                </div>
-                <div class="cv-lbar-row">
-                    <div class="cv-lbar h40"></div>
-                    <div class="cv-lbar h80 bright"></div>
-                    <div class="cv-lbar h60"></div>
-                    <div class="cv-lbar h100 bright"></div>
+            <div>
+                <div class="cv-panel-title">SYSTEM DATA</div>
+                <div class="cv-nums">
+                    <span>486274</span>
+                    <span>1792</span>
+                    <span>49400864</span>
+                    <span>9787754</span>
                 </div>
             </div>
             
-            <div class="cv-codes">
-                <span>'GT82S9</span>
-                <span>DX/QF/VD</span>
-                <span>VXF</span>
+            <div>
+                <div class="cv-panel-title">SIGNAL</div>
+                <div class="cv-data-bars">
+                    <div class="cv-bar-row">
+                        <div class="cv-bar h100 active"></div>
+                        <div class="cv-bar h60"></div>
+                        <div class="cv-bar h80 active"></div>
+                        <div class="cv-bar h40"></div>
+                        <div class="cv-bar h100"></div>
+                    </div>
+                    <div class="cv-bar-row">
+                        <div class="cv-bar h60"></div>
+                        <div class="cv-bar h100 active"></div>
+                        <div class="cv-bar h40"></div>
+                        <div class="cv-bar h80 active"></div>
+                        <div class="cv-bar h60"></div>
+                    </div>
+                    <div class="cv-bar-row">
+                        <div class="cv-bar h80 active"></div>
+                        <div class="cv-bar h40"></div>
+                        <div class="cv-bar h100 active"></div>
+                        <div class="cv-bar h60"></div>
+                        <div class="cv-bar h80"></div>
+                    </div>
+                    <div class="cv-bar-row">
+                        <div class="cv-bar h40"></div>
+                        <div class="cv-bar h80 active"></div>
+                        <div class="cv-bar h60"></div>
+                        <div class="cv-bar h100 active"></div>
+                        <div class="cv-bar h40"></div>
+                    </div>
+                </div>
             </div>
             
-            <div class="cv-codes">
-                <span>T9X/N</span>
-                <span>Q391F0</span>
+            <div>
+                <div class="cv-panel-title">CODES</div>
+                <div class="cv-codes">
+                    <span>'GT82S9</span>
+                    <span>DX/QF/VD</span>
+                    <span>VXF</span>
+                    <span>T9X/N</span>
+                    <span>Q391F0</span>
+                </div>
             </div>
-            
-            <div class="cv-codes" style="margin-top:auto;"><span>5U</span></div>
         </aside>
         
-        <!-- VIEWPORT -->
+        <!-- THREE.JS VIEWPORT -->
         <div class="cv-viewport" id="cvViewport">
-            <!-- SVG neural network rendered here by JS -->
+            <!-- Three.js canvas rendered here -->
             
+            <div class="cv-scanlines"></div>
+            <div class="cv-vignette"></div>
+            <div class="cv-grid-overlay"></div>
+            
+            <!-- Zoom Controls -->
             <div class="cv-zoom">
                 <button class="cv-zoom-btn" id="cvZoomIn">+</button>
                 <button class="cv-zoom-btn" id="cvZoomOut">−</button>
                 <button class="cv-zoom-btn" id="cvZoomReset">⟲</button>
-                <div class="cv-zoom-lvl" id="cvZoomLvl">90%</div>
+                <div class="cv-zoom-lvl" id="cvZoomLvl">100%</div>
             </div>
             
+            <!-- Stats Overlay -->
+            <div class="cv-stats-overlay" id="cvStatsOverlay">
+                <!-- Populated by JS -->
+            </div>
+            
+            <!-- Subtitle -->
             <div class="cv-subtitle-wrap">
                 <div class="cv-subtitle" id="cvSubtitle"></div>
             </div>
             
-            <div class="cv-popup" id="cvPopup">
-                <div class="cv-popup-title">NODE</div>
-                <div class="cv-popup-row"><span class="cv-popup-lbl">STATUS</span><span class="cv-popup-val">ACTIVE</span></div>
-                <div class="cv-popup-row"><span class="cv-popup-lbl">CONNECTIONS</span><span class="cv-popup-val">3</span></div>
-                <div class="cv-popup-row"><span class="cv-popup-lbl">BARS</span><span class="cv-popup-val">5</span></div>
-                <div class="cv-popup-desc">Neural processing node in SKYE cognitive architecture.</div>
+            <!-- Node Info Popup -->
+            <div class="cv-node-info" id="cvNodeInfo">
+                <div class="cv-node-info-title">NODE</div>
+                <div class="cv-node-info-row">
+                    <span class="cv-node-info-label">STATUS</span>
+                    <span class="cv-node-info-value">ACTIVE</span>
+                </div>
+                <div class="cv-node-info-row">
+                    <span class="cv-node-info-label">CONNECTIONS</span>
+                    <span class="cv-node-info-value">3</span>
+                </div>
+                <div class="cv-node-info-row">
+                    <span class="cv-node-info-label">POSITION</span>
+                    <span class="cv-node-info-value">LAYER 0</span>
+                </div>
+                <div class="cv-node-info-desc">Neural processing node description.</div>
             </div>
         </div>
         
         <!-- RIGHT PANEL -->
         <aside class="cv-right">
-            <!-- Col 1: Info + codes -->
-            <div class="cv-rcol">
-                <div class="cv-infobox">
-                    <div class="cv-infobox-text">
+            <div class="cv-right-scroll">
+                
+                <div class="cv-panel-title">NETWORK INFO</div>
+                
+                <div class="cv-info-box">
+                    <div class="cv-info-text">
                         NRTPHVNXBLE.ID<br>
-                        <span class="cv-infobox-hl">REV2X06X13'NR08</span><br>
-                        MODIFICATIONSYNCH
+                        <span class="cv-info-hl">REV2X06X13'NR08</span><br>
+                        MODIFICATIONSYNCH<br>
+                        NEURAL_MAP_ACTIVE
                     </div>
                 </div>
                 
@@ -838,85 +843,26 @@
                     <div class="cv-btn">9</div>
                 </div>
                 
-                <div class="cv-codeblk"><span>RLUL</span><span>KPFWLU</span></div>
-                
-                <div class="cv-codecols">
-                    <div class="cv-codeblk">
-                        <span>FJH</span>
-                        <span>XRLAIWVP</span>
-                        <span>JFGORTMRBYWIFAQT</span>
-                        <span>QIKXVH</span>
-                    </div>
-                    <div class="cv-codeblk"><span>GAMLVVR</span></div>
-                </div>
-                
-                <div class="cv-codecols">
-                    <div class="cv-codeblk">
-                        <span>RUDH</span>
-                        <span>MVJTLIYN</span>
-                        <span>VTXPVWQQXS⊞</span>
-                        <span>ANSJ</span>
-                    </div>
-                    <div class="cv-codeblk">
-                        <span>HSSNGB</span>
-                        <span>DATTOEFTIO</span>
-                        <span>FRORUFIY</span>
-                    </div>
-                </div>
-                
-                <div class="cv-smallgrid">
-                    <div class="cv-smallgrid-col">
-                        <div class="cv-smallgrid-row">
-                            <div class="cv-smallgrid-cell"></div>
-                            <div class="cv-smallgrid-cell dim"></div>
-                            <div class="cv-smallgrid-cell bright"></div>
+                <div class="cv-code-section">
+                    <div class="cv-panel-title">IDENTIFIERS</div>
+                    <div class="cv-code-cols">
+                        <div class="cv-code-block">
+                            <span>RLUL</span>
+                            <span>KPFWLU</span>
+                            <span>FJH</span>
+                            <span>XRLAIWVP</span>
+                            <span>QIKXVH</span>
                         </div>
-                        <div class="cv-smallgrid-row">
-                            <div class="cv-smallgrid-cell dim"></div>
-                            <div class="cv-smallgrid-cell bright"></div>
-                            <div class="cv-smallgrid-cell"></div>
-                        </div>
-                        <div class="cv-smallgrid-row">
-                            <div class="cv-smallgrid-cell bright"></div>
-                            <div class="cv-smallgrid-cell"></div>
-                            <div class="cv-smallgrid-cell dim"></div>
+                        <div class="cv-code-block">
+                            <span>GAMLVVR</span>
+                            <span>HSSNGB</span>
+                            <span>DATTOEFTIO</span>
+                            <span>FRORUFIY</span>
                         </div>
                     </div>
-                    <div class="cv-codeblk" style="font-size:6px;">
-                        <span>NETMRK</span>
-                        <span>124273</span>
-                        <span>XC7920</span>
-                        <span>MATRIX</span>
-                    </div>
                 </div>
                 
-                <div class="cv-codecols">
-                    <div class="cv-codeblk">
-                        <span>VRPFNDT</span>
-                        <span>ZGC</span>
-                        <span>XA</span>
-                        <span>KCSDVV_NWRIN</span>
-                        <span>MWW</span>
-                        <span>IBIPNRDWZIAA</span>
-                        <span>KFXQ</span>
-                    </div>
-                    <div class="cv-codeblk">
-                        <span>RBMMQTMHI</span>
-                        <span>SBRXA</span>
-                        <span>DCOV_NVHCQ</span>
-                    </div>
-                </div>
-                
-                <div class="cv-numpairs">
-                    <span>5775081</span><span>5775081</span>
-                    <span>8989</span><span>8989</span>
-                    <span>6317</span><span>6317</span>
-                    <span>10919589</span><span>10919589</span>
-                </div>
-            </div>
-            
-            <!-- Col 2: Matrix -->
-            <div class="cv-rcol">
+                <div class="cv-panel-title">SYNAPTIC MATRIX</div>
                 <div class="cv-matrix">
                     <span>/3:6627828572g/2</span><span>3:8352899842g/3</span><span>/3:6627828572g/2</span><span>3:8352899842g/3</span>
                     <span>1:2636612182g/3</span><span>3:4984495022g/3</span><span>1:2636612182g/3</span><span>3:4984495022g/3</span>
@@ -926,43 +872,34 @@
                     <span>/3:2932823432g/2</span><span>6:7043154972g/2</span><span>/3:2932823432g/2</span><span>6:7043154972g/2</span>
                     <span>5:8536464822g/3</span><span>3:9021991802g/3</span><span>5:8536464822g/3</span><span>3:9021991802g/3</span>
                     <span>3:8331758782g/2</span><span>/6:5926335462g/3</span><span>3:8331758782g/2</span><span>/6:5926335462g/3</span>
-                    <span>/3:6627026572g/2</span><span>3:8352899842g/3</span><span>/3:6627026572g/2</span><span>3:8352899842g/3</span>
-                    <span>1:2636612182g/3</span><span>/4:9984495822g/2</span><span>1:2636612182g/3</span><span>/4:9984495822g/2</span>
-                    <span>/5:8984642572g/3</span><span>1:4477899002g/4</span><span>/5:8984642572g/3</span><span>1:4477899002g/4</span>
-                    <span>3:9283744882g/2</span><span>/5:5145728012g/2</span><span>3:9283744882g/2</span><span>/5:5145728012g/2</span>
-                    <span>/6:9836146382g/3</span><span>/3:7184586932g/2</span><span>/6:9836146382g/3</span><span>/3:7184586932g/2</span>
-                    <span>3:7843454972g/2</span><span>/6:7043154972g/2</span><span>3:7843454972g/2</span><span>/6:7043154972g/2</span>
-                    <span>/5:9021991862g/2</span><span>/3:2932823462g/2</span><span>/5:9021991862g/2</span><span>/3:2932823462g/2</span>
-                    <span>/6:8331758782g/2</span><span>/6:5926335462g/2</span><span>/6:8331758782g/2</span><span>/6:5926335462g/2</span>
-                </div>
-            </div>
-            
-            <!-- Col 3: Vertical + boxes -->
-            <div class="cv-rcol">
-                <div class="cv-vtext">I<br>U<br>Z<br>V<br>Y<br>C<br>L<br>U<br>U<br>P<br>R<br>F<br>F<br>Y<br>F<br>B<br>X<br>Q<br>X<br>O<br>J<br>R<br>O<br>Z<br>T<br>K<br>G<br>J</div>
-                
-                <div class="cv-xbox">
-                    <svg viewBox="0 0 100 70" preserveAspectRatio="none">
-                        <line x1="0" y1="0" x2="100" y2="70" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                        <line x1="100" y1="0" x2="0" y2="70" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                    </svg>
                 </div>
                 
-                <div class="cv-linesbox">
-                    <div class="cv-hline" style="width:95%"></div>
-                    <div class="cv-hline" style="width:80%"></div>
-                    <div class="cv-hline" style="width:90%"></div>
-                    <div class="cv-hline" style="width:70%"></div>
-                    <div class="cv-hline" style="width:85%"></div>
-                    <div class="cv-hline" style="width:75%"></div>
+                <div class="cv-num-pairs">
+                    <span>5775081</span><span>5775081</span>
+                    <span>8989</span><span>8989</span>
+                    <span>6317</span><span>6317</span>
+                    <span>10919589</span><span>10919589</span>
                 </div>
                 
-                <div class="cv-xbox-sm">
-                    <svg viewBox="0 0 40 40" preserveAspectRatio="none">
-                        <line x1="0" y1="0" x2="40" y2="40" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                        <line x1="40" y1="0" x2="0" y2="40" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                    </svg>
+                <div class="cv-vertical-section">
+                    <div class="cv-vtext">I U Z V Y C L U U P R F F Y F B X Q X O J R O Z T K G J</div>
+                    
+                    <div class="cv-xbox">
+                        <svg viewBox="0 0 100 80" preserveAspectRatio="none">
+                            <line x1="0" y1="0" x2="100" y2="80" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                            <line x1="100" y1="0" x2="0" y2="80" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="cv-lines-box">
+                        <div class="cv-hline" style="width:95%"></div>
+                        <div class="cv-hline" style="width:80%"></div>
+                        <div class="cv-hline" style="width:90%"></div>
+                        <div class="cv-hline" style="width:70%"></div>
+                        <div class="cv-hline" style="width:85%"></div>
+                    </div>
                 </div>
+                
             </div>
         </aside>
         
@@ -971,7 +908,7 @@
     <!-- FOOTER -->
     <footer class="cv-footer">
         <div class="cv-footer-left">
-            <span class="cv-time-lbl">TIME</span>
+            <span class="cv-time-label">TIME</span>
             <div class="cv-time-bar"><div class="cv-time-fill" id="cvTimeFill"></div></div>
         </div>
         <div class="cv-footer-center">5Q22D5</div>
