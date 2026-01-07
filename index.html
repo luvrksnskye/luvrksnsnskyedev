@@ -698,8 +698,9 @@
     
     <!-- HEADER -->
     <header class="cv-header">
-        <div class="cv-logo">COGNEX<span class="cv-logo-sub">VIDI</span></div>
-        <div class="cv-operator">OPERATOR:<span>LYNCH</span></div>
+        <div class="cv-logo">COGNEX<span class="cv-logo-sub">DATA</span></div>
+        <div class="cv-operator">OPERATOR:<span>STARVORTEX</span></div>
+        <div class="cv-classification">CLASSIFIED</div>
         <div class="cv-header-icons">
             <div class="cv-hicon">◫</div>
             <div class="cv-hicon">⊞</div>
@@ -709,8 +710,8 @@
             <div class="cv-hbar"><div class="cv-hbar-fill"></div></div>
         </div>
         <div class="cv-header-right">
-            <div class="cv-gpus">GPUs<span>3</span></div>
-            <div class="cv-login">Login</div>
+            <div class="cv-gpus">CORES<span>128</span></div>
+            <div class="cv-login">SECURE</div>
         </div>
     </header>
     
@@ -720,10 +721,11 @@
         <!-- LEFT PANEL -->
         <aside class="cv-left">
             <div>
-                <div class="cv-panel-title">SYSTEM DATA</div>
+                <div class="cv-panel-title">SYSTEM</div>
                 <div class="cv-nums">
                     <span>486274</span>
                     <span>1792</span>
+                    <span class="error">00000008</span>
                     <span>49400864</span>
                     <span>9787754</span>
                 </div>
@@ -738,6 +740,7 @@
                         <div class="cv-bar h80 active"></div>
                         <div class="cv-bar h40"></div>
                         <div class="cv-bar h100"></div>
+                        <div class="cv-bar h20 danger"></div>
                     </div>
                     <div class="cv-bar-row">
                         <div class="cv-bar h60"></div>
@@ -752,6 +755,7 @@
                         <div class="cv-bar h100 active"></div>
                         <div class="cv-bar h60"></div>
                         <div class="cv-bar h80"></div>
+                        <div class="cv-bar h40 danger"></div>
                     </div>
                     <div class="cv-bar-row">
                         <div class="cv-bar h40"></div>
@@ -760,28 +764,46 @@
                         <div class="cv-bar h100 active"></div>
                         <div class="cv-bar h40"></div>
                     </div>
+                    <div class="cv-bar-row">
+                        <div class="cv-bar h100"></div>
+                        <div class="cv-bar h60 active"></div>
+                        <div class="cv-bar h80"></div>
+                        <div class="cv-bar h40 active"></div>
+                        <div class="cv-bar h100"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <div class="cv-panel-title danger">ALERT</div>
+                <div class="cv-alert">
+                    <div class="cv-alert-title">⚠ CRITICAL</div>
+                    <div class="cv-alert-text">8 nodes offline<br>Rerouting traffic</div>
                 </div>
             </div>
             
             <div>
                 <div class="cv-panel-title">CODES</div>
                 <div class="cv-codes">
-                    <span>'GT82S9</span>
-                    <span>DX/QF/VD</span>
-                    <span>VXF</span>
-                    <span>T9X/N</span>
-                    <span>Q391F0</span>
+                    <span>BLK-OPS-7X</span>
+                    <span>NEURAL-MAP</span>
+                    <span>SEC-LEVEL-9</span>
+                    <span>AUTH-LYNCH</span>
                 </div>
             </div>
         </aside>
         
-        <!-- THREE.JS VIEWPORT -->
+        <!-- D3.JS SVG VIEWPORT -->
         <div class="cv-viewport" id="cvViewport">
-            <!-- Three.js canvas rendered here -->
+            <!-- D3 SVG rendered here -->
             
+            <div class="cv-grid"></div>
             <div class="cv-scanlines"></div>
-            <div class="cv-vignette"></div>
-            <div class="cv-grid-overlay"></div>
+            
+            <div class="cv-corner tl"></div>
+            <div class="cv-corner tr"></div>
+            <div class="cv-corner bl"></div>
+            <div class="cv-corner br"></div>
             
             <!-- Zoom Controls -->
             <div class="cv-zoom">
@@ -806,17 +828,17 @@
                 <div class="cv-node-info-title">NODE</div>
                 <div class="cv-node-info-row">
                     <span class="cv-node-info-label">STATUS</span>
-                    <span class="cv-node-info-value">ACTIVE</span>
+                    <span class="cv-node-info-value">NOMINAL</span>
                 </div>
                 <div class="cv-node-info-row">
                     <span class="cv-node-info-label">CONNECTIONS</span>
-                    <span class="cv-node-info-value">3</span>
+                    <span class="cv-node-info-value">0 LINKS</span>
                 </div>
                 <div class="cv-node-info-row">
-                    <span class="cv-node-info-label">POSITION</span>
-                    <span class="cv-node-info-value">LAYER 0</span>
+                    <span class="cv-node-info-label">ACTIVITY</span>
+                    <span class="cv-node-info-value">0%</span>
                 </div>
-                <div class="cv-node-info-desc">Neural processing node description.</div>
+                <div class="cv-node-info-desc">Node description.</div>
             </div>
         </div>
         
@@ -824,79 +846,60 @@
         <aside class="cv-right">
             <div class="cv-right-scroll">
                 
-                <div class="cv-panel-title">NETWORK INFO</div>
+                <div class="cv-panel-title">NETWORK STATUS</div>
+                <div class="cv-network-status">
+                    <!-- 100 status dots -->
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
+                </div>
                 
+                <div class="cv-panel-title">SYSTEM INFO</div>
                 <div class="cv-info-box">
                     <div class="cv-info-text">
-                        NRTPHVNXBLE.ID<br>
-                        <span class="cv-info-hl">REV2X06X13'NR08</span><br>
-                        MODIFICATIONSYNCH<br>
-                        NEURAL_MAP_ACTIVE
+                        NEURAL_NET_v4.7.2<br>
+                        <span class="cv-info-hl">BLACKOPS PROTOCOL</span><br>
+                        NODES: 100 | LINKS: 347<br>
+                        <span class="cv-info-hl danger">CRITICAL: 8</span>
                     </div>
                 </div>
                 
-                <div class="cv-btns">
-                    <div class="cv-btn">G</div>
-                    <div class="cv-btn on">3</div>
-                    <div class="cv-btn">5</div>
-                    <div class="cv-btn on">Q</div>
-                    <div class="cv-btn">9</div>
-                </div>
-                
-                <div class="cv-code-section">
-                    <div class="cv-panel-title">IDENTIFIERS</div>
-                    <div class="cv-code-cols">
-                        <div class="cv-code-block">
-                            <span>RLUL</span>
-                            <span>KPFWLU</span>
-                            <span>FJH</span>
-                            <span>XRLAIWVP</span>
-                            <span>QIKXVH</span>
-                        </div>
-                        <div class="cv-code-block">
-                            <span>GAMLVVR</span>
-                            <span>HSSNGB</span>
-                            <span>DATTOEFTIO</span>
-                            <span>FRORUFIY</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="cv-panel-title">SYNAPTIC MATRIX</div>
+                <div class="cv-panel-title">SECTOR MATRIX</div>
                 <div class="cv-matrix">
-                    <span>/3:6627828572g/2</span><span>3:8352899842g/3</span><span>/3:6627828572g/2</span><span>3:8352899842g/3</span>
-                    <span>1:2636612182g/3</span><span>3:4984495022g/3</span><span>1:2636612182g/3</span><span>3:4984495022g/3</span>
-                    <span>/5:8984642572g/3</span><span>1:4477890002g/4</span><span>/5:8984642572g/3</span><span>1:4477890002g/4</span>
-                    <span>/4:5145728017g/2</span><span>/5:5938744892g/2</span><span>/4:5145728017g/2</span><span>/5:5938744892g/2</span>
-                    <span>6:9836146382g/3</span><span>3:7184586932g/2</span><span>6:9836146382g/3</span><span>3:7184586932g/2</span>
-                    <span>/3:2932823432g/2</span><span>6:7043154972g/2</span><span>/3:2932823432g/2</span><span>6:7043154972g/2</span>
-                    <span>5:8536464822g/3</span><span>3:9021991802g/3</span><span>5:8536464822g/3</span><span>3:9021991802g/3</span>
-                    <span>3:8331758782g/2</span><span>/6:5926335462g/3</span><span>3:8331758782g/2</span><span>/6:5926335462g/3</span>
+                    <span>CORTEX-001</span><span>CORTEX-002</span><span>CORTEX-003</span><span>CORTEX-004</span>
+                    <span>LIMBIC-001</span><span>LIMBIC-002</span><span>LIMBIC-003</span><span>LIMBIC-004</span>
+                    <span>MOTOR-001</span><span>MOTOR-002</span><span>MOTOR-003</span><span>MOTOR-004</span>
+                    <span>SENSORY-001</span><span>SENSORY-002</span><span>SENSORY-003</span><span>SENSORY-004</span>
+                    <span>MEMORY-001</span><span>MEMORY-002</span><span>MEMORY-003</span><span>MEMORY-004</span>
+                    <span>PROCESS-001</span><span>PROCESS-002</span><span>PROCESS-003</span><span>PROCESS-004</span>
+                    <span>CONTROL-001</span><span>CONTROL-002</span><span>CONTROL-003</span><span>CONTROL-004</span>
+                    <span>NEURAL-001</span><span>NEURAL-002</span><span>NEURAL-003</span><span>NEURAL-004</span>
                 </div>
                 
-                <div class="cv-num-pairs">
-                    <span>5775081</span><span>5775081</span>
-                    <span>8989</span><span>8989</span>
-                    <span>6317</span><span>6317</span>
-                    <span>10919589</span><span>10919589</span>
-                </div>
-                
-                <div class="cv-vertical-section">
-                    <div class="cv-vtext">I U Z V Y C L U U P R F F Y F B X Q X O J R O Z T K G J</div>
-                    
-                    <div class="cv-xbox">
-                        <svg viewBox="0 0 100 80" preserveAspectRatio="none">
-                            <line x1="0" y1="0" x2="100" y2="80" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                            <line x1="100" y1="0" x2="0" y2="80" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                        </svg>
-                    </div>
-                    
-                    <div class="cv-lines-box">
-                        <div class="cv-hline" style="width:95%"></div>
-                        <div class="cv-hline" style="width:80%"></div>
-                        <div class="cv-hline" style="width:90%"></div>
-                        <div class="cv-hline" style="width:70%"></div>
-                        <div class="cv-hline" style="width:85%"></div>
+                <div class="cv-panel-title">ENCRYPTION</div>
+                <div class="cv-info-box">
+                    <div class="cv-info-text">
+                        AES-256-GCM<br>
+                        KEY: ****************<br>
+                        HASH: 7f3a9b2c4d5e6f1a<br>
+                        VALID: 2024-12-31
                     </div>
                 </div>
                 
@@ -908,16 +911,18 @@
     <!-- FOOTER -->
     <footer class="cv-footer">
         <div class="cv-footer-left">
-            <span class="cv-time-label">TIME</span>
+            <span class="cv-time-label">UPTIME</span>
             <div class="cv-time-bar"><div class="cv-time-fill" id="cvTimeFill"></div></div>
         </div>
-        <div class="cv-footer-center">5Q22D5</div>
+        <div class="cv-footer-center">BLACKOPS-7X-NEURAL</div>
         <div class="cv-footer-right">
-            <span class="cv-reading">READING<span class="cv-reading-dots"><span class="cv-rdot"></span><span class="cv-rdot"></span><span class="cv-rdot"></span></span></span>
+            <span class="cv-reading">SCANNING<span class="cv-reading-dots"><span class="cv-rdot"></span><span class="cv-rdot"></span><span class="cv-rdot"></span></span></span>
         </div>
     </footer>
     
 </div>
+
+<!-- END PHASE: NEURAL NETWORK VISUALIZATION -->
 
   <!-- PHASE 4: BRAIN VISUALIZATION -->
   <div class="intro-phase phase-body" id="phaseBody">

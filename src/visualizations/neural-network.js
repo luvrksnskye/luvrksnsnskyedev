@@ -1,375 +1,625 @@
 /**
  * COGNEX VIDI - NEURAL NETWORK VISUALIZATION
- * Three.js + GSAP Sci-Fi Style
+ * NEO-MILITARY BLACKOPS EDITION
  * 
- * - Nodos circulares con glow
- * - Conexiones curvas animadas
- * - Partículas fluyendo entre nodos
- * - Pan/Zoom con controles suaves
- * - Click para info de nodos SKYE
+ * ~100 nodes, hundreds of connections
+ * Black / White / Red only
+ * D3.js Force Simulation + GSAP
  */
 
 export default class NeuralNetworkVisualization {
     
-    constructor(container, nodes, stats) {
+    constructor(container) {
         this.container = container;
-        
-        // Three.js
-        this.scene = null;
-        this.camera = null;
-        this.renderer = null;
-        this.controls = null;
-        
-        // Groups
-        this.nodesGroup = null;
-        this.connectionsGroup = null;
-        this.particlesGroup = null;
+        this.svg = null;
+        this.simulation = null;
         
         // Data
-        this.nodes = this.initNodes();
-        this.stats = stats || [];
-        this.connections = [];
+        this.nodes = [];
+        this.edges = [];
         this.particles = [];
-        this.nodeObjects = new Map();
+        
+        // D3 selections
+        this.edgePaths = null;
+        this.nodeGroups = null;
+        this.particleCircles = null;
         
         // Interaction
-        this.raycaster = null;
-        this.mouse = null;
         this.selectedNode = null;
         this.hoveredNode = null;
         
         // Animation
-        this.clock = null;
         this.isActive = false;
+        this.animationFrame = null;
         this.time = 0;
         
-        // Colors
-        this.colors = {
-            node: 0xffffff,
-            nodeGlow: 0x00f0ff,
-            connection: 0x333333,
-            connectionActive: 0x00f0ff,
-            particle: 0x00f0ff,
-            optimal: 0x00ff88,
-            active: 0x00f0ff,
-            calibrating: 0xffaa00,
-            recovering: 0xff6666,
-            exceptional: 0xff00ff
-        };
+        // Dimensions
+        this.width = 0;
+        this.height = 0;
+        
+        // Zoom
+        this.currentZoom = 1;
+        this.zoomBehavior = null;
         
         this.init();
-    }
-    
-    initNodes() {
-        // SKYE Neural network - 4 layers
-        return [
-            // Layer 0 - Input (4 nodes)
-            { id: 'prefrontal', label: 'PREFRONTAL CORTEX', layer: 0, index: 0, status: 'optimal', 
-              desc: 'Executive function pathways clear. Decision-making optimal.' },
-            { id: 'temporal', label: 'TEMPORAL LOBE', layer: 0, index: 1, status: 'active',
-              desc: 'Memory encoding active. Auditory processing nominal.' },
-            { id: 'parietal', label: 'PARIETAL LOBE', layer: 0, index: 2, status: 'optimal',
-              desc: 'Spatial awareness online. Sensory integration stable.' },
-            { id: 'occipital', label: 'OCCIPITAL LOBE', layer: 0, index: 3, status: 'active',
-              desc: 'Visual processing active. Pattern recognition enhanced.' },
-            
-            // Layer 1 - Hidden 1 (4 nodes)
-            { id: 'motor', label: 'MOTOR CORTEX', layer: 1, index: 0, status: 'calibrating',
-              desc: 'Motor functions calibrating. Movement coordination returning.' },
-            { id: 'cerebellum', label: 'CEREBELLUM', layer: 1, index: 1, status: 'active',
-              desc: 'Balance systems active. Fine motor control engaged.' },
-            { id: 'limbic', label: 'LIMBIC SYSTEM', layer: 1, index: 2, status: 'optimal',
-              desc: 'Emotional regulation balanced. Stress response nominal.' },
-            { id: 'hippocampus', label: 'HIPPOCAMPUS', layer: 1, index: 3, status: 'recovering',
-              desc: 'Memory formation at 78%. Long-term storage recovering.' },
-            
-            // Layer 2 - Hidden 2 (3 nodes)
-            { id: 'brainstem', label: 'BRAINSTEM', layer: 2, index: 0, status: 'optimal',
-              desc: 'Autonomic functions independent. Vital signs stable.' },
-            { id: 'broca', label: "BROCA'S AREA", layer: 2, index: 1, status: 'active',
-              desc: 'Speech production active. Language output nominal.' },
-            { id: 'wernicke', label: "WERNICKE'S AREA", layer: 2, index: 2, status: 'active',
-              desc: 'Language comprehension online. Semantic processing engaged.' },
-            
-            // Layer 3 - Output (2 nodes)
-            { id: 'creative', label: 'CREATIVE CORTEX', layer: 3, index: 0, status: 'exceptional',
-              desc: 'Divergent thinking highly active. Creativity exceeds baseline.' },
-            { id: 'consciousness', label: 'CONSCIOUSNESS', layer: 3, index: 1, status: 'optimal',
-              desc: 'Consciousness index at 98.7%. Self-awareness confirmed.' }
-        ];
     }
     
     init() {
         if (!this.container) return false;
         
-        const width = this.container.clientWidth;
-        const height = this.container.clientHeight;
+        const rect = this.container.getBoundingClientRect();
+        this.width = rect.width;
+        this.height = rect.height;
         
-        // Scene
-        this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x050508);
-        this.scene.fog = new THREE.Fog(0x050508, 400, 1200);
+        // Initialize data - 100 nodes
+        this.initData();
         
-        // Camera
-        this.camera = new THREE.PerspectiveCamera(60, width / height, 1, 2000);
-        this.camera.position.set(0, 0, 500);
+        // Create SVG
+        this.createSVG();
         
-        // Renderer
-        this.renderer = new THREE.WebGLRenderer({ 
-            antialias: true,
-            alpha: true 
-        });
-        this.renderer.setSize(width, height);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        this.container.appendChild(this.renderer.domElement);
+        // Create simulation
+        this.createSimulation();
         
-        // Groups
-        this.connectionsGroup = new THREE.Group();
-        this.nodesGroup = new THREE.Group();
-        this.particlesGroup = new THREE.Group();
-        
-        this.scene.add(this.connectionsGroup);
-        this.scene.add(this.particlesGroup);
-        this.scene.add(this.nodesGroup);
-        
-        // Raycaster for interaction
-        this.raycaster = new THREE.Raycaster();
-        this.mouse = new THREE.Vector2();
-        
-        // Clock
-        this.clock = new THREE.Clock();
-        
-        // Create visualization
-        this.calculateNodePositions();
-        this.createConnections();
+        // Create visual elements
+        this.createEdges();
         this.createNodes();
         this.createParticles();
-        this.createAmbientElements();
         
         // Bind events
         this.bindEvents();
         
-        // Initial animation
+        // Animate entrance
         this.animateEntrance();
         
-        console.log('[NEURAL-THREEJS] Visualization initialized');
+        console.log('[BLACKOPS] Neural network initialized - ' + this.nodes.length + ' nodes, ' + this.edges.length + ' connections');
         return true;
     }
     
-    calculateNodePositions() {
-        const layerCounts = [4, 4, 3, 2];
-        const layerSpacing = 200;
-        const startX = -300;
+    initData() {
+        // Generate ~100 nodes across different sectors
+        const sectors = [
+            { prefix: 'CORTEX', count: 15, criticalChance: 0.1 },
+            { prefix: 'LIMBIC', count: 12, criticalChance: 0.15 },
+            { prefix: 'MOTOR', count: 10, criticalChance: 0.05 },
+            { prefix: 'SENSORY', count: 12, criticalChance: 0.08 },
+            { prefix: 'MEMORY', count: 14, criticalChance: 0.2 },
+            { prefix: 'PROCESS', count: 15, criticalChance: 0.05 },
+            { prefix: 'CONTROL', count: 10, criticalChance: 0.12 },
+            { prefix: 'NEURAL', count: 12, criticalChance: 0.1 }
+        ];
         
-        this.nodes.forEach(node => {
-            const layerCount = layerCounts[node.layer];
-            const layerHeight = (layerCount - 1) * 80;
-            
-            node.x = startX + node.layer * layerSpacing;
-            node.y = (node.index - (layerCount - 1) / 2) * 80;
-            node.z = (Math.random() - 0.5) * 50;
-            
-            // Store connections
-            node.connections = [];
-            if (node.layer < 3) {
-                const nextLayerNodes = this.nodes.filter(n => n.layer === node.layer + 1);
-                nextLayerNodes.forEach(target => {
-                    node.connections.push(target.id);
+        const statuses = ['nominal', 'active', 'warning', 'critical', 'offline'];
+        const statusWeights = {
+            nominal: 0.4,
+            active: 0.35,
+            warning: 0.12,
+            critical: 0.08,
+            offline: 0.05
+        };
+        
+        this.nodes = [];
+        let nodeIndex = 0;
+        
+        sectors.forEach(sector => {
+            for (let i = 0; i < sector.count; i++) {
+                const isCritical = Math.random() < sector.criticalChance;
+                let status;
+                
+                if (isCritical) {
+                    status = 'critical';
+                } else {
+                    const r = Math.random();
+                    let cumulative = 0;
+                    for (const [s, w] of Object.entries(statusWeights)) {
+                        cumulative += w;
+                        if (r <= cumulative) {
+                            status = s;
+                            break;
+                        }
+                    }
+                }
+                
+                const nodeId = `${sector.prefix}-${String(i + 1).padStart(3, '0')}`;
+                
+                this.nodes.push({
+                    id: nodeIndex,
+                    name: nodeId,
+                    sector: sector.prefix,
+                    status: status,
+                    connections: 0,
+                    activity: Math.random() * 100,
+                    desc: this.generateDescription(sector.prefix, status)
                 });
+                
+                nodeIndex++;
             }
         });
+        
+        // Generate connections - aim for ~300-400 connections
+        this.edges = [];
+        const connectionDensity = 3.5; // Average connections per node
+        
+        this.nodes.forEach((node, i) => {
+            // Connect to random nodes
+            const connectionCount = Math.floor(Math.random() * 4) + 2;
+            
+            for (let c = 0; c < connectionCount; c++) {
+                // Prefer connections within same sector or adjacent sectors
+                let targetIndex;
+                
+                if (Math.random() < 0.6) {
+                    // Same sector connection
+                    const sectorNodes = this.nodes.filter(n => n.sector === node.sector && n.id !== node.id);
+                    if (sectorNodes.length > 0) {
+                        targetIndex = sectorNodes[Math.floor(Math.random() * sectorNodes.length)].id;
+                    }
+                }
+                
+                if (targetIndex === undefined) {
+                    // Random connection
+                    targetIndex = Math.floor(Math.random() * this.nodes.length);
+                }
+                
+                if (targetIndex !== i) {
+                    // Check if connection already exists
+                    const exists = this.edges.some(e => 
+                        (e.source === i && e.target === targetIndex) ||
+                        (e.source === targetIndex && e.target === i)
+                    );
+                    
+                    if (!exists) {
+                        const isCriticalConnection = 
+                            this.nodes[i].status === 'critical' || 
+                            this.nodes[targetIndex].status === 'critical';
+                        
+                        this.edges.push({
+                            source: i,
+                            target: targetIndex,
+                            value: 1,
+                            critical: isCriticalConnection
+                        });
+                        
+                        this.nodes[i].connections++;
+                        this.nodes[targetIndex].connections++;
+                    }
+                }
+            }
+        });
+        
+        // Add some long-range connections for network connectivity
+        for (let i = 0; i < 50; i++) {
+            const source = Math.floor(Math.random() * this.nodes.length);
+            const target = Math.floor(Math.random() * this.nodes.length);
+            
+            if (source !== target) {
+                const exists = this.edges.some(e => 
+                    (e.source === source && e.target === target) ||
+                    (e.source === target && e.target === source)
+                );
+                
+                if (!exists) {
+                    this.edges.push({
+                        source: source,
+                        target: target,
+                        value: 1,
+                        critical: false
+                    });
+                }
+            }
+        }
+    }
+    
+    generateDescription(sector, status) {
+        const descriptions = {
+            CORTEX: [
+                'Executive processing unit. ',
+                'Decision matrix node. ',
+                'Cognitive integration point. '
+            ],
+            LIMBIC: [
+                'Emotional regulation hub. ',
+                'Stress response controller. ',
+                'Autonomic interface. '
+            ],
+            MOTOR: [
+                'Movement coordination. ',
+                'Motor output controller. ',
+                'Kinetic processing unit. '
+            ],
+            SENSORY: [
+                'Input processing node. ',
+                'Sensory integration unit. ',
+                'Perception gateway. '
+            ],
+            MEMORY: [
+                'Data storage sector. ',
+                'Long-term memory bank. ',
+                'Information retrieval hub. '
+            ],
+            PROCESS: [
+                'Computation node. ',
+                'Data processing unit. ',
+                'Analysis module. '
+            ],
+            CONTROL: [
+                'System regulation point. ',
+                'Override control hub. ',
+                'Command interface. '
+            ],
+            NEURAL: [
+                'Signal relay node. ',
+                'Synaptic junction. ',
+                'Network bridge. '
+            ]
+        };
+        
+        const statusMessages = {
+            nominal: 'Operating within parameters.',
+            active: 'High activity detected.',
+            warning: 'Monitoring required.',
+            critical: 'ALERT: Critical failure imminent.',
+            offline: 'Node offline. Rerouting traffic.'
+        };
+        
+        const base = descriptions[sector][Math.floor(Math.random() * 3)];
+        return base + statusMessages[status];
+    }
+    
+    createSVG() {
+        this.svg = d3.select(this.container)
+            .append('svg')
+            .attr('width', this.width)
+            .attr('height', this.height);
+        
+        // Glow filter for critical nodes
+        const defs = this.svg.append('defs');
+        
+        const filter = defs.append('filter')
+            .attr('id', 'redglow')
+            .attr('x', '-100%')
+            .attr('y', '-100%')
+            .attr('width', '300%')
+            .attr('height', '300%');
+        
+        filter.append('feGaussianBlur')
+            .attr('stdDeviation', '3')
+            .attr('result', 'blur');
+        
+        filter.append('feFlood')
+            .attr('flood-color', '#ff0000')
+            .attr('flood-opacity', '0.5')
+            .attr('result', 'color');
+        
+        filter.append('feComposite')
+            .attr('in', 'color')
+            .attr('in2', 'blur')
+            .attr('operator', 'in')
+            .attr('result', 'colorBlur');
+        
+        const feMerge = filter.append('feMerge');
+        feMerge.append('feMergeNode').attr('in', 'colorBlur');
+        feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+        
+        // Zoom behavior
+        this.zoomBehavior = d3.zoom()
+            .scaleExtent([0.2, 4])
+            .on('zoom', (event) => {
+                this.svg.select('#main-group').attr('transform', event.transform);
+                this.currentZoom = event.transform.k;
+                this.updateZoomLevel();
+            });
+        
+        this.svg.call(this.zoomBehavior);
+        
+        // Main group
+        this.svg.append('g').attr('id', 'main-group');
+    }
+    
+    createSimulation() {
+        this.simulation = d3.forceSimulation(this.nodes)
+            .force('link', d3.forceLink(this.edges)
+                .id(d => d.id)
+                .distance(60)
+                .strength(0.3))
+            .force('center', d3.forceCenter(this.width / 2, this.height / 2))
+            .force('charge', d3.forceManyBody().strength(-80))
+            .force('collision', d3.forceCollide().radius(15))
+            .force('x', d3.forceX(this.width / 2).strength(0.03))
+            .force('y', d3.forceY(this.height / 2).strength(0.03))
+            .alphaDecay(0.02)
+            .on('tick', () => this.tick());
+    }
+    
+    createEdges() {
+        const mainGroup = this.svg.select('#main-group');
+        
+        this.edgePaths = mainGroup.append('g')
+            .attr('id', 'edges')
+            .selectAll('path')
+            .data(this.edges)
+            .enter()
+            .append('path')
+            .attr('class', d => d.critical ? 'edge danger' : 'edge')
+            .style('opacity', 0);
     }
     
     createNodes() {
-        const nodeGeometry = new THREE.SphereGeometry(8, 32, 32);
-        const glowGeometry = new THREE.SphereGeometry(15, 32, 32);
+        const mainGroup = this.svg.select('#main-group');
+        const self = this;
         
-        this.nodes.forEach(node => {
-            const group = new THREE.Group();
-            group.position.set(node.x, node.y, node.z);
-            group.userData = { node };
-            
-            // Core sphere
-            const coreMaterial = new THREE.MeshBasicMaterial({
-                color: this.colors.node,
-                transparent: true,
-                opacity: 0.9
+        // Drag behavior
+        const drag = d3.drag()
+            .on('start', function(event, d) {
+                if (!event.active) self.simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            })
+            .on('drag', function(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            })
+            .on('end', function(event, d) {
+                if (!event.active) self.simulation.alphaTarget(0);
+                d3.select(this).classed('pinned', true);
             });
-            const core = new THREE.Mesh(nodeGeometry, coreMaterial);
-            group.add(core);
-            
-            // Glow sphere
-            const statusColor = this.colors[node.status] || this.colors.node;
-            const glowMaterial = new THREE.MeshBasicMaterial({
-                color: statusColor,
-                transparent: true,
-                opacity: 0.15,
-                side: THREE.BackSide
-            });
-            const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-            glow.scale.set(1.5, 1.5, 1.5);
-            group.add(glow);
-            
-            // Outer ring
-            const ringGeometry = new THREE.RingGeometry(12, 14, 32);
-            const ringMaterial = new THREE.MeshBasicMaterial({
-                color: statusColor,
-                transparent: true,
-                opacity: 0.3,
-                side: THREE.DoubleSide
-            });
-            const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-            group.add(ring);
-            
-            // Store references
-            node.object = group;
-            node.core = core;
-            node.glow = glow;
-            node.ring = ring;
-            
-            this.nodesGroup.add(group);
-            this.nodeObjects.set(node.id, group);
-            
-            // Initial scale for animation
-            group.scale.set(0, 0, 0);
-        });
-    }
-    
-    createConnections() {
-        this.nodes.forEach(node => {
-            if (!node.connections) return;
-            
-            node.connections.forEach(targetId => {
-                const target = this.nodes.find(n => n.id === targetId);
-                if (!target) return;
-                
-                // Create curved connection
-                const curve = this.createCurve(node, target);
-                const points = curve.getPoints(50);
-                const geometry = new THREE.BufferGeometry().setFromPoints(points);
-                
-                const material = new THREE.LineBasicMaterial({
-                    color: this.colors.connection,
-                    transparent: true,
-                    opacity: 0.4
-                });
-                
-                const line = new THREE.Line(geometry, material);
-                line.userData = { from: node, to: target, curve };
-                
-                this.connectionsGroup.add(line);
-                this.connections.push({ line, curve, from: node, to: target });
-            });
-        });
-    }
-    
-    createCurve(from, to) {
-        const midX = (from.x + to.x) / 2;
-        const midY = (from.y + to.y) / 2;
-        const midZ = (from.z + to.z) / 2 + (Math.random() - 0.5) * 30;
         
-        // Add some curve offset
-        const offset = (from.y - to.y) * 0.3;
+        this.nodeGroups = mainGroup.append('g')
+            .attr('id', 'nodes')
+            .selectAll('g')
+            .data(this.nodes)
+            .enter()
+            .append('g')
+            .attr('class', d => `node-group status-${d.status}`)
+            .call(drag)
+            .on('dblclick', function(event, d) {
+                d.fx = null;
+                d.fy = null;
+                d3.select(this).classed('pinned', false);
+            })
+            .on('mouseenter', (event, d) => this.onNodeHover(d, event))
+            .on('mouseleave', () => this.onNodeUnhover())
+            .on('click', (event, d) => this.onNodeClick(d, event));
         
-        return new THREE.QuadraticBezierCurve3(
-            new THREE.Vector3(from.x, from.y, from.z),
-            new THREE.Vector3(midX, midY + offset, midZ),
-            new THREE.Vector3(to.x, to.y, to.z)
-        );
+        // Node circles
+        this.nodeGroups.append('circle')
+            .attr('class', 'node-main')
+            .attr('r', 0) // Start at 0 for animation
+            .attr('filter', d => d.status === 'critical' ? 'url(#redglow)' : null);
+        
+        // Labels (only show for larger nodes or on hover)
+        this.nodeGroups.append('text')
+            .attr('y', -12)
+            .text(d => d.name)
+            .style('opacity', 0)
+            .style('display', d => d.connections > 4 ? 'block' : 'none');
     }
     
     createParticles() {
-        const particleGeometry = new THREE.SphereGeometry(2, 8, 8);
-        const particleMaterial = new THREE.MeshBasicMaterial({
-            color: this.colors.particle,
-            transparent: true,
-            opacity: 0.8
+        const mainGroup = this.svg.select('#main-group');
+        
+        // Create fewer particles for performance with 100 nodes
+        this.particles = [];
+        
+        // Only add particles to ~30% of edges
+        this.edges.forEach((edge, edgeIndex) => {
+            if (Math.random() < 0.3) {
+                this.particles.push({
+                    edge: edge,
+                    edgeIndex: edgeIndex,
+                    progress: Math.random(),
+                    speed: 0.005 + Math.random() * 0.005,
+                    direction: Math.random() > 0.5 ? 1 : -1
+                });
+            }
         });
         
-        this.connections.forEach(conn => {
-            // 2-4 particles per connection
-            const count = 2 + Math.floor(Math.random() * 3);
+        this.particleCircles = mainGroup.append('g')
+            .attr('id', 'particles')
+            .selectAll('circle')
+            .data(this.particles)
+            .enter()
+            .append('circle')
+            .attr('r', 1.5)
+            .style('opacity', 0);
+    }
+    
+    tick() {
+        // Update edge paths with curved arcs
+        this.edgePaths.attr('d', d => {
+            const dx = d.target.x - d.source.x;
+            const dy = d.target.y - d.source.y;
+            const dr = Math.sqrt(dx * dx + dy * dy) * 1.5;
+            return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+        });
+        
+        // Update node positions
+        this.nodeGroups.attr('transform', d => `translate(${d.x},${d.y})`);
+        
+        // Update particles
+        this.updateParticles();
+    }
+    
+    updateParticles() {
+        this.particleCircles.each((d, i, nodes) => {
+            d.progress += d.speed * d.direction;
             
-            for (let i = 0; i < count; i++) {
-                const particle = new THREE.Mesh(particleGeometry, particleMaterial.clone());
-                particle.userData = {
-                    connection: conn,
-                    progress: Math.random(),
-                    speed: 0.002 + Math.random() * 0.003,
-                    direction: Math.random() > 0.5 ? 1 : -1
-                };
-                
-                this.particlesGroup.add(particle);
-                this.particles.push(particle);
-            }
+            if (d.progress > 1) d.progress = 0;
+            if (d.progress < 0) d.progress = 1;
+            
+            const edge = d.edge;
+            const source = typeof edge.source === 'object' ? edge.source : this.nodes[edge.source];
+            const target = typeof edge.target === 'object' ? edge.target : this.nodes[edge.target];
+            
+            if (!source || !target) return;
+            
+            const t = d.progress;
+            const dx = target.x - source.x;
+            const dy = target.y - source.y;
+            const dr = Math.sqrt(dx * dx + dy * dy) * 1.5;
+            
+            // Approximate arc position
+            const midX = (source.x + target.x) / 2;
+            const midY = (source.y + target.y) / 2;
+            const perpX = -dy / (dr || 1) * 20;
+            const perpY = dx / (dr || 1) * 20;
+            
+            const x = source.x * (1-t) * (1-t) + (midX + perpX) * 2 * t * (1-t) + target.x * t * t;
+            const y = source.y * (1-t) * (1-t) + (midY + perpY) * 2 * t * (1-t) + target.y * t * t;
+            
+            d3.select(nodes[i])
+                .attr('cx', x)
+                .attr('cy', y);
         });
     }
     
-    createAmbientElements() {
-        // Add some floating particles in background
-        const bgParticles = new THREE.BufferGeometry();
-        const bgCount = 200;
-        const positions = new Float32Array(bgCount * 3);
+    onNodeHover(node, event) {
+        this.hoveredNode = node;
         
-        for (let i = 0; i < bgCount; i++) {
-            positions[i * 3] = (Math.random() - 0.5) * 1000;
-            positions[i * 3 + 1] = (Math.random() - 0.5) * 600;
-            positions[i * 3 + 2] = (Math.random() - 0.5) * 400 - 100;
-        }
+        const group = this.nodeGroups.filter(d => d.id === node.id);
         
-        bgParticles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        
-        const bgMaterial = new THREE.PointsMaterial({
-            color: 0x00f0ff,
-            size: 1.5,
-            transparent: true,
-            opacity: 0.3
+        gsap.to(group.select('.node-main').node(), {
+            attr: { r: 10 },
+            duration: 0.2,
+            ease: 'power2.out'
         });
         
-        const bgPoints = new THREE.Points(bgParticles, bgMaterial);
-        this.scene.add(bgPoints);
-        this.bgParticles = bgPoints;
+        // Show label
+        group.select('text').style('display', 'block');
+        gsap.to(group.select('text').node(), {
+            opacity: 1,
+            duration: 0.2
+        });
+        
+        // Highlight connected edges
+        this.edgePaths.classed('active', d => 
+            d.source.id === node.id || d.target.id === node.id
+        );
+    }
+    
+    onNodeUnhover() {
+        if (!this.hoveredNode) return;
+        
+        const node = this.hoveredNode;
+        const group = this.nodeGroups.filter(d => d.id === node.id);
+        
+        const baseRadius = node.status === 'critical' ? 5 : 4;
+        
+        gsap.to(group.select('.node-main').node(), {
+            attr: { r: baseRadius },
+            duration: 0.2,
+            ease: 'power2.out'
+        });
+        
+        // Hide label if low connection count
+        if (node.connections <= 4) {
+            gsap.to(group.select('text').node(), {
+                opacity: 0,
+                duration: 0.2,
+                onComplete: () => group.select('text').style('display', 'none')
+            });
+        }
+        
+        // Remove edge highlight
+        this.edgePaths.classed('active', false);
+        
+        this.hoveredNode = null;
+    }
+    
+    onNodeClick(node, event) {
+        this.selectedNode = node;
+        this.showNodeInfo(node, event.pageX, event.pageY);
+    }
+    
+    showNodeInfo(node, x, y) {
+        const popup = document.getElementById('cvNodeInfo');
+        if (!popup) return;
+        
+        const rect = this.container.getBoundingClientRect();
+        
+        let popupX = x - rect.left + 15;
+        let popupY = y - rect.top - 30;
+        
+        if (popupX + 230 > rect.width) popupX = x - rect.left - 240;
+        if (popupY < 20) popupY = y - rect.top + 20;
+        
+        popup.style.left = popupX + 'px';
+        popup.style.top = popupY + 'px';
+        
+        // Set danger class
+        popup.classList.toggle('danger', node.status === 'critical');
+        
+        // Update content
+        const title = popup.querySelector('.cv-node-info-title');
+        title.textContent = node.name;
+        title.classList.toggle('danger', node.status === 'critical');
+        
+        const rows = popup.querySelectorAll('.cv-node-info-row');
+        if (rows[0]) {
+            const val = rows[0].querySelector('.cv-node-info-value');
+            val.textContent = node.status.toUpperCase();
+            val.classList.toggle('danger', node.status === 'critical');
+        }
+        if (rows[1]) {
+            rows[1].querySelector('.cv-node-info-value').textContent = node.connections + ' LINKS';
+        }
+        if (rows[2]) {
+            rows[2].querySelector('.cv-node-info-value').textContent = node.activity.toFixed(1) + '%';
+        }
+        
+        popup.querySelector('.cv-node-info-desc').textContent = node.desc;
+        
+        popup.classList.add('visible');
+        
+        clearTimeout(this.hidePopupTimeout);
+        this.hidePopupTimeout = setTimeout(() => {
+            popup.classList.remove('visible');
+        }, 3500);
     }
     
     animateEntrance() {
-        // Animate nodes appearing with GSAP
-        this.nodes.forEach((node, i) => {
-            const delay = i * 0.08;
-            
-            gsap.to(node.object.scale, {
-                x: 1, y: 1, z: 1,
-                duration: 0.6,
-                delay: delay,
-                ease: 'back.out(1.7)'
-            });
-            
-            gsap.to(node.object.position, {
-                z: node.z,
-                duration: 0.8,
-                delay: delay,
-                ease: 'power2.out'
+        // Animate edges
+        gsap.to(this.edgePaths.nodes(), {
+            opacity: 1,
+            duration: 0.3,
+            stagger: 0.002,
+            delay: 0.2,
+            ease: 'none'
+        });
+        
+        // Animate nodes
+        this.nodeGroups.selectAll('.node-main').each(function(d) {
+            const baseRadius = d.status === 'critical' ? 5 : 4;
+            gsap.to(this, {
+                attr: { r: baseRadius },
+                duration: 0.4,
+                delay: 0.3 + Math.random() * 0.5,
+                ease: 'back.out(1.5)'
             });
         });
         
-        // Animate connections
-        this.connections.forEach((conn, i) => {
-            gsap.fromTo(conn.line.material, 
-                { opacity: 0 },
-                { 
-                    opacity: 0.4, 
-                    duration: 0.5, 
-                    delay: 0.5 + i * 0.02,
-                    ease: 'power2.out'
-                }
-            );
+        // Animate some labels
+        gsap.to(this.nodeGroups.filter(d => d.connections > 4).selectAll('text').nodes(), {
+            opacity: 1,
+            duration: 0.3,
+            stagger: 0.02,
+            delay: 0.8,
+            ease: 'power2.out'
+        });
+        
+        // Animate particles
+        gsap.to(this.particleCircles.nodes(), {
+            opacity: 0.6,
+            duration: 0.5,
+            delay: 1,
+            ease: 'power2.out'
         });
         
         // Animate header bar
         gsap.to('.cv-hbar-fill', {
-            width: '78%',
-            duration: 2,
-            delay: 0.5,
-            ease: 'power2.out'
+            width: '100%',
+            duration: 3,
+            delay: 0.3,
+            ease: 'power1.out'
         });
         
         // Animate stats
@@ -377,308 +627,92 @@ export default class NeuralNetworkVisualization {
             gsap.to(row, {
                 opacity: 1,
                 x: 0,
-                duration: 0.5,
-                delay: 1 + i * 0.1,
-                ease: 'power2.out'
+                duration: 0.3,
+                delay: 1 + i * 0.08,
+                ease: 'power2.out',
+                onStart: () => row.classList.add('visible')
             });
-            row.classList.add('visible');
+        });
+        
+        // Update status dots
+        this.updateStatusDots();
+    }
+    
+    updateStatusDots() {
+        const dots = document.querySelectorAll('.cv-status-dot');
+        const criticalCount = this.nodes.filter(n => n.status === 'critical').length;
+        const activeCount = this.nodes.filter(n => n.status === 'active').length;
+        
+        dots.forEach((dot, i) => {
+            setTimeout(() => {
+                if (i < criticalCount) {
+                    dot.classList.add('danger');
+                } else if (i < criticalCount + Math.floor(activeCount / 2)) {
+                    dot.classList.add('active');
+                }
+            }, i * 30);
         });
     }
     
     bindEvents() {
-        // Resize
         window.addEventListener('resize', () => this.onResize());
         
-        // Mouse move for hover
-        this.container.addEventListener('mousemove', (e) => this.onMouseMove(e));
-        
-        // Click for selection
-        this.container.addEventListener('click', (e) => this.onClick(e));
-        
-        // Zoom buttons
         const zoomIn = document.getElementById('cvZoomIn');
         const zoomOut = document.getElementById('cvZoomOut');
         const zoomReset = document.getElementById('cvZoomReset');
         
         if (zoomIn) zoomIn.addEventListener('click', () => this.zoomIn());
         if (zoomOut) zoomOut.addEventListener('click', () => this.zoomOut());
-        if (zoomReset) zoomReset.addEventListener('click', () => this.resetView());
-        
-        // Mouse wheel zoom
-        this.container.addEventListener('wheel', (e) => this.onWheel(e));
-        
-        // Drag to rotate
-        let isDragging = false;
-        let prevX = 0, prevY = 0;
-        
-        this.container.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            prevX = e.clientX;
-            prevY = e.clientY;
-        });
-        
-        this.container.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            
-            const deltaX = e.clientX - prevX;
-            const deltaY = e.clientY - prevY;
-            
-            this.nodesGroup.rotation.y += deltaX * 0.005;
-            this.nodesGroup.rotation.x += deltaY * 0.005;
-            this.connectionsGroup.rotation.y += deltaX * 0.005;
-            this.connectionsGroup.rotation.x += deltaY * 0.005;
-            this.particlesGroup.rotation.y += deltaX * 0.005;
-            this.particlesGroup.rotation.x += deltaY * 0.005;
-            
-            prevX = e.clientX;
-            prevY = e.clientY;
-        });
-        
-        this.container.addEventListener('mouseup', () => isDragging = false);
-        this.container.addEventListener('mouseleave', () => isDragging = false);
+        if (zoomReset) zoomReset.addEventListener('click', () => this.resetZoom());
     }
     
     onResize() {
-        const width = this.container.clientWidth;
-        const height = this.container.clientHeight;
-        
-        this.camera.aspect = width / height;
-        this.camera.updateProjectionMatrix();
-        this.renderer.setSize(width, height);
-    }
-    
-    onMouseMove(e) {
         const rect = this.container.getBoundingClientRect();
-        this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-        this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        this.width = rect.width;
+        this.height = rect.height;
         
-        // Check for hover
-        this.raycaster.setFromCamera(this.mouse, this.camera);
-        const intersects = this.raycaster.intersectObjects(this.nodesGroup.children, true);
-        
-        if (intersects.length > 0) {
-            const obj = intersects[0].object.parent;
-            if (obj.userData.node && obj.userData.node !== this.hoveredNode) {
-                this.onNodeHover(obj.userData.node);
-            }
-            this.container.style.cursor = 'pointer';
-        } else {
-            if (this.hoveredNode) {
-                this.onNodeUnhover();
-            }
-            this.container.style.cursor = 'grab';
-        }
-    }
-    
-    onNodeHover(node) {
-        this.hoveredNode = node;
-        
-        // Scale up with GSAP
-        gsap.to(node.object.scale, {
-            x: 1.3, y: 1.3, z: 1.3,
-            duration: 0.3,
-            ease: 'back.out(1.7)'
-        });
-        
-        // Brighten glow
-        gsap.to(node.glow.material, {
-            opacity: 0.4,
-            duration: 0.3
-        });
-        
-        // Highlight connections
-        this.connections.forEach(conn => {
-            if (conn.from.id === node.id || conn.to.id === node.id) {
-                gsap.to(conn.line.material, {
-                    opacity: 0.8,
-                    duration: 0.3
-                });
-                conn.line.material.color.setHex(this.colors.connectionActive);
-            }
-        });
-    }
-    
-    onNodeUnhover() {
-        if (!this.hoveredNode) return;
-        
-        const node = this.hoveredNode;
-        
-        gsap.to(node.object.scale, {
-            x: 1, y: 1, z: 1,
-            duration: 0.3,
-            ease: 'power2.out'
-        });
-        
-        gsap.to(node.glow.material, {
-            opacity: 0.15,
-            duration: 0.3
-        });
-        
-        // Reset connections
-        this.connections.forEach(conn => {
-            if (conn.from.id === node.id || conn.to.id === node.id) {
-                gsap.to(conn.line.material, {
-                    opacity: 0.4,
-                    duration: 0.3
-                });
-                conn.line.material.color.setHex(this.colors.connection);
-            }
-        });
-        
-        this.hoveredNode = null;
-    }
-    
-    onClick(e) {
-        if (this.hoveredNode) {
-            this.selectNode(this.hoveredNode, e.clientX, e.clientY);
-        } else {
-            this.deselectNode();
-        }
-    }
-    
-    selectNode(node, x, y) {
-        this.selectedNode = node;
-        
-        const popup = document.getElementById('cvNodeInfo');
-        if (!popup) return;
-        
-        // Position popup
-        const rect = this.container.getBoundingClientRect();
-        popup.style.left = (x - rect.left + 20) + 'px';
-        popup.style.top = (y - rect.top - 100) + 'px';
-        
-        // Update content
-        popup.querySelector('.cv-node-info-title').textContent = node.label;
-        
-        const rows = popup.querySelectorAll('.cv-node-info-row');
-        if (rows[0]) {
-            const val = rows[0].querySelector('.cv-node-info-value');
-            val.textContent = node.status.toUpperCase();
-            val.className = 'cv-node-info-value ' + node.status;
-        }
-        if (rows[1]) {
-            rows[1].querySelector('.cv-node-info-value').textContent = node.connections?.length || 0;
-        }
-        if (rows[2]) {
-            rows[2].querySelector('.cv-node-info-value').textContent = 'LAYER ' + node.layer;
-        }
-        
-        popup.querySelector('.cv-node-info-desc').textContent = node.desc;
-        
-        // Show with animation
-        popup.classList.add('visible');
-        
-        // Auto hide after 4 seconds
-        setTimeout(() => this.deselectNode(), 4000);
-    }
-    
-    deselectNode() {
-        this.selectedNode = null;
-        const popup = document.getElementById('cvNodeInfo');
-        if (popup) popup.classList.remove('visible');
-    }
-    
-    onWheel(e) {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? 50 : -50;
-        
-        gsap.to(this.camera.position, {
-            z: Math.max(200, Math.min(800, this.camera.position.z + delta)),
-            duration: 0.3,
-            ease: 'power2.out',
-            onUpdate: () => this.updateZoomLevel()
-        });
+        this.svg.attr('width', this.width).attr('height', this.height);
+        this.simulation.force('center', d3.forceCenter(this.width / 2, this.height / 2));
+        this.simulation.alpha(0.3).restart();
     }
     
     zoomIn() {
-        gsap.to(this.camera.position, {
-            z: Math.max(200, this.camera.position.z - 80),
-            duration: 0.5,
-            ease: 'power2.out',
-            onUpdate: () => this.updateZoomLevel()
-        });
+        this.svg.transition().duration(300).call(this.zoomBehavior.scaleBy, 1.4);
     }
     
     zoomOut() {
-        gsap.to(this.camera.position, {
-            z: Math.min(800, this.camera.position.z + 80),
-            duration: 0.5,
-            ease: 'power2.out',
-            onUpdate: () => this.updateZoomLevel()
-        });
+        this.svg.transition().duration(300).call(this.zoomBehavior.scaleBy, 0.7);
     }
     
-    resetView() {
-        gsap.to(this.camera.position, {
-            x: 0, y: 0, z: 500,
-            duration: 0.8,
-            ease: 'power2.out',
-            onUpdate: () => this.updateZoomLevel()
-        });
-        
-        gsap.to(this.nodesGroup.rotation, { x: 0, y: 0, z: 0, duration: 0.8, ease: 'power2.out' });
-        gsap.to(this.connectionsGroup.rotation, { x: 0, y: 0, z: 0, duration: 0.8, ease: 'power2.out' });
-        gsap.to(this.particlesGroup.rotation, { x: 0, y: 0, z: 0, duration: 0.8, ease: 'power2.out' });
+    resetZoom() {
+        this.svg.transition().duration(500).call(this.zoomBehavior.transform, d3.zoomIdentity);
     }
     
     updateZoomLevel() {
         const el = document.getElementById('cvZoomLvl');
-        if (el) {
-            const zoom = Math.round((1 - (this.camera.position.z - 200) / 600) * 100 + 50);
-            el.textContent = zoom + '%';
-        }
+        if (el) el.textContent = Math.round(this.currentZoom * 100) + '%';
     }
     
     start() {
         this.isActive = true;
         this.animate();
-        console.log('[NEURAL-THREEJS] Animation started');
+        console.log('[BLACKOPS] Animation started');
     }
     
     stop() {
         this.isActive = false;
-        console.log('[NEURAL-THREEJS] Animation stopped');
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+            this.animationFrame = null;
+        }
+        console.log('[BLACKOPS] Animation stopped');
     }
     
     animate() {
         if (!this.isActive) return;
         
-        requestAnimationFrame(() => this.animate());
-        
-        const delta = this.clock.getDelta();
-        this.time += delta;
-        
-        // Animate particles along curves
-        this.particles.forEach(particle => {
-            const data = particle.userData;
-            data.progress += data.speed * data.direction;
-            
-            if (data.progress > 1) data.progress = 0;
-            if (data.progress < 0) data.progress = 1;
-            
-            const point = data.connection.curve.getPoint(data.progress);
-            particle.position.copy(point);
-            
-            // Pulse opacity
-            particle.material.opacity = 0.5 + Math.sin(this.time * 5 + data.progress * 10) * 0.3;
-        });
-        
-        // Animate node rings
-        this.nodes.forEach(node => {
-            if (node.ring) {
-                node.ring.rotation.z += delta * 0.5;
-            }
-            
-            // Pulse glow based on status
-            if (node.glow && node.status === 'exceptional') {
-                node.glow.material.opacity = 0.15 + Math.sin(this.time * 3) * 0.1;
-            }
-        });
-        
-        // Rotate background particles slightly
-        if (this.bgParticles) {
-            this.bgParticles.rotation.y += delta * 0.02;
-        }
+        this.animationFrame = requestAnimationFrame(() => this.animate());
+        this.time += 0.016;
         
         // Update time bar
         const timeFill = document.getElementById('cvTimeFill');
@@ -687,17 +721,26 @@ export default class NeuralNetworkVisualization {
             timeFill.style.width = progress + '%';
         }
         
-        this.renderer.render(this.scene, this.camera);
+        // Pulse critical nodes
+        this.nodeGroups.filter(d => d.status === 'critical')
+            .select('.node-main')
+            .attr('r', 5 + Math.sin(this.time * 4) * 1.5);
+        
+        // Animate left panel bars
+        document.querySelectorAll('.cv-bar').forEach((bar, i) => {
+            const baseHeight = bar.classList.contains('h100') ? 100 :
+                             bar.classList.contains('h80') ? 80 :
+                             bar.classList.contains('h60') ? 60 :
+                             bar.classList.contains('h40') ? 40 : 20;
+            const pulse = Math.sin(this.time * 3 + i * 0.3) * 15;
+            bar.style.height = Math.max(5, baseHeight + pulse) + '%';
+        });
     }
     
     destroy() {
         this.stop();
-        
-        if (this.renderer) {
-            this.renderer.dispose();
-            this.container.removeChild(this.renderer.domElement);
-        }
-        
-        console.log('[NEURAL-THREEJS] Destroyed');
+        if (this.simulation) this.simulation.stop();
+        if (this.svg) this.svg.remove();
+        console.log('[BLACKOPS] Destroyed');
     }
 }

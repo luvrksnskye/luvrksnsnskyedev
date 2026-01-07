@@ -1,8 +1,9 @@
 /**
  * PHASE 3c: NEURAL NETWORK VISUALIZATION
- * Three.js + GSAP Sci-Fi Style
+ * NEO-MILITARY BLACKOPS EDITION
  * 
- * Duración: 60 segundos
+ * ~100 nodes, hundreds of connections
+ * Black / White / Red palette
  * Subtítulos ORIGINALES mantenidos
  */
 
@@ -14,14 +15,14 @@ export default class Phase3cNeural extends BasePhase {
     constructor(manager) {
         super(manager);
         
-        // Estadísticas para el overlay
+        // Estadísticas para el overlay - blackops style
         this.stats = [
-            { label: 'TOTAL NEURONS', value: '86.2 BILLION' },
-            { label: 'SYNAPTIC CONNECTIONS', value: '142.7 TRILLION' },
-            { label: 'NEURAL PLASTICITY', value: 'HIGH' },
-            { label: 'PROCESSING SPEED', value: '127% BASELINE' },
-            { label: 'MEMORY INTEGRATION', value: '78% RECOVERED' },
-            { label: 'CONSCIOUSNESS INDEX', value: '98.7%' }
+            { label: 'NEURAL NODES', value: '100', danger: false },
+            { label: 'ACTIVE CONNECTIONS', value: '347', danger: false },
+            { label: 'CRITICAL FAILURES', value: '8', danger: true },
+            { label: 'PROCESSING LOAD', value: '127%', danger: false },
+            { label: 'MEMORY SECTORS', value: '78% ONLINE', danger: false },
+            { label: 'SYSTEM INTEGRITY', value: '91.3%', danger: false }
         ];
         
         // SUBTITULOS ORIGINALES - SIN CAMBIOS
@@ -44,7 +45,7 @@ export default class Phase3cNeural extends BasePhase {
     
     async play() {
         return new Promise((resolve) => {
-            console.log('[PHASE 3c] Neural Network started');
+            console.log('[PHASE 3c] Neural Network BLACKOPS started');
             this.isActive = true;
             this.manager.currentPhase = 3.5;
             
@@ -61,14 +62,10 @@ export default class Phase3cNeural extends BasePhase {
             // Populate stats overlay
             this.populateStats();
             
-            // Inicializar visualización Three.js
+            // Inicializar visualización D3
             const viewport = document.getElementById('cvViewport');
             if (viewport) {
-                this.visualization = new NeuralNetworkVisualization(
-                    viewport,
-                    null,
-                    this.stats
-                );
+                this.visualization = new NeuralNetworkVisualization(viewport);
                 this.visualization.start();
             }
             
@@ -108,7 +105,7 @@ export default class Phase3cNeural extends BasePhase {
         container.innerHTML = this.stats.map(stat => `
             <div class="cv-stat-row">
                 <span class="cv-stat-label">${stat.label}</span>
-                <span class="cv-stat-value">${stat.value}</span>
+                <span class="cv-stat-value ${stat.danger ? 'danger' : ''}">${stat.value}</span>
             </div>
         `).join('');
     }
@@ -175,7 +172,7 @@ export default class Phase3cNeural extends BasePhase {
         }
         
         this.isActive = false;
-        console.log('[PHASE 3c] Completed');
+        console.log('[PHASE 3c] BLACKOPS Completed');
     }
     
     stop() {
