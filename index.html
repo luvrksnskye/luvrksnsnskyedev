@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="/src/css/responsive.css">
     <link rel="stylesheet" href="/src/css/intro.css">
     <link rel="stylesheet" href="/src/css/survivor-panel.css">
+    <link rel="stylesheet" href="/src/css/neural-network.css">
 
 </head>
 
@@ -686,6 +687,329 @@
 </div>
 <!-- END PHASE 3b -->
 
+
+<!-- PHASE: NEURAL NETWORK VISUALIZATION -->
+<div id="phaseNeuralNetwork" class="intro-phase phase-neural-network">
+    
+    <!-- HEADER - COGNEX STYLE -->
+    <header class="vidi-header">
+        <div class="vidi-header-left">
+            <div class="vidi-logo">COGNEX<span class="vidi-logo-sub">VIDI</span></div>
+            <div class="vidi-operator">OPERATOR: <span>LYNCH</span></div>
+            <div class="vidi-icons">
+                <div class="vidi-icon">◫</div>
+                <div class="vidi-icon">⊞</div>
+                <div class="vidi-icon">◇</div>
+            </div>
+        </div>
+        <div class="vidi-header-center">
+            <div class="vidi-progress-bar">
+                <div class="vidi-progress-fill"></div>
+            </div>
+        </div>
+        <div class="vidi-header-right">
+            <div class="vidi-gpus">GPUs<span class="vidi-gpus-val">3</span></div>
+            <div class="vidi-login">Login</div>
+        </div>
+    </header>
+    
+    <!-- MAIN CONTENT -->
+    <div class="vidi-main">
+        
+        <!-- LEFT PANEL - Numbers and bars -->
+        <aside class="vidi-panel-left">
+            <div class="vidi-numbers">
+                <span>486274</span>
+                <span>1792</span>
+                <span>49400864</span>
+                <span>9787754</span>
+            </div>
+            
+            <div class="vidi-bar-group">
+                <div class="vidi-bar-row">
+                    <div class="vidi-bar h1 bright"></div>
+                    <div class="vidi-bar h2"></div>
+                    <div class="vidi-bar h3 bright"></div>
+                    <div class="vidi-bar h1"></div>
+                    <div class="vidi-bar h2 bright"></div>
+                </div>
+                <div class="vidi-bar-row">
+                    <div class="vidi-bar h2"></div>
+                    <div class="vidi-bar h1 bright"></div>
+                    <div class="vidi-bar h3"></div>
+                    <div class="vidi-bar h2 bright"></div>
+                    <div class="vidi-bar h1"></div>
+                    <div class="vidi-bar h3 bright"></div>
+                </div>
+                <div class="vidi-bar-row">
+                    <div class="vidi-bar h3 bright"></div>
+                    <div class="vidi-bar h1"></div>
+                    <div class="vidi-bar h2 bright"></div>
+                    <div class="vidi-bar h3"></div>
+                    <div class="vidi-bar h1 bright"></div>
+                </div>
+                <div class="vidi-bar-row">
+                    <div class="vidi-bar h1"></div>
+                    <div class="vidi-bar h2 bright"></div>
+                    <div class="vidi-bar h1"></div>
+                    <div class="vidi-bar h3 bright"></div>
+                    <div class="vidi-bar h2"></div>
+                </div>
+                <div class="vidi-bar-row">
+                    <div class="vidi-bar h2 bright"></div>
+                    <div class="vidi-bar h3"></div>
+                    <div class="vidi-bar h1 bright"></div>
+                    <div class="vidi-bar h2"></div>
+                    <div class="vidi-bar h3 bright"></div>
+                    <div class="vidi-bar h1"></div>
+                </div>
+                <div class="vidi-bar-row">
+                    <div class="vidi-bar h3"></div>
+                    <div class="vidi-bar h1 bright"></div>
+                    <div class="vidi-bar h2"></div>
+                    <div class="vidi-bar h1 bright"></div>
+                    <div class="vidi-bar h3"></div>
+                </div>
+                <div class="vidi-bar-row">
+                    <div class="vidi-bar h1 bright"></div>
+                    <div class="vidi-bar h2"></div>
+                    <div class="vidi-bar h3 bright"></div>
+                    <div class="vidi-bar h1"></div>
+                    <div class="vidi-bar h2 bright"></div>
+                    <div class="vidi-bar h3"></div>
+                </div>
+                <div class="vidi-bar-row">
+                    <div class="vidi-bar h2"></div>
+                    <div class="vidi-bar h1 bright"></div>
+                    <div class="vidi-bar h3"></div>
+                    <div class="vidi-bar h2 bright"></div>
+                </div>
+            </div>
+            
+            <div class="vidi-codes">
+                <span>'GT82S9</span>
+                <span>DX/QF/VD</span>
+                <span>VXF</span>
+            </div>
+            
+            <div class="vidi-codes">
+                <span>T9X/N</span>
+                <span>Q391F0</span>
+            </div>
+            
+            <div class="vidi-codes" style="margin-top:auto;">
+                <span>5U</span>
+            </div>
+        </aside>
+        
+        <!-- CANVAS VIEWPORT -->
+        <div class="vidi-viewport" id="vidiViewport">
+            <canvas id="neuralCanvas"></canvas>
+            
+            <!-- Zoom Controls -->
+            <div class="vidi-zoom">
+                <button class="vidi-zoom-btn" id="vidiZoomIn">+</button>
+                <button class="vidi-zoom-btn" id="vidiZoomOut">−</button>
+                <button class="vidi-zoom-btn" id="vidiZoomReset">⟲</button>
+                <div class="vidi-zoom-level" id="vidiZoomLevel">85%</div>
+            </div>
+            
+            <!-- Subtitle -->
+            <div class="vidi-subtitle-wrap">
+                <div class="vidi-subtitle" id="neuralSubtitle"></div>
+            </div>
+            
+            <!-- Node Popup -->
+            <div class="vidi-node-popup" id="vidiNodePopup">
+                <div class="vidi-popup-title">NODE</div>
+                <div class="vidi-popup-row">
+                    <span class="vidi-popup-label">STATUS</span>
+                    <span class="vidi-popup-value">ACTIVE</span>
+                </div>
+                <div class="vidi-popup-row">
+                    <span class="vidi-popup-label">LINKS</span>
+                    <span class="vidi-popup-value">3</span>
+                </div>
+                <div class="vidi-popup-row">
+                    <span class="vidi-popup-label">BARS</span>
+                    <span class="vidi-popup-value">5</span>
+                </div>
+                <div class="vidi-popup-desc">Neural processing node.</div>
+            </div>
+        </div>
+        
+        <!-- RIGHT PANEL -->
+        <aside class="vidi-panel-right">
+            <div class="vidi-panel-right-top">
+                <!-- Column 1: Info box + buttons + codes -->
+                <div class="vidi-panel-col">
+                    <div class="vidi-info-box">
+                        <div class="vidi-info-text">
+                            NRTPHVNXBLE.ID<br>
+                            <span class="vidi-info-highlight">REV2X06X13'NR08</span><br>
+                            MODIFICATIONSYNCH
+                        </div>
+                    </div>
+                    <div class="vidi-btn-row">
+                        <div class="vidi-btn">G</div>
+                        <div class="vidi-btn active">3</div>
+                        <div class="vidi-btn">5</div>
+                        <div class="vidi-btn active">Q</div>
+                        <div class="vidi-btn">9</div>
+                    </div>
+                    <div class="vidi-code-block">
+                        <span>RLUL</span>
+                        <span>KPFWLU</span>
+                    </div>
+                    <div class="vidi-code-cols">
+                        <div class="vidi-code-block">
+                            <span>FJH</span>
+                            <span>XRLAIWVP</span>
+                            <span>JFGORTMRBYWIFAQT</span>
+                            <span>QIKXVH</span>
+                        </div>
+                        <div class="vidi-code-block">
+                            <span>GAMLVVR</span>
+                        </div>
+                    </div>
+                    <div class="vidi-code-cols">
+                        <div class="vidi-code-block">
+                            <span>RUDH</span>
+                            <span>MVJTLIYN</span>
+                            <span>VTXPVWQQXS⊞</span>
+                            <span>ANSJ</span>
+                        </div>
+                        <div class="vidi-code-block">
+                            <span>HSSNGB</span>
+                            <span>DATTOEFTIO</span>
+                            <span>FRORUFIY</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Small bars grid -->
+                    <div style="display:flex;gap:3px;margin-top:8px;">
+                        <div style="display:flex;flex-direction:column;gap:2px;">
+                            <div style="display:flex;gap:1px;">
+                                <div style="width:8px;height:8px;background:rgba(255,255,255,0.4);"></div>
+                                <div style="width:8px;height:8px;background:rgba(255,255,255,0.2);"></div>
+                                <div style="width:8px;height:8px;background:rgba(255,255,255,0.5);"></div>
+                            </div>
+                            <div style="display:flex;gap:1px;">
+                                <div style="width:8px;height:8px;background:rgba(255,255,255,0.3);"></div>
+                                <div style="width:8px;height:8px;background:rgba(255,255,255,0.5);"></div>
+                                <div style="width:8px;height:8px;background:rgba(255,255,255,0.2);"></div>
+                            </div>
+                            <div style="display:flex;gap:1px;">
+                                <div style="width:8px;height:8px;background:rgba(255,255,255,0.4);"></div>
+                                <div style="width:8px;height:8px;background:rgba(255,255,255,0.3);"></div>
+                                <div style="width:8px;height:8px;background:rgba(255,255,255,0.5);"></div>
+                            </div>
+                        </div>
+                        <div class="vidi-code-block" style="font-size:0.35rem;">
+                            <span>NETMRK</span>
+                            <span>124273</span>
+                            <span>XC7920</span>
+                            <span>MATRIX</span>
+                        </div>
+                    </div>
+                    
+                    <div class="vidi-code-cols" style="margin-top:8px;">
+                        <div class="vidi-code-block">
+                            <span>VRPFNDT</span>
+                            <span>ZGC</span>
+                            <span>XA</span>
+                            <span>KCSDVV_NWRIN</span>
+                            <span>MWW</span>
+                            <span>IBIPNRDWZIAA</span>
+                            <span>KFXQ</span>
+                        </div>
+                        <div class="vidi-code-block">
+                            <span>RBMMQTMHI</span>
+                            <span>SBRXA</span>
+                            <span>DCOV_NVHCQ</span>
+                        </div>
+                    </div>
+                    
+                    <div class="vidi-num-pairs">
+                        <span>5775081</span><span>5775081</span>
+                        <span>8989</span><span>8989</span>
+                        <span>6317</span><span>6317</span>
+                        <span>10919589</span><span>10919589</span>
+                    </div>
+                </div>
+                
+                <!-- Column 2: Matrix numbers -->
+                <div class="vidi-panel-col">
+                    <div class="vidi-matrix">
+                        <span>/3:6627828572g/2</span><span>3:8352899842g/3</span><span>/3:6627828572g/2</span><span>3:8352899842g/3</span>
+                        <span>1:2636612182g/3</span><span>3:4984495022g/3</span><span>1:2636612182g/3</span><span>3:4984495022g/3</span>
+                        <span>/5:8984642572g/3</span><span>1:4477890002g/4</span><span>/5:8984642572g/3</span><span>1:4477890002g/4</span>
+                        <span>/4:5145728017g/2</span><span>/5:5938744892g/2</span><span>/4:5145728017g/2</span><span>/5:5938744892g/2</span>
+                        <span>6:9836146382g/3</span><span>3:7184586932g/2</span><span>6:9836146382g/3</span><span>3:7184586932g/2</span>
+                        <span>/3:2932823432g/2</span><span>6:7043154972g/2</span><span>/3:2932823432g/2</span><span>6:7043154972g/2</span>
+                        <span>5:8536464822g/3</span><span>3:9021991802g/3</span><span>5:8536464822g/3</span><span>3:9021991802g/3</span>
+                        <span>3:8331758782g/2</span><span>/6:5926335462g/3</span><span>3:8331758782g/2</span><span>/6:5926335462g/3</span>
+                        <span>/3:6627026572g/2</span><span>3:8352899842g/3</span><span>/3:6627026572g/2</span><span>3:8352899842g/3</span>
+                        <span>1:2636612182g/3</span><span>/4:9984495822g/2</span><span>1:2636612182g/3</span><span>/4:9984495822g/2</span>
+                        <span>/5:8984642572g/3</span><span>1:4477899002g/4</span><span>/5:8984642572g/3</span><span>1:4477899002g/4</span>
+                        <span>3:9283744882g/2</span><span>/5:5145728012g/2</span><span>3:9283744882g/2</span><span>/5:5145728012g/2</span>
+                        <span>/6:9836146382g/3</span><span>/3:7184586932g/2</span><span>/6:9836146382g/3</span><span>/3:7184586932g/2</span>
+                        <span>3:7843454972g/2</span><span>/6:7043154972g/2</span><span>3:7843454972g/2</span><span>/6:7043154972g/2</span>
+                        <span>/5:9021991862g/2</span><span>/3:2932823462g/2</span><span>/5:9021991862g/2</span><span>/3:2932823462g/2</span>
+                        <span>/6:8331758782g/2</span><span>/6:5926335462g/2</span><span>/6:8331758782g/2</span><span>/6:5926335462g/2</span>
+                    </div>
+                </div>
+                
+                <!-- Column 3: Vertical text + boxes -->
+                <div class="vidi-panel-col" style="width:100px;flex:none;">
+                    <div class="vidi-vertical-text">
+                        I<br>U<br>Z<br>V<br>Y<br>C<br>L<br>U<br>U<br>P<br>R<br>F<br>F<br>Y<br>F<br>B<br>X<br>Q<br>X<br>O<br>J<br>R<br>O<br>Z<br>T<br>K<br>G<br>J
+                    </div>
+                    
+                    <div class="vidi-x-box">
+                        <svg viewBox="0 0 100 80" preserveAspectRatio="none">
+                            <line x1="0" y1="0" x2="100" y2="80"/>
+                            <line x1="100" y1="0" x2="0" y2="80"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="vidi-lines-box">
+                        <div class="vidi-hline"></div>
+                        <div class="vidi-hline"></div>
+                        <div class="vidi-hline"></div>
+                        <div class="vidi-hline"></div>
+                        <div class="vidi-hline"></div>
+                        <div class="vidi-hline"></div>
+                    </div>
+                    
+                    <div class="vidi-x-box-small">
+                        <svg viewBox="0 0 45 45" preserveAspectRatio="none">
+                            <line x1="0" y1="0" x2="45" y2="45"/>
+                            <line x1="45" y1="0" x2="0" y2="45"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+    </div>
+    
+    <!-- FOOTER -->
+    <footer class="vidi-footer">
+        <div class="vidi-footer-left">
+            <span class="vidi-time-label">TIME</span>
+            <div class="vidi-time-bar">
+                <div class="vidi-time-fill" id="vidiTimeFill"></div>
+            </div>
+        </div>
+        <div class="vidi-footer-center">5Q22D5</div>
+        <div class="vidi-footer-right">
+            <span class="vidi-reading">READING<span class="vidi-reading-dots"><span class="vidi-reading-dot"></span><span class="vidi-reading-dot"></span><span class="vidi-reading-dot"></span></span></span>
+        </div>
+    </footer>
+    
+</div>
+
   <!-- PHASE 4: BRAIN VISUALIZATION -->
   <div class="intro-phase phase-body" id="phaseBody">
     <div class="body-container">
@@ -726,9 +1050,6 @@
             <div class="scan-dot success"></div>
             <span class="scan-text">Neural Pathways: REINITIALIZED</span>
           </div>
-        </div>
-        <div class="body-subtitle-container">
-          <p class="body-subtitle" id="bodySubtitle"></p>
         </div>
       </div>
     </div>

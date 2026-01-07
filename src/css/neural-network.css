@@ -1,0 +1,645 @@
+/* ========================================
+   NEURAL NETWORK - COGNEX VIDI EXACT REPLICA
+   ======================================== */
+
+:root {
+    --vidi-bg: #000000;
+    --vidi-white: #ffffff;
+    --vidi-gray-90: rgba(255, 255, 255, 0.9);
+    --vidi-gray-70: rgba(255, 255, 255, 0.7);
+    --vidi-gray-50: rgba(255, 255, 255, 0.5);
+    --vidi-gray-40: rgba(255, 255, 255, 0.4);
+    --vidi-gray-30: rgba(255, 255, 255, 0.3);
+    --vidi-gray-20: rgba(255, 255, 255, 0.2);
+    --vidi-gray-15: rgba(255, 255, 255, 0.15);
+    --vidi-gray-10: rgba(255, 255, 255, 0.1);
+    --vidi-gray-05: rgba(255, 255, 255, 0.05);
+    --vidi-font: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+/* ========================================
+   MAIN CONTAINER
+   ======================================== */
+#stellarIntro .phase-neural-network {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--vidi-bg);
+    font-family: var(--vidi-font);
+    color: var(--vidi-white);
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    overflow: hidden;
+}
+
+/* ========================================
+   HEADER - EXACT COGNEX STYLE
+   ======================================== */
+.vidi-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 15px;
+    border-bottom: 1px solid var(--vidi-gray-15);
+    flex-shrink: 0;
+    height: 36px;
+}
+
+.vidi-header-left {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.vidi-logo {
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    color: var(--vidi-white);
+}
+
+.vidi-logo-sub {
+    font-size: 0.55rem;
+    font-weight: normal;
+    color: var(--vidi-gray-50);
+    margin-left: 2px;
+    vertical-align: bottom;
+}
+
+.vidi-operator {
+    font-size: 0.6rem;
+    color: var(--vidi-gray-50);
+    letter-spacing: 0.05em;
+}
+
+.vidi-operator span {
+    color: var(--vidi-gray-70);
+}
+
+.vidi-icons {
+    display: flex;
+    gap: 6px;
+}
+
+.vidi-icon {
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--vidi-gray-30);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    color: var(--vidi-gray-50);
+    cursor: pointer;
+}
+
+.vidi-header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 0 40px;
+}
+
+.vidi-progress-bar {
+    width: 100px;
+    height: 2px;
+    background: var(--vidi-gray-20);
+}
+
+.vidi-progress-fill {
+    width: 60%;
+    height: 100%;
+    background: var(--vidi-white);
+}
+
+.vidi-header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.vidi-gpus {
+    font-size: 0.55rem;
+    color: var(--vidi-gray-50);
+}
+
+.vidi-gpus-val {
+    color: var(--vidi-white);
+    margin-left: 8px;
+}
+
+.vidi-login {
+    font-size: 0.55rem;
+    color: var(--vidi-gray-50);
+}
+
+/* ========================================
+   MAIN CONTENT
+   ======================================== */
+.vidi-main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+}
+
+/* ========================================
+   LEFT PANEL - DATA NUMBERS & BARS
+   ======================================== */
+.vidi-panel-left {
+    width: 120px;
+    padding: 15px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-right: 1px solid var(--vidi-gray-10);
+    flex-shrink: 0;
+}
+
+.vidi-numbers {
+    font-size: 0.55rem;
+    color: var(--vidi-gray-70);
+    line-height: 1.8;
+}
+
+.vidi-numbers span {
+    display: block;
+}
+
+/* Bar groups - exactly like image */
+.vidi-bar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vidi-bar-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 25px;
+}
+
+.vidi-bar {
+    width: 3px;
+    background: var(--vidi-gray-40);
+}
+
+.vidi-bar.h1 { height: 100%; }
+.vidi-bar.h2 { height: 80%; }
+.vidi-bar.h3 { height: 60%; }
+.vidi-bar.h4 { height: 40%; }
+.vidi-bar.h5 { height: 20%; }
+.vidi-bar.bright { background: var(--vidi-gray-70); }
+.vidi-bar.dim { background: var(--vidi-gray-20); }
+
+.vidi-codes {
+    font-size: 0.5rem;
+    color: var(--vidi-gray-50);
+    line-height: 1.6;
+}
+
+/* ========================================
+   CANVAS VIEWPORT - NEURAL NETWORK
+   ======================================== */
+.vidi-viewport {
+    flex: 1;
+    position: relative;
+    cursor: grab;
+    overflow: hidden;
+}
+
+.vidi-viewport:active {
+    cursor: grabbing;
+}
+
+.vidi-viewport canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Zoom controls */
+.vidi-zoom {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    z-index: 50;
+}
+
+.vidi-zoom-btn {
+    width: 22px;
+    height: 22px;
+    background: var(--vidi-bg);
+    border: 1px solid var(--vidi-gray-30);
+    color: var(--vidi-gray-50);
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vidi-zoom-btn:hover {
+    border-color: var(--vidi-gray-50);
+    color: var(--vidi-white);
+}
+
+.vidi-zoom-level {
+    font-size: 0.45rem;
+    color: var(--vidi-gray-30);
+    text-align: center;
+    margin-top: 3px;
+}
+
+/* ========================================
+   RIGHT PANEL - DATA DISPLAYS
+   ======================================== */
+.vidi-panel-right {
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--vidi-gray-10);
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.vidi-panel-right-top {
+    display: flex;
+    border-bottom: 1px solid var(--vidi-gray-10);
+}
+
+.vidi-panel-right-bottom {
+    display: flex;
+    flex: 1;
+}
+
+.vidi-panel-col {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-right: 1px solid var(--vidi-gray-10);
+}
+
+.vidi-panel-col:last-child {
+    border-right: none;
+}
+
+/* Info box with glitchy text */
+.vidi-info-box {
+    border: 1px solid var(--vidi-gray-20);
+    padding: 8px;
+    min-height: 50px;
+    background: var(--vidi-gray-05);
+}
+
+.vidi-info-text {
+    font-size: 0.4rem;
+    color: var(--vidi-gray-40);
+    line-height: 1.3;
+    word-break: break-all;
+}
+
+.vidi-info-highlight {
+    background: var(--vidi-gray-30);
+    padding: 1px 3px;
+    color: var(--vidi-white);
+}
+
+/* Button row G 3 5 Q 9 */
+.vidi-btn-row {
+    display: flex;
+    gap: 3px;
+    margin: 5px 0;
+}
+
+.vidi-btn {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--vidi-gray-30);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.5rem;
+    color: var(--vidi-gray-50);
+    cursor: pointer;
+}
+
+.vidi-btn:hover,
+.vidi-btn.active {
+    border-color: var(--vidi-white);
+    color: var(--vidi-white);
+    background: var(--vidi-gray-20);
+}
+
+/* Random codes columns */
+.vidi-code-block {
+    font-size: 0.42rem;
+    color: var(--vidi-gray-50);
+    line-height: 1.4;
+}
+
+.vidi-code-block span {
+    display: block;
+}
+
+.vidi-code-cols {
+    display: flex;
+    gap: 12px;
+}
+
+/* Scientific numbers grid - exact match */
+.vidi-matrix {
+    font-size: 0.38rem;
+    color: var(--vidi-gray-40);
+    line-height: 1.35;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px 6px;
+}
+
+.vidi-matrix span {
+    white-space: nowrap;
+}
+
+/* Number pairs at bottom */
+.vidi-num-pairs {
+    font-size: 0.5rem;
+    color: var(--vidi-gray-50);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 15px;
+    margin-top: 10px;
+}
+
+/* Vertical text column (far right) */
+.vidi-vertical-col {
+    width: 25px;
+    padding: 10px 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.vidi-vertical-text {
+    font-size: 0.4rem;
+    color: var(--vidi-gray-40);
+    line-height: 1.15;
+    letter-spacing: 0.05em;
+}
+
+/* Box with X diagonal lines */
+.vidi-x-box {
+    border: 1px solid var(--vidi-gray-20);
+    height: 80px;
+    position: relative;
+    margin: 5px 0;
+}
+
+.vidi-x-box svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.vidi-x-box line {
+    stroke: var(--vidi-gray-15);
+    stroke-width: 1;
+}
+
+/* Lines box - horizontal lines */
+.vidi-lines-box {
+    border: 1px solid var(--vidi-gray-20);
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.vidi-hline {
+    height: 5px;
+    background: var(--vidi-gray-15);
+}
+
+.vidi-hline:nth-child(1) { width: 95%; }
+.vidi-hline:nth-child(2) { width: 80%; }
+.vidi-hline:nth-child(3) { width: 90%; }
+.vidi-hline:nth-child(4) { width: 70%; }
+.vidi-hline:nth-child(5) { width: 85%; }
+.vidi-hline:nth-child(6) { width: 75%; }
+
+/* Small X box */
+.vidi-x-box-small {
+    border: 1px solid var(--vidi-gray-20);
+    width: 45px;
+    height: 45px;
+    position: relative;
+    margin-top: auto;
+}
+
+.vidi-x-box-small svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+.vidi-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 15px;
+    border-top: 1px solid var(--vidi-gray-15);
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.vidi-footer-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vidi-time-label {
+    font-size: 0.5rem;
+    color: var(--vidi-gray-40);
+    letter-spacing: 0.1em;
+}
+
+.vidi-time-bar {
+    width: 120px;
+    height: 2px;
+    background: var(--vidi-gray-20);
+    position: relative;
+}
+
+.vidi-time-fill {
+    height: 100%;
+    background: var(--vidi-gray-50);
+    width: 0%;
+    transition: width 0.1s linear;
+}
+
+.vidi-footer-center {
+    font-size: 0.5rem;
+    color: var(--vidi-gray-40);
+}
+
+.vidi-footer-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.vidi-reading {
+    font-size: 0.5rem;
+    color: var(--vidi-gray-40);
+}
+
+.vidi-reading-dots {
+    display: inline-flex;
+    gap: 2px;
+    margin-left: 2px;
+}
+
+.vidi-reading-dot {
+    width: 3px;
+    height: 3px;
+    background: var(--vidi-gray-40);
+    animation: vidiDot 1s infinite;
+}
+
+.vidi-reading-dot:nth-child(2) { animation-delay: 0.2s; }
+.vidi-reading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes vidiDot {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+/* ========================================
+   SUBTITLE OVERLAY
+   ======================================== */
+.vidi-subtitle-wrap {
+    position: absolute;
+    bottom: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    pointer-events: none;
+}
+
+.vidi-subtitle {
+    font-family: 'Orbitron', var(--vidi-font);
+    font-size: 0.95rem;
+    color: var(--vidi-gray-90);
+    letter-spacing: 0.06em;
+    line-height: 1.7;
+    max-width: 600px;
+    text-align: center;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid var(--vidi-gray-20);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.vidi-subtitle.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ========================================
+   NODE CLICK POPUP
+   ======================================== */
+.vidi-node-popup {
+    position: absolute;
+    width: 180px;
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid var(--vidi-gray-30);
+    padding: 10px;
+    z-index: 200;
+    display: none;
+    pointer-events: none;
+}
+
+.vidi-node-popup.active {
+    display: block;
+}
+
+.vidi-popup-title {
+    font-size: 0.55rem;
+    color: var(--vidi-white);
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--vidi-gray-20);
+}
+
+.vidi-popup-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.45rem;
+    margin-bottom: 3px;
+}
+
+.vidi-popup-label {
+    color: var(--vidi-gray-40);
+}
+
+.vidi-popup-value {
+    color: var(--vidi-gray-70);
+}
+
+.vidi-popup-desc {
+    font-size: 0.4rem;
+    color: var(--vidi-gray-50);
+    line-height: 1.4;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--vidi-gray-10);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 1400px) {
+    .vidi-panel-right {
+        width: 420px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .vidi-panel-right {
+        width: 350px;
+    }
+    
+    .vidi-matrix {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .vidi-panel-left {
+        width: 80px;
+    }
+    
+    .vidi-panel-right {
+        width: 280px;
+    }
+}
