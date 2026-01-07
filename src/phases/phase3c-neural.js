@@ -1,3 +1,7 @@
+/**
+ * PHASE 3c: NEURAL NETWORK - BLACKOPS
+ * Subtítulos ORIGINALES
+ */
 
 import BasePhase from './base-phase.js';
 import NeuralNetworkVisualization from '../visualizations/neural-network.js';
@@ -7,120 +11,98 @@ export default class Phase3cNeural extends BasePhase {
     constructor(manager) {
         super(manager);
         
-
         this.subtitles = [
-            { start: 3.0, end: 10.0, text: "Initiating neural network scan. Mapping cognitive architecture. Twelve brain regions identified." },
-            { start: 10.0, end: 16.0, text: "Connection matrix established. Prefrontal cortex optimal. Executive function pathways clear." },
-            { start: 16.0, end: 22.0, text: "Temporal and parietal integration active. Memory encoding stable." },
-            { start: 22.0, end: 27.0, text: "Motor cortex calibrating. Cerebellum coordination returning." },
-            { start: 27.0, end: 34.0, text: "Limbic system balanced. Hippocampus seventy-eight percent recovered." },
-            { start: 34.0, end: 40.0, text: "Brainstem nominal. Autonomic functions independent. Language centers online." },
-            { start: 40.0, end: 47.0, text: "Broca and Wernicke connected. Creative cortex exceptional. Divergent thinking highly active." },
-            { start: 47.0, end: 55.0, text: "Neural plasticity high. Adaptation capability remarkable. One hundred forty-two point seven trillion synaptic connections detected." },
-            { start: 55.0, end: 61.0, text: "Network complexity extraordinary. Neural scan complete. All systems operational." },
-            { start: 61.0, end: 66.0, text: "Consciousness at ninety-eight point seven percent." }
+            { start: 3, end: 10, text: "Initiating neural network scan. Mapping cognitive architecture. Twelve brain regions identified." },
+            { start: 10, end: 16, text: "Connection matrix established. Prefrontal cortex optimal. Executive function pathways clear." },
+            { start: 16, end: 22, text: "Temporal and parietal integration active. Memory encoding stable." },
+            { start: 22, end: 27, text: "Motor cortex calibrating. Cerebellum coordination returning." },
+            { start: 27, end: 34, text: "Limbic system balanced. Hippocampus seventy-eight percent recovered." },
+            { start: 34, end: 40, text: "Brainstem nominal. Autonomic functions independent. Language centers online." },
+            { start: 40, end: 47, text: "Broca and Wernicke connected. Creative cortex exceptional. Divergent thinking highly active." },
+            { start: 47, end: 55, text: "Neural plasticity high. Adaptation capability remarkable. One hundred forty-two point seven trillion synaptic connections detected." },
+            { start: 55, end: 61, text: "Network complexity extraordinary. Neural scan complete. All systems operational." },
+            { start: 61, end: 66, text: "Consciousness at ninety-eight point seven percent." }
         ];
         
-        this.visualization = null;
-        this.subtitleInterval = null;
+        this._vis = null;
+        this._subInt = null;
     }
     
     async play() {
-        return new Promise((resolve) => {
-            console.log('[PHASE 3c] Neural Network BLACKOPS');
+        return new Promise(resolve => {
             this.isActive = true;
             this.manager.currentPhase = 3.5;
             
-            const phase = this.elements.phaseNeuralNetwork;
-            if (!phase) {
-                console.error('[PHASE 3c] Element not found');
-                return resolve();
-            }
+            const el = this.elements.phaseNeuralNetwork;
+            if (!el) return resolve();
             
             this.audio.playTransition(1);
-            phase.classList.add('active');
+            el.classList.add('active');
             
-            // Init visualization
-            const viewport = document.getElementById('cvViewport');
-            if (viewport) {
-                this.visualization = new NeuralNetworkVisualization(viewport);
-                this.visualization.start();
+            const vp = document.getElementById('cvViewport');
+            if (vp) {
+                this._vis = new NeuralNetworkVisualization(vp);
+                this._vis.start();
             }
             
-            // Play voice
             setTimeout(() => {
                 if (this.isSkipped) return resolve();
                 
-                this.startSubtitleSync();
+                this._startSubs();
                 this.audio.playVoice('voiceNeuralNetwork');
                 
-                const voice = this.audio.getAudio('voiceNeuralNetwork');
-                if (voice) {
-                    voice.onended = () => {
-                        setTimeout(() => {
-                            this.cleanup();
-                            resolve();
-                        }, 1500);
-                    };
+                const v = this.audio.getAudio('voiceNeuralNetwork');
+                if (v) {
+                    v.onended = () => setTimeout(() => { this._cleanup(); resolve(); }, 1500);
                 } else {
-                    setTimeout(() => {
-                        this.cleanup();
-                        resolve();
-                    }, 66000);
+                    setTimeout(() => { this._cleanup(); resolve(); }, 66000);
                 }
             }, 2000);
         });
     }
     
-    startSubtitleSync() {
-        this.subtitleInterval = setInterval(() => {
-            if (this.isSkipped) {
-                clearInterval(this.subtitleInterval);
-                return;
-            }
+    _startSubs() {
+        this._subInt = setInterval(() => {
+            if (this.isSkipped) { clearInterval(this._subInt); return; }
             
-            const voice = this.audio.getAudio('voiceNeuralNetwork');
-            const subtitle = document.getElementById('cvSubtitle');
-            if (!voice || !subtitle) return;
+            const v = this.audio.getAudio('voiceNeuralNetwork');
+            const s = document.getElementById('cvSubtitle');
+            if (!v || !s) return;
             
-            const time = voice.currentTime;
-            const current = this.subtitles.find(s => time >= s.start && time < s.end);
+            const t = v.currentTime;
+            const cur = this.subtitles.find(x => t >= x.start && t < x.end);
             
-            if (current && subtitle.textContent !== current.text) {
-                subtitle.textContent = current.text;
-                subtitle.classList.add('visible');
-            } else if (!current) {
-                subtitle.classList.remove('visible');
+            if (cur && s.textContent !== cur.text) {
+                s.textContent = cur.text;
+                s.classList.add('visible');
+            } else if (!cur) {
+                s.classList.remove('visible');
             }
         }, 100);
     }
     
-    cleanup() {
-        if (this.subtitleInterval) clearInterval(this.subtitleInterval);
+    _cleanup() {
+        if (this._subInt) clearInterval(this._subInt);
         
-        const subtitle = document.getElementById('cvSubtitle');
-        if (subtitle) subtitle.classList.remove('visible');
+        const s = document.getElementById('cvSubtitle');
+        if (s) s.classList.remove('visible');
         
-        if (this.visualization) this.visualization.stop();
+        if (this._vis) this._vis.stop();
         
-        const phase = this.elements.phaseNeuralNetwork;
-        if (phase) phase.classList.remove('active');
+        const el = this.elements.phaseNeuralNetwork;
+        if (el) el.classList.remove('active');
         
         this.isActive = false;
-        console.log('[PHASE 3c] Complete');
     }
     
     stop() {
         super.stop();
-        if (this.subtitleInterval) clearInterval(this.subtitleInterval);
-        this.cleanup();
+        if (this._subInt) clearInterval(this._subInt);
+        this._cleanup();
     }
     
     destroy() {
         this.stop();
-        if (this.visualization) {
-            this.visualization.destroy();
-            this.visualization = null;
-        }
+        if (this._vis) { this._vis.destroy(); this._vis = null; }
     }
 }

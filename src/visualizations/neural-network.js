@@ -1,372 +1,296 @@
 
 
-export default class NeuralNetworkVisualization {
+class NeuralNetworkVisualization {
     
     constructor(container) {
-        this.container = container;
-        this.svg = null;
-        this.g = null;
-        this.simulation = null;
+        this._nn_container = container;
+        this._nn_svg = null;
+        this._nn_g = null;
+        this._nn_simulation = null;
+        this._nn_nodes = [];
+        this._nn_edges = [];
+        this._nn_edgeEls = null;
+        this._nn_nodeEls = null;
+        this._nn_labelEls = null;
+        this._nn_width = 0;
+        this._nn_height = 0;
+        this._nn_zoom = 1;
+        this._nn_zoomBehavior = null;
+        this._nn_active = false;
+        this._nn_frame = null;
+        this._nn_time = 0;
+        this._nn_popupTimer = null;
+        this._nn_resizeHandler = null;
         
-        this.nodes = [];
-        this.edges = [];
-        this.particles = [];
-        
-        this.edgeElements = null;
-        this.nodeElements = null;
-        this.labelElements = null;
-        this.particleElements = null;
-        
-        this.width = 0;
-        this.height = 0;
-        this.currentZoom = 1;
-        
-        this.isActive = false;
-        this.time = 0;
-        
-        this.init();
+        this._nn_init();
     }
     
-    init() {
-        if (!this.container) return false;
+    _nn_init() {
+        if (!this._nn_container) return;
         
-        this.width = this.container.clientWidth;
-        this.height = this.container.clientHeight;
+        this._nn_width = this._nn_container.clientWidth;
+        this._nn_height = this._nn_container.clientHeight;
         
-        this.generateData();
-        this.createSVG();
-        this.createSimulation();
-        this.createElements();
-        this.bindEvents();
-        this.updateStats();
-        
-        console.log('[BLACKOPS] Initialized:', this.nodes.length, 'nodes,', this.edges.length, 'edges');
-        return true;
+        this._nn_genData();
+        this._nn_createSVG();
+        this._nn_createSim();
+        this._nn_createEls();
+        this._nn_bindEvents();
+        this._nn_updateStats();
     }
     
-    generateData() {
-        const sectors = ['CORTEX', 'LIMBIC', 'MOTOR', 'SENSORY', 'MEMORY', 'PROCESS', 'CONTROL', 'NEURAL'];
-        this.nodes = [];
-        let nodeId = 0;
+    _nn_genData() {
+        const sectors = ['CX', 'LB', 'MT', 'SN', 'MM', 'PR', 'CT', 'NR'];
+        let id = 0;
         
-        sectors.forEach(sector => {
-            const count = 10 + Math.floor(Math.random() * 5);
-            for (let i = 0; i < count; i++) {
-                const isCritical = Math.random() < 0.04; // Only 4% critical
-                this.nodes.push({
-                    id: nodeId++,
-                    name: `${sector}-${String(i + 1).padStart(3, '0')}`,
-                    sector: sector,
-                    status: isCritical ? 'critical' : (Math.random() < 0.25 ? 'active' : 'nominal'),
+        sectors.forEach(s => {
+            const cnt = 11 + Math.floor(Math.random() * 4);
+            for (let i = 0; i < cnt; i++) {
+                this._nn_nodes.push({
+                    id: id++,
+                    name: `${s}-${String(i + 1).padStart(3, '0')}`,
+                    sector: s,
+                    status: Math.random() < 0.03 ? 'critical' : (Math.random() < 0.2 ? 'active' : 'nominal'),
                     links: 0
                 });
             }
         });
         
-        this.edges = [];
-        this.nodes.forEach((node, i) => {
-            const connectionCount = 2 + Math.floor(Math.random() * 3);
-            for (let c = 0; c < connectionCount; c++) {
-                let targetIdx;
+        this._nn_nodes.forEach((n, i) => {
+            const cc = 2 + Math.floor(Math.random() * 3);
+            for (let c = 0; c < cc; c++) {
+                let t;
                 if (Math.random() < 0.6) {
-                    const sectorNodes = this.nodes.filter(n => n.sector === node.sector && n.id !== node.id);
-                    if (sectorNodes.length > 0) {
-                        targetIdx = sectorNodes[Math.floor(Math.random() * sectorNodes.length)].id;
-                    }
+                    const same = this._nn_nodes.filter(x => x.sector === n.sector && x.id !== n.id);
+                    if (same.length) t = same[Math.floor(Math.random() * same.length)].id;
                 }
-                if (targetIdx === undefined) {
-                    targetIdx = Math.floor(Math.random() * this.nodes.length);
-                }
+                if (t === undefined) t = Math.floor(Math.random() * this._nn_nodes.length);
                 
-                if (targetIdx !== i) {
-                    const exists = this.edges.some(e => 
-                        (e.source === i && e.target === targetIdx) ||
-                        (e.source === targetIdx && e.target === i)
-                    );
-                    if (!exists) {
-                        this.edges.push({ source: i, target: targetIdx });
-                        this.nodes[i].links++;
-                        if (this.nodes[targetIdx]) this.nodes[targetIdx].links++;
-                    }
+                if (t !== i && !this._nn_edges.some(e => (e.source === i && e.target === t) || (e.source === t && e.target === i))) {
+                    this._nn_edges.push({ source: i, target: t });
+                    this._nn_nodes[i].links++;
+                    if (this._nn_nodes[t]) this._nn_nodes[t].links++;
                 }
             }
         });
     }
     
-    createSVG() {
-        this.svg = d3.select(this.container)
+    _nn_createSVG() {
+        const old = this._nn_container.querySelector('svg.nn-svg');
+        if (old) old.remove();
+        
+        this._nn_svg = d3.select(this._nn_container)
             .append('svg')
-            .attr('width', this.width)
-            .attr('height', this.height)
-            .style('display', 'block');
+            .attr('class', 'nn-svg')
+            .attr('width', this._nn_width)
+            .attr('height', this._nn_height)
+            .style('display', 'block')
+            .style('position', 'absolute')
+            .style('top', '0')
+            .style('left', '0');
         
-        this.g = this.svg.append('g');
+        this._nn_g = this._nn_svg.append('g').attr('class', 'nn-g');
         
-        // Zoom
-        const zoom = d3.zoom()
+        this._nn_zoomBehavior = d3.zoom()
             .scaleExtent([0.2, 4])
-            .on('zoom', (event) => {
-                this.g.attr('transform', event.transform);
-                this.currentZoom = event.transform.k;
-                this.updateZoomLevel();
+            .on('zoom', (e) => {
+                this._nn_g.attr('transform', e.transform);
+                this._nn_zoom = e.transform.k;
+                this._nn_updateZoom();
             });
         
-        this.svg.call(zoom);
-        this.zoomBehavior = zoom;
+        this._nn_svg.call(this._nn_zoomBehavior);
     }
     
-    createSimulation() {
-        this.simulation = d3.forceSimulation(this.nodes)
-            .force('link', d3.forceLink(this.edges).id(d => d.id).distance(50).strength(0.4))
-            .force('charge', d3.forceManyBody().strength(-60))
-            .force('center', d3.forceCenter(this.width / 2, this.height / 2))
-            .force('collision', d3.forceCollide().radius(12))
-            .on('tick', () => this.tick());
+    _nn_createSim() {
+        this._nn_simulation = d3.forceSimulation(this._nn_nodes)
+            .force('link', d3.forceLink(this._nn_edges).id(d => d.id).distance(45).strength(0.4))
+            .force('charge', d3.forceManyBody().strength(-50))
+            .force('center', d3.forceCenter(this._nn_width / 2, this._nn_height / 2))
+            .force('collision', d3.forceCollide().radius(10))
+            .alphaDecay(0.025)
+            .on('tick', () => this._nn_tick());
     }
     
-    createElements() {
-        // Edges
-        this.edgeElements = this.g.append('g')
-            .attr('class', 'edges')
+    _nn_createEls() {
+        const self = this;
+        
+        this._nn_edgeEls = this._nn_g.append('g')
             .selectAll('path')
-            .data(this.edges)
+            .data(this._nn_edges)
             .enter()
             .append('path')
             .attr('fill', 'none')
-            .attr('stroke', 'rgba(255,255,255,0.12)')
+            .attr('stroke', 'rgba(255,255,255,0.1)')
             .attr('stroke-width', 0.5);
         
-        // Particles
-        this.particles = [];
-        this.edges.slice(0, Math.floor(this.edges.length * 0.15)).forEach(edge => {
-            this.particles.push({
-                edge: edge,
-                progress: Math.random(),
-                speed: 0.004 + Math.random() * 0.004
-            });
-        });
-        
-        this.particleElements = this.g.append('g')
-            .attr('class', 'particles')
+        this._nn_nodeEls = this._nn_g.append('g')
             .selectAll('circle')
-            .data(this.particles)
+            .data(this._nn_nodes)
             .enter()
             .append('circle')
-            .attr('r', 1.5)
-            .attr('fill', 'rgba(255,255,255,0.5)');
-        
-        // Nodes
-        this.nodeElements = this.g.append('g')
-            .attr('class', 'nodes')
-            .selectAll('circle')
-            .data(this.nodes)
-            .enter()
-            .append('circle')
-            .attr('r', d => d.status === 'critical' ? 5 : 4)
-            .attr('fill', d => {
-                if (d.status === 'critical') return '#ff0000';
-                if (d.status === 'active') return 'rgba(255,255,255,0.8)';
-                return 'rgba(255,255,255,0.4)';
-            })
-            .attr('stroke', 'rgba(255,255,255,0.2)')
+            .attr('r', d => d.status === 'critical' ? 4 : 3)
+            .attr('fill', d => d.status === 'critical' ? 'rgba(255, 127, 127, 1)' : (d.status === 'active' ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.35)'))
+            .attr('stroke', 'rgba(255,255,255,0.15)')
             .attr('stroke-width', 0.5)
             .style('cursor', 'pointer')
             .call(d3.drag()
-                .on('start', (event, d) => this.dragStart(event, d))
-                .on('drag', (event, d) => this.dragging(event, d))
-                .on('end', (event, d) => this.dragEnd(event, d)))
-            .on('mouseenter', (event, d) => this.highlightNode(d, true))
-            .on('mouseleave', (event, d) => this.highlightNode(d, false))
-            .on('click', (event, d) => this.showPopup(d, event));
+                .on('start', (e, d) => self._nn_dragStart(e, d))
+                .on('drag', (e, d) => self._nn_drag(e, d))
+                .on('end', (e, d) => self._nn_dragEnd(e, d)))
+            .on('mouseenter', (e, d) => self._nn_hl(d, true))
+            .on('mouseleave', (e, d) => self._nn_hl(d, false))
+            .on('click', (e, d) => self._nn_popup(d, e));
         
-        // Labels
-        this.labelElements = this.g.append('g')
-            .attr('class', 'labels')
+        this._nn_labelEls = this._nn_g.append('g')
             .selectAll('text')
-            .data(this.nodes.filter(n => n.links > 5))
+            .data(this._nn_nodes.filter(n => n.links > 6))
             .enter()
             .append('text')
             .text(d => d.name)
-            .attr('font-family', 'Share Tech Mono, monospace')
-            .attr('font-size', '6px')
-            .attr('fill', 'rgba(255,255,255,0.3)')
+            .attr('font-family', 'monospace')
+            .attr('font-size', '5px')
+            .attr('fill', 'rgba(255,255,255,0.25)')
             .attr('text-anchor', 'middle')
             .style('pointer-events', 'none');
     }
     
-    tick() {
-        // Edges
-        this.edgeElements.attr('d', d => {
+    _nn_tick() {
+        this._nn_edgeEls.attr('d', d => {
             const dx = d.target.x - d.source.x;
             const dy = d.target.y - d.source.y;
-            const dr = Math.sqrt(dx * dx + dy * dy) * 1.2;
+            const dr = Math.sqrt(dx * dx + dy * dy) * 1.3;
             return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
         });
-        
-        // Nodes
-        this.nodeElements.attr('cx', d => d.x).attr('cy', d => d.y);
-        
-        // Labels
-        this.labelElements.attr('x', d => d.x).attr('y', d => d.y - 10);
-        
-        // Particles
-        this.particleElements.each((p, i, nodes) => {
-            p.progress += p.speed;
-            if (p.progress > 1) p.progress = 0;
-            
-            const source = p.edge.source;
-            const target = p.edge.target;
-            const t = p.progress;
-            
-            const midX = (source.x + target.x) / 2;
-            const midY = (source.y + target.y) / 2;
-            const dx = target.x - source.x;
-            const dy = target.y - source.y;
-            const dr = Math.sqrt(dx * dx + dy * dy) || 1;
-            const offsetX = -dy / dr * 15;
-            const offsetY = dx / dr * 15;
-            
-            const x = (1-t)*(1-t)*source.x + 2*(1-t)*t*(midX+offsetX) + t*t*target.x;
-            const y = (1-t)*(1-t)*source.y + 2*(1-t)*t*(midY+offsetY) + t*t*target.y;
-            
-            d3.select(nodes[i]).attr('cx', x).attr('cy', y);
-        });
+        this._nn_nodeEls.attr('cx', d => d.x).attr('cy', d => d.y);
+        this._nn_labelEls.attr('x', d => d.x).attr('y', d => d.y - 8);
     }
     
-    dragStart(event, d) {
-        if (!event.active) this.simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
+    _nn_dragStart(e, d) {
+        if (!e.active) this._nn_simulation.alphaTarget(0.3).restart();
+        d.fx = d.x; d.fy = d.y;
     }
     
-    dragging(event, d) {
-        d.fx = event.x;
-        d.fy = event.y;
+    _nn_drag(e, d) { d.fx = e.x; d.fy = e.y; }
+    
+    _nn_dragEnd(e, d) {
+        if (!e.active) this._nn_simulation.alphaTarget(0);
     }
     
-    dragEnd(event, d) {
-        if (!event.active) this.simulation.alphaTarget(0);
-    }
-    
-    highlightNode(node, active) {
-        this.edgeElements.attr('stroke', d => {
-            if (active && (d.source.id === node.id || d.target.id === node.id)) {
-                return 'rgba(255,255,255,0.4)';
-            }
-            return 'rgba(255,255,255,0.12)';
-        }).attr('stroke-width', d => {
-            if (active && (d.source.id === node.id || d.target.id === node.id)) {
-                return 1;
-            }
-            return 0.5;
-        });
+    _nn_hl(n, on) {
+        this._nn_edgeEls
+            .attr('stroke', d => (on && (d.source.id === n.id || d.target.id === n.id)) ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.1)')
+            .attr('stroke-width', d => (on && (d.source.id === n.id || d.target.id === n.id)) ? 1 : 0.5);
         
-        if (active) {
-            this.nodeElements.filter(d => d.id === node.id)
-                .attr('r', 8)
-                .attr('stroke', 'rgba(255,255,255,0.6)');
-        } else {
-            this.nodeElements.filter(d => d.id === node.id)
-                .attr('r', d => d.status === 'critical' ? 5 : 4)
-                .attr('stroke', 'rgba(255,255,255,0.2)');
+        this._nn_nodeEls.filter(d => d.id === n.id)
+            .attr('r', on ? 6 : (n.status === 'critical' ? 4 : 3))
+            .attr('stroke', on ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.15)');
+    }
+    
+    _nn_popup(n, e) {
+        const p = document.getElementById('cvNodeInfo');
+        if (!p) return;
+        
+        const r = this._nn_container.getBoundingClientRect();
+        let x = e.clientX - r.left + 10;
+        let y = e.clientY - r.top - 20;
+        if (x + 180 > r.width) x = e.clientX - r.left - 190;
+        
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+        
+        const t = p.querySelector('.cv-node-info-title');
+        if (t) t.textContent = n.name;
+        
+        const v = p.querySelectorAll('.cv-node-info-value');
+        if (v[0]) v[0].textContent = n.status.toUpperCase();
+        if (v[1]) v[1].textContent = n.links;
+        if (v[2]) v[2].textContent = n.sector;
+        
+        p.classList.add('visible');
+        clearTimeout(this._nn_popupTimer);
+        this._nn_popupTimer = setTimeout(() => p.classList.remove('visible'), 2500);
+    }
+    
+    _nn_updateStats() {
+        const nc = document.getElementById('nodeCount');
+        const ec = document.getElementById('edgeCount');
+        const cc = document.getElementById('criticalCount');
+        
+        if (nc) nc.textContent = this._nn_nodes.length;
+        if (ec) ec.textContent = this._nn_edges.length;
+        if (cc) cc.textContent = this._nn_nodes.filter(n => n.status === 'critical').length;
+        
+        const g = document.getElementById('statusGrid');
+        if (g) {
+            g.innerHTML = '';
+            this._nn_nodes.forEach(n => {
+                const d = document.createElement('div');
+                d.className = 'cv-status-dot' + (n.status === 'critical' ? ' critical' : (n.status === 'active' ? ' active' : ''));
+                g.appendChild(d);
+            });
         }
     }
     
-    showPopup(node, event) {
-        const popup = document.getElementById('cvNodeInfo');
-        if (!popup) return;
-        
-        const rect = this.container.getBoundingClientRect();
-        popup.style.left = (event.clientX - rect.left + 10) + 'px';
-        popup.style.top = (event.clientY - rect.top - 20) + 'px';
-        
-        const title = popup.querySelector('.cv-node-info-title');
-        if (title) title.textContent = node.name;
-        
-        const rows = popup.querySelectorAll('.cv-node-info-row');
-        if (rows[0]) rows[0].querySelector('.cv-node-info-value').textContent = node.status.toUpperCase();
-        if (rows[1]) rows[1].querySelector('.cv-node-info-value').textContent = node.links + ' LINKS';
-        if (rows[2]) rows[2].querySelector('.cv-node-info-value').textContent = node.sector;
-        
-        popup.classList.add('visible');
-        
-        clearTimeout(this.popupTimeout);
-        this.popupTimeout = setTimeout(() => popup.classList.remove('visible'), 3000);
-    }
-    
-    updateStats() {
-        const nodeCount = document.getElementById('nodeCount');
-        const edgeCount = document.getElementById('edgeCount');
-        const criticalCount = document.getElementById('criticalCount');
-        
-        if (nodeCount) nodeCount.textContent = this.nodes.length;
-        if (edgeCount) edgeCount.textContent = this.edges.length;
-        if (criticalCount) criticalCount.textContent = this.nodes.filter(n => n.status === 'critical').length;
-    }
-    
-    updateZoomLevel() {
+    _nn_updateZoom() {
         const el = document.getElementById('cvZoomLvl');
-        if (el) el.textContent = Math.round(this.currentZoom * 100) + '%';
+        if (el) el.textContent = Math.round(this._nn_zoom * 100) + '%';
     }
     
-    bindEvents() {
-        const zoomIn = document.getElementById('cvZoomIn');
-        const zoomOut = document.getElementById('cvZoomOut');
-        const zoomReset = document.getElementById('cvZoomReset');
+    _nn_bindEvents() {
+        const zi = document.getElementById('cvZoomIn');
+        const zo = document.getElementById('cvZoomOut');
+        const zr = document.getElementById('cvZoomReset');
         
-        if (zoomIn) zoomIn.onclick = () => this.svg.transition().call(this.zoomBehavior.scaleBy, 1.3);
-        if (zoomOut) zoomOut.onclick = () => this.svg.transition().call(this.zoomBehavior.scaleBy, 0.7);
-        if (zoomReset) zoomReset.onclick = () => this.svg.transition().call(this.zoomBehavior.transform, d3.zoomIdentity);
+        if (zi) zi.onclick = () => this._nn_svg.transition().duration(200).call(this._nn_zoomBehavior.scaleBy, 1.4);
+        if (zo) zo.onclick = () => this._nn_svg.transition().duration(200).call(this._nn_zoomBehavior.scaleBy, 0.7);
+        if (zr) zr.onclick = () => this._nn_svg.transition().duration(300).call(this._nn_zoomBehavior.transform, d3.zoomIdentity);
         
-        window.addEventListener('resize', () => this.onResize());
-    }
-    
-    onResize() {
-        this.width = this.container.clientWidth;
-        this.height = this.container.clientHeight;
-        this.svg.attr('width', this.width).attr('height', this.height);
-        this.simulation.force('center', d3.forceCenter(this.width / 2, this.height / 2));
-        this.simulation.alpha(0.3).restart();
+        this._nn_resizeHandler = () => {
+            this._nn_width = this._nn_container.clientWidth;
+            this._nn_height = this._nn_container.clientHeight;
+            this._nn_svg.attr('width', this._nn_width).attr('height', this._nn_height);
+            this._nn_simulation.force('center', d3.forceCenter(this._nn_width / 2, this._nn_height / 2));
+            this._nn_simulation.alpha(0.3).restart();
+        };
+        window.addEventListener('resize', this._nn_resizeHandler);
     }
     
     start() {
-        this.isActive = true;
-        this.animate();
-        
-        // Animate entrance with GSAP if available
-        if (typeof gsap !== 'undefined') {
-            gsap.to('.cv-hbar-fill', { width: '100%', duration: 3, ease: 'power1.out' });
-        }
-        
-        console.log('[BLACKOPS] Started');
+        this._nn_active = true;
+        this._nn_animate();
+        document.querySelectorAll('.cv-stat-row').forEach((r, i) => {
+            setTimeout(() => r.classList.add('visible'), 300 + i * 80);
+        });
     }
     
     stop() {
-        this.isActive = false;
-        console.log('[BLACKOPS] Stopped');
+        this._nn_active = false;
+        if (this._nn_frame) cancelAnimationFrame(this._nn_frame);
     }
     
-    animate() {
-        if (!this.isActive) return;
+    _nn_animate() {
+        if (!this._nn_active) return;
+        this._nn_frame = requestAnimationFrame(() => this._nn_animate());
+        this._nn_time += 0.016;
         
-        requestAnimationFrame(() => this.animate());
-        this.time += 0.016;
+        const tf = document.getElementById('cvTimeFill');
+        if (tf) tf.style.width = ((this._nn_time % 60) / 60 * 100) + '%';
         
-        // Time bar
-        const timeFill = document.getElementById('cvTimeFill');
-        if (timeFill) timeFill.style.width = ((this.time % 60) / 60 * 100) + '%';
-        
-        // Pulse critical nodes
-        if (this.nodeElements) {
-            this.nodeElements.filter(d => d.status === 'critical')
-                .attr('r', 5 + Math.sin(this.time * 4) * 1.5);
+        if (this._nn_nodeEls) {
+            this._nn_nodeEls.filter(d => d.status === 'critical')
+                .attr('r', 4 + Math.sin(this._nn_time * 5) * 1);
         }
     }
     
     destroy() {
         this.stop();
-        if (this.simulation) this.simulation.stop();
-        if (this.svg) this.svg.remove();
-        console.log('[BLACKOPS] Destroyed');
+        if (this._nn_simulation) { this._nn_simulation.stop(); this._nn_simulation = null; }
+        if (this._nn_svg) { this._nn_svg.remove(); this._nn_svg = null; }
+        if (this._nn_resizeHandler) window.removeEventListener('resize', this._nn_resizeHandler);
+        clearTimeout(this._nn_popupTimer);
     }
 }
+
+export default NeuralNetworkVisualization;
+if (typeof window !== 'undefined') window.NeuralNetworkVisualization = NeuralNetworkVisualization;

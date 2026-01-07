@@ -1,382 +1,354 @@
 
 
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Share+Tech+Mono&display=swap');
-
-/* Variables */
 .phase-neural-network {
-    --black: #000000;
-    --white: #ffffff;
-    --w80: rgba(255,255,255,0.8);
-    --w60: rgba(255,255,255,0.6);
-    --w40: rgba(255,255,255,0.4);
-    --w30: rgba(255,255,255,0.3);
-    --w20: rgba(255,255,255,0.2);
-    --w15: rgba(255,255,255,0.15);
-    --w10: rgba(255,255,255,0.1);
-    --w05: rgba(255,255,255,0.05);
-    --red: #ff6565;
-    --font-mono: 'Share Tech Mono', monospace;
-    --font-ui: 'Orbitron', sans-serif;
+    --nn-black: #000;
+    --nn-white: #fff;
+    --nn-w80: rgba(255,255,255,0.8);
+    --nn-w60: rgba(255,255,255,0.6);
+    --nn-w40: rgba(255,255,255,0.4);
+    --nn-w30: rgba(255,255,255,0.3);
+    --nn-w20: rgba(255,255,255,0.2);
+    --nn-w15: rgba(255,255,255,0.15);
+    --nn-w10: rgba(255,255,255,0.1);
+    --nn-w05: rgba(255,255,255,0.05);
+    --nn-red: rgb(255, 155, 155);
 }
 
-/* Container */
-#stellarIntro .phase-neural-network {
+#phaseNeuralNetwork {
     position: absolute;
     inset: 0;
-    background: var(--black);
-    font-family: var(--font-mono);
-    color: var(--white);
+    background: var(--nn-black);
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--nn-white);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
 }
 
 /* Header */
-.phase-neural-network .cv-header {
-    height: 40px;
-    padding: 0 20px;
+#phaseNeuralNetwork .cv-header {
+    height: 38px;
+    padding: 0 15px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid var(--w10);
+    border-bottom: 1px solid var(--nn-w10);
     flex-shrink: 0;
 }
 
-.phase-neural-network .cv-logo {
-    font-family: var(--font-ui);
-    font-size: 16px;
+#phaseNeuralNetwork .cv-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
     font-weight: 700;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
 }
 
-.phase-neural-network .cv-logo sub {
-    font-size: 9px;
-    color: var(--w40);
+#phaseNeuralNetwork .cv-logo sub {
+    font-size: 8px;
+    color: var(--nn-w40);
 }
 
-.phase-neural-network .cv-header-center {
+#phaseNeuralNetwork .cv-header-center {
     flex: 1;
     display: flex;
     justify-content: center;
 }
 
-.phase-neural-network .cv-hbar {
-    width: 150px;
+#phaseNeuralNetwork .cv-hbar {
+    width: 120px;
     height: 2px;
-    background: var(--w10);
+    background: var(--nn-w10);
 }
 
-.phase-neural-network .cv-hbar-fill {
+#phaseNeuralNetwork .cv-hbar-fill {
     width: 0%;
     height: 100%;
-    background: var(--white);
-    transition: width 0.1s;
+    background: var(--nn-white);
 }
 
-.phase-neural-network .cv-header-right {
-    font-size: 10px;
-    color: var(--w40);
-    letter-spacing: 2px;
+#phaseNeuralNetwork .cv-header-right {
+    font-size: 9px;
+    color: var(--nn-w40);
+    letter-spacing: 1px;
 }
 
 /* Main */
-.phase-neural-network .cv-main {
+#phaseNeuralNetwork .cv-main {
     flex: 1;
     display: flex;
     overflow: hidden;
 }
 
-/* Left Panel */
-.phase-neural-network .cv-left {
-    width: 140px;
-    padding: 15px;
-    border-right: 1px solid var(--w10);
+/* Left */
+#phaseNeuralNetwork .cv-left {
+    width: 120px;
+    padding: 12px;
+    border-right: 1px solid var(--nn-w10);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
-.phase-neural-network .cv-panel-title {
-    font-family: var(--font-ui);
-    font-size: 8px;
-    color: var(--w40);
+#phaseNeuralNetwork .cv-panel-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 7px;
+    color: var(--nn-w40);
     letter-spacing: 2px;
-    margin-bottom: 8px;
-    padding-bottom: 5px;
-    border-bottom: 1px solid var(--w10);
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--nn-w10);
 }
 
-.phase-neural-network .cv-nums {
-    font-size: 10px;
-    color: var(--w60);
-    line-height: 1.8;
+#phaseNeuralNetwork .cv-nums {
+    font-size: 9px;
+    color: var(--nn-w60);
+    line-height: 1.7;
 }
 
-.phase-neural-network .cv-nums span { display: block; }
+#phaseNeuralNetwork .cv-nums span { display: block; }
 
-.phase-neural-network .cv-bars {
+#phaseNeuralNetwork .cv-bars {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
 }
 
-.phase-neural-network .cv-bar-row {
+#phaseNeuralNetwork .cv-bar-row {
     display: flex;
     align-items: flex-end;
     gap: 2px;
-    height: 20px;
+    height: 18px;
 }
 
-.phase-neural-network .cv-bar {
+#phaseNeuralNetwork .cv-bar {
     width: 3px;
-    background: var(--w30);
-    transition: height 0.3s;
+    background: var(--nn-w30);
 }
 
-.phase-neural-network .cv-bar.h100 { height: 100%; }
-.phase-neural-network .cv-bar.h80 { height: 80%; }
-.phase-neural-network .cv-bar.h60 { height: 60%; }
-.phase-neural-network .cv-bar.h40 { height: 40%; }
-.phase-neural-network .cv-bar.h20 { height: 20%; }
-.phase-neural-network .cv-bar.bright { background: var(--w60); }
+#phaseNeuralNetwork .cv-bar.h100 { height: 100%; }
+#phaseNeuralNetwork .cv-bar.h80 { height: 80%; }
+#phaseNeuralNetwork .cv-bar.h60 { height: 60%; }
+#phaseNeuralNetwork .cv-bar.h40 { height: 40%; }
+#phaseNeuralNetwork .cv-bar.h20 { height: 20%; }
+#phaseNeuralNetwork .cv-bar.bright { background: var(--nn-w60); }
 
 /* Viewport */
-.phase-neural-network .cv-viewport {
+#phaseNeuralNetwork .cv-viewport {
     flex: 1;
     position: relative;
-    background: var(--black);
+    background: var(--nn-black);
 }
 
-.phase-neural-network .cv-viewport svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-.phase-neural-network .cv-grid {
+#phaseNeuralNetwork .cv-grid {
     position: absolute;
     inset: 0;
-    background: 
-        linear-gradient(90deg, var(--w05) 1px, transparent 1px),
-        linear-gradient(var(--w05) 1px, transparent 1px);
-    background-size: 50px 50px;
+    background: linear-gradient(90deg, var(--nn-w05) 1px, transparent 1px),
+                linear-gradient(var(--nn-w05) 1px, transparent 1px);
+    background-size: 40px 40px;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.4;
 }
 
-.phase-neural-network .cv-scanlines {
+#phaseNeuralNetwork .cv-scanlines {
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(255,255,255,0.02) 2px,
-        rgba(255,255,255,0.02) 4px
-    );
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 4px);
     pointer-events: none;
 }
 
 /* Zoom */
-.phase-neural-network .cv-zoom {
+#phaseNeuralNetwork .cv-zoom {
     position: absolute;
-    bottom: 15px;
-    left: 15px;
+    bottom: 12px;
+    left: 12px;
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    z-index: 100;
+    gap: 2px;
+    z-index: 50;
 }
 
-.phase-neural-network .cv-zoom-btn {
-    width: 28px;
-    height: 28px;
-    background: var(--black);
-    border: 1px solid var(--w20);
-    color: var(--w60);
-    font-size: 14px;
+#phaseNeuralNetwork .cv-zoom-btn {
+    width: 24px;
+    height: 24px;
+    background: var(--nn-black);
+    border: 1px solid var(--nn-w20);
+    color: var(--nn-w60);
+    font-size: 12px;
     cursor: pointer;
 }
 
-.phase-neural-network .cv-zoom-btn:hover {
-    border-color: var(--white);
-    color: var(--white);
+#phaseNeuralNetwork .cv-zoom-btn:hover {
+    border-color: var(--nn-white);
+    color: var(--nn-white);
 }
 
-.phase-neural-network .cv-zoom-lvl {
-    font-size: 8px;
-    color: var(--w40);
+#phaseNeuralNetwork .cv-zoom-lvl {
+    font-size: 7px;
+    color: var(--nn-w40);
     text-align: center;
-    margin-top: 3px;
+    margin-top: 2px;
 }
 
 /* Stats */
-.phase-neural-network .cv-stats {
+#phaseNeuralNetwork .cv-stats {
     position: absolute;
-    top: 15px;
-    left: 15px;
-    z-index: 100;
+    top: 12px;
+    left: 12px;
+    z-index: 50;
 }
 
-.phase-neural-network .cv-stat-row {
+#phaseNeuralNetwork .cv-stat-row {
     display: flex;
-    gap: 10px;
-    margin-bottom: 5px;
-    font-size: 9px;
+    gap: 8px;
+    margin-bottom: 4px;
+    font-size: 8px;
     opacity: 0;
-    transform: translateX(-10px);
-    transition: all 0.3s;
+    transform: translateX(-8px);
+    transition: all 0.25s;
 }
 
-.phase-neural-network .cv-stat-row.visible {
+#phaseNeuralNetwork .cv-stat-row.visible {
     opacity: 1;
     transform: translateX(0);
 }
 
-.phase-neural-network .cv-stat-label { 
-    color: var(--w40); 
-    min-width: 100px; 
-}
+#phaseNeuralNetwork .cv-stat-label { color: var(--nn-w40); min-width: 80px; }
+#phaseNeuralNetwork .cv-stat-value { color: var(--nn-white); }
 
-.phase-neural-network .cv-stat-value { 
-    color: var(--white); 
-}
-
-/* Node Popup */
-.phase-neural-network .cv-node-info {
+/* Popup */
+#phaseNeuralNetwork .cv-node-info {
     position: absolute;
-    width: 180px;
-    background: var(--black);
-    border: 1px solid var(--w20);
-    padding: 10px;
-    z-index: 200;
+    width: 160px;
+    background: var(--nn-black);
+    border: 1px solid var(--nn-w20);
+    padding: 8px;
+    z-index: 100;
     opacity: 0;
     transform: scale(0.95);
-    transition: all 0.2s;
+    transition: all 0.15s;
     pointer-events: none;
 }
 
-.phase-neural-network .cv-node-info.visible {
+#phaseNeuralNetwork .cv-node-info.visible {
     opacity: 1;
     transform: scale(1);
 }
 
-.phase-neural-network .cv-node-info-title {
-    font-family: var(--font-ui);
-    font-size: 10px;
-    margin-bottom: 8px;
-    padding-bottom: 5px;
-    border-bottom: 1px solid var(--w15);
+#phaseNeuralNetwork .cv-node-info-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 9px;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--nn-w15);
 }
 
-.phase-neural-network .cv-node-info-row {
+#phaseNeuralNetwork .cv-node-info-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 3px;
-    font-size: 9px;
+    margin-bottom: 2px;
+    font-size: 8px;
 }
 
-.phase-neural-network .cv-node-info-label { color: var(--w40); }
-.phase-neural-network .cv-node-info-value { color: var(--w80); }
+#phaseNeuralNetwork .cv-node-info-label { color: var(--nn-w40); }
+#phaseNeuralNetwork .cv-node-info-value { color: var(--nn-w80); }
 
-/* Right Panel */
-.phase-neural-network .cv-right {
-    width: 200px;
-    padding: 15px;
-    border-left: 1px solid var(--w10);
+/* Right */
+#phaseNeuralNetwork .cv-right {
+    width: 160px;
+    padding: 12px;
+    border-left: 1px solid var(--nn-w10);
     overflow-y: auto;
 }
 
-.phase-neural-network .cv-matrix {
-    font-size: 7px;
-    color: var(--w30);
-    line-height: 1.4;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px 5px;
-}
-
-.phase-neural-network .cv-status-grid {
+#phaseNeuralNetwork .cv-status-grid {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: 2px;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
-.phase-neural-network .cv-status-dot {
+#phaseNeuralNetwork .cv-status-dot {
     aspect-ratio: 1;
-    background: var(--w15);
+    background: var(--nn-w15);
 }
 
-.phase-neural-network .cv-status-dot.active { background: var(--w40); }
-.phase-neural-network .cv-status-dot.critical { background: var(--red); }
+#phaseNeuralNetwork .cv-status-dot.active { background: var(--nn-w40); }
+#phaseNeuralNetwork .cv-status-dot.critical { background: var(--nn-red); }
+
+#phaseNeuralNetwork .cv-matrix {
+    font-size: 6px;
+    color: var(--nn-w30);
+    line-height: 1.4;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+}
 
 /* Footer */
-.phase-neural-network .cv-footer {
-    height: 32px;
-    padding: 0 20px;
+#phaseNeuralNetwork .cv-footer {
+    height: 28px;
+    padding: 0 15px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-top: 1px solid var(--w10);
-    font-size: 9px;
-    color: var(--w40);
+    border-top: 1px solid var(--nn-w10);
+    font-size: 8px;
+    color: var(--nn-w40);
 }
 
-.phase-neural-network .cv-footer-left {
+#phaseNeuralNetwork .cv-footer-left {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
-.phase-neural-network .cv-time-bar {
-    width: 120px;
+#phaseNeuralNetwork .cv-time-bar {
+    width: 100px;
     height: 2px;
-    background: var(--w10);
+    background: var(--nn-w10);
 }
 
-.phase-neural-network .cv-time-fill {
+#phaseNeuralNetwork .cv-time-fill {
     width: 0%;
     height: 100%;
-    background: var(--white);
+    background: var(--nn-white);
 }
 
 /* Subtitle */
-.phase-neural-network .cv-subtitle-wrap {
+#phaseNeuralNetwork .cv-subtitle-wrap {
     position: absolute;
-    bottom: 50px;
+    bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 100;
+    z-index: 60;
 }
 
-.phase-neural-network .cv-subtitle {
-    font-family: var(--font-ui);
-    font-size: 13px;
-    color: var(--w80);
+#phaseNeuralNetwork .cv-subtitle {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    color: var(--nn-w80);
     letter-spacing: 1px;
-    line-height: 1.7;
-    max-width: 600px;
+    line-height: 1.6;
+    max-width: 550px;
     text-align: center;
-    padding: 12px 25px;
+    padding: 10px 20px;
     background: rgba(0,0,0,0.95);
-    border: 1px solid var(--w15);
+    border: 1px solid var(--nn-w15);
     opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.3s;
+    transform: translateY(8px);
+    transition: all 0.25s;
 }
 
-.phase-neural-network .cv-subtitle.visible {
+#phaseNeuralNetwork .cv-subtitle.visible {
     opacity: 1;
     transform: translateY(0);
 }
 
 /* Responsive */
-@media (max-width: 900px) {
-    .phase-neural-network .cv-left { width: 100px; }
-    .phase-neural-network .cv-right { width: 150px; }
+@media (max-width: 800px) {
+    #phaseNeuralNetwork .cv-left { width: 90px; }
+    #phaseNeuralNetwork .cv-right { width: 120px; }
 }
 
 @media (max-width: 600px) {
-    .phase-neural-network .cv-left,
-    .phase-neural-network .cv-right { display: none; }
+    #phaseNeuralNetwork .cv-left,
+    #phaseNeuralNetwork .cv-right { display: none; }
 }
