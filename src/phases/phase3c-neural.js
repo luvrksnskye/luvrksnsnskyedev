@@ -1,11 +1,3 @@
-/**
- * PHASE 3c: NEURAL NETWORK VISUALIZATION
- * NEO-MILITARY BLACKOPS EDITION
- * 
- * ~100 nodes, hundreds of connections
- * Black / White / Red palette
- * Subtítulos ORIGINALES mantenidos
- */
 
 import BasePhase from './base-phase.js';
 import NeuralNetworkVisualization from '../visualizations/neural-network.js';
@@ -15,17 +7,7 @@ export default class Phase3cNeural extends BasePhase {
     constructor(manager) {
         super(manager);
         
-        // Estadísticas para el overlay - blackops style
-        this.stats = [
-            { label: 'NEURAL NODES', value: '100', danger: false },
-            { label: 'ACTIVE CONNECTIONS', value: '347', danger: false },
-            { label: 'CRITICAL FAILURES', value: '8', danger: true },
-            { label: 'PROCESSING LOAD', value: '127%', danger: false },
-            { label: 'MEMORY SECTORS', value: '78% ONLINE', danger: false },
-            { label: 'SYSTEM INTEGRITY', value: '91.3%', danger: false }
-        ];
-        
-        // SUBTITULOS ORIGINALES - SIN CAMBIOS
+
         this.subtitles = [
             { start: 3.0, end: 10.0, text: "Initiating neural network scan. Mapping cognitive architecture. Twelve brain regions identified." },
             { start: 10.0, end: 16.0, text: "Connection matrix established. Prefrontal cortex optimal. Executive function pathways clear." },
@@ -45,50 +27,42 @@ export default class Phase3cNeural extends BasePhase {
     
     async play() {
         return new Promise((resolve) => {
-            console.log('[PHASE 3c] Neural Network BLACKOPS started');
+            console.log('[PHASE 3c] Neural Network BLACKOPS');
             this.isActive = true;
             this.manager.currentPhase = 3.5;
             
-            const phaseNeural = this.elements.phaseNeuralNetwork;
-            if (!phaseNeural) {
+            const phase = this.elements.phaseNeuralNetwork;
+            if (!phase) {
                 console.error('[PHASE 3c] Element not found');
                 return resolve();
             }
             
-            // Activar fase
             this.audio.playTransition(1);
-            phaseNeural.classList.add('active');
+            phase.classList.add('active');
             
-            // Populate stats overlay
-            this.populateStats();
-            
-            // Inicializar visualización D3
+            // Init visualization
             const viewport = document.getElementById('cvViewport');
             if (viewport) {
                 this.visualization = new NeuralNetworkVisualization(viewport);
                 this.visualization.start();
             }
             
-            // Reproducir voz con subtítulos
+            // Play voice
             setTimeout(() => {
                 if (this.isSkipped) return resolve();
                 
                 this.startSubtitleSync();
+                this.audio.playVoice('voiceNeuralNetwork');
                 
-                this.audio.playVoice('voiceNeuralNetwork', () => {
-                    // Voice started
-                });
-                
-                const voiceAudio = this.audio.getAudio('voiceNeuralNetwork');
-                if (voiceAudio) {
-                    voiceAudio.onended = () => {
+                const voice = this.audio.getAudio('voiceNeuralNetwork');
+                if (voice) {
+                    voice.onended = () => {
                         setTimeout(() => {
                             this.cleanup();
                             resolve();
                         }, 1500);
                     };
                 } else {
-                    // Fallback: 66 segundos
                     setTimeout(() => {
                         this.cleanup();
                         resolve();
@@ -98,97 +72,52 @@ export default class Phase3cNeural extends BasePhase {
         });
     }
     
-    populateStats() {
-        const container = document.getElementById('cvStatsOverlay');
-        if (!container) return;
-        
-        container.innerHTML = this.stats.map(stat => `
-            <div class="cv-stat-row">
-                <span class="cv-stat-label">${stat.label}</span>
-                <span class="cv-stat-value ${stat.danger ? 'danger' : ''}">${stat.value}</span>
-            </div>
-        `).join('');
-    }
-    
     startSubtitleSync() {
-        if (this.subtitleInterval) {
-            clearInterval(this.subtitleInterval);
-        }
-        
         this.subtitleInterval = setInterval(() => {
-            this.updateSubtitles();
+            if (this.isSkipped) {
+                clearInterval(this.subtitleInterval);
+                return;
+            }
+            
+            const voice = this.audio.getAudio('voiceNeuralNetwork');
+            const subtitle = document.getElementById('cvSubtitle');
+            if (!voice || !subtitle) return;
+            
+            const time = voice.currentTime;
+            const current = this.subtitles.find(s => time >= s.start && time < s.end);
+            
+            if (current && subtitle.textContent !== current.text) {
+                subtitle.textContent = current.text;
+                subtitle.classList.add('visible');
+            } else if (!current) {
+                subtitle.classList.remove('visible');
+            }
         }, 100);
     }
     
-    updateSubtitles() {
-        if (this.isSkipped) {
-            if (this.subtitleInterval) {
-                clearInterval(this.subtitleInterval);
-                this.subtitleInterval = null;
-            }
-            return;
-        }
-        
-        const voiceAudio = this.audio.getAudio('voiceNeuralNetwork');
-        if (!voiceAudio) return;
-        
-        const subtitle = document.getElementById('cvSubtitle');
-        if (!subtitle) return;
-        
-        const currentTime = voiceAudio.currentTime;
-        
-        const currentSub = this.subtitles.find(sub => 
-            currentTime >= sub.start && currentTime < sub.end
-        );
-        
-        if (currentSub && subtitle.textContent !== currentSub.text) {
-            subtitle.textContent = currentSub.text;
-            subtitle.classList.add('visible');
-        } else if (!currentSub && currentTime >= this.subtitles[this.subtitles.length - 1].end) {
-            subtitle.classList.remove('visible');
-        }
-    }
-    
     cleanup() {
-        if (this.isSkipped) return;
-        
-        if (this.subtitleInterval) {
-            clearInterval(this.subtitleInterval);
-            this.subtitleInterval = null;
-        }
+        if (this.subtitleInterval) clearInterval(this.subtitleInterval);
         
         const subtitle = document.getElementById('cvSubtitle');
-        if (subtitle) {
-            subtitle.classList.remove('visible');
-        }
+        if (subtitle) subtitle.classList.remove('visible');
         
-        if (this.visualization) {
-            this.visualization.stop();
-        }
+        if (this.visualization) this.visualization.stop();
         
-        const phaseNeural = this.elements.phaseNeuralNetwork;
-        if (phaseNeural) {
-            phaseNeural.classList.remove('active');
-        }
+        const phase = this.elements.phaseNeuralNetwork;
+        if (phase) phase.classList.remove('active');
         
         this.isActive = false;
-        console.log('[PHASE 3c] BLACKOPS Completed');
+        console.log('[PHASE 3c] Complete');
     }
     
     stop() {
         super.stop();
-        
-        if (this.subtitleInterval) {
-            clearInterval(this.subtitleInterval);
-            this.subtitleInterval = null;
-        }
-        
+        if (this.subtitleInterval) clearInterval(this.subtitleInterval);
         this.cleanup();
     }
     
     destroy() {
         this.stop();
-        
         if (this.visualization) {
             this.visualization.destroy();
             this.visualization = null;

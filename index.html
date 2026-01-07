@@ -696,217 +696,109 @@
 
 <div id="phaseNeuralNetwork" class="intro-phase phase-neural-network">
     
-    <!-- HEADER -->
+    <!-- Header -->
     <header class="cv-header">
-        <div class="cv-logo">COGNEX<span class="cv-logo-sub">DATA</span></div>
-        <div class="cv-operator">OPERATOR:<span>STARVORTEX</span></div>
-        <div class="cv-classification">CLASSIFIED</div>
-        <div class="cv-header-icons">
-            <div class="cv-hicon">◫</div>
-            <div class="cv-hicon">⊞</div>
-            <div class="cv-hicon">◇</div>
-        </div>
+        <div class="cv-logo">COGNEX<sub>STARVORTEX</sub></div>
         <div class="cv-header-center">
             <div class="cv-hbar"><div class="cv-hbar-fill"></div></div>
         </div>
-        <div class="cv-header-right">
-            <div class="cv-gpus">CORES<span>128</span></div>
-            <div class="cv-login">SECURE</div>
-        </div>
+        <div class="cv-header-right">SKYEDEV// NEURAL</div>
     </header>
-    
-    <!-- MAIN -->
+
+    <!-- Main -->
     <div class="cv-main">
         
-        <!-- LEFT PANEL -->
+        <!-- Left -->
         <aside class="cv-left">
             <div>
                 <div class="cv-panel-title">SYSTEM</div>
                 <div class="cv-nums">
                     <span>486274</span>
                     <span>1792</span>
-                    <span class="error">00000008</span>
                     <span>49400864</span>
-                    <span>9787754</span>
                 </div>
             </div>
-            
             <div>
                 <div class="cv-panel-title">SIGNAL</div>
-                <div class="cv-data-bars">
+                <div class="cv-bars">
                     <div class="cv-bar-row">
-                        <div class="cv-bar h100 active"></div>
+                        <div class="cv-bar h100 bright"></div>
                         <div class="cv-bar h60"></div>
-                        <div class="cv-bar h80 active"></div>
+                        <div class="cv-bar h80 bright"></div>
                         <div class="cv-bar h40"></div>
                         <div class="cv-bar h100"></div>
-                        <div class="cv-bar h20 danger"></div>
                     </div>
                     <div class="cv-bar-row">
                         <div class="cv-bar h60"></div>
-                        <div class="cv-bar h100 active"></div>
+                        <div class="cv-bar h100 bright"></div>
                         <div class="cv-bar h40"></div>
-                        <div class="cv-bar h80 active"></div>
-                        <div class="cv-bar h60"></div>
-                    </div>
-                    <div class="cv-bar-row">
-                        <div class="cv-bar h80 active"></div>
-                        <div class="cv-bar h40"></div>
-                        <div class="cv-bar h100 active"></div>
-                        <div class="cv-bar h60"></div>
                         <div class="cv-bar h80"></div>
-                        <div class="cv-bar h40 danger"></div>
                     </div>
                     <div class="cv-bar-row">
+                        <div class="cv-bar h80 bright"></div>
                         <div class="cv-bar h40"></div>
-                        <div class="cv-bar h80 active"></div>
-                        <div class="cv-bar h60"></div>
-                        <div class="cv-bar h100 active"></div>
-                        <div class="cv-bar h40"></div>
-                    </div>
-                    <div class="cv-bar-row">
                         <div class="cv-bar h100"></div>
-                        <div class="cv-bar h60 active"></div>
-                        <div class="cv-bar h80"></div>
-                        <div class="cv-bar h40 active"></div>
-                        <div class="cv-bar h100"></div>
+                        <div class="cv-bar h60 bright"></div>
                     </div>
-                </div>
-            </div>
-            
-            <div>
-                <div class="cv-panel-title danger">ALERT</div>
-                <div class="cv-alert">
-                    <div class="cv-alert-title">⚠ CRITICAL</div>
-                    <div class="cv-alert-text">8 nodes offline<br>Rerouting traffic</div>
-                </div>
-            </div>
-            
-            <div>
-                <div class="cv-panel-title">CODES</div>
-                <div class="cv-codes">
-                    <span>BLK-OPS-7X</span>
-                    <span>NEURAL-MAP</span>
-                    <span>SEC-LEVEL-9</span>
-                    <span>AUTH-LYNCH</span>
                 </div>
             </div>
         </aside>
-        
-        <!-- D3.JS SVG VIEWPORT -->
+
+        <!-- Viewport -->
         <div class="cv-viewport" id="cvViewport">
-            <!-- D3 SVG rendered here -->
-            
             <div class="cv-grid"></div>
             <div class="cv-scanlines"></div>
             
-            <div class="cv-corner tl"></div>
-            <div class="cv-corner tr"></div>
-            <div class="cv-corner bl"></div>
-            <div class="cv-corner br"></div>
-            
-            <!-- Zoom Controls -->
             <div class="cv-zoom">
                 <button class="cv-zoom-btn" id="cvZoomIn">+</button>
                 <button class="cv-zoom-btn" id="cvZoomOut">−</button>
                 <button class="cv-zoom-btn" id="cvZoomReset">⟲</button>
                 <div class="cv-zoom-lvl" id="cvZoomLvl">100%</div>
             </div>
-            
-            <!-- Stats Overlay -->
-            <div class="cv-stats-overlay" id="cvStatsOverlay">
-                <!-- Populated by JS -->
+
+            <div class="cv-stats">
+                <div class="cv-stat-row"><span class="cv-stat-label">NODES</span><span class="cv-stat-value" id="nodeCount">0</span></div>
+                <div class="cv-stat-row"><span class="cv-stat-label">CONNECTIONS</span><span class="cv-stat-value" id="edgeCount">0</span></div>
+                <div class="cv-stat-row"><span class="cv-stat-label">CRITICAL</span><span class="cv-stat-value" id="criticalCount">0</span></div>
             </div>
-            
-            <!-- Subtitle -->
+
+            <div class="cv-node-info" id="cvNodeInfo">
+                <div class="cv-node-info-title">NODE</div>
+                <div class="cv-node-info-row"><span class="cv-node-info-label">STATUS</span><span class="cv-node-info-value">--</span></div>
+                <div class="cv-node-info-row"><span class="cv-node-info-label">LINKS</span><span class="cv-node-info-value">--</span></div>
+                <div class="cv-node-info-row"><span class="cv-node-info-label">SECTOR</span><span class="cv-node-info-value">--</span></div>
+            </div>
+
             <div class="cv-subtitle-wrap">
                 <div class="cv-subtitle" id="cvSubtitle"></div>
             </div>
-            
-            <!-- Node Info Popup -->
-            <div class="cv-node-info" id="cvNodeInfo">
-                <div class="cv-node-info-title">NODE</div>
-                <div class="cv-node-info-row">
-                    <span class="cv-node-info-label">STATUS</span>
-                    <span class="cv-node-info-value">NOMINAL</span>
-                </div>
-                <div class="cv-node-info-row">
-                    <span class="cv-node-info-label">CONNECTIONS</span>
-                    <span class="cv-node-info-value">0 LINKS</span>
-                </div>
-                <div class="cv-node-info-row">
-                    <span class="cv-node-info-label">ACTIVITY</span>
-                    <span class="cv-node-info-value">0%</span>
-                </div>
-                <div class="cv-node-info-desc">Node description.</div>
-            </div>
         </div>
-        
-        <!-- RIGHT PANEL -->
+
+        <!-- Right -->
         <aside class="cv-right">
-            <div class="cv-right-scroll">
-                
-                <div class="cv-panel-title">NETWORK STATUS</div>
-                <div class="cv-network-status">
-                    <!-- 100 status dots -->
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                    <div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div><div class="cv-status-dot"></div>
-                </div>
-                
-                <div class="cv-panel-title">SYSTEM INFO</div>
-                <div class="cv-info-box">
-                    <div class="cv-info-text">
-                        NEURAL_NET_v4.7.2<br>
-                        <span class="cv-info-hl">BLACKOPS PROTOCOL</span><br>
-                        NODES: 100 | LINKS: 347<br>
-                        <span class="cv-info-hl danger">CRITICAL: 8</span>
-                    </div>
-                </div>
-                
-                <div class="cv-panel-title">SECTOR MATRIX</div>
-                <div class="cv-matrix">
-                    <span>CORTEX-001</span><span>CORTEX-002</span><span>CORTEX-003</span><span>CORTEX-004</span>
-                    <span>LIMBIC-001</span><span>LIMBIC-002</span><span>LIMBIC-003</span><span>LIMBIC-004</span>
-                    <span>MOTOR-001</span><span>MOTOR-002</span><span>MOTOR-003</span><span>MOTOR-004</span>
-                    <span>SENSORY-001</span><span>SENSORY-002</span><span>SENSORY-003</span><span>SENSORY-004</span>
-                    <span>MEMORY-001</span><span>MEMORY-002</span><span>MEMORY-003</span><span>MEMORY-004</span>
-                    <span>PROCESS-001</span><span>PROCESS-002</span><span>PROCESS-003</span><span>PROCESS-004</span>
-                    <span>CONTROL-001</span><span>CONTROL-002</span><span>CONTROL-003</span><span>CONTROL-004</span>
-                    <span>NEURAL-001</span><span>NEURAL-002</span><span>NEURAL-003</span><span>NEURAL-004</span>
-                </div>
-                
-                <div class="cv-panel-title">ENCRYPTION</div>
-                <div class="cv-info-box">
-                    <div class="cv-info-text">
-                        AES-256-GCM<br>
-                        KEY: ****************<br>
-                        HASH: 7f3a9b2c4d5e6f1a<br>
-                        VALID: 2024-12-31
-                    </div>
-                </div>
-                
+            <div class="cv-panel-title">STATUS</div>
+            <div class="cv-status-grid" id="statusGrid"></div>
+            
+            <div class="cv-panel-title">SECTORS</div>
+            <div class="cv-matrix">
+                <span>CORTEX</span><span>LIMBIC</span><span>MOTOR</span>
+                <span>SENSORY</span><span>MEMORY</span><span>PROCESS</span>
+                <span>CONTROL</span><span>NEURAL</span><span>--</span>
             </div>
         </aside>
-        
     </div>
+
+    <!-- Footer -->
+    <footer class="cv-footer">
+        <div class="cv-footer-left">
+            <span>UPTIME</span>
+            <div class="cv-time-bar"><div class="cv-time-fill" id="cvTimeFill"></div></div>
+        </div>
+        <span>SKYE-7X</span>
+        <span>SCANNING...</span>
+    </footer>
+    
+</div>
     
     <!-- FOOTER -->
     <footer class="cv-footer">
