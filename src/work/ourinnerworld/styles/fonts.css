@@ -1,0 +1,9 @@
+/* fonts.css - Tipografía del juego */
+
+@font-face {
+    font-family: 'OMORI_GAME2';
+    src: url('../assets/OMORI_GAME2.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

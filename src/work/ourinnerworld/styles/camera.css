@@ -1,0 +1,62 @@
+
+/* Logo Overlay */
+.logo-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(80vw, 600px);
+    z-index: 101;
+    opacity: 0;
+}
+
+.logo-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+}
+
+/* Contenido de Título */
+.title-container {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 102;
+}
+
+.welcome-text {
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: bold;
+    line-height: 1.3;
+    opacity: 0;
+}
+
+/* Estados de Animación */
+.rainy-toy.enter-active {
+    opacity: 1;
+    transition: opacity ease-in 1s, transform ease-in-out 2.5s 2s;
+}
+
+.rainy-toy.enter-to {
+    transform: translate(-50%, calc(-50% - 100px));
+}
+
+.logo-overlay.enter-active {
+    opacity: 1;
+    transition: opacity ease-in 1s 1s;
+}
+
+.rainy-toy.fast-enter-active {
+    opacity: 1;
+    transition: opacity ease-in 0.5s, transform ease-in-out 1.25s 1s;
+}
+
+.logo-overlay.fast-enter-active {
+    opacity: 1;
+    transition: opacity ease-in 0.5s 0.5s;
+}

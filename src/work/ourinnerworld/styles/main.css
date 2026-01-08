@@ -1,0 +1,282 @@
+/* main.css - Estilos principales */
+
+/* Reset y configuración base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'OMORI_GAME2', monospace;
+    background-color: #000000;
+    color: #ffffff;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+#app {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* SECCIÓN INTRO: Logo y Bienvenida */
+.title-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: -1vh;
+    background-color: #000000;
+    z-index: 10;
+}
+
+.logo-overlay {
+    position: relative;
+    width: 85%;
+    max-width: 1100px;
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-image {
+    width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.welcome-text {
+    font-size: 2rem;
+    letter-spacing: 0.3rem;
+    text-align: center;
+    font-weight: normal;
+    padding: 0 2rem;
+    line-height: 1.6;
+}
+
+/* SECCIÓN UNO: Contenido Principal */
+.main-content {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #000000;
+    z-index: 5;
+    padding: 6rem 2rem;
+}
+
+.content-section {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+}
+
+.splash-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    border: 3px solid #ffffff;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.game-description {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sv-project-desc {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    letter-spacing: 0.1rem;
+    text-align: justify;
+}
+
+.sv-project-desc-long {
+    font-size: 1.1rem;
+}
+
+/* TRANSICIÓN GRADUAL */
+.gradient-transition {
+    position: relative;
+    width: 100%;
+    height: 150vh;
+    background: linear-gradient(
+        to bottom,
+        #000000 0%,
+        #000000 20%,
+        #050510 35%,
+        #0a0a1a 50%,
+        #0f0f20 65%,
+        #141428 80%,
+        #1b2735 100%
+    );
+    z-index: 5;
+}
+
+/* SECCIÓN DOS: The Dreamers Journey */
+.section-two {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    z-index: 5;
+    padding: 6rem 2rem;
+}
+
+.section-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+}
+
+.section-title {
+    font-size: 3rem;
+    letter-spacing: 0.3rem;
+    text-align: center;
+    font-weight: normal;
+    margin-bottom: 2rem;
+}
+
+.scene-container {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.scene-image {
+    width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.section-description {
+    width: 100%;
+    max-width: 900px;
+}
+
+/* Gradient overlay para transiciones */
+.gradient-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 2;
+    transition: opacity 0.5s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .title-container {
+        padding-top: 3vh;
+    }
+    
+    .logo-overlay {
+        width: 90%;
+        max-width: 90%;
+    }
+    
+    .welcome-text {
+        font-size: 1.5rem;
+        letter-spacing: 0.2rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+        letter-spacing: 0.2rem;
+    }
+    
+    .sv-project-desc {
+        font-size: 1rem;
+        letter-spacing: 0.05rem;
+    }
+    
+    .sv-project-desc-long {
+        font-size: 0.95rem;
+    }
+    
+    .main-content,
+    .section-two {
+        padding: 4rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .title-container {
+        padding-top: 2vh;
+    }
+    
+    .logo-overlay {
+        width: 92%;
+        max-width: 92%;
+    }
+    
+    .welcome-text {
+        font-size: 1.2rem;
+        letter-spacing: 0.1rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+        letter-spacing: 0.15rem;
+    }
+    
+    .sv-project-desc {
+        font-size: 0.9rem;
+        text-align: left;
+    }
+    
+    .sv-project-desc-long {
+        font-size: 0.85rem;
+    }
+    
+    .splash-image,
+    .scene-image {
+        border-width: 2px;
+    }
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333333;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555555;
+}
