@@ -112,21 +112,6 @@ export class AnimationManager {
         
         if (!secondSection) return;
 
-        // Fade in de la segunda sección
-        gsap.fromTo(secondSection,
-            { opacity: 0 },
-            {
-                opacity: 1,
-                duration: 1.5,
-                scrollTrigger: {
-                    trigger: secondSection,
-                    start: 'top bottom',
-                    end: 'top center',
-                    scrub: 1
-                }
-            }
-        );
-
         // Animación del título de la segunda sección
         const sectionTitle = secondSection.querySelector('.section-title');
         if (sectionTitle) {
@@ -147,20 +132,20 @@ export class AnimationManager {
             );
         }
 
-        // Animación de la escena animada
-        const sceneImage = secondSection.querySelector('.scene-image');
-        if (sceneImage) {
-            gsap.fromTo(sceneImage,
-                { opacity: 0, scale: 0.9 },
+        // Animación de la descripción
+        const sectionDesc = secondSection.querySelector('.section-description');
+        if (sectionDesc) {
+            gsap.fromTo(sectionDesc,
+                { opacity: 0, y: 50 },
                 {
                     opacity: 1,
-                    scale: 1,
-                    duration: 1.5,
+                    y: 0,
+                    duration: 1.2,
                     ease: 'power2.out',
                     scrollTrigger: {
-                        trigger: sceneImage,
-                        start: 'top 75%',
-                        end: 'top 45%',
+                        trigger: sectionDesc,
+                        start: 'top 80%',
+                        end: 'top 50%',
                         scrub: 1
                     }
                 }

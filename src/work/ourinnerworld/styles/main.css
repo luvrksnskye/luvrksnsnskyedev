@@ -1,6 +1,6 @@
-/* main.css - Estilos principales */
+/* main.css - Actualizado con nubes en la transiciÃ³n */
 
-/* Reset y configuración base */
+/* Reset y configuraciÃ³n base */
 * {
     margin: 0;
     padding: 0;
@@ -21,7 +21,7 @@ body {
     min-height: 100vh;
 }
 
-/* SECCIÓN INTRO: Logo y Bienvenida */
+/* SECCIÃ“N INTRO: Logo y Bienvenida */
 .title-container {
     position: relative;
     width: 100%;
@@ -62,7 +62,7 @@ body {
     line-height: 1.6;
 }
 
-/* SECCIÓN UNO: Contenido Principal */
+/* SECCIÃ“N UNO: Contenido Principal */
 .main-content {
     position: relative;
     width: 100%;
@@ -103,7 +103,7 @@ body {
 }
 
 .sv-project-desc {
-    font-size: 1.2rem;
+    font-size: 2rem;
     line-height: 1.8;
     letter-spacing: 0.1rem;
     text-align: justify;
@@ -113,7 +113,7 @@ body {
     font-size: 1.1rem;
 }
 
-/* TRANSICIÓN GRADUAL */
+/* TRANSICIÃ“N GRADUAL CON NUBES */
 .gradient-transition {
     position: relative;
     width: 100%;
@@ -122,35 +122,167 @@ body {
         to bottom,
         #000000 0%,
         #000000 20%,
-        #050510 35%,
-        #0a0a1a 50%,
-        #0f0f20 65%,
-        #141428 80%,
-        #1b2735 100%
+        #0a0a15 35%,
+        #151530 50%,
+        #1a2040 65%,
+        #1f2a55 80%,
+        #26477d 100%
     );
     z-index: 5;
+    overflow: hidden;
 }
 
-/* SECCIÓN DOS: The Dreamers Journey */
+/* Nubes flotantes - GIGANTES en la transiciÃ³n */
+.floating-clouds {
+    position: absolute;
+    top: -800px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.cloud-left {
+    display: none;
+}
+
+.cloud-right-1 {
+    position: absolute;
+    bottom: 0;
+    right: -15%;
+    width: 1500px;
+    z-index: -3;
+    height: 1100px;
+    background-image: url('../assets/3.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    animation: floatRight1 30s ease-in-out infinite;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.cloud-right-2 {
+    position: absolute;
+    bottom: 0;
+    left: -15%;
+    width: 1400px;
+    height: 1050px;
+    z-index: -1;
+    background-image: url('../assets/2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    animation: floatRight2 35s ease-in-out infinite reverse;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* SECCIÃ“N DOS: The Dreamers Journey */
 .section-two {
     position: relative;
     width: 100%;
-    min-height: 100vh;
+    min-height: 120vh;
+    height: 100%;
+    background-color: #26477d;
     z-index: 5;
-    padding: 6rem 2rem;
+    overflow: hidden;
+    opacity: 1;
 }
 
+.train-background {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/TRAIN-BG.png');
+    background-size: contain;
+    background-position: center top;
+    background-repeat: no-repeat;
+    z-index: 1;
+    image-rendering: pixelated;
+    
+    /* Escalar uniformemente - tamaño moderado */
+    transform: translateX(-50%) scale(1.25); /* 15% más grande */
+    transform-origin: top center;
+    
+    clip-path: inset(0 0 0 0);
+    
+    @media (min-width: 769px) {
+        transform: translateX(-50%) scale(1.40); /* 25% más grande en desktop */
+        clip-path: inset(0 0 8% 0); /* Recorte moderado abajo */
+    }
+}
+/* Estrellas con parallax */
+.star-parallax {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background-image: url('../assets/star_a.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    z-index: 2;
+    animation: parallaxStars 60s linear infinite;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* Nubes del fondo del tren */
+.train-clouds {
+    position: absolute;
+    top: -15%; /* Cambia de 0 a -15% para moverlo hacia arriba */
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/TRAIN-BG-CLOUDS.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 3;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* Exterior del tren */
+.train-outside {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/TRAIN-OUTSIDE.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 4;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* Contenido de la segunda secciÃ³n */
 .section-content {
+    position: relative;
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 4rem;
+    padding: 6rem 2rem;
+    z-index: 6;
 }
 
 .section-title {
-    font-size: 3rem;
+    font-size: 6rem;
     letter-spacing: 0.3rem;
     text-align: center;
     font-weight: normal;
@@ -166,30 +298,100 @@ body {
     padding: 2rem;
 }
 
-.scene-image {
-    width: 100%;
-    height: auto;
-    image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: crisp-edges;
-}
-
 .section-description {
     width: 100%;
     max-width: 900px;
 }
 
-/* Gradient overlay para transiciones */
-.gradient-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
+/* TRANSICIÃ“N GRADUAL A NEGRO */
+.gradient-transition-three {
+    position: relative;
     width: 100%;
-    height: 100%;
-    pointer-events: none;
-    opacity: 0;
-    z-index: 2;
-    transition: opacity 0.5s ease;
+    height: 150vh;
+    background: linear-gradient(
+        to bottom,
+          #aa88ba 0%,
+        #9577a8 15%,
+        #7d6693 30%,
+        #655580 45%,
+        #4d446d 60%,
+        #35335a 75%,
+        #1d2247 85%,
+        #0a0a15 95%,
+        #000000 100%
+    );
+    z-index: 5;
+}
+
+/* SECCIÃ“N TRES: PrÃ³ximo contenido */
+.section-three {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #000000;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+}
+
+/* Animaciones */
+@keyframes parallaxStars {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes floatLeft {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px);
+    }
+    25% {
+        transform: translateY(-8px) translateX(5px);
+    }
+    50% {
+        transform: translateY(-15px) translateX(-3px);
+    }
+    75% {
+        transform: translateY(-5px) translateX(7px);
+    }
+}
+
+@keyframes floatRight1 {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px);
+    }
+    20% {
+        transform: translateY(-10px) translateX(-8px);
+    }
+    40% {
+        transform: translateY(-18px) translateX(4px);
+    }
+    60% {
+        transform: translateY(-12px) translateX(-6px);
+    }
+    80% {
+        transform: translateY(-6px) translateX(10px);
+    }
+}
+
+@keyframes floatRight2 {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px);
+    }
+    30% {
+        transform: translateY(-12px) translateX(6px);
+    }
+    60% {
+        transform: translateY(-20px) translateX(-4px);
+    }
+    90% {
+        transform: translateY(-8px) translateX(8px);
+    }
 }
 
 /* Responsive Design */
@@ -216,6 +418,7 @@ body {
     .sv-project-desc {
         font-size: 1rem;
         letter-spacing: 0.05rem;
+        text-align: center;
     }
     
     .sv-project-desc-long {
@@ -223,8 +426,20 @@ body {
     }
     
     .main-content,
-    .section-two {
+    .section-content {
         padding: 4rem 1.5rem;
+    }
+    
+    .cloud-right-1 {
+        width: 1000px;
+        height: 750px;
+        right: -20%;
+    }
+    
+    .cloud-right-2 {
+        width: 950px;
+        height: 720px;
+        left: -20%;
     }
 }
 
@@ -260,6 +475,18 @@ body {
     .splash-image,
     .scene-image {
         border-width: 2px;
+    }
+    
+    .cloud-right-1 {
+        width: 750px;
+        height: 560px;
+        right: -25%;
+    }
+    
+    .cloud-right-2 {
+        width: 700px;
+        height: 530px;
+        left: -25%;
     }
 }
 

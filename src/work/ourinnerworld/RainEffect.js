@@ -1,4 +1,4 @@
-// RainEffect.js
+// RainEffect.js - Solo en sección de bienvenida
 export class RainEffect {
     constructor() {
         this.isActive = false;
@@ -9,15 +9,19 @@ export class RainEffect {
     init() {
         this.createRainContainer();
         this.makeItRain();
-        this.start();
     }
 
     createRainContainer() {
-        // Crear contenedor principal
+        // Crear contenedor principal solo en la sección de bienvenida
         this.rainContainer = document.createElement('div');
         this.rainContainer.className = 'rain';
         this.rainContainer.style.opacity = '0';
-        document.getElementById('app').prepend(this.rainContainer);
+        
+        // Insertar en el título container para que solo aparezca ahí
+        const titleContainer = document.querySelector('.title-container');
+        if (titleContainer) {
+            titleContainer.appendChild(this.rainContainer);
+        }
     }
 
     makeItRain() {
@@ -68,13 +72,18 @@ export class RainEffect {
         });
         
         // Actualizar lluvia cada 30 segundos para variedad
-        setInterval(() => {
-            this.makeItRain();
+        this.rainInterval = setInterval(() => {
+            if (this.isActive) {
+                this.makeItRain();
+            }
         }, 30000);
     }
 
     stop() {
         this.isActive = false;
+        if (this.rainInterval) {
+            clearInterval(this.rainInterval);
+        }
         gsap.to(this.rainContainer, {
             opacity: 0,
             duration: 2,

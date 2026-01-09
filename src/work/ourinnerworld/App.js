@@ -2,7 +2,6 @@
 import { AudioManager } from './AudioManager.js';
 import { AnimationManager } from './AnimationManager.js';
 import { RainEffect } from './RainEffect.js';
-import { StarsEffect } from './StarsEffect.js';
 import { SectionManager } from './SectionManager.js';
 
 export class App {
@@ -41,9 +40,6 @@ export class App {
         // Efectos visuales
         this.rainEffect = new RainEffect();
         this.rainEffect.init();
-
-        this.starsEffect = new StarsEffect();
-        this.starsEffect.init();
 
         // Animaciones
         this.animationManager = new AnimationManager();
@@ -129,7 +125,6 @@ export class App {
     pause() {
         this.audioManager.stopAll();
         this.rainEffect.stop();
-        this.starsEffect.stop();
     }
 
     resume() {
@@ -143,7 +138,6 @@ export class App {
     destroy() {
         if (this.audioManager) this.audioManager.stopAll();
         if (this.rainEffect) this.rainEffect.stop();
-        if (this.starsEffect) this.starsEffect.stop();
         if (this.animationManager) this.animationManager.cleanup();
         
         this.isInitialized = false;

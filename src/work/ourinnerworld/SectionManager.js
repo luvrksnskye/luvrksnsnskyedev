@@ -1,4 +1,4 @@
-// SectionManager.js - Sistema de gestión de secciones y transiciones
+// SectionManager.js - Actualizado sin efecto de estrellas
 export class SectionManager {
     constructor(audioManager, animationManager, rainEffect, starsEffect) {
         this.audioManager = audioManager;
@@ -12,7 +12,23 @@ export class SectionManager {
     init() {
         this.setupSections();
         this.setupScrollObserver();
+        this.createTrainElements();
         this.activateSection('intro');
+    }
+
+    createTrainElements() {
+        const sectionTwo = document.getElementById('section-two');
+        if (!sectionTwo) return;
+
+        // Crear elementos del tren
+        const trainElements = `
+            <div class="train-background"></div>
+            <div class="star-parallax"></div>
+            <div class="train-clouds"></div>
+            <div class="train-outside"></div>
+        `;
+
+        sectionTwo.insertAdjacentHTML('afterbegin', trainElements);
     }
 
     setupSections() {
@@ -38,9 +54,18 @@ export class SectionManager {
             element: document.getElementById('section-two'),
             music: 'stardust-music',
             sfx: ['train-ambient'],
-            effect: 'stars',
+            effect: 'none',
             onEnter: () => this.enterSectionTwo(),
             onLeave: () => this.leaveSectionTwo()
+        });
+
+        this.sections.set('section-three', {
+            element: document.getElementById('section-three'),
+            music: 'title-music',
+            sfx: [],
+            effect: 'none',
+            onEnter: () => this.enterSectionThree(),
+            onLeave: () => this.leaveSectionThree()
         });
     }
 
@@ -61,6 +86,17 @@ export class SectionManager {
                 start: 'top center',
                 onEnter: () => this.activateSection('section-two'),
                 onLeaveBack: () => this.activateSection('content-one')
+            });
+        }
+
+        // Observer para la tercera sección
+        const gradientTransitionThree = document.getElementById('gradient-transition-three');
+        if (gradientTransitionThree) {
+            ScrollTrigger.create({
+                trigger: gradientTransitionThree,
+                start: 'top center',
+                onEnter: () => this.activateSection('section-three'),
+                onLeaveBack: () => this.activateSection('section-two')
             });
         }
     }
@@ -101,10 +137,8 @@ export class SectionManager {
     handleEffectTransition(effectType) {
         if (effectType === 'rain') {
             this.rainEffect.start();
-            this.starsEffect.stop();
-        } else if (effectType === 'stars') {
+        } else if (effectType === 'none') {
             this.rainEffect.stop();
-            this.starsEffect.start();
         }
     }
 
@@ -135,6 +169,18 @@ export class SectionManager {
 
     leaveSectionTwo() {
         this.audioManager.stopSfx('train-ambient', 1500);
+    }
+
+    enterSectionThree() {
+        // Detener todos los efectos de sonido
+        this.audioManager.stopAllSfx(2000);
+        
+        // Volver a la música de título
+        this.audioManager.playMusic('title-music', 2000);
+    }
+
+    leaveSectionThree() {
+        // Al volver a la sección dos
     }
 
     // Obtener sección actual
