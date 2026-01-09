@@ -1,6 +1,6 @@
-/* main.css - Actualizado con nubes en la transiciÃ³n */
+/* main.css - Actualizado con parallax infinito y estrellas flotantes */
 
-/* Reset y configuraciÃ³n base */
+/* Reset y configuración base */
 * {
     margin: 0;
     padding: 0;
@@ -21,7 +21,7 @@ body {
     min-height: 100vh;
 }
 
-/* SECCIÃ“N INTRO: Logo y Bienvenida */
+/* SECCIÓN INTRO: Logo y Bienvenida */
 .title-container {
     position: relative;
     width: 100%;
@@ -62,7 +62,7 @@ body {
     line-height: 1.6;
 }
 
-/* SECCIÃ“N UNO: Contenido Principal */
+/* SECCIÓN UNO: Contenido Principal */
 .main-content {
     position: relative;
     width: 100%;
@@ -106,14 +106,14 @@ body {
     font-size: 2rem;
     line-height: 1.8;
     letter-spacing: 0.1rem;
-    text-align: justify;
+    text-align: center;
 }
 
 .sv-project-desc-long {
     font-size: 1.1rem;
 }
 
-/* TRANSICIÃ“N GRADUAL CON NUBES */
+/* TRANSICIÓN GRADUAL CON NUBES Y ESTRELLAS FLOTANTES */
 .gradient-transition {
     position: relative;
     width: 100%;
@@ -132,15 +132,94 @@ body {
     overflow: hidden;
 }
 
-/* Nubes flotantes - GIGANTES en la transiciÃ³n */
-.floating-clouds {
+/* Estrellas flotantes en la transición */
+.floating-stars-transition {
     position: absolute;
-    top: -800px;
+    top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2;
+    z-index: 3;
     pointer-events: none;
+    overflow: hidden;
+}
+
+/* Primer overlay de nubes - aparece en gradient-transition */
+.floating-clouds-overlay-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 1;
+}
+
+.floating-clouds-overlay-gradient .cloud-right-1 {
+    position: absolute;
+    bottom: 0;
+    right: -15%;
+    width: 1500px;
+    height: 1100px;
+    background-image: url('../assets/3.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    animation: floatRight1 30s ease-in-out infinite;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.floating-clouds-overlay-gradient .cloud-right-2 {
+    position: absolute;
+    bottom: 0;
+    left: -15%;
+    width: 1400px;
+    height: 1050px;
+    background-image: url('../assets/2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    animation: floatRight2 35s ease-in-out infinite reverse;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.star-particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background-color: #ffffff;
+    opacity: 0;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.star-particle.large {
+    width: 3px;
+    height: 3px;
+}
+
+.star-particle.sparkle {
+    width: 4px;
+    height: 4px;
+}
+
+/* Nubes flotantes - OVERLAY sobre tren y transición */
+.floating-clouds {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 300vh;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }
 
 .cloud-left {
@@ -181,7 +260,7 @@ body {
     image-rendering: crisp-edges;
 }
 
-/* SECCIÃ“N DOS: The Dreamers Journey */
+/* SECCIÓN DOS: The Dreamers Journey */
 .section-two {
     position: relative;
     width: 100%;
@@ -207,28 +286,29 @@ body {
     image-rendering: pixelated;
     
     /* Escalar uniformemente - tamaño moderado */
-    transform: translateX(-50%) scale(1.25); /* 15% más grande */
+    transform: translateX(-50%) scale(1.25);
     transform-origin: top center;
     
     clip-path: inset(0 0 0 0);
     
     @media (min-width: 769px) {
-        transform: translateX(-50%) scale(1.40); /* 25% más grande en desktop */
-        clip-path: inset(0 0 8% 0); /* Recorte moderado abajo */
+        transform: translateX(-50%) scale(1.40);
+        clip-path: inset(0 0 8% 0);
     }
 }
-/* Estrellas con parallax */
+
+/* Estrellas con parallax infinito - más lento */
 .star-parallax {
     position: absolute;
     top: 0;
     left: 0;
-    width: 200%;
+    width: 400%;
     height: 100%;
     background-image: url('../assets/star_a.png');
     background-repeat: repeat-x;
     background-size: auto 100%;
     z-index: 2;
-    animation: parallaxStars 60s linear infinite;
+    animation: parallaxStarsInfinite 120s linear infinite;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
@@ -237,7 +317,7 @@ body {
 /* Nubes del fondo del tren */
 .train-clouds {
     position: absolute;
-    top: -15%; /* Cambia de 0 a -15% para moverlo hacia arriba */
+    top: -15%;
     left: 0;
     width: 100%;
     height: 100%;
@@ -268,7 +348,51 @@ body {
     image-rendering: crisp-edges;
 }
 
-/* Contenido de la segunda secciÃ³n */
+/* Segundo overlay de nubes - aparece sobre el tren */
+.floating-clouds-overlay-train {
+    position: absolute;
+    bottom: 1900px;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 180;
+    pointer-events: none;
+    opacity: 1;
+}
+
+.floating-clouds-overlay-train .cloud-right-1 {
+    position: absolute;
+    bottom: 0;
+    right: -15%;
+    width: 1500px;
+    height: 1100px;
+    background-image: url('../assets/3.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    animation: floatRight1 30s ease-in-out infinite;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.floating-clouds-overlay-train .cloud-right-2 {
+    position: absolute;
+    bottom: 0;
+    left: -15%;
+    width: 1400px;
+    height: 1050px;
+    background-image: url('../assets/2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    animation: floatRight2 35s ease-in-out infinite reverse;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* Contenido de la segunda sección */
 .section-content {
     position: relative;
     max-width: 1200px;
@@ -303,14 +427,14 @@ body {
     max-width: 900px;
 }
 
-/* TRANSICIÃ“N GRADUAL A NEGRO */
+/* TRANSICIÓN GRADUAL A NEGRO */
 .gradient-transition-three {
     position: relative;
     width: 100%;
-    height: 150vh;
+    height: 190vh;
     background: linear-gradient(
         to bottom,
-          #aa88ba 0%,
+        #aa88ba 0%,
         #9577a8 15%,
         #7d6693 30%,
         #655580 45%,
@@ -320,10 +444,11 @@ body {
         #0a0a15 95%,
         #000000 100%
     );
-    z-index: 5;
+    z-index: -5;
+    overflow: hidden;
 }
 
-/* SECCIÃ“N TRES: PrÃ³ximo contenido */
+/* SECCIÓN TRES: Próximo contenido */
 .section-three {
     position: relative;
     width: 100%;
@@ -337,7 +462,7 @@ body {
 }
 
 /* Animaciones */
-@keyframes parallaxStars {
+@keyframes parallaxStarsInfinite {
     0% {
         transform: translateX(0);
     }
@@ -351,13 +476,13 @@ body {
         transform: translateY(0px) translateX(0px);
     }
     25% {
-        transform: translateY(-8px) translateX(5px);
+        transform: translateY(-20px) translateX(15px);
     }
     50% {
-        transform: translateY(-15px) translateX(-3px);
+        transform: translateY(-35px) translateX(-10px);
     }
     75% {
-        transform: translateY(-5px) translateX(7px);
+        transform: translateY(-15px) translateX(18px);
     }
 }
 
@@ -366,16 +491,16 @@ body {
         transform: translateY(0px) translateX(0px);
     }
     20% {
-        transform: translateY(-10px) translateX(-8px);
+        transform: translateY(-25px) translateX(-20px);
     }
     40% {
-        transform: translateY(-18px) translateX(4px);
+        transform: translateY(-45px) translateX(15px);
     }
     60% {
-        transform: translateY(-12px) translateX(-6px);
+        transform: translateY(-30px) translateX(-18px);
     }
     80% {
-        transform: translateY(-6px) translateX(10px);
+        transform: translateY(-12px) translateX(25px);
     }
 }
 
@@ -384,13 +509,13 @@ body {
         transform: translateY(0px) translateX(0px);
     }
     30% {
-        transform: translateY(-12px) translateX(6px);
+        transform: translateY(-30px) translateX(18px);
     }
     60% {
-        transform: translateY(-20px) translateX(-4px);
+        transform: translateY(-50px) translateX(-15px);
     }
     90% {
-        transform: translateY(-8px) translateX(8px);
+        transform: translateY(-20px) translateX(22px);
     }
 }
 
@@ -418,7 +543,6 @@ body {
     .sv-project-desc {
         font-size: 1rem;
         letter-spacing: 0.05rem;
-        text-align: center;
     }
     
     .sv-project-desc-long {
@@ -437,6 +561,20 @@ body {
     }
     
     .cloud-right-2 {
+        width: 950px;
+        height: 720px;
+        left: -20%;
+    }
+    
+    .floating-clouds-overlay-gradient .cloud-right-1,
+    .floating-clouds-overlay-train .cloud-right-1 {
+        width: 1000px;
+        height: 750px;
+        right: -20%;
+    }
+    
+    .floating-clouds-overlay-gradient .cloud-right-2,
+    .floating-clouds-overlay-train .cloud-right-2 {
         width: 950px;
         height: 720px;
         left: -20%;
@@ -465,7 +603,6 @@ body {
     
     .sv-project-desc {
         font-size: 0.9rem;
-        text-align: left;
     }
     
     .sv-project-desc-long {
@@ -484,6 +621,20 @@ body {
     }
     
     .cloud-right-2 {
+        width: 700px;
+        height: 530px;
+        left: -25%;
+    }
+    
+    .floating-clouds-overlay-gradient .cloud-right-1,
+    .floating-clouds-overlay-train .cloud-right-1 {
+        width: 750px;
+        height: 560px;
+        right: -25%;
+    }
+    
+    .floating-clouds-overlay-gradient .cloud-right-2,
+    .floating-clouds-overlay-train .cloud-right-2 {
         width: 700px;
         height: 530px;
         left: -25%;

@@ -24,7 +24,6 @@ export class AudioManager {
             ]
         };
 
-        // Crear elementos de audio para BGM
         audioFiles.bgm.forEach(audio => {
             const element = new Audio(audio.src);
             element.volume = 0;
@@ -33,7 +32,6 @@ export class AudioManager {
             this.audioElements.set(audio.id, element);
         });
 
-        // Crear elementos de audio para SFX
         audioFiles.sfx.forEach(audio => {
             const element = new Audio(audio.src);
             element.volume = 0;
@@ -89,15 +87,12 @@ export class AudioManager {
             return;
         }
 
-        // Si es la misma música, no hacer nada
         if (this.activeBgm === newMusic && !newMusic.paused) {
             return;
         }
 
-        // Fade in de la nueva música
         this.fadeIn(newMusic, this.bgmVolume, fadeDuration);
 
-        // Fade out de la música anterior
         if (this.activeBgm && this.activeBgm !== newMusic) {
             this.fadeOut(this.activeBgm, fadeDuration);
         }

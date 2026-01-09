@@ -1,4 +1,4 @@
-// SectionManager.js - Actualizado sin efecto de estrellas
+// SectionManager.js - Con estrellas flotantes en transición
 export class SectionManager {
     constructor(audioManager, animationManager, rainEffect, starsEffect) {
         this.audioManager = audioManager;
@@ -7,12 +7,14 @@ export class SectionManager {
         this.starsEffect = starsEffect;
         this.currentSection = null;
         this.sections = new Map();
+        this.floatingStars = [];
     }
 
     init() {
         this.setupSections();
         this.setupScrollObserver();
         this.createTrainElements();
+        this.createFloatingStars();
         this.activateSection('intro');
     }
 
@@ -20,7 +22,6 @@ export class SectionManager {
         const sectionTwo = document.getElementById('section-two');
         if (!sectionTwo) return;
 
-        // Crear elementos del tren
         const trainElements = `
             <div class="train-background"></div>
             <div class="star-parallax"></div>
@@ -29,6 +30,47 @@ export class SectionManager {
         `;
 
         sectionTwo.insertAdjacentHTML('afterbegin', trainElements);
+    }
+
+    createFloatingStars() {
+        const starsContainer = document.getElementById('floating-stars-transition');
+        if (!starsContainer) return;
+
+        const starCount = 150;
+        
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star-particle';
+            
+            if (Math.random() > 0.7) {
+                star.classList.add('large');
+            }
+            
+            if (Math.random() > 0.6) {
+                star.classList.add('sparkle');
+            }
+            
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${50 + Math.random() * 50}%`;
+            
+            starsContainer.appendChild(star);
+            this.floatingStars.push(star);
+        }
+
+        ScrollTrigger.create({
+            trigger: '#gradient-transition',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1,
+            onUpdate: (self) => {
+                const progress = self.progress;
+                this.floatingStars.forEach((star, index) => {
+                    const delay = (index / this.floatingStars.length) * 0.5;
+                    const starProgress = Math.max(0, Math.min(1, (progress - delay) * 2));
+                    star.style.opacity = starProgress;
+                });
+            }
+        });
     }
 
     setupSections() {
@@ -70,7 +112,6 @@ export class SectionManager {
     }
 
     setupScrollObserver() {
-        // Observer para la primera sección de contenido
         ScrollTrigger.create({
             trigger: '.main-content',
             start: 'top center',
@@ -78,18 +119,22 @@ export class SectionManager {
             onLeaveBack: () => this.activateSection('intro')
         });
 
-        // Observer para la transición gradual (cambiar música y efectos)
         const gradientTransition = document.getElementById('gradient-transition');
         if (gradientTransition) {
             ScrollTrigger.create({
                 trigger: gradientTransition,
                 start: 'top center',
-                onEnter: () => this.activateSection('section-two'),
-                onLeaveBack: () => this.activateSection('content-one')
+                onEnter: () => {
+                    this.activateSection('section-two');
+                    this.showCloudsOverlay();
+                },
+                onLeaveBack: () => {
+                    this.activateSection('content-one');
+                    this.hideCloudsOverlay();
+                }
             });
         }
 
-        // Observer para la tercera sección
         const gradientTransitionThree = document.getElementById('gradient-transition-three');
         if (gradientTransitionThree) {
             ScrollTrigger.create({
@@ -97,6 +142,14 @@ export class SectionManager {
                 start: 'top center',
                 onEnter: () => this.activateSection('section-three'),
                 onLeaveBack: () => this.activateSection('section-two')
+            });
+            
+            // Ocultar nubes cuando se sale de la sección tres hacia abajo
+            ScrollTrigger.create({
+                trigger: gradientTransitionThree,
+                start: 'bottom bottom',
+                onEnter: () => this.hideCloudsOverlay(),
+                onLeaveBack: () => this.showCloudsOverlay()
             });
         }
     }
@@ -108,7 +161,6 @@ export class SectionManager {
             return;
         }
 
-        // Desactivar sección anterior
         if (this.currentSection) {
             const prevSection = this.sections.get(this.currentSection);
             if (prevSection && prevSection.onLeave) {
@@ -116,19 +168,16 @@ export class SectionManager {
             }
         }
 
-        // Activar nueva sección
         this.currentSection = sectionId;
         
         if (section.onEnter) {
             section.onEnter();
         }
 
-        // Cambiar música
         if (section.music) {
             this.audioManager.playMusic(section.music, 2000);
         }
 
-        // Manejar efectos visuales
         this.handleEffectTransition(section.effect);
 
         console.log(`Activated section: ${sectionId}`);
@@ -142,28 +191,21 @@ export class SectionManager {
         }
     }
 
-    // Callbacks para entrada de secciones
     enterIntroSection() {
         this.audioManager.playSfx('soft-rain', 0.08, 1500);
     }
 
     leaveIntroSection() {
-        // La música y efectos continúan
     }
 
     enterContentOneSection() {
-        // Mantener música y efectos actuales
     }
 
     leaveContentOneSection() {
-        // Preparar para transición
     }
 
     enterSectionTwo() {
-        // Detener lluvia gradualmente
         this.audioManager.stopSfx('soft-rain', 2000);
-        
-        // Iniciar ambiente de tren muy muy bajo
         this.audioManager.playSfx('train-ambient', 0.03, 2000);
     }
 
@@ -172,23 +214,17 @@ export class SectionManager {
     }
 
     enterSectionThree() {
-        // Detener todos los efectos de sonido
         this.audioManager.stopAllSfx(2000);
-        
-        // Volver a la música de título
         this.audioManager.playMusic('title-music', 2000);
     }
 
     leaveSectionThree() {
-        // Al volver a la sección dos
     }
 
-    // Obtener sección actual
     getCurrentSection() {
         return this.currentSection;
     }
 
-    // Forzar cambio de sección
     goToSection(sectionId) {
         const section = this.sections.get(sectionId);
         if (!section || !section.element) return;
@@ -198,5 +234,19 @@ export class SectionManager {
             duration: 1.5,
             ease: 'power2.inOut'
         });
+    }
+
+    showCloudsOverlay() {
+        const cloudsOverlay = document.querySelector('.floating-clouds');
+        if (cloudsOverlay) {
+            cloudsOverlay.style.opacity = '1';
+        }
+    }
+
+    hideCloudsOverlay() {
+        const cloudsOverlay = document.querySelector('.floating-clouds');
+        if (cloudsOverlay) {
+            cloudsOverlay.style.opacity = '0';
+        }
     }
 }

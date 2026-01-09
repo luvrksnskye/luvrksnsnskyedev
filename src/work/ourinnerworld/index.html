@@ -4,76 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OURINNERWORLD</title>
-     <link rel="icon" type="image/x-icon" href="assets/icon.png">
-    <!-- Estilos -->
+    <link rel="icon" type="image/x-icon" href="assets/icon.png">
     <link rel="stylesheet" href="styles/fonts.css">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/rain.css">
     
-    <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        .wiggle-text {
+            filter: url('#squiggly-filter');
+        }
+    </style>
 </head>
 <body>
+    <!-- Filtro SVG para efecto wiggle -->
+    <svg style="position: absolute; width: 0; height: 0;">
+        <defs>
+            <filter id="squiggly-filter">
+                <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="0"/>
+                <feDisplacementMap id="displacement" in="SourceGraphic" in2="noise" scale="2" />
+            </filter>
+        </defs>
+    </svg>
+    
     <div id="app">
         
- 
         <div class="title-container">
             <div id="game-logo-overlay" class="logo-overlay">
                 <img src="assets/ourinnerworld_white.gif" alt="OURINNERWORLD" class="logo-image">
             </div>
             
-            <h1 id="welcome-text" class="welcome-text">THE DREAMERS JOURNEY PROJECT</h1>
+            <h1 id="welcome-text" class="welcome-text wiggle-text">THE DREAMERS JOURNEY PROJECT</h1>
         </div>
         
-
         <div id="main-content" class="main-content">
             <section class="content-section">
                 <div class="content-container">
                     <img id="splash-image" src="assets/splashGalv2.png" alt="Game Screenshot" class="splash-image">
                     
                     <div class="game-description">
-                        <p class="sv-project-desc" data-text="OPPS! THIS SITE IS UNDER CONSTRUCTION..."></p>
-                    
+                        <p class="sv-project-desc wiggle-text" data-text="OPPS! THIS SITE IS UNDER CONSTRUCTION..."></p>
                     </div>
                 </div>
             </section>
         </div>
         
         <div id="gradient-transition" class="gradient-transition">
-      
-        </div>
-        
-
-        <div id="section-two" class="section-two">
-            <div class="section-content">
-                <h2 class="section-title">THE DREAMERS JOURNEY</h2>
-            
-                
-                <div class="section-description">
-                    <p class="sv-project-desc" data-text="OURINNERWORLD IS A STORY-DRIVEN DREAM ADVENTURE INSPIRED BY THE GAMES THAT SHAPED A CHILDHOOD, AND THE FEELINGS THAT FOLLOWED AFTER. BUILT AS A PERSONAL PROJECT, THIS JOURNEY BLENDS WARMTH, MELANCHOLY, AND MYSTERY INTO A WORLD THAT FEELS FAMILIAR- YET UNSETTLING."></p>
-                </div>
+            <div class="floating-clouds-overlay-gradient">
+                <div class="cloud-right-1"></div>
+                <div class="cloud-right-2"></div>
             </div>
+            <div id="floating-stars-transition" class="floating-stars-transition"></div>
+           
         </div>
         
-        
-        <div id="gradient-transition-three" class="gradient-transition-three">
-             
+        <div id="section-two" class="section-two">
             <div class="floating-clouds">
                 <div class="cloud-right-1"></div>
                 <div class="cloud-right-2"></div>
             </div>
-        </div>
-        
-
-        <div id="section-three" class="section-three">
-        
+            
+            <div class="section-content">
+                <h2 class="section-title wiggle-text">THE DREAMERS JOURNEY</h2>
+                
+                <div class="section-description">
+                    <p class="sv-project-desc wiggle-text" data-text="OURINNERWORLD IS A STORY-DRIVEN DREAM ADVENTURE INSPIRED BY THE GAMES THAT SHAPED A CHILDHOOD, AND THE FEELINGS THAT FOLLOWED AFTER. BUILT AS A PERSONAL PROJECT, THIS JOURNEY BLENDS WARMTH, MELANCHOLY, AND MYSTERY INTO A WORLD THAT FEELS FAMILIAR- YET UNSETTLING."></p>
+                </div>
             </div>
+
+            
         </div>
+             <div class="floating-clouds-overlay-train">
+                <div class="cloud-right-1"></div>
+                <div class="cloud-right-2"></div>
+            </div>
+        <div id="gradient-transition-three" class="gradient-transition-three">
+         
+        </div>
+        
+        <div id="section-three" class="section-three"></div>
         
     </div>
     
-    <!-- Script modular -->
+    <script>
+        // Animar el filtro SVG para crear efecto wiggle
+        const turbulence = document.getElementById('turbulence');
+        let seed = 0;
+        
+        function animateWiggle() {
+            seed += 0.1;
+            if (seed > 100) seed = 0;
+            turbulence.setAttribute('seed', seed);
+            requestAnimationFrame(animateWiggle);
+        }
+        
+        animateWiggle();
+    </script>
+    
     <script type="module" src="App.js"></script>
 </body>
 </html>

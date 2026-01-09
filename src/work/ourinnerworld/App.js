@@ -19,13 +19,10 @@ export class App {
 
         console.log('Initializing OURINNERWORLD...');
 
-        // Inicializar managers en orden
         this.initializeManagers();
         
-        // Setup inicial
         await this.setupInitialState();
         
-        // Iniciar experiencia
         this.startExperience();
 
         this.isInitialized = true;
@@ -33,19 +30,15 @@ export class App {
     }
 
     initializeManagers() {
-        // Audio
         this.audioManager = new AudioManager();
         this.audioManager.init();
 
-        // Efectos visuales
         this.rainEffect = new RainEffect();
         this.rainEffect.init();
 
-        // Animaciones
         this.animationManager = new AnimationManager();
         this.animationManager.init();
 
-        // Secciones
         this.sectionManager = new SectionManager(
             this.audioManager,
             this.animationManager,
@@ -56,26 +49,22 @@ export class App {
     }
 
     async setupInitialState() {
-        // Esperar a que el DOM esté completamente cargado
         if (document.readyState === 'loading') {
             await new Promise(resolve => {
                 document.addEventListener('DOMContentLoaded', resolve);
             });
         }
 
-        // Configurar estado inicial de elementos
         this.setupInitialElements();
     }
 
     setupInitialElements() {
-        // Asegurar que elementos iniciales estén listos
         const logo = document.getElementById('game-logo-overlay');
         const welcomeText = document.getElementById('welcome-text');
         
         if (logo) logo.style.opacity = '0';
         if (welcomeText) welcomeText.style.opacity = '0';
 
-        // Aplicar texto a elementos con data-text
         this.applyDataText();
     }
 
@@ -90,23 +79,16 @@ export class App {
     }
 
     startExperience() {
-        // Pequeño delay antes de iniciar para suavidad
         setTimeout(() => {
-            // Iniciar música de título
             this.audioManager.playMusic('title-music', 2000);
             
-            // Iniciar lluvia
             this.rainEffect.start();
-            
-            // Las animaciones de intro ya están configuradas en AnimationManager
         }, 500);
 
-        // Permitir interacción con audio en navegadores modernos
         this.setupUserInteraction();
     }
 
     setupUserInteraction() {
-        // Algunos navegadores requieren interacción del usuario para reproducir audio
         const startAudio = () => {
             if (!this.audioManager.activeBgm || this.audioManager.activeBgm.paused) {
                 this.audioManager.playMusic('title-music', 1000);
@@ -121,7 +103,6 @@ export class App {
         document.addEventListener('keydown', startAudio, { once: true });
     }
 
-    // Métodos de control públicos
     pause() {
         this.audioManager.stopAll();
         this.rainEffect.stop();
@@ -134,7 +115,6 @@ export class App {
         }
     }
 
-    // Cleanup
     destroy() {
         if (this.audioManager) this.audioManager.stopAll();
         if (this.rainEffect) this.rainEffect.stop();
@@ -144,15 +124,12 @@ export class App {
     }
 }
 
-// Crear instancia global
 const app = new App();
 
-// Auto-inicializar cuando el DOM esté listo
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => app.init());
 } else {
     app.init();
 }
 
-// Exportar para acceso global si es necesario
 window.OURINNERWORLD = app;

@@ -11,13 +11,10 @@ export class AnimationManager {
     }
 
     setupScrollAnimations() {
-        // Animación inicial del logo y título
         this.animateIntroSection();
         
-        // Animación de la primera sección de contenido
         this.animateFirstContentSection();
         
-        // Animación de transición a segunda sección
         this.animateSecondSection();
     }
 
@@ -25,7 +22,6 @@ export class AnimationManager {
         const logo = document.getElementById('game-logo-overlay');
         const welcomeText = document.getElementById('welcome-text');
 
-        // Logo aparece primero
         gsap.fromTo(logo,
             { opacity: 0, scale: 0.8 },
             {
@@ -37,7 +33,6 @@ export class AnimationManager {
             }
         );
 
-        // Texto de bienvenida aparece después
         gsap.fromTo(welcomeText,
             { opacity: 0, y: 30 },
             {
@@ -49,7 +44,6 @@ export class AnimationManager {
             }
         );
 
-        // Fade out al hacer scroll
         ScrollTrigger.create({
             trigger: '.main-content',
             start: 'top bottom',
@@ -69,7 +63,6 @@ export class AnimationManager {
         const splashImage = document.getElementById('splash-image');
         const descriptions = document.querySelectorAll('.sv-project-desc');
 
-        // Splash image aparece al hacer scroll
         gsap.fromTo(splashImage,
             { opacity: 0, y: 100, scale: 0.95 },
             {
@@ -87,7 +80,6 @@ export class AnimationManager {
             }
         );
 
-        // Texto aparece gradualmente
         descriptions.forEach((desc, index) => {
             gsap.fromTo(desc,
                 { opacity: 0, y: 50 },
@@ -112,7 +104,6 @@ export class AnimationManager {
         
         if (!secondSection) return;
 
-        // Animación del título de la segunda sección
         const sectionTitle = secondSection.querySelector('.section-title');
         if (sectionTitle) {
             gsap.fromTo(sectionTitle,
@@ -132,7 +123,6 @@ export class AnimationManager {
             );
         }
 
-        // Animación de la descripción
         const sectionDesc = secondSection.querySelector('.section-description');
         if (sectionDesc) {
             gsap.fromTo(sectionDesc,
@@ -153,7 +143,6 @@ export class AnimationManager {
         }
     }
 
-    // Transición de gradiente entre secciones
     createGradientTransition(triggerElement, startColor, endColor) {
         const overlay = document.getElementById('gradient-overlay');
         
@@ -170,7 +159,6 @@ export class AnimationManager {
         });
     }
 
-    // Efecto de typing para texto
     typewriterEffect(element, text, speed = 50) {
         element.textContent = '';
         let index = 0;
@@ -186,7 +174,6 @@ export class AnimationManager {
         type();
     }
 
-    // Limpiar todos los ScrollTriggers
     cleanup() {
         ScrollTrigger.getAll().forEach(trigger => trigger.kill());
         this.animations.clear();

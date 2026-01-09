@@ -1,8 +1,8 @@
-// RainEffect.js - Solo en sección de bienvenida
+// RainEffect.js - Lluvia más intensa y visible
 export class RainEffect {
     constructor() {
         this.isActive = false;
-        this.dropCount = 250;
+        this.dropCount = 450;
         this.rainContainer = null;
     }
 
@@ -12,12 +12,10 @@ export class RainEffect {
     }
 
     createRainContainer() {
-        // Crear contenedor principal solo en la sección de bienvenida
         this.rainContainer = document.createElement('div');
         this.rainContainer.className = 'rain';
         this.rainContainer.style.opacity = '0';
         
-        // Insertar en el título container para que solo aparezca ahí
         const titleContainer = document.querySelector('.title-container');
         if (titleContainer) {
             titleContainer.appendChild(this.rainContainer);
@@ -25,7 +23,6 @@ export class RainEffect {
     }
 
     makeItRain() {
-        // Limpiar lluvia anterior
         if (this.rainContainer) {
             this.rainContainer.innerHTML = '';
         }
@@ -34,13 +31,11 @@ export class RainEffect {
         let increment = 0;
 
         while (increment < this.dropCount) {
-            // Números aleatorios para varias randomizaciones
             const randoHundo = Math.floor(Math.random() * (98 - 1 + 1) + 1);
             const randoFiver = Math.floor(Math.random() * (5 - 2 + 1) + 2);
             
             increment += randoFiver;
             
-            // Crear gota con propiedades aleatorias
             drops += `
                 <div class="drop" style="
                     left: ${increment}%; 
@@ -64,14 +59,12 @@ export class RainEffect {
     start() {
         this.isActive = true;
         
-        // Fade in de la lluvia
         gsap.to(this.rainContainer, {
-            opacity: 0.8,
+            opacity: 1,
             duration: 3,
             ease: "power2.inOut"
         });
         
-        // Actualizar lluvia cada 30 segundos para variedad
         this.rainInterval = setInterval(() => {
             if (this.isActive) {
                 this.makeItRain();
@@ -92,8 +85,7 @@ export class RainEffect {
     }
 
     setIntensity(intensity) {
-        // intensity: 0-1
-        this.dropCount = Math.floor(intensity * 200);
+        this.dropCount = Math.floor(intensity * 500);
         this.makeItRain();
     }
 }
