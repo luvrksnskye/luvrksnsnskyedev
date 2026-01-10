@@ -1,4 +1,4 @@
-/* main.css - Actualizado con parallax infinito y estrellas flotantes */
+
 
 /* Reset y configuración base */
 * {
@@ -14,6 +14,12 @@ body {
     overflow-x: hidden;
     scroll-behavior: smooth;
 }
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 
 #app {
     position: relative;
@@ -520,127 +526,6 @@ body {
     }
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .title-container {
-        padding-top: 3vh;
-    }
-    
-    .logo-overlay {
-        width: 90%;
-        max-width: 90%;
-    }
-    
-    .welcome-text {
-        font-size: 1.5rem;
-        letter-spacing: 0.2rem;
-    }
-    
-    .section-title {
-        font-size: 2rem;
-        letter-spacing: 0.2rem;
-    }
-    
-    .sv-project-desc {
-        font-size: 1rem;
-        letter-spacing: 0.05rem;
-    }
-    
-    .sv-project-desc-long {
-        font-size: 0.95rem;
-    }
-    
-    .main-content,
-    .section-content {
-        padding: 4rem 1.5rem;
-    }
-    
-    .cloud-right-1 {
-        width: 1000px;
-        height: 750px;
-        right: -20%;
-    }
-    
-    .cloud-right-2 {
-        width: 950px;
-        height: 720px;
-        left: -20%;
-    }
-    
-    .floating-clouds-overlay-gradient .cloud-right-1,
-    .floating-clouds-overlay-train .cloud-right-1 {
-        width: 1000px;
-        height: 750px;
-        right: -20%;
-    }
-    
-    .floating-clouds-overlay-gradient .cloud-right-2,
-    .floating-clouds-overlay-train .cloud-right-2 {
-        width: 950px;
-        height: 720px;
-        left: -20%;
-    }
-}
-
-@media (max-width: 480px) {
-    .title-container {
-        padding-top: 2vh;
-    }
-    
-    .logo-overlay {
-        width: 92%;
-        max-width: 92%;
-    }
-    
-    .welcome-text {
-        font-size: 1.2rem;
-        letter-spacing: 0.1rem;
-    }
-    
-    .section-title {
-        font-size: 1.5rem;
-        letter-spacing: 0.15rem;
-    }
-    
-    .sv-project-desc {
-        font-size: 0.9rem;
-    }
-    
-    .sv-project-desc-long {
-        font-size: 0.85rem;
-    }
-    
-    .splash-image,
-    .scene-image {
-        border-width: 2px;
-    }
-    
-    .cloud-right-1 {
-        width: 750px;
-        height: 560px;
-        right: -25%;
-    }
-    
-    .cloud-right-2 {
-        width: 700px;
-        height: 530px;
-        left: -25%;
-    }
-    
-    .floating-clouds-overlay-gradient .cloud-right-1,
-    .floating-clouds-overlay-train .cloud-right-1 {
-        width: 750px;
-        height: 560px;
-        right: -25%;
-    }
-    
-    .floating-clouds-overlay-gradient .cloud-right-2,
-    .floating-clouds-overlay-train .cloud-right-2 {
-        width: 700px;
-        height: 530px;
-        left: -25%;
-    }
-}
 
 /* Scrollbar personalizada */
 ::-webkit-scrollbar {
