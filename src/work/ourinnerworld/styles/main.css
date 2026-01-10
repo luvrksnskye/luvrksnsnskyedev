@@ -318,7 +318,7 @@ body {
 /* Nubes del fondo del tren */
 .train-clouds {
     position: absolute;
-    top: -15%;
+    top: -15vh;
     left: 0;
     width: 100%;
     height: 100%;
@@ -352,7 +352,7 @@ body {
 /* Segundo overlay de nubes - aparece sobre el tren */
 .floating-clouds-overlay-train {
     position: absolute;
-    bottom: 1900px;
+    bottom: 240vh;
     left: 0;
     width: 100%;
     height: 100vh;
