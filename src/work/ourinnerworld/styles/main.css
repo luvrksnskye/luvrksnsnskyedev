@@ -272,6 +272,7 @@ body {
     opacity: 1;
 }
 
+
 .train-background {
     position: absolute;
     top: 0;
@@ -286,14 +287,14 @@ body {
     image-rendering: pixelated;
     
     /* Escalar uniformemente - tamaño moderado */
-    transform: translateX(-50%) scale(1.25);
+    transform: translateX(-50%) scale(1.25); /* 15% más grande */
     transform-origin: top center;
     
     clip-path: inset(0 0 0 0);
     
     @media (min-width: 769px) {
-        transform: translateX(-50%) scale(1.40);
-        clip-path: inset(0 0 8% 0);
+        transform: translateX(-50%) scale(1.40); /* 25% más grande en desktop */
+        clip-path: inset(0 0 8% 0); /* Recorte moderado abajo */
     }
 }
 
