@@ -306,7 +306,7 @@ html, body {
 /* Ajuste exclusivo para 1366x768 */
 @media (width: 1366px) and (height: 768px) {
     .train-background {
-        transform: translateX(-50%) scale(1.30); /* un poco menos de zoom */
+        transform: translateX(-50%) scale(1.40); /* un poco menos de zoom */
         clip-path: inset(0 0 4% 0); /* menos recorte abajo */
     }
 }
