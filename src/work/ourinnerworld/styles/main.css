@@ -293,7 +293,7 @@ html, body {
     image-rendering: pixelated;
     
     /* Escalar uniformemente - tamaño moderado */
-    transform: translateX(-50%) scale(1.25); /* 15% más grande */
+    transform: translateX(-50%) scale(1.40); /* 15% más grande */
     transform-origin: top center;
     
     clip-path: inset(0 0 0 0);
