@@ -1,10 +1,11 @@
 // SectionManager.js - Con estrellas flotantes en transición
 export class SectionManager {
-    constructor(audioManager, animationManager, rainEffect, starsEffect) {
+    constructor(audioManager, animationManager, rainEffect, starsEffect, dustParticles) {
         this.audioManager = audioManager;
         this.animationManager = animationManager;
         this.rainEffect = rainEffect;
         this.starsEffect = starsEffect;
+        this.dustParticles = dustParticles;
         this.currentSection = null;
         this.sections = new Map();
         this.floatingStars = [];
@@ -215,9 +216,15 @@ export class SectionManager {
 
     enterSectionThree() {
         // Mantener la música y SFX de la sección 2
+        if (this.dustParticles) {
+            this.dustParticles.start();
+        }
     }
 
     leaveSectionThree() {
+        if (this.dustParticles) {
+            this.dustParticles.stop();
+        }
     }
 
     getCurrentSection() {
