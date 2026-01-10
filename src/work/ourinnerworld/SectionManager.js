@@ -103,8 +103,8 @@ export class SectionManager {
 
         this.sections.set('section-three', {
             element: document.getElementById('section-three'),
-            music: 'title-music',
-            sfx: [],
+            music: 'stardust-music',
+            sfx: ['train-ambient'],
             effect: 'none',
             onEnter: () => this.enterSectionThree(),
             onLeave: () => this.leaveSectionThree()
@@ -214,8 +214,7 @@ export class SectionManager {
     }
 
     enterSectionThree() {
-        this.audioManager.stopAllSfx(2000);
-        this.audioManager.playMusic('title-music', 2000);
+        // Mantener la música y SFX de la sección 2
     }
 
     leaveSectionThree() {

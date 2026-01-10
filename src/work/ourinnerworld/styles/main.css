@@ -463,6 +463,52 @@ html, body {
     overflow: hidden;
 }
 
+/* Estrellas flotantes estáticas que disminuyen */
+.fading-stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.fading-star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background-color: #ffffff;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.fading-star.large {
+    width: 3px;
+    height: 3px;
+}
+
+.fading-star.sparkle {
+    width: 4px;
+    height: 4px;
+    box-shadow: 0 0 2px #ffffff;
+}
+
+/* Contenido de texto en la transición */
+.transition-content {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+    padding: 60vh 2rem 6rem 2rem;
+    z-index: 10;
+}
+
 /* SECCIÓN TRES: Próximo contenido */
 .section-three {
     position: relative;
@@ -474,6 +520,54 @@ html, body {
     align-items: center;
     justify-content: center;
     opacity: 1;
+    overflow: hidden;
+}
+
+/* Inner Train Background */
+.inner-train-background {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/innertrain.gif');
+    background-size: contain;
+    background-position: center top;
+    background-repeat: no-repeat;
+    z-index: 1;
+    image-rendering: pixelated;
+    
+    /* Escalar uniformemente */
+    transform: translateX(-50%) scale(1.10); 
+    transform-origin: top center;
+    
+    clip-path: inset(0 0 0 0);
+    
+    @media (min-width: 769px) {
+        transform: translateX(-50%) scale(1.10); 
+        clip-path: inset(0 0 8% 0); 
+    }
+}
+
+/* Ajuste exclusivo para 1366x768 */
+@media (width: 1366px) and (height: 768px) {
+    .inner-train-background {
+        transform: translateX(-50%) scale(1.20);
+        clip-path: inset(0 0 4% 0);
+    }
+}
+
+/* Contenido de la tercera sección */
+.section-three-content {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+    padding: 6rem 2rem;
+    z-index: 6;
 }
 
 /* Animaciones */

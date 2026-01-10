@@ -3,6 +3,7 @@ import { AudioManager } from './AudioManager.js';
 import { AnimationManager } from './AnimationManager.js';
 import { RainEffect } from './RainEffect.js';
 import { SectionManager } from './SectionManager.js';
+import { FadingStarsEffect } from './FadingStarsEffect.js';
 
 export class App {
     constructor() {
@@ -10,6 +11,7 @@ export class App {
         this.animationManager = null;
         this.rainEffect = null;
         this.starsEffect = null;
+        this.fadingStarsEffect = null;
         this.sectionManager = null;
         this.isInitialized = false;
     }
@@ -35,6 +37,9 @@ export class App {
 
         this.rainEffect = new RainEffect();
         this.rainEffect.init();
+
+        this.fadingStarsEffect = new FadingStarsEffect();
+        this.fadingStarsEffect.init();
 
         this.animationManager = new AnimationManager();
         this.animationManager.init();
