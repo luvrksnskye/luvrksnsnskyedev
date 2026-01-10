@@ -292,17 +292,25 @@ html, body {
     z-index: 1;
     image-rendering: pixelated;
     
-    /* Escalar uniformemente - tamaño moderado */
-    transform: translateX(-50%) scale(1.40); /* 15% más grande */
+    /* Escalar uniformemente */
+    transform: translateX(-50%) scale(1.40); 
     transform-origin: top center;
     
     clip-path: inset(0 0 0 0);
     
     @media (min-width: 769px) {
-        transform: translateX(-50%) scale(1.40); /* 25% más grande en desktop */
-        clip-path: inset(0 0 8% 0); /* Recorte moderado abajo */
+        transform: translateX(-50%) scale(1.40); 
+        clip-path: inset(0 0 8% 0); 
     }
 }
+/* Ajuste exclusivo para 1366x768 */
+@media (width: 1366px) and (height: 768px) {
+    .train-background {
+        transform: translateX(-50%) scale(1.30); /* un poco menos de zoom */
+        clip-path: inset(0 0 4% 0); /* menos recorte abajo */
+    }
+}
+
 
 /* Estrellas con parallax infinito - más lento */
 .star-parallax {
