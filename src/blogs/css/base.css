@@ -1,0 +1,166 @@
+/* =============================================
+   BASE MODULE
+   Reset, variables, body grid from pasted code
+   ============================================= */
+
+@import url('https://unpkg.com/normalize.css');
+@import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap');
+
+:root {
+    --font-size-min: 16;
+    --font-size-max: 20;
+    --font-ratio-min: 1.2;
+    --font-ratio-max: 1.33;
+    --font-width-min: 375;
+    --font-width-max: 1500;
+
+    /*
+        Liquid glass tokens from pasted:
+        --lg-bg-color / --lg-highlight now in glass.css
+    */
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-border-hover: rgba(255, 255, 255, 0.18);
+    --text-primary: #fff;
+    --text-secondary: rgba(255, 255, 255, 0.72);
+    --text-tertiary: rgba(255, 255, 255, 0.48);
+    --accent-blue: rgba(180, 205, 255, 0.653);
+    --accent-blue-bright: rgba(220, 226, 255, 0.514);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-2xl: 24px;
+    /* Apple-fluid curves */
+    --transition-smooth: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-spring: 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition-ease: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+ --font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'SF Mono', Monaco, monospace;
+    
+
+    scrollbar-color: canvasText #0000;
+}
+
+
+html {
+    color-scheme: dark only;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    ::selection {
+  color: white; /* sets the color of the selected text */
+  background: rgba(97, 60, 220, 0.708); /* sets the background color of the selection */
+}
+
+/* For Firefox compatibility, use the -moz prefix */
+::-moz-selection {
+  color: white;
+  background:rgba(97, 60, 220, 0.881);
+}
+
+}
+
+:where(.fluid) {
+    --fluid-min: calc(
+        var(--font-size-min) * pow(var(--font-ratio-min), var(--font-level, 0))
+    );
+    --fluid-max: calc(
+        var(--font-size-max) * pow(var(--font-ratio-max), var(--font-level, 0))
+    );
+    --fluid-preferred: calc(
+        (var(--fluid-max) - var(--fluid-min)) /
+        (var(--font-width-max) - var(--font-width-min))
+    );
+    --fluid-type: clamp(
+        (var(--fluid-min) / 16) * 1rem,
+        ((var(--fluid-min) / 16) * 1rem) -
+        (((var(--fluid-preferred) * var(--font-width-min)) / 16) * 1rem) +
+        (var(--fluid-preferred) * var(--variable-unit, 100vi)),
+        (var(--fluid-max) / 16) * 1rem
+    );
+    font-size: var(--fluid-type);
+}
+
+*,
+*:after,
+*:before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #000;
+    overflow-x: hidden;
+    min-height: 100vh;
+    font-family: var(--font-system);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* Grid background from pasted code */
+body::before {
+    --size: 45px;
+    --line: color-mix(in hsl, canvasText, transparent 80%);
+    content: '';
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    background:
+        linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size))
+            calc(var(--size) * 0.36) 50% / var(--size) var(--size),
+        linear-gradient(var(--line) 1px, transparent 1px var(--size))
+            0% calc(var(--size) * 0.32) / var(--size) var(--size);
+    mask: linear-gradient(-20deg, transparent 50%, white);
+    top: 0;
+    transform-style: flat;
+    pointer-events: none;
+    z-index: -1;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    color: inherit;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}

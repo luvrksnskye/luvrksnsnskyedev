@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Hexagonal radar chart -->
+  <g transform="translate(100, 100)">
+    <!-- Background hexagons -->
+    <polygon points="0,-70 60.6,-35 60.6,35 0,70 -60.6,35 -60.6,-35" stroke="rgba(255,255,255,0.1)" stroke-width="1" fill="none"/>
+    <polygon points="0,-50 43.3,-25 43.3,25 0,50 -43.3,25 -43.3,-25" stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none"/>
+    <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" stroke="rgba(255,255,255,0.2)" stroke-width="1" fill="none"/>
+    
+    <!-- Data shape -->
+    <polygon points="0,-55 51,-20 45,30 -5,45 -50,20 -40,-25" stroke="white" stroke-width="1.5" fill="rgba(255,255,255,0.08)"/>
+    
+    <!-- Data points -->
+    <circle cx="0" cy="-55" r="3" fill="white"/>
+    <circle cx="51" cy="-20" r="3" fill="white"/>
+    <circle cx="45" cy="30" r="3" fill="white"/>
+    <circle cx="-5" cy="45" r="3" fill="white"/>
+    <circle cx="-50" cy="20" r="3" fill="white"/>
+    <circle cx="-40" cy="-25" r="3" fill="white"/>
+    
+    <!-- Center point -->
+    <circle cx="0" cy="0" r="4" fill="white"/>
+  </g>
+  
+  <!-- Labels -->
+  <text x="100" y="20" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="7" text-anchor="middle" letter-spacing="0.1em">DESIGN</text>
+  <text x="175" y="75" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="7" text-anchor="middle" letter-spacing="0.1em">CODE</text>
+  <text x="175" y="145" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="7" text-anchor="middle" letter-spacing="0.1em">ART</text>
+  <text x="100" y="190" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="7" text-anchor="middle" letter-spacing="0.1em">UX</text>
+  <text x="25" y="145" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="7" text-anchor="middle" letter-spacing="0.1em">GAME</text>
+  <text x="25" y="75" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="7" text-anchor="middle" letter-spacing="0.1em">SYSTEM</text>
+</svg>

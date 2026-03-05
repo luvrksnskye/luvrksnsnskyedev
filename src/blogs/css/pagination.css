@@ -1,0 +1,198 @@
+/* =============================================
+   PAGINATION MODULE
+   Structure matches Document 6 pasted HTML:
+   .pagination > .pagination__list > .pagination__item
+   Progressive anchor with glass effects
+   ============================================= */
+
+.blog-pagination-wrap {
+    /* glass-container handles appearance */
+}
+
+.blog-pagination__content {
+    padding: 24px 36px;
+    flex-direction: column;
+}
+
+/* --- From Document 6 pasted: nav.pagination --- */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* --- From Document 6: ul.pagination__list --- */
+.pagination__list {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* --- From Document 6: li.pagination__item --- */
+.pagination__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- From Document 6: a.pagination__link --- */
+.pagination__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 6px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    text-decoration: none;
+}
+
+.pagination__link:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+.pagination__link:active {
+    transform: scale(0.92);
+    transition-duration: 0.12s;
+}
+
+/* --- From Document 6: .pagination__link--current --- */
+.pagination__link--current {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+    font-weight: 600;
+}
+
+/* Active page underline indicator */
+.pagination__link--current::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--accent-blue);
+    border-radius: 1px;
+    animation: paginationDot 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes paginationDot {
+    0%   { width: 0; opacity: 0; }
+    100% { width: 16px; opacity: 0.8; }
+}
+
+/* --- From Document 6: .pagination__link--arrow with SVG --- */
+.pagination__link--arrow {
+    color: var(--text-tertiary);
+}
+
+.pagination__link--arrow:hover {
+    color: var(--accent-blue);
+    background: rgba(180, 205, 255, 0.06);
+}
+
+.pagination__link--arrow[disabled],
+.pagination__link--arrow.disabled {
+    opacity: 0.25;
+    pointer-events: none;
+    cursor: default;
+}
+
+.pagination__link--arrow svg {
+    width: 10px;
+    height: 10px;
+}
+
+/* --- From Document 6: .pagination__gap with ellipsis --- */
+.pagination__gap {
+    min-width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination__link--gap {
+    font-size: 14px;
+    color: var(--text-tertiary);
+    letter-spacing: 2px;
+    line-height: 1;
+}
+
+/* --- From Document 6: .pagination__item--mobile-only --- */
+@media (min-width: 769px) {
+    .pagination__item--mobile-only {
+        display: none;
+    }
+}
+
+/* --- Reading progress bar --- */
+.pagination__progress {
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 1px;
+    overflow: hidden;
+}
+
+.pagination__progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-blue-bright));
+    border-radius: 1px;
+    width: 0%;
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- Page content transitions --- */
+.blog-page-content {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+    transition:
+        opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.blog-page-content--exiting {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(3px);
+}
+
+.blog-page-content--entering {
+    opacity: 0;
+    transform: translateY(-10px);
+    filter: blur(3px);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .blog-pagination-wrap {
+        padding: 20px 24px;
+    }
+
+    .pagination__link {
+        min-width: 34px;
+        height: 34px;
+        font-size: 13px;
+    }
+}

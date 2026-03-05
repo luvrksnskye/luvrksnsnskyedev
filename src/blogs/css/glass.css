@@ -1,0 +1,186 @@
+/* =============================================
+   GLASS MODULE
+   Enhanced with proximity-based shine intensity
+   driven by --shine-intensity CSS variable
+   ============================================= */
+
+:root {
+    --lg-bg-color: rgba(255, 255, 255, 0.04);
+    --lg-highlight: rgba(255, 255, 255, 0.85);
+    --lg-text: rgba(255, 255, 255, 0.75);
+}
+
+/* =============================================
+   GLASS CONTAINER
+   ============================================= */
+
+.glass-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--lg-bg-color);
+    border-radius: 2rem;
+    overflow: hidden;
+    flex: 1 1 auto;
+
+    box-shadow:
+        0 6px 6px rgba(32, 0, 81, 0.105),
+        0 0 20px rgba(0, 0, 0, 0.039);
+
+    color: var(--lg-text);
+
+    transition:
+        transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-container--rounded {
+    border-radius: 3rem;
+}
+
+/* =============================================
+   SHARED ABSOLUTE LAYERS
+   ============================================= */
+
+.glass-filter,
+.glass-overlay,
+.glass-specular {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+/* =============================================
+   BLUR LAYER (REAL GLASS BASE)
+   ============================================= */
+
+.glass-filter {
+    z-index: 0;
+
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+}
+
+/* =============================================
+   DISTORTION LAYER (SVG DISPLACEMENT)
+   ============================================= */
+
+.glass-overlay {
+    z-index: 1;
+
+    background: var(--lg-bg-color);
+
+    filter: url(#displacementFilter);
+    opacity: 0.9;
+}
+
+/* =============================================
+   SPECULAR HIGHLIGHT (PointerShine)
+   --pointer-angle set by pointer-shine.js
+   --shine-intensity set by pointer-shine.js (0..1)
+   Opacity scales with proximity for fluid feel
+   ============================================= */
+
+.glass-specular {
+    z-index: 2;
+
+    box-shadow:
+        inset 1px 1px 0 var(--lg-highlight),
+        inset 0 0 6px var(--lg-highlight);
+
+    opacity: calc(0.25 + var(--shine-intensity, 0) * 0.75);
+
+    mask: linear-gradient(
+        calc(var(--pointer-angle, 325) * 1deg),
+        rgba(255, 255, 255, 0.6),
+        rgba(255, 255, 255, 0.08) 30% 60%,
+        rgba(255, 255, 255, 0.95)
+    );
+
+    -webkit-mask: linear-gradient(
+        calc(var(--pointer-angle, 325) * 1deg),
+        rgba(255, 255, 255, 0.6),
+        rgba(255, 255, 255, 0.08) 30% 60%,
+        rgba(255, 255, 255, 0.95)
+    );
+
+    transition:
+        opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* =============================================
+   CONTENT LAYER
+   ============================================= */
+
+.glass-content {
+    position: relative;
+    z-index: 3;
+
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: space-around;
+
+    padding: 12px 28px;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    color: white;
+    text-shadow: 0 2px 6px rgba(14, 0, 56, 0.75);
+}
+
+/* =============================================
+   BORDER SHINE (GlassShine)
+   --shine-angle set by glass-shine.js
+   --shine-intensity set by glass-shine.js (0..1)
+   Smoother conic-gradient, proximity-modulated
+   ============================================= */
+
+.glass-shine::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+
+    background:
+        conic-gradient(
+            from calc(var(--shine-angle, 0) * 1deg),
+            transparent 0deg,
+            rgba(255, 255, 255, calc(0.25 + var(--shine-intensity, 0) * 0.55)) 25deg,
+            transparent 55deg,
+            rgba(255, 255, 255, calc(0.08 + var(--shine-intensity, 0) * 0.25)) 165deg,
+            transparent 195deg
+        );
+
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+
+    pointer-events: none;
+    opacity: calc(0.35 + var(--shine-intensity, 0) * 0.65);
+    transition: opacity 0.25s ease;
+}
+
+/* =============================================
+   HOVER LIFT EFFECT
+   ============================================= */
+
+.glass-container:hover {
+    box-shadow:
+        0 10px 16px rgba(30, 0, 54, 0.025),
+        0 0 28px rgba(33, 0, 51, 0.068);
+
+    transform: translateY(-2px);
+}
+
+
+#glass-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}

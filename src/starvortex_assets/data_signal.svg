@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 100" fill="none">
+  <!-- Signal waveform display -->
+  
+  <!-- Grid -->
+  <line x1="20" y1="25" x2="230" y2="25" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <line x1="20" y1="50" x2="230" y2="50" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+  <line x1="20" y1="75" x2="230" y2="75" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  
+  <!-- Waveform -->
+  <polyline 
+    points="20,50 35,35 45,60 55,40 70,55 85,30 100,65 115,45 130,50 145,35 160,55 175,40 190,60 205,45 220,50 230,50" 
+    stroke="white" 
+    stroke-width="1.5" 
+    fill="none"
+  />
+  
+  <!-- Data points glow -->
+  <circle cx="85" cy="30" r="2" fill="white"/>
+  <circle cx="100" cy="65" r="2" fill="white"/>
+  <circle cx="145" cy="35" r="2" fill="white"/>
+  
+  <!-- Labels -->
+  <text x="10" y="15" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="8" letter-spacing="0.1em">SIGNAL</text>
+  <text x="200" y="15" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="8" letter-spacing="0.1em">LIVE</text>
+  <circle cx="225" cy="12" r="3" fill="#00ff88">
+    <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Bottom data -->
+  <text x="20" y="92" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">FREQ: 432.7 Hz</text>
+  <text x="130" y="92" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">AMP: 0.847</text>
+</svg>

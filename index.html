@@ -1,0 +1,2748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyedev</title>
+    <meta name="description" content="Skye's portfolio lol">
+     <link rel="icon" type="image/x-icon" href="/src/assets/favicon_io/favicon.ico">
+<!-- Facebook Meta Tags -->
+<meta property="og:url" content="https://luvrksnsnskyedev.space/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Skyedev">
+<meta property="og:description" content="Skye's portfolio lol">
+<meta property="og:image" content="/src/assets/meta.png">
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="https://luvrksnsnskyedev.space/">
+<meta property="twitter:url" content="https://luvrksnsnskyedev.space/">
+<meta name="twitter:title" content="Skyedev">
+<meta name="twitter:description" content="Skye's portfolio lol">
+    <meta name="twitter:image" content="/src/assets/meta.png">
+    <link rel="stylesheet" href="/src/css/styles.css">
+    <link rel="stylesheet" href="/src/css/loader.css">
+    <link rel="stylesheet" href="/src/css/work.css">
+    <link rel="stylesheet" href="/src/css/responsive.css">
+    <link rel="stylesheet" href="/src/css/intro.css">
+    <link rel="stylesheet" href="/src/css/survivor-panel.css">
+    <link rel="stylesheet" href="/src/css/neural-network.css">
+
+</head>
+
+<body>
+
+<!-- ========================================
+                PRELOADER SCREEN
+     ======================================== -->
+<div id="preloader">
+    <div class="loader-wrapper">
+        <div id='loader'>
+            <div id='title' class='flex'>
+                <p class='loading-text'>LOADING</p>
+                <div class='therefore'>∴</div>
+                <p class="loading-number"><span id="loadPercent">0</span>%</p>
+            </div>
+            <div id='loading-bar-border'>
+                <div class='loading-bar' id="loadingBar"></div>
+            </div>
+            <div id='warning'>
+                <p>
+                    <span class='exclamation'>!</span>
+                    &nbsp; CAUTION, Do not turn off.
+                </p>
+                <div id='line-cascates'></div>
+            </div>
+            
+            <!-- Audio Prompt -->
+            <div class="audio-prompt" id="audioPrompt">
+                <div class="audio-icon">
+                    <img src="/src/assets/loading-audio.svg" alt="Audio">
+                </div>
+                <p class="audio-text">TAP TO ENABLE SOUND</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <!-- SVG Filters -->
+  <svg style="display:none;">
+        <filter id="displacementFilter">
+            <feImage href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAA9hAAAPYQGoP6dpAAAMoElEQVRogZ1a3ZqjyI6MkBJc3XOz7/+g+53pMoq9kJQk2K6Zs0yNGzAG/UQFSgn+/r0PYpCD2IEH+SA/yIdZfj6MD9pu3M02cjMb5KC50cycNBoJ0kiCJKn8BEWCACgCAkAAIAhQAGAAIRccNGIDBjCADdilHdilh/QAH9AX+DA+yN1sM9vAYRw2SIKg1dNJkm61Y0YzGkmDGc1A0og8JEGT1Q1gBCkQJEgArENgCi4QFDR1AABIAEEJggAIECRJogBJeblIkLK0AUEOjpQUBMzMyPk/naTRUvTUgTQDjWZESmxgfgJGIA8poE62+HNHvSeJedzngdYgZZaASNepr1HelgQhYthuhjKrpaBmrP+MZuUHt9IqP9mKWnkEZiAxzc8UkgQFkDzFLAeohZJw7qh3InRAIYYUQAhBCOVStauHbaTBQXMaPWV2L4Sb08ytxPUS1wxmaftohIEX0QkT076Fe1UcZExISB3Uhp3Ctw9CSt0i2jMSKCKmP4nBB70AYsbEudtwcx++DR/DbJi7mafh6WVs2sSPQJql+Zmxm9Y/kVPSsw1OlB/K3gIhEwI4ICqDO47QM8Lj2BShCFHMCEmTaPhXYd5TBXN3H2N/7PtjezzG/nDfzDe6kw66+cRQBsQKfaSLK2RXBU6Y84SSFtwrhCOjNcULAaEIHId/f38f37tCoQAEBCBQ0uCXO+E0N7rb5j58e+y/f339/v3462t7bDaGuTMZkwZ6RgBIEvk50d/Si1DGMi8KqHVicc8ZstEIknBAh3Aojjjw/Obzb/v7z/78ez9CVAhKiAHDv8qYLPSPfX/8+vX719f//Nr/2rd9s+FWdOPNWCk9KzpZzM7Cjdr2J0+CnPSji+yEAATAPqeCO0IRccTzie9tH//7/A+ex98hISoeAhr2SCah08wSPV/7778eX3899t/DNrdJnMVXGapW4hbceSLnZP4VP9P20jw76afUUAMqACkkQYPb+OP8j8WXjnhGxHFECBQEcPCr2JFGp49tG4992x/742GeadcIFNXgBE3zQJ1sE99wX0Q/sbXkrsvRCa+ZCxonh/jc9Y3vZ4yDT4UiEJLIkIZ9mYFmNtLGw20bY9vMh/mocAVViM/Yb7uDInlyJRfEL9C/RO881HJGEFtZQJnBLc8LDBwxxrF7wCNiZmmBw3abGcvo5u6bcTg9MzEh4sXkrUMVBLwY/oV83m7pNgEpO1sNZDSUtWAZL6ag3GKjghIVRabDdzeaZx6AmRs35yCsLTq5pUHPhW1O/LwXnauVr1t7RQuvcuYHAKpUSIYgMzkhyiAwQkWjtruDltUlRuZf+qx/WCiZ9cdCO9OQn23fmp940eUrCMwgpgArNVQRiqo5YJBn8UGJQEAsCPnmDnoXOk7H8CQm2Mru09LzD1cs/ajAaXV79cUstZupqoA6CcsIIZyiEIiqMxJCw410ZJ5y0tyJTrbT0h20L9J/9MNVE85/rrFbUs4I4HpeVXJKAVlWIQxrjpJEDPOytlkyvaOL0AUti7icKt00WSR+5SKhi5eVTtdMrdUH0kJveRElL29nJi4P2Kh1SqcqTvzwLmsF9Sn0xwC4UdDbzHaTm7WqqeDOmpuiQCIaRVVr5dIHQHmgFlqmWqmwFll5La/QZ+P61Q/9mUkNpzxX2c8lzZReaJOvsdCHygVAUAYJwUxzDGDQ5wLRDEZ5umHlnKvtL5iZCe6uxksk36XXTb1Xn+R9VKkzuSgoEmZSZOk0LFcyuSYrD3T4LtIvbHMR9L0H3oTvi+3Lf1otnd92NPfCIRc7hGSy6hXUugwYtQyWmVmulgm78D1XWW5S/iD9HezvtlfpZ3CXDmWlJCMjZAELSvAswIeZTfxkAjtDtrI9X2RdDf9WsZv9Lwb+IDcnVXE9vER/rvVy0Vc5wgzu8FMHeHqA5++4yLJq8rMTbpd90vPyqeVQ19/OsiI/xVozDaMbaLLsmWR3oYJmeeQ1Kv9RxJsf5vaD7W/kc95B/XlKn9eQgHJ9PkU3g6E8cIoyeeaKnFWTH3b+q1D5IXJOL6kWxBRg7GZVU03uGLhQp2636SB58+BXV9xUvetzWyq8/Xk7YWny9WaE5anknyyrVgy+M+fbJ93M/Oknr9sPqHvxku7ONCBbUGwdzr+K/PePfCv6W7F+UO9ywZuc9vLzeU35ROgYmDpk1/WN+f/l9paLflCPL6fOMwu6lLUbs4brOABglKXQldl62f7JBv8k+n+98ePRHauq/kXvIxWoFmGmYauerz5J/BoDc9PLlf8k7Rs/XPsU77cmeBGAUYQKQiV9k8+rT3/cbpe9fbxeD/Xm/PvnMoXXSYwUzJr1iTlamYy7pvJ/3N4uFOff/2Ob04OWWK8eaw6d31GmPqTeWv+tl+/08Gnh+7r/zxZqSjmlLLUEcXRqarqYJe3lQe+f8qKgfoyKtzp8MsFlu4ZdO0UkZZgeOlsCuCpx2X138hXZPwfAv0fUTKtYhWq6zPCtb7he11HwD0Lw5cz1UJ8NfH7qZyeUDDUUnAzTa1blWOUknHzmOVJ70eEDRG5i3aDy0fYXTjnFAq5wB9AzsbZtMiY1ijKN6hblyaB97+Ve1XA6EyT4Y0n8ul2Uud58VeyycyV1nRASLBXJYpt2XQW8mutFgs+k9IlVbzv3Gy6EeOqmU/pe8mbdbBhFpPOurGKjdU87lYG7WwNBOX2vFSBnUEwP4IMTrvpXE1TvKPvs5FNIwukUm01zGDBy7Jfd1e43anJv31arC+uwwr+/Onmre5pamw7vdVhgevfJ+txqRVmPPxMvIsAhx5nS1U3hALITebFKD0bvlsbd8BcS+yj9y7darFAgWNfm2U8x5mqrwD7gU/wUUTUwj1sqTqtnHJ9d2G4itL2n7d6IfhX0JLv3V5Zz2HFnVXUmU3bvhINeaqdzJPEQONvgN0yfcXU+pn/auJrS/FjecbJQBcPCp7XPs0gQTTVZNvasUSQGvSdb1TVtrUO3x7bNl4nQyaq44Gr96RrPd1C9wImn9OdTa34LmuiiJ51EQYhb1qHdwIq2ztoau2eAoiau2p3Mpbvpb85YvMSrDpwj5v66gQQ6MECHeQ6ZSMCoga3SQiKfQQAIQmd1NAclyoyIOdW9RsgFJG9TyXLBawDwclkzppj8YzIXh+DZfcjFlw2NnJaVDnFAggIIN7KmSwzI/UUFks2/fQSvoust33WZk5lAdDB0X+A2cwDe1JP5i/CJECHEksFHS3PzmUGm4h068JqccZE1HL+1SFr3F/VKD8Q5qmAbAcd3UAXwIGHEMzkq5CegqQnFKpUgJo9vFD/VeiLGlex1mi+A+ZF9NlcQOEaBpg4xB3cZCNbo6kDB/bm5chJpwKBI6QIhcmkGvEs8vdsKSPijt77diEprqGPnsqAKFqsHEhgzvgsfMi2sE22ywaybCNAw+DeHkvMuALHoe8Dw2k6OqwZC7+tcQzcC5nGUI3dsfiIa52FHmrPYE2TlAsV2bEaI3w8t8cxHoc/wAFI9Gq0D37RauhBShrS0GHHk9/m8OdQ0MFDsE4UBEw43wZIyS4R/NEPtd+/5Aqk2VojDNnmj0GN7bnvf/Zff7avw7fDh5w01GuSg49eKgQA46E4jm//5gb+ifh+ejBkFhXQJhgQoqWZZqu76sEzF826SZp+KKyzxZ3Qz4ZUNacgJ5wYjM31tT9/7X++Ht/b4+kuOskga4w3+EVEY0OKgAmxP78fgvPYTzuCLrhgwXrzol8ctO71sVj4bMovpYYWQBHz336jlN0ezL6aQ8MwKCc2xu56+PPXFvv2HEOVELrhT8PQXgFTr6+IEXEsxHEwQgc8KEABE0aVLTAxXxJL+J3NvJM/EiWFk7N862ivV0t7oIKckEKDGIQzdtcG7B4P0/AYLmOQSPTnRIPkwKOKgswDqnqUETpCQL2JR5ChrFBTn9RWUitASvqauGoU9QtAlRNmbZPrlLJ9v5QLGTEMngHgcmKYzETO+VdOISlhxKNeAGE6PtOWIrkpJ+IUQjLNfKekpXRFLbVbh8XOXX0vyOl1d2eMjKosgZofsnYAROtpmFULEcsMGDASQ3t6WpbLmJyCZySklFAIEcpXOxkpgBigGIBJyPrql4e5p+aXtUaizhfCiX7Pes7UaSJIE7C8nFrXdAPU5uyCAIe2IoyADMwJeOK7DV8LnNyvMjtfyy78GM7XPc8grfeje2mFfqdO6CbURRLAquggOeXukJ2pF0V4pwIjpotzdFw4yUIi+iXIwo9KpWg+73FDgUL9YnSTEdfVLuv1MhE2XyrlJCXjgiLU6AXovAsqybPKAlHA/wH75uVy+EFM3wAAAABJRU5ErkJggg==" 
+                    preserveAspectRatio="none" />
+
+            <feDisplacementMap in="SourceGraphic"
+                in2="turbulence"    
+                            scale="200" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
+
+
+    <!-- Video Background -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="/src/assets/bg/bg-alt.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="mainNav">
+        <ul class="nav-menu">
+            <div class="nav-indicator-bg"></div>
+            <li class="nav-item">
+                <a href="" class="nav-link active" data-page="home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a href="" class="nav-link" data-page="about">About</a>
+            </li>
+            <li class="nav-item">
+                <a href="" class="nav-link" data-page="work">Work</a>
+            </li>
+            <li class="nav-item">
+                <a href="" class="nav-link" data-page="contact">Contact</a>
+            </li>
+        </ul>
+    </nav>
+
+
+<div class="stellar-intro" id="stellarIntro">
+  <div class="skip-indicator" id="skipIndicator">
+    <div class="skip-bracket left">
+      [
+    </div>
+    <div class="skip-content">
+      <svg class="skip-icon" viewbox="0 0 24 24">
+        <rect x="4" y="4" width="6" height="16" rx="1" fill="currentColor"></rect>
+        <rect x="14" y="4" width="6" height="16" rx="1" fill="currentColor"></rect>
+      </svg>
+      <span class="skip-text">HOLD SPACE TO SKIP</span>
+      <div class="skip-bar"></div>
+    </div>
+    <div class="skip-bracket right">
+      ]
+    </div>
+  </div>
+
+  <!-- PHASE 1: VOICE AUTHENTICATION -->
+  <div class="intro-phase phase-voice" id="phaseVoice">
+    <div class="voice-container">
+      <div class="ai-voice-visualizer">
+        <div class="voice-core">
+          <div class="core-ring ring-1"></div>
+          <div class="core-ring ring-2"></div>
+          <div class="core-ring ring-3"></div>
+          <div class="core-pulse"></div>
+        </div>
+      </div>
+      <div class="subtitle-container">
+        <div class="subtitle-brackets">
+          <span class="bracket-left">‹</span>
+          <p class="subtitle-text" id="subtitleText"></p>
+          <span class="bracket-right">›</span>
+        </div>
+        <div class="subtitle-line"></div>
+      </div>
+      <div class="voice-status">
+        <div class="status-dot"></div>
+        <span class="status-label">VOICE RECOGNITION ACTIVE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 2: DATA VISUALIZATION -->
+  <div class="intro-phase phase-data" id="phaseData">
+    <div class="data-container">
+      <div class="hud-corner top-left">
+        <svg viewbox="0 0 50 50">
+          <path d="M0 25 L0 5 L5 0 L25 0" fill="none" stroke="currentColor" stroke-width="1"></path>
+        </svg>
+      </div>
+      <div class="hud-corner top-right">
+        <svg viewbox="0 0 50 50">
+          <path d="M50 25 L50 5 L45 0 L25 0" fill="none" stroke="currentColor" stroke-width="1"></path>
+        </svg>
+      </div>
+      <div class="hud-corner bottom-left">
+        <svg viewbox="0 0 50 50">
+          <path d="M0 25 L0 45 L5 50 L25 50" fill="none" stroke="currentColor" stroke-width="1"></path>
+        </svg>
+      </div>
+      <div class="hud-corner bottom-right">
+        <svg viewbox="0 0 50 50">
+          <path d="M50 25 L50 45 L45 50 L25 50" fill="none" stroke="currentColor" stroke-width="1"></path>
+        </svg>
+      </div>
+      <div class="data-header">
+        <div class="header-left">
+          <div class="header-icon-box">
+            <svg class="header-icon" viewbox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"></circle>
+              <circle cx="12" cy="12" r="3" fill="currentColor"></circle>
+            </svg>
+          </div>
+          <span class="header-label">STELLAR COMMAND</span>
+          <div class="header-line"></div>
+          <span class="header-sub">CRYO-ANALYSIS UNIT</span>
+        </div>
+        <div class="header-right">
+          <span class="header-time" id="dataTime">2090.03.15</span>
+          <div class="header-divider"></div>
+          <span class="header-status">SYSTEM ONLINE</span>
+        </div>
+      </div>
+      <div class="medical-section">
+        <div class="scan-header">
+          <div class="scan-icon">
+            <svg viewbox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1"></rect>
+              <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="0.5" opacity="0.5"></line>
+              <line x1="12" y1="3" x2="12" y2="21" stroke="currentColor" stroke-width="0.5" opacity="0.5"></line>
+            </svg>
+          </div>
+          <span class="scan-label">CRYO-STASIS ANALYSIS</span>
+          <div class="scan-progress">
+            <div class="progress-fill" id="scanProgress"></div>
+            <div class="progress-glow"></div>
+          </div>
+          <span class="scan-percent" id="scanPercent">0%</span>
+        </div>
+        <div class="scan-grid">
+          <div class="data-readouts">
+            <div class="readout-item" data-reveal="1">
+              <div class="readout-header">
+                <span class="readout-id">01</span>
+                <span class="readout-label">STASIS DURATION</span>
+              </div>
+              <span class="readout-value scramble-data">PROLONGED</span>
+              <div class="readout-bar">
+                <div class="bar-fill" style="--fill: 87%"></div>
+              </div>
+            </div>
+            <div class="readout-item" data-reveal="2">
+              <div class="readout-header">
+                <span class="readout-id">02</span>
+                <span class="readout-label">MEMORY INTEGRITY</span>
+              </div>
+              <span class="readout-value scramble-data">DRIFT DETECTED</span>
+              <div class="readout-bar">
+                <div class="bar-fill warning" style="--fill: 62%"></div>
+              </div>
+            </div>
+            <div class="readout-item" data-reveal="3">
+              <div class="readout-header">
+                <span class="readout-id">03</span>
+                <span class="readout-label">TEMPORAL SYNC</span>
+              </div>
+              <span class="readout-value scramble-data">MINOR GAPS</span>
+              <div class="readout-bar">
+                <div class="bar-fill" style="--fill: 78%"></div>
+              </div>
+            </div>
+            <div class="readout-item" data-reveal="4">
+              <div class="readout-header">
+                <span class="readout-id">04</span>
+                <span class="readout-label">NEURAL ACTIVITY</span>
+              </div>
+              <span class="readout-value scramble-data">ELEVATED</span>
+              <div class="readout-bar">
+                <div class="bar-fill success" style="--fill: 94%"></div>
+              </div>
+            </div>
+            <div class="readout-item" data-reveal="5">
+              <div class="readout-header">
+                <span class="readout-id">05</span>
+                <span class="readout-label">CREATIVE CORTEX</span>
+              </div>
+              <span class="readout-value scramble-data">HIGHLY RESPONSIVE</span>
+              <div class="readout-bar">
+                <div class="bar-fill success" style="--fill: 98%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="status-display">
+            <div class="status-box" id="statusBox">
+              <div class="status-header">
+                <div class="status-icon-wrap">
+                  <span class="status-icon">!</span>
+                </div>
+                <span class="status-title">ANALYSIS REPORT</span>
+                <span class="status-code">REF: SKY-2090-CRY</span>
+              </div>
+              <div class="status-content">
+                <p class="status-line" id="statusLine1"></p>
+                <p class="status-line" id="statusLine2"></p>
+                <p class="status-line" id="statusLine3"></p>
+              </div>
+              <div class="status-footer">
+                <div class="status-dots"></div>
+                <span class="status-stamp">VERIFIED</span>
+              </div>
+            </div>
+            <div class="percentage-ring">
+              <svg viewbox="0 0 120 120">
+                <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"></circle>
+                <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-dasharray="339.292" stroke-dashoffset="339.292" id="progressRing" transform="rotate(-90 60 60)"></circle>
+                <circle cx="60" cy="60" r="45" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"></circle>
+              </svg>
+              <div class="percentage-value">
+                <span class="percent-num" id="percentNum">0</span>
+                <span class="percent-sign">%</span>
+              </div>
+            </div>
+          </div>
+          <div class="system-info">
+            <div class="info-block" data-reveal="1">
+              <span class="info-label">YEAR</span>
+              <span class="info-value large">2090</span>
+              <div class="info-underline"></div>
+            </div>
+            <div class="info-block" data-reveal="2">
+              <span class="info-label">EARTH STATUS</span>
+              <span class="info-value">POP: INCREASED</span>
+              <span class="info-sub">ATTN: DECREASED</span>
+              <div class="info-underline"></div>
+            </div>
+            <div class="info-block" data-reveal="3">
+              <span class="info-label">SIGNAL STATUS</span>
+              <span class="info-value warning">SATURATION CRITICAL</span>
+              <div class="info-underline"></div>
+            </div>
+            <div class="info-block" data-reveal="4">
+              <span class="info-label">CREATIVITY INDEX</span>
+              <span class="info-value success">RARE ASSET</span>
+              <div class="info-underline"></div>
+            </div>
+          </div>
+        </div>
+        <div class="data-subtitle-container">
+          <div class="subtitle-line-left"></div>
+          <p class="data-subtitle" id="dataSubtitle"></p>
+          <div class="subtitle-line-right"></div>
+        </div>
+      </div>
+      <div class="data-footer">
+        <div class="footer-left">
+          <div class="footer-bracket">
+            [
+          </div>
+          <span class="footer-label">STELLAR NAVIGATION</span>
+          <div class="footer-bracket">
+            ]
+          </div>
+        </div>
+        <div class="footer-center">
+          <div class="footer-line"></div>
+          <div class="footer-dots"></div>
+          <div class="footer-line"></div>
+        </div>
+        <div class="footer-right">
+          <span class="footer-coord">35.7120°N</span>
+          <span class="footer-divider">/</span>
+          <span class="footer-coord">139.7876°E</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 3: TERRAIN VISUALIZATION -->
+  <div class="intro-phase phase-globe" id="phaseGlobe">
+    <div class="globe-container">
+      <canvas id="terrainCanvas" class="centered-canvas"></canvas>
+      <div class="globe-hud">
+        <div class="globe-header">
+          <div class="globe-header-left">
+            <div class="globe-icon">
+              <svg viewbox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"></circle>
+                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" fill="none" stroke="currentColor" stroke-width="1"></path>
+              </svg>
+            </div>
+            <span class="globe-label">GLOBAL TERRAIN SCAN</span>
+          </div>
+          <div class="globe-header-right">
+            <span class="globe-status">MAPPING</span>
+            <div class="status-blink"></div>
+          </div>
+        </div>
+        <div class="globe-scan-data">
+          <div class="scan-item" data-reveal="1">
+            <div class="scan-dot"></div>
+            <span class="scan-text">ELEVATION: STABLE</span>
+          </div>
+          <div class="scan-item" data-reveal="2">
+            <div class="scan-dot"></div>
+            <span class="scan-text">TERRAIN: ROUGH</span>
+          </div>
+          <div class="scan-item" data-reveal="3">
+            <div class="scan-dot success"></div>
+            <span class="scan-text">ATMOSPHERE: BREATHABLE</span>
+          </div>
+          <div class="scan-item" data-reveal="4">
+            <div class="scan-dot warning"></div>
+            <span class="scan-text">WEATHER: UNSTABLE</span>
+          </div>
+          <div class="scan-item" data-reveal="5">
+            <div class="scan-dot success"></div>
+            <span class="scan-text">SIGNAL: STRONG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 3b: EARTH VISUALIZATION (CATASTROPHE) -->
+<!-- PHASE 3b: EARTH VISUALIZATION (CATASTROPHE) -->
+<div class="intro-phase phase-earth" id="phaseEarth">
+  <!-- Earth Header HUD -->
+  <div class="earth-header-hud">
+    <div class="earth-header-top">
+      <div class="header-section-left">
+        <div class="system-status">
+          <span class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.5V9M15 7.5L9 6V8L15 9M7 18A2 2 0 0 1 5 16H3V14H5C5 12.9 5.9 12 7 12S9 12.9 9 14V16C9 17.1 8.1 18 7 18Z"/>
+              <circle cx="12" cy="16" r="2"/>
+            </svg>
+          </span>
+          <span class="status-text">ACTIVE</span>
+        </div>
+        <div class="timestamp">
+          <span class="timestamp-label">UTC</span>
+          <span class="timestamp-value" id="earth-timestamp">--:--:--</span>
+        </div>
+      </div>
+      
+      <div class="header-section-center">
+        <div class="mission-title">
+          <div class="title-line"></div>
+          <h1 class="main-title">◢ PLANETARY SURVEILLANCE ◤</h1>
+          <div class="title-line"></div>
+        </div>
+        <div class="mission-subtitle">
+          <span class="bracket">⟨</span>
+          <span class="subtitle-text">CATASTROPHIC EVENT MONITORING</span>
+          <span class="bracket">⟩</span>
+        </div>
+      </div>
+      
+      <div class="header-section-right">
+        <div class="network-status">
+          <span class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M1 9L9 5L13 6.89L22.39 3.6L23 5.4L14 8.69L9 7L3 10L1 9M6 12L2 14L4 15L8 13L6 12M22 11.5C22 11.78 21.97 12.05 21.92 12.31L20.5 12.5L21.92 12.69C21.97 12.95 22 13.22 22 13.5C22 15.71 20.21 17.5 18 17.5C17.81 17.5 17.62 17.47 17.45 17.43L16.87 16.85C16.91 16.9 16.95 16.95 17 17C17.55 17 18 16.55 18 16S17.55 15 17 15 16 15.45 16 16C16 16.05 16.05 16.09 16.1 16.13L15.52 16.71C15.36 16.5 15.19 16.31 15 16.14V14.5C15.58 14.19 16 13.61 16 13C16 12.17 15.33 11.5 14.5 11.5S13 12.17 13 13C13 13.61 13.42 14.19 14 14.5V16.14C13.64 16.37 13.32 16.66 13.07 17H12V19H15.5C16.88 19 18 17.88 18 16.5C18 16.41 17.99 16.32 17.98 16.23L18.87 15.34C19.24 15.06 19.55 14.71 19.78 14.31L20.5 14.5C20.19 15.89 19.11 17 17.78 17.5L18.22 18.5C20.11 17.91 21.5 16.11 21.78 14H22.72C22.25 18.58 18.58 22.25 14 22.72V21.78C17.39 21.32 20.18 18.61 20.72 15.22H20.5L19.78 15.69C19.55 15.29 19.24 14.94 18.87 14.66L17.98 15.77C17.99 15.68 18 15.59 18 15.5C18 14.12 16.88 13 15.5 13H12V11H13.07C13.32 10.34 13.64 9.63 14 9.86V11.5C13.42 11.81 13 12.39 13 13C13 13.83 13.67 14.5 14.5 14.5S16 13.83 16 13C16 12.39 15.58 11.81 15 11.5V9.86C15.19 9.69 15.36 9.5 15.52 9.29L16.1 9.87C16.05 9.91 16 9.95 16 10C16 10.55 16.45 11 17 11S18 10.55 18 10 17.55 9 17 9C16.95 9 16.91 9.1 16.87 9.15L16.29 8.57C16.47 8.38 16.62 8.19 16.74 7.98L17.45 8.69C17.62 8.65 17.81 8.62 18 8.62C20.21 8.62 22 10.41 22 12.62Z"/>
+            </svg>
+          </span>
+          <span class="network-text">UPLINK</span>
+        </div>
+        <div class="security-level">
+          <span class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11C15.4,11 16,11.4 16,12V16C16,16.6 15.6,17 15,17H9C8.4,17 8,16.6 8,16V12C8,11.4 8.4,11 9,11V10C9,8.6 10.6,7 12,7M12,8.2C11.2,8.2 10.2,9.2 10.2,10V11H13.8V10C13.8,9.2 12.8,8.2 12,8.2Z"/>
+            </svg>
+          </span>
+          <span class="security-text">CLASSIFIED</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="earth-header-bottom">
+      <div class="scan-progress-container">
+        <div class="scan-label">⟪ ORBITAL SCAN PROGRESS ⟫</div>
+        <div class="scan-bar">
+          <div class="scan-fill" id="earth-scan-progress"></div>
+          <div class="scan-glow"></div>
+        </div>
+        <div class="scan-percentage" id="earth-scan-percent">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="earth-container">
+    <!-- Left Panel - Enhanced -->
+    <div class="earth-panel-left">
+      <div class="panel-header-enhanced">
+        <div class="tech-icon panel-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/>
+          </svg>
+        </div>
+        <div class="panel-title-group">
+          <h2 class="panel-title">SYSTEM STATUS</h2>
+          <div class="panel-subtitle">PRIMARY SENSORS</div>
+        </div>
+        <div class="panel-status-dot"></div>
+      </div>
+      
+      <div class="panel-content-enhanced">
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">SIGNAL STRENGTH</span>
+            <span class="data-value status-ok">98.7% STABLE</span>
+            <div class="data-bar">
+              <div class="bar-fill" style="width: 98.7%;"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,2A2,2 0 0,1 14,4C14,4.74 13.6,5.39 13,5.73V7H14A7,7 0 0,1 21,14H22A1,1 0 0,1 23,15V18A1,1 0 0,1 22,19H21A7,7 0 0,1 14,26H10A7,7 0 0,1 3,19H2A1,1 0 0,1 1,18V15A1,1 0 0,1 2,14H3A7,7 0 0,1 10,7H11V5.73C10.4,5.39 10,4.74 10,4A2,2 0 0,1 12,2M12,4A0,0 0 0,0 12,4A0,0 0 0,0 12,4M7,9A5,5 0 0,0 2,14V17H3A5,5 0 0,0 8,22H16A5,5 0 0,0 21,17H22V14A5,5 0 0,0 17,9H7M8,11H16A3,3 0 0,1 19,14V15H18A3,3 0 0,1 15,12H9A3,3 0 0,1 6,15H5V14A3,3 0 0,1 8,11Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">ORBITAL STATUS</span>
+            <span class="data-value status-ok">SYNCHRONOUS</span>
+            <div class="data-detail">ALT: 35,786 KM</div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.42 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.42 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">LIFE SIGNS</span>
+            <span class="data-value status-warning">7.8B DETECTED</span>
+            <div class="data-detail">BIOSIG: NOMINAL</div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M15 13V5A3 3 0 0 0 9 5V13A5 5 0 1 0 15 13M12 4A1 1 0 0 1 13 5V8H11V5A1 1 0 0 1 12 4Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">SURFACE TEMP</span>
+            <span class="data-value status-warning">+1.2°C ANOMALY</span>
+            <div class="data-detail">TREND: RISING</div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,2C13.1,2 14,2.9 14,4C14,5.1 13.1,6 12,6C10.9,6 10,5.1 10,4C10,2.9 10.9,2 12,2ZM21,9V7L15,7.5V9M15,7.5L9,6V8L15,9M7,18A2,2 0 0,1 5,16H3V14H5C5,12.9 5.9,12 7,12S9,12.9 9,14V16C9,17.1 8.1,18 7,18Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">ENERGY LEVELS</span>
+            <span class="data-value status-critical">FLUCTUATING</span>
+            <div class="data-detail">SOURCE: UNKNOWN</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="panel-footer">
+        <div class="footer-status">
+          <span class="status-dots">
+            <span class="dot active"></span>
+            <span class="dot active"></span>
+            <span class="dot warning"></span>
+          </span>
+          <span class="footer-text">3/5 NOMINAL</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earth Canvas -->
+    <canvas id="earthCanvas" class="centered-canvas"></canvas>
+
+    <!-- Right Panel - Enhanced -->
+    <div class="earth-panel-right">
+      <div class="panel-header-enhanced">
+        <div class="tech-icon panel-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22S19,14.25 19,9A7,7 0 0,0 12,2Z"/>
+          </svg>
+        </div>
+        <div class="panel-title-group">
+          <h2 class="panel-title">EVENT DATA</h2>
+          <div class="panel-subtitle">CATASTROPHIC ANALYSIS</div>
+        </div>
+        <div class="panel-status-dot warning"></div>
+      </div>
+      
+      <div class="panel-content-enhanced">
+        <div class="data-block critical">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">THREAT LEVEL</span>
+            <span class="data-value status-critical">EXTREME</span>
+            <div class="data-detail">CLASS: GLOBAL</div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16,6L18.29,8.29L13.41,13.17L9.41,9.17L2,16.59L3.41,18L9.41,12L13.41,16L19.71,9.71L22,12V6H16Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">MAGNITUDE</span>
+            <span class="data-value" id="earth-mag-data">CALCULATING...</span>
+            <div class="data-detail">SCALE: RICHTER</div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,2C13.1,2 14,2.9 14,4C14,5.1 13.1,6 12,6C10.9,6 10,5.1 10,4C10,2.9 10.9,2 12,2ZM21,9V7L15,7.5V9M15,7.5L9,6V8L15,9M7,18A2,2 0 0,1 5,16H3V14H5C5,12.9 5.9,12 7,12S9,12.9 9,14V16C9,17.1 8.1,18 7,18Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">EPICENTER</span>
+            <span class="data-value" id="earth-region-data">SCANNING...</span>
+            <div class="data-detail">COORD: PENDING</div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19M19,6H5V5H19V6Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">TIMESTAMP</span>
+            <span class="data-value" id="earth-year-data">ANALYZING...</span>
+            <div class="data-detail">TZ: UNIVERSAL</div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">CASUALTIES</span>
+            <span class="data-value status-critical" id="earth-casualties">ESTIMATING...</span>
+            <div class="data-detail">CONF: HIGH</div>
+          </div>
+        </div>
+        
+        <div class="data-block">
+          <div class="tech-icon data-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M11,7H13V13H11V7M11,15H13V17H11V15Z"/>
+            </svg>
+          </div>
+          <div class="data-info">
+            <span class="data-label">ALERT STATUS</span>
+            <span class="data-value status-critical">CODE RED</span>
+            <div class="data-detail">AUTO: TRIGGERED</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="panel-footer">
+        <div class="footer-status">
+          <span class="status-dots">
+            <span class="dot critical"></span>
+            <span class="dot critical"></span>
+            <span class="dot critical"></span>
+          </span>
+          <span class="footer-text">CRITICAL</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Bottom HUD Bar -->
+  <div class="earth-bottom-hud">
+    <div class="bottom-left">
+      <span class="hud-text">◤ GLOBAL MONITORING STATION</span>
+      <span class="hud-divider">⬢</span>
+      <span class="hud-text">DEFCON 1</span>
+    </div>
+    <div class="bottom-center">
+      <div class="pulse-indicator">
+        <span class="pulse-dot"></span>
+        <span class="pulse-text">LIVE FEED</span>
+      </div>
+    </div>
+    <div class="bottom-right">
+      <span class="hud-text">CLEARANCE: OMEGA</span>
+      <span class="hud-divider">⬢</span>
+      <span class="hud-text">◥ CLASSIFIED</span>
+    </div>
+  </div>
+</div>
+<!-- END PHASE 3b -->
+
+
+<!-- PHASE: NEURAL NETWORK VISUALIZATION -->
+<!-- me costo un webo hacer esto-->
+
+<div id="phaseNeuralNetwork" class="intro-phase phase-neural-network">
+    
+    <header class="cv-header">
+        <div class="cv-logo">CORTEX<sub>STARVORTEX</sub></div>
+        <div class="cv-header-center"><div class="cv-hbar"><div class="cv-hbar-fill"></div></div></div>
+        <div class="cv-header-right">BLACKOPS</div>
+    </header>
+
+    <div class="cv-main">
+        <aside class="cv-left">
+            <div>
+                <div class="cv-panel-title">SYSTEM</div>
+                <div class="cv-nums"><span>486274</span><span>1792</span><span>49400864</span></div>
+            </div>
+            <div>
+                <div class="cv-panel-title">SIGNAL</div>
+                <div class="cv-bars">
+                    <div class="cv-bar-row"><div class="cv-bar h100 bright"></div><div class="cv-bar h60"></div><div class="cv-bar h80 bright"></div><div class="cv-bar h40"></div></div>
+                    <div class="cv-bar-row"><div class="cv-bar h60"></div><div class="cv-bar h100 bright"></div><div class="cv-bar h40"></div><div class="cv-bar h80"></div></div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="cv-viewport" id="cvViewport">
+            <div class="cv-grid"></div>
+            <div class="cv-scanlines"></div>
+            
+            <div class="cv-zoom">
+                <button class="cv-zoom-btn" id="cvZoomIn">+</button>
+                <button class="cv-zoom-btn" id="cvZoomOut">−</button>
+                <button class="cv-zoom-btn" id="cvZoomReset">⟲</button>
+                <div class="cv-zoom-lvl" id="cvZoomLvl">100%</div>
+            </div>
+
+            <div class="cv-stats">
+                <div class="cv-stat-row"><span class="cv-stat-label">NODES</span><span class="cv-stat-value" id="nodeCount">0</span></div>
+                <div class="cv-stat-row"><span class="cv-stat-label">LINKS</span><span class="cv-stat-value" id="edgeCount">0</span></div>
+                <div class="cv-stat-row"><span class="cv-stat-label">CRITICAL</span><span class="cv-stat-value" id="criticalCount">0</span></div>
+            </div>
+
+            <div class="cv-node-info" id="cvNodeInfo">
+                <div class="cv-node-info-title">NODE</div>
+                <div class="cv-node-info-row"><span class="cv-node-info-label">STATUS</span><span class="cv-node-info-value">--</span></div>
+                <div class="cv-node-info-row"><span class="cv-node-info-label">LINKS</span><span class="cv-node-info-value">--</span></div>
+                <div class="cv-node-info-row"><span class="cv-node-info-label">SECTOR</span><span class="cv-node-info-value">--</span></div>
+            </div>
+
+            <div class="cv-subtitle-wrap"><div class="cv-subtitle" id="cvSubtitle"></div></div>
+        </div>
+
+        <aside class="cv-right">
+            <div class="cv-panel-title">STATUS</div>
+            <div class="cv-status-grid" id="statusGrid"></div>
+            <div class="cv-panel-title">SECTORS</div>
+            <div class="cv-matrix"><span>CX</span><span>LB</span><span>MT</span><span>SN</span><span>MM</span><span>PR</span><span>CT</span><span>NR</span></div>
+        </aside>
+    </div>
+
+    <footer class="cv-footer">
+        <div class="cv-footer-left"><span>UPTIME</span><div class="cv-time-bar"><div class="cv-time-fill" id="cvTimeFill"></div></div></div>
+        <span>7X-NEURAL</span>
+        <span>SCAN...</span>
+    </footer>
+</div>
+
+<!-- END PHASE: NEURAL NETWORK VISUALIZATION -->
+
+  <!-- PHASE 4: BRAIN VISUALIZATION -->
+  <div class="intro-phase phase-body" id="phaseBody">
+    <div class="body-container">
+      <canvas id="brainCanvas" class="centered-canvas"></canvas>
+      <div class="body-hud">
+        <div class="body-header">
+          <div class="body-header-left">
+            <div class="body-icon">
+              <svg viewbox="0 0 24 24">
+                <path d="M12 5a7 7 0 0 0-7 7c0 1.5.5 3 1.5 4.5L12 22l5.5-5.5C18.5 15 19 13.5 19 12a7 7 0 0 0-7-7z" fill="none" stroke="currentColor" stroke-width="1"></path>
+                <circle cx="12" cy="9" r="2" fill="none" stroke="currentColor" stroke-width="1"></circle>
+              </svg>
+            </div>
+            <span class="body-label">NEURAL MAPPING</span>
+          </div>
+          <div class="body-header-right">
+            <span class="body-id">SUBJECT: SKYE</span>
+          </div>
+        </div>
+        <div class="body-scan-data">
+          <div class="scan-item" data-reveal="1">
+            <div class="scan-dot"></div>
+            <span class="scan-text">Frontal Lobe: ACTIVE</span>
+          </div>
+          <div class="scan-item" data-reveal="2">
+            <div class="scan-dot"></div>
+            <span class="scan-text">Temporal Lobe: SYNCHRONIZED</span>
+          </div>
+          <div class="scan-item" data-reveal="3">
+            <div class="scan-dot success"></div>
+            <span class="scan-text">Creative Cortex: HIGHLY RESPONSIVE</span>
+          </div>
+          <div class="scan-item" data-reveal="4">
+            <div class="scan-dot warning"></div>
+            <span class="scan-text">Memory Banks: FRAGMENTED</span>
+          </div>
+          <div class="scan-item" data-reveal="5">
+            <div class="scan-dot success"></div>
+            <span class="scan-text">Neural Pathways: REINITIALIZED</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 5: BOARDING PASS -->
+  <div class="intro-phase phase-boarding" id="phaseBoarding">
+    <div class="boarding-wrapper">
+      <div class="boarding-container">
+        <div class="boarding-left">
+          <div class="boarding-header">
+            <svg class="boarding-chevrons" viewbox="0 0 40 40">
+              <path d="M8,10 L18,20 L8,30" fill="none" stroke="currentColor" stroke-width="1"></path>
+              <path d="M16,10 L26,20 L16,30" fill="none" stroke="currentColor" stroke-width="1"></path>
+            </svg>
+            <span class="boarding-title">RUNAWAY</span>
+          </div>
+          <div class="passenger-section">
+            <div class="passenger-label">
+              PASSENGER
+            </div>
+            <div class="passenger-name">
+              <span class="name-prefix">MISS.</span>
+              <span class="name-main">SKYEDEV</span>
+            </div>
+            <div class="diagonal-stripes">
+              <div class="stripe"></div>
+              <div class="stripe"></div>
+              <div class="stripe"></div>
+              <div class="stripe"></div>
+              <div class="stripe"></div>
+            </div>
+            <div class="coordinates">
+              <div class="coord-value">
+                35.7120° N
+              </div>
+              <div class="coord-value">
+                139.7876° E
+              </div>
+            </div>
+          </div>
+          <div class="boarding-time">
+            <div class="time-label">
+              BOARDING
+            </div>
+            <div class="time-value">
+              TM.16.20
+            </div>
+          </div>
+          <div class="journey-section">
+            <div class="journey-from">
+              <div class="journey-label">
+                FROM
+              </div>
+              <div class="journey-value">
+                UNKNOWN
+              </div>
+            </div>
+            <div class="journey-arrow">
+              <svg viewbox="0 0 24 24">
+                <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="1" fill="none"></path>
+              </svg>
+            </div>
+            <div class="journey-to">
+              <div class="journey-label">
+                TO
+              </div>
+              <div class="journey-value">
+                STARVORTEX SHIP
+              </div>
+            </div>
+          </div>
+          <div class="status-section">
+            <div class="status-indicator">
+              <div class="status-dot-large"></div>
+              <div class="status-text">
+                STATUS: CLEARED
+              </div>
+            </div>
+            <div class="qr-code">
+              <div class="qr-row"></div>
+              <div class="qr-row"></div>
+              <div class="qr-row"></div>
+              <div class="qr-row"></div>
+              <div class="qr-row"></div>
+            </div>
+          </div>
+          <div class="boarding-footer">
+            <div class="footer-icon">
+              ◉
+            </div>
+            <div class="footer-message">
+              ten thousand voices fill your broken soul, just fade away you know there's nothing here to make us stay, headed out far away where no one knows ya.
+            </div>
+          </div>
+        </div>
+        <div class="boarding-right">
+          <div class="gate-header">
+            <svg class="gate-chevrons" viewbox="0 0 40 40">
+              <path d="M8,10 L18,20 L8,30" fill="none" stroke="currentColor" stroke-width="1"></path>
+              <path d="M16,10 L26,20 L16,30" fill="none" stroke="currentColor" stroke-width="1"></path>
+            </svg>
+            <svg class="gate-expand" viewbox="0 0 24 24">
+              <path d="M4 14l4 4M4 14h4v4M20 10l-4-4M20 10h-4v-4" stroke="currentColor" stroke-width="1" fill="none"></path>
+            </svg>
+          </div>
+          <div class="gate-label">
+            GATE
+          </div>
+          <div class="gate-number">
+            A6
+          </div>
+          <div class="barcode-section">
+            <div class="passenger-id">
+              PASSENGER ID
+            </div>
+            <div class="id-number">
+              SKYEDEV_2025
+            </div>
+            <div class="barcode">
+              <div class="bar thin"></div>
+              <div class="bar thick"></div>
+              <div class="bar thin"></div>
+              <div class="bar medium"></div>
+              <div class="bar thin"></div>
+              <div class="bar thick"></div>
+              <div class="bar thin"></div>
+              <div class="bar medium"></div>
+              <div class="bar thick"></div>
+              <div class="bar thin"></div>
+              <div class="bar medium"></div>
+              <div class="bar thin"></div>
+              <div class="bar thick"></div>
+              <div class="bar thin"></div>
+              <div class="bar medium"></div>
+              <div class="bar thin"></div>
+              <div class="bar thick"></div>
+              <div class="bar thin"></div>
+            </div>
+          </div>
+          <div class="flight-info">
+            <div class="info-label">
+              ENTER THE FLIGHT
+            </div>
+            <div class="info-icons">
+              <div class="globe-icon-small">
+                <svg viewbox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"></circle>
+                  <path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10" fill="none" stroke="currentColor" stroke-width="1"></path>
+                </svg>
+              </div>
+              <div class="globe-icon-small">
+                <svg viewbox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"></circle>
+                  <path d="M2 12h20M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10" fill="none" stroke="currentColor" stroke-width="1"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="seat-number">
+              SEAT <span>25-F</span>
+            </div>
+          </div>
+          <div class="date-stamp">
+            <span class="date-label">FEB 25 2025</span>
+          </div>
+          <div class="bottom-barcode">
+            <div class="barcode small">
+              <div class="bar thin"></div>
+              <div class="bar medium"></div>
+              <div class="bar thin"></div>
+              <div class="bar thick"></div>
+              <div class="bar thin"></div>
+              <div class="bar medium"></div>
+              <div class="bar thin"></div>
+              <div class="bar thick"></div>
+              <div class="bar thin"></div>
+              <div class="bar medium"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Main Screen (Home) -->
+    <div class="main-screen" id="homeScreen">
+        <div class="header-panel">
+            <h1 class="main-title">Skye is building <span class="highlight">ideas</span></h1>
+            <p class="main-subtitle">Inspired by great minds</p>
+        </div>
+
+        <div class="content-grid">
+            <!-- Left Column - Quotes -->
+            <div class="quotes-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Inspiration</h2>
+                    <p class="panel-subtitle">Design philosophies</p>
+                </div>
+                
+                <div class="quotes-container">
+                    <div class="quote-card">
+                        <p class="quote-text">"Design is not just what it looks like and feels like. Design is how it works."</p>
+                        <p class="quote-author">- Steve Jobs</p>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <p class="quote-text">"Simplicity is the ultimate sophistication."</p>
+                        <p class="quote-author">- Leonardo da Vinci</p>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <p class="quote-text">"Good design is obvious. Great design is transparent."</p>
+                        <p class="quote-author">- Joe Sparano</p>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <p class="quote-text">"The details are not the details. They make the design."</p>
+                        <p class="quote-author">- Charles Eames</p>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <p class="quote-text">"Design creates culture. Culture shapes values. Values determine the future."</p>
+                        <p class="quote-author">- Robert L. Peters</p>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <p class="quote-text">"Innovation distinguishes between a leader and a follower."</p>
+                        <p class="quote-author">- Steve Jobs</p>
+                    </div>
+
+                    <div class="highlights-description">
+                                <p>Hey there! I'm so glad that you're here. I hope you find inspiration and joy in the ideas we share together. You're more than welcome to explore and engage with the content! I'll be here to guide you along the way, and probably I will eventually add a interactive chat in the <strong>"Contact section"</strong>, so you and more people will be able to connect and share your thoughts. This portfolio is a <strong>work in progress</strong>, so expect updates and new features over time! Also, feel free to reach out if you have any questions or suggestions. Remember to click everywhere! I love making everything very interactive and enjoyable for you.</p>
+                                  &nbsp;
+                                <p>Feel free to take my code if you want and need it. I really don't mind as long as it's helping someone. If you find any bugs or have suggestions, please let me know! And of course, if my portfolio inspires you in any way, I'd love to hear about it and see what you can create with that.</p>
+                                      &nbsp;
+                                <p>I really don't expect this to get so many attention, but here we are. I really enjoy making this kind of stuff, so I hope you enjoy it as well. Remember to always keep learning and growing, and never be afraid to take risks and try new things. The world needs more creative minds like yours. Thank you for visiting my portfolio, and I hope to connect with you soon! ^^</p>
+          </div>
+           
+                </div>
+          
+            </div>
+
+            <!-- Right Column -->
+            <div class="right-column">
+                <!-- Tools Panel -->
+                <div class="tools-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Tools & Software</h2>
+                        <p class="panel-subtitle">My creative toolkit</p>
+                    </div>
+                    
+                    <div class="tools-grid-container">
+                        <div class="tools-scroll" id="toolsScroll">
+                            <!-- Tool cards will be generated by toolsManager.js -->
+                        </div>
+                        
+                        <div class="tool-description" id="toolDescription">
+                            <p class="tool-description-text" id="toolDescriptionText"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Languages Panel -->
+                <div class="languages-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Languages & Frameworks</h2>
+                        <p class="panel-subtitle">Frontend development</p>
+                    </div>
+                    
+                    <div class="languages-container" id="languagesContainer">
+                        <!-- Language cards will be generated by languagesManager.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Screen (section two) -->
+    <div class="about-screen" id="aboutScreen">
+        <div class="header-panel">
+            <h1 class="main-title">About <span class="highlight">Skye</span></h1>
+            <p class="main-subtitle">Getting to know me better</p>
+        </div>
+
+        <div class="about-content">
+            <!-- Left Column -->
+            <div class="about-left-column">
+                <!-- Profile Section -->
+                <div class="about-panel profile-card">
+                    <div class="about-panel-header">
+                        <h2 class="about-panel-title">Profile</h2>
+                        <p class="about-panel-subtitle">Who I am</p>
+                    </div>
+                    
+                    <div class="about-panel-content" id="profileContainer">
+                        <!-- Profile content will be generated by aboutManager.js -->
+                    </div>
+                </div>
+
+                <!-- Location Section -->
+                <div class="about-panel location-card">
+                    <div class="about-panel-header">
+                        <h2 class="about-panel-title">Location</h2>
+                        <p class="about-panel-subtitle">Where I'm based</p>
+                    </div>
+                    
+                    <div class="about-panel-content" id="locationContainer">
+                        <!-- Location content will be generated by aboutManager.js -->
+                    </div>
+                </div>
+
+                <!-- Interests Section -->
+                <div class="about-panel">
+                    <div class="about-panel-header">
+                        <h2 class="about-panel-title">Interests</h2>
+                        <p class="about-panel-subtitle">What I love doing</p>
+                    </div>
+                    
+                    <div class="about-panel-content">
+                        <div class="interests-container" id="interestsContainer">
+                            <!-- Interest cards will be generated by aboutManager.js -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="about-right-column">
+                <!-- Highlights Section -->
+                <div class="highlights-section">
+                    <div class="highlights-header">
+                        <div class="highlights-hint">
+                            <img src="/src/assets/arrow.svg" alt="Arrow" class="hint-arrow">
+                            <span class="hint-text">click and look around...</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Medium Panels Section -->
+                   <div class="about-panel medium-panels-section">
+    <div class="about-panel-header">
+        <h2 class="about-panel-title">Highlights</h2>
+    </div>
+
+    <div class="about-panel-content">
+        <div class="medium-panels-grid">
+            <!-- Panel 1 - Twitter -->
+            <div class="medium-panel twitter-panel" id="mediumPanel1">
+                <div class="twitter-color-overlay"></div>
+                <div class="twitter-icon-container">
+                    <img src="/src/assets/twitter-icon-min.png" alt="Twitter" class="twitter-icon">
+                                    </div>
+                                    <div class="twitter-content">
+                                        <div class="tweet-text">
+                                            <div class="tweet-header">
+                                                <img src="/src/assets/pfp-twt.jpg" alt="Skye" class="tweet-profile-pic">
+                                                <div class="tweet-user-info">
+                                                    <span class="tweet-name">Skye</span>
+                                                    <span class="tweet-username">@LuvrksnSkye</span>
+                                                </div>
+                                            </div>
+                                            <p>spending 6 hours perfecting a button animation that nobody will notice because I have my priorities straight 😌✨</p>
+                                        </div>
+                                        <button class="twitter-button">
+                                            <span>Read my tweets</span>
+                                            <img src="/src/assets/arrow-angle.svg" alt="arrow" class="button-arrow">
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Panel 2 - Apple Music -->
+                                <div class="medium-panel music-panel" id="mediumPanel2">
+                                    <div class="music-color-overlay"></div>
+                                    <div class="music-icon-container">
+                                        <img src="/src/assets/apple-music-icon.png" alt="Apple Music" class="music-icon">
+                                    </div>
+                                    <div class="music-content">
+                                        <div class="music-info">
+                                            <img src="/src/assets/tunic-apple_music.jpg" alt="Album Cover" class="album-cover">
+                                            <div class="track-info">
+                                                <div class="track-title">From Far Shores</div>
+                                                <div class="track-artist">Lifeformed & Janice Kwan</div>
+                                            </div>
+                                        </div>
+                                        <div class="music-controls">
+                                            <button class="control-btn volume-btn" id="volumeBtn">
+                                                <img src="/src/assets/volume_on.svg" alt="Volume On" class="volume-on-icon">
+                                                <img src="/src/assets/volume-off.svg" alt="Volume Off" class="volume-off-icon">
+                                            </button>
+                                            <button class="control-btn" id="prevBtn">
+                                                <img src="/src/assets/Rewind.svg" alt="Previous">
+                                            </button>
+                                            <button class="control-btn play-btn" id="playBtn">
+                                                <img src="/src/assets/play-icon-1.svg" alt="Play" class="play-icon">
+                                                <img src="/src/assets/Pause.svg" alt="Pause" class="pause-icon">
+                                            </button>
+                                            <button class="control-btn" id="nextBtn">
+                                                <img src="/src/assets/Fast Fwd.svg" alt="Next">
+                                            </button>
+                                            <button class="control-btn playlist-btn" id="playlistBtn">
+                                                <img src="/src/assets/playlist-icon.svg" alt="Playlist">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Panel 3 - Photos Gallery -->
+                                <div class="medium-panel photos-panel" id="mediumPanel3">
+                                    <div class="photos-color-overlay"></div>
+                                    <div class="photos-icon-container">
+                                        <img src="/src/assets/Photos-min.webp" alt="Photos" class="photos-icon">
+                                    </div>
+                                    <div class="photos-content">
+                                        <div class="gallery-image-container">
+                                            <img src="" alt="Gallery" class="gallery-image" id="galleryImage">
+                                        </div>
+                                        <nav class="gallery-nav" id="galleryNav">
+                                            <ul class="gallery-nav-menu">
+                                                <div class="gallery-nav-indicator"></div>
+                                                <li class="gallery-nav-item">
+                                                    <button class="gallery-nav-btn active" data-category="everything">
+                                                        <img src="/src/assets/everything-icon.svg" alt="Everything">
+                                                    </button>
+                                                </li>
+                                                <li class="gallery-nav-item">
+                                                    <button class="gallery-nav-btn" data-category="places">
+                                                        <img src="/src/assets/places-icon.svg" alt="Places">
+                                                    </button>
+                                                </li>
+                                                <li class="gallery-nav-item">
+                                                    <button class="gallery-nav-btn" data-category="heart">
+                                                        <img src="/src/assets/heart-icon.svg" alt="Favorites">
+                                                    </button>
+                                                </li>
+                                                <li class="gallery-nav-item">
+                                                    <button class="gallery-nav-btn" data-category="cat">
+                                                        <img src="/src/assets/cat-icon.svg" alt="Cats">
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                                
+                                <!-- YouTube Panel (Panel 4) -->
+                                <div class="medium-panel youtube-panel" id="youtubePanel">
+                                    <div class="youtube-color-overlay"></div>
+                                    <div class="youtube-icon-container">
+                                        <img src="/src/assets/yt-icon.png" alt="YouTube" class="youtube-icon">
+                                    </div>
+                                    <div class="youtube-content">
+                                        <div class="youtube-video-container">
+                                            <iframe 
+                                                id="youtubeIframe"src="https://www.youtube.com/embed/UrO0_OWuf6c?si=TjuSvX6Sz0HP-oOw&amp;controls=0&enablejsapi=1"  
+                                                title="YouTube video player" 
+                                                frameborder="0" 
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                                referrerpolicy="strict-origin-when-cross-origin" 
+                                                allowfullscreen>
+                                            </iframe>
+                                        </div>
+                                        <div class="music-controls">
+                                            <button class="control-btn volume-btn" id="youtubeVolumeBtn">
+                                                <img src="/src/assets/volume_on.svg" alt="Volume On" class="volume-on-icon">
+                                                <img src="/src/assets/volume-off.svg" alt="Volume Off" class="volume-off-icon">
+                                            </button>
+                                            <button class="control-btn" id="youtubePrevBtn">
+                                                <img src="/src/assets/Rewind.svg" alt="Previous">
+                                            </button>
+                                            <button class="control-btn play-btn" id="youtubePlayBtn">
+                                                <img src="/src/assets/play-icon-1.svg" alt="Play" class="play-icon">
+                                                <img src="/src/assets/Pause.svg" alt="Pause" class="pause-icon">
+                                            </button>
+                                            <button class="control-btn" id="youtubeNextBtn">
+                                                <img src="/src/assets/Fast Fwd.svg" alt="Next">
+                                            </button>
+                                            <button class="control-btn playlist-btn" id="youtubePlaylistBtn">
+                                                <img src="/src/assets/playlist-icon.svg" alt="Playlist">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Cute Text Below Highlights -->
+                            <div class="highlights-description">
+                                <p>If you already know me, you may also see that I am the creator of <a href="https://luvrksknskyejourney.org/" target="_blank" class="website-link"><strong>luvrksknskyejourney↗</strong></a>! I find it quite funny to create things to express myself. A few months ago, I tried to make a portfolio on my GitHub,  but you know, time passes, so we need new things. So I made this, or at least I'm trying. Sometimes the most beautiful things are the ones we create with love and care, like a gentle whisper in the digital world.</p>
+                                &nbsp;
+                                &nbsp;
+                                &nbsp;
+                                <p>I'm not even sure if I will work with other people (which I wish to!), but for the moment, I just work along with my cute boyfriend, who is also a developer! The only difference between him and me is that he is definitely more professional. So I'm likely behind him, helping him with some designs or anything else. I know this is supposed to be about me, and more like my portfolio, but I also like to talk about him all the time and his incredible work.</p>
+                                  &nbsp;
+                                &nbsp;
+                                &nbsp;
+                                <p>If you want to see more about him, you can check his <a href="https://github.com/RegreDanger" target="_blank"> <strong>GitHub↗</strong></a> or... his violently-coolest <a href="https://regredanger.neocities.org/" target="_blank"> <strong>Website↗</strong></a>  that I also made for him! He is so cool tho, also such a nerdy,  but a cutie pie. I love him!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Panel -->
+                <div class="personal-panel">
+                    <div class="about-panel">
+                        <div class="about-panel-header">
+                            <h2 class="about-panel-title">Language Proficiency</h2>
+                            <p class="about-panel-subtitle">Info about my language skills</p>
+                        </div>
+                        
+                        <div class="about-panel-content">
+                            
+                            <div class="personal-thoughts">
+                                <p>I have native fluency in both <b>English</b> and <b>Spanish (Caribbean)</b>, and can speak in conversational <b>French/Français</b>, currently still learning. I also speak <b>Italian</b> and <b>German</b>, but at a very, very pre-school proficiency! ^^</p>
+                                &nbsp;
+                                &nbsp;
+                                &nbsp;
+                                <p>I wasn't always confident in my language skills, but with practice and exposure, I've grown more comfortable communicating in different languages. I used to have voice problems, but I've worked hard to improve my pronunciation and fluency in Speech-Language Therapy when I was young. Sometimes I still struggle with certain sounds or phrases, but I keep pushing myself to improve since I became an English teacher for children.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+  <!-- Contact Screen -->
+<div class="contact-screen" id="contactScreen">
+    <div class="header-panel">
+        <h1 class="main-title">Get in <span class="highlight">Touch</span></h1>
+        <p class="main-subtitle">Let's chat! I'd love to hear from you</p>
+    </div>
+
+    <div class="contact-content">
+        <!-- Left Column: iMessage Chat + Contact Info -->
+        <div class="left-column">
+            <div class="imessage-container" id="contactContainer">
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="chat-header-avatar" style="background-image: url('https://dl.dropbox.com/scl/fi/nrgsz0vtcnwgd9msz1nzh/puppy.JPG?rlkey=jen8najj04sih3gw2pxeymq35&st=hvyte78j&dl=0');"></div>
+                    <div class="chat-header-info">
+                        <div class="chat-header-name">Skye</div>
+                        <div class="chat-header-status">
+                            <span class="status-dot"></span>
+                            <span>Online now</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Messages Container -->
+                <div class="messages-container" id="messagesContainer">
+                    <!-- Messages will be dynamically added here -->
+                </div>
+
+                <!-- Input Container -->
+                <div class="input-container" id="inputContainer">
+                    <div class="message-input-wrapper">
+                        <input 
+                            type="text" 
+                            class="message-input" 
+                            id="messageInput" 
+                            placeholder="Type your message..."
+                            autocomplete="off"
+                        >
+                    </div>
+                    <button class="send-button" id="sendButton">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contact Info Panel (Below iMessage) -->
+            <div class="contact-info-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Contact</h2>
+                    <p class="panel-subtitle">Ways to reach me</p>
+                </div>
+                
+                <div class="contact-links-container">
+    <a href="mailto:luvrksnskyejourney@icloud.com" class="contact-link">
+        <img src="src/assets/email-icon.svg" alt="Email" class="contact-icon">
+        <span class="contact-text">luvrksnskyejourney@icloud.com</span>
+    </a>
+
+
+                    
+                    <a href="https://github.com/luvrksnskye" target="_blank" class="contact-link">
+                        <img src="src/assets/github-icon-for-contact.svg" alt="GitHub" class="contact-icon">
+                        <span class="contact-text">@luvrksnskye</span>
+                    </a>
+                    
+                    <a href="https://bsky.app/profile/luvrksnskyedev.bsky.social" target="_blank" class="contact-link">
+                        <img src="src/assets/Bluesky.png" alt="Bluesky" class="contact-icon">
+                        <span class="contact-text">@luvrksnskyedev.bsky.social</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center Column: Blog + Availability -->
+        <div class="center-column">
+            <!-- Blog Panel (Top Center) -->
+            <div class="blog-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Blog & Updates</h2>
+                    <p class="panel-subtitle">Latest posts and announcements</p>
+                </div>
+                
+                <div class="blog-entries-container">
+                    <!-- Blog Entry-->
+                    <div class="blog-entry">
+                        <div class="blog-entry-header">
+                            <div class="blog-entry-avatar" style="background-image: url('src/assets/pfp-photo.jpg');"></div>
+                            <div class="blog-entry-user">
+                                <div class="blog-entry-name">Skyedev</div>
+                                <div class="blog-entry-username">@LuvrksnSkye</div>
+                            </div>
+                        </div>
+                        <h3 class="blog-entry-title">Project Launch</h3>
+                        <p class="blog-entry-description">It's not my first time doing a portfolio, but I'm excited for this tbh, and I can't wait to share it with you. My progress is slow as someone who is chronically ill and must be mindful of my energy levels, but also, being almost all the time into medical stuff take a lot of my time. However, I'm determined to make it work! You can click <a href="src/blogs/index.html"><strong>here</strong></a> to see my progress and the full blog about it.</p>
+                        <img src="src/assets/blogs_assets/cover-blog-project-launch.JPG" alt="Blog entry" class="blog-entry-image">
+                        <div class="blog-entry-date">October 25</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Availability Panel (Bottom Center) -->
+            <div class="availability-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Availability</h2>
+                    <p class="panel-subtitle">What I'm open to</p>
+                </div>
+                
+                <div class="availability-content">
+                    <div class="availability-status">
+                        <div class="availability-indicator"></div>
+                        <span class="availability-status-text">Open for opportunities</span>
+                    </div>
+                    
+                    <div class="availability-list">
+                        <div class="availability-item">
+                            <svg class="availability-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: rgb(34, 197, 94);"/>
+                            </svg>
+                            <div class="availability-text">
+                                <strong>Internships</strong> - Looking for learning opportunities in frontend development
+                            </div>
+                        </div>
+                        
+                        <div class="availability-item">
+                            <svg class="availability-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: rgb(34, 197, 94);"/>
+                            </svg>
+                            <div class="availability-text">
+                                <strong>Code Help</strong> - Happy to assist with HTML, CSS, JavaScript questions
+                            </div>
+                        </div>
+                        
+                        <div class="availability-item">
+                            <svg class="availability-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: rgb(34, 197, 94);"/>
+                            </svg>
+                            <div class="availability-text">
+                                <strong>Collaborations</strong> - Open to creative projects and learning together
+                            </div>
+                        </div>
+                        
+                        <div class="availability-item">
+                            <svg class="availability-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: rgb(34, 197, 94);"/>
+                            </svg>
+                            <div class="availability-text">
+                              <p><strong>Mentorship</strong> - Always eager to learn from experienced developers</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="response-note">
+                        <p><strong>Note:</strong> I may take a bit longer to respond due to health considerations, but I read every message and will get back to you! 💙</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Column: Chat Embed + Guidelines -->
+        <div class="right-column">
+            <!-- Chat Embed -->
+            <div class="chat-embed-container">
+                <iframe src="https://iframe.chat/embed?chat=16672563" id="chattable"></iframe>
+            </div>
+
+            <!-- Guidelines Panel (Below Chat Embed) -->
+            <div class="guidelines-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Just So You Know!</h2>
+                    <p class="panel-subtitle">A friendly heads up</p>
+                </div>
+                
+                <div class="guidelines-content">
+                    <div class="guidelines-intro">
+                        <p><strong>Hey there!</strong> Just to be clear - I'm not selling any services or doing freelance work. I'm just a student who loves coding and is happy to help out.</p>
+                    </div>
+                    
+                    <div class="guideline-card">
+                        <h3 class="guideline-title">
+                            <span class="guideline-emoji">✨</span>
+                            Free to Help
+                        </h3>
+                        <p class="guideline-description">
+                            Got a question? Need help with your code? Just want to bounce ideas around? I'm here for it!
+                        </p>
+                    </div>
+                    
+                    <div class="guideline-card">
+                        <h3 class="guideline-title">
+                            <span class="guideline-emoji">🌷</span>
+                            Love Collaborating
+                        </h3>
+                        <p class="guideline-description">
+                            If you have a fun project or idea, I'd love to be part of it! Learning by doing is my favorite.
+                        </p>
+                    </div>
+                    
+                    <div class="guideline-card">
+                        <h3 class="guideline-title">
+                            <span class="guideline-emoji">🌸</span>
+                            Always Learning
+                        </h3>
+                        <p class="guideline-description">
+                            I'm still learning and growing!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--WORK(STARVORTEX)-->
+
+<!-- CONTENEDOR PRINCIPAL WORK MANAGER -->
+<div class="sv-work-screen" id="sv-work-screen" style="display: none;">
+    
+    <!-- Grid Overlay -->
+    <div class="sv-grid-overlay">
+        <div class="sv-grid-v sv-v1"></div>
+        <div class="sv-grid-v sv-v2"></div>
+        <div class="sv-grid-v sv-v3"></div>
+        <div class="sv-grid-v sv-v4"></div>
+        <div class="sv-grid-h sv-h1"></div>
+        <div class="sv-grid-h sv-h2"></div>
+        <div class="sv-grid-h sv-h3"></div>
+    </div>
+    
+    <!-- Vertical Scroll Navigation - LEFT -->
+    <div class="sv-scroll-nav sv-scroll-nav-left">
+        <img src="/src/starvortex_assets/arrow-scroll.png" alt="Up" class="sv-scroll-arrow up" id="sv-scroll-up-left">
+        <div class="sv-section-indicators" id="sv-section-dots-left">
+            <div class="sv-section-dot active" data-section="0"></div>
+            <div class="sv-section-dot" data-section="1"></div>
+            <div class="sv-section-dot" data-section="2"></div>
+            <div class="sv-section-dot" data-section="3"></div>
+            <div class="sv-section-dot" data-section="4"></div>
+            <div class="sv-section-dot" data-section="5"></div>
+            <div class="sv-section-dot" data-section="6"></div>
+        </div>
+        <img src="/src/starvortex_assets/arrow-scroll-inactive.png" alt="Down" class="sv-scroll-arrow down" id="sv-scroll-down-left">
+    </div>
+    
+    <!-- Vertical Scroll Navigation - RIGHT -->
+    <div class="sv-scroll-nav">
+        <img src="/src/starvortex_assets/arrow-scroll.png" alt="Up" class="sv-scroll-arrow up" id="sv-scroll-up-right">
+        <div class="sv-section-indicators" id="sv-section-dots-right">
+            <div class="sv-section-dot active" data-section="0"></div>
+            <div class="sv-section-dot" data-section="1"></div>
+            <div class="sv-section-dot" data-section="2"></div>
+            <div class="sv-section-dot" data-section="3"></div>
+            <div class="sv-section-dot" data-section="4"></div>
+            <div class="sv-section-dot" data-section="5"></div>
+            <div class="sv-section-dot" data-section="6"></div>
+        </div>
+        <img src="/src/starvortex_assets/arrow-scroll-inactive.png" alt="Down" class="sv-scroll-arrow down" id="sv-scroll-down-right">
+    </div>
+    
+    <!-- Horizontal Section Number Display -->
+    <div class="sv-section-number-display">
+        <span class="sv-section-num active" data-section="0">01</span>
+        <div class="sv-section-divider"></div>
+        <span class="sv-section-num" data-section="1">02</span>
+        <div class="sv-section-divider"></div>
+        <span class="sv-section-num" data-section="2">03</span>
+        <div class="sv-section-divider"></div>
+        <span class="sv-section-num" data-section="3">04</span>
+        <div class="sv-section-divider"></div>
+        <span class="sv-section-num" data-section="4">05</span>
+        <div class="sv-section-divider"></div>
+        <span class="sv-section-num" data-section="5">06</span>
+        <div class="sv-section-divider"></div>
+        <span class="sv-section-num" data-section="6">07</span>
+    </div>
+    
+    <!-- Expandable Info Panel -->
+    <div class="sv-expandable-panel" id="sv-expandable-panel">
+        <div class="sv-expandable-panel-header">
+            <span class="sv-panel-dot">■</span>
+            <span>// DATA </span>
+        </div>
+        <div class="sv-expandable-content">
+            <div class="sv-info-block">
+                <h3 class="sv-info-block-title">COLLECTIVE OVERVIEW</h3>
+                <p class="sv-info-block-text"> WE BELIEVE IN THE POWER OF INDEPENDENT CREATORS WORKING TOGETHER TO BUILD SYSTEMS THAT MATTER.</p>
+                <div class="sv-info-stats">
+                    <div class="sv-info-stat">
+                        <span class="sv-info-stat-value">02</span>
+                        <span class="sv-info-stat-label">DIVISIONS</span>
+                    </div>
+                    <div class="sv-info-stat">
+                        <span class="sv-info-stat-value">05</span>
+                        <span class="sv-info-stat-label">MEMBERS</span>
+                    </div>
+                    <div class="sv-info-stat">
+                        <span class="sv-info-stat-value">04</span>
+                        <span class="sv-info-stat-label">PROJECTS</span>
+                    </div>
+                    <div class="sv-info-stat">
+                        <span class="sv-info-stat-value">∞</span>
+                        <span class="sv-info-stat-label">PASSION</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sv-info-block">
+                <h3 class="sv-info-block-title">QUANTUM ANALYTICS</h3>
+                <p class="sv-info-block-text">DIVISION 01 — FOCUSED ON DATA ANALYSIS, BACKEND SYSTEMS, AND ANALYTICAL SOLUTIONS. TRANSFORMING RAW DATA INTO ACTIONABLE INSIGHTS.</p>
+            </div>
+            
+            <div class="sv-info-block">
+                <h3 class="sv-info-block-title">ECHO STUDIOS</h3>
+                <p class="sv-info-block-text">DIVISION 02 — DEDICATED TO VIDEO GAME DEVELOPMENT, INTERACTIVE EXPERIENCES, AND CREATIVE DIGITAL PROJECTS.</p>
+            </div>
+            
+            <div class="sv-info-block">
+                <h3 class="sv-info-block-title">TECH STACK</h3>
+                <p class="sv-info-block-text">> JAVA / PYTHON / KOTLIN / JAVASCRIPT / RUST<br>
+                > REACT / TAILWIND / VITE / SPRING BOOT / FASTAPI<br>
+                > GODOT ENGINE / AFFINITY SUITE / FIGMA<br>
+                > MYSQL / POSTGRESQL / SQLITE / GIT</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="sv-scroll" id="sv-scroll">
+        
+        <!-- ==========================================
+             HERO SECTION - ENHANCED
+             ========================================== -->
+        <section class="sv-section sv-hero" id="sv-hero" data-section-index="0">
+            
+            <!-- Fill Bar Background Animation -->
+            <div class="sv-fill-bar-container">
+                <img src="/src/starvortex_assets/fill-bar.png" alt="" class="sv-fill-bar">
+                <img src="/src/starvortex_assets/fill-bar.png" alt="" class="sv-fill-bar sv-fill-bar-2">
+            </div>
+            
+            <!-- Logo Behind (subtle watermark) -->
+            <img src="/src/starvortex_assets/logo-behind-fill.png" alt="" class="sv-logo-behind">
+            
+            <!-- Decorative Arrows -->
+            <img src="/src/starvortex_assets/arrow_decor.png" alt="" class="sv-arrow-decor sv-arrow-decor-tl">
+            <img src="/src/starvortex_assets/arrow_decor.png" alt="" class="sv-arrow-decor sv-arrow-decor-tr">
+            <img src="/src/starvortex_assets/arrow_decor.png" alt="" class="sv-arrow-decor sv-arrow-decor-bl">
+            <img src="/src/starvortex_assets/arrow_decor.png" alt="" class="sv-arrow-decor sv-arrow-decor-br">
+            
+            <!-- Center Circle Animation -->
+            <div class="sv-circle-wrap">
+                <img class="sv-circle-img" id="sv-circle-img" src="/src/starvortex_assets/center-circle.png" alt="">
+            </div>
+            
+            <!-- Labels -->
+            <div class="sv-label sv-label-l">
+                <span class="sv-dot">■</span>
+                <span id="sv-label-l"></span>
+            </div>
+            <div class="sv-label sv-label-r">
+                <span id="sv-label-r"></span>
+                <span class="sv-dot">■</span>
+            </div>
+            
+<div class="sv-title-container">
+    <span class="sv-title-ghost sv-title-ghost-1" id="sv-title-ghost-1"></span>
+    <h1 class="sv-title" id="sv-title"></h1>
+    <span class="sv-title-ghost sv-title-ghost-2" id="sv-title-ghost-2"></span>
+</div>
+            
+            <p class="sv-tagline" id="sv-tagline"></p>
+            
+            <!-- Expand Button -->
+            <button class="sv-expand-btn" id="sv-expand-btn">
+                <img src="/src/starvortex_assets/arrow_left_or_right.png" alt="Expand">
+            </button>
+            
+            <!-- Hero Description -->
+            <div class="sv-hero-desc">
+                <p id="sv-desc"></p>
+            </div>
+            
+            <span class="sv-marker">||||</span>
+        </section>
+        
+        <!-- ==========================================
+             SKYE SCAN SECTION
+             ========================================== -->
+        <section class="sv-section sv-scan-section" id="sv-scan-skye" data-section-index="1">
+            <div class="sv-scan-area">
+                <!-- DOT PATTERN BACKGROUND -->
+                <div class="sv-dot-pattern" data-scan-group="skye"></div>
+                
+                <h2 class="sv-scan-title sv-scan-target sv-scroll-reveal" data-scan-id="skye" data-scroll-text="WHAT I'M INTO?"></h2>
+                <p class="sv-scan-subtitle">CREATIVE • DEVELOPER • CREATOR</p>
+                
+                <!-- VISUAL DATA ASSETS - appear on scan -->
+                <img class="sv-scan-asset sv-asset-geo" src="/src/starvortex_assets/data_geo.webp" alt="" data-scan-group="skye">
+                <img class="sv-scan-asset sv-asset-distance" src="/src/starvortex_assets/data_distance.webp" alt="" data-scan-group="skye">
+                <img class="sv-scan-asset sv-asset-scans" src="/src/starvortex_assets/data_scans.webp" alt="" data-scan-group="skye">
+            
+                
+                <!-- IDENTITY -->
+                <div class="sv-scan-panel sv-panel-tl" data-scan-group="skye">
+                    <div class="sv-panel-content">
+                        <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// IDENTITY" data-effect="scramble"></span></div>
+                        <div class="sv-panel-grid">
+                            <div class="sv-panel-data"><span class="sv-data-label" data-text="ALIAS" data-effect="type"></span><span class="sv-data-value" data-text="SKYE" data-effect="scramble"></span></div>
+                            <div class="sv-panel-data"><span class="sv-data-label" data-text="DESIGNATION" data-effect="type"></span><span class="sv-data-value" data-text="DEV" data-effect="scramble"></span></div>
+                            <div class="sv-panel-data"><span class="sv-data-label" data-text="DIVISION" data-effect="type"></span><span class="sv-data-value" data-text="ECHO" data-effect="scramble"></span></div>
+                            <div class="sv-panel-data"><span class="sv-data-label" data-effect="type" data-text="STATUS"></span><span class="sv-data-value" data-text="ACTIVE" data-effect="scramble"></span></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- BIOMETRICS -->
+                <div class="sv-scan-panel sv-panel-tr" data-scan-group="skye">
+                    <div class="sv-panel-content">
+                        <div class="sv-panel-header"><span class="sv-panel-dot">■ ■</span><span data-text="// BIOMETRICS" data-effect="scramble"></span></div>
+                        <div class="sv-bio-list">
+                            <div class="sv-bio-row"><span data-text="AGE" data-effect="type"></span><span data-text="20" data-effect="scramble"></span></div>
+                            <div class="sv-bio-row"><span data-text="LOCATION" data-effect="type"></span><span data-text="VENEZUELA" data-effect="scramble"></span></div>
+                            <div class="sv-bio-row"><span data-text="LANGUAGES" data-effect="type"></span><span data-text="ES / EN" data-effect="scramble"></span></div>
+                            <div class="sv-bio-row"><span data-text="GENDER" data-effect="type"></span><span data-text="GENDERFLUID" data-effect="scramble"></span></div>
+                            <div class="sv-bio-row"><span data-text="PRONOUNS" data-effect="type"></span><span data-text="SHE/THEY" data-effect="scramble"></span></div>
+                            <div class="sv-bio-row"><span data-text="ALIGNMENT" data-effect="type"></span><span data-text="CHAOTIC GOOD" data-effect="scramble"></span></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SKILLS -->
+                <div class="sv-scan-panel sv-panel-left" data-scan-group="skye">
+                    <div class="sv-panel-content">
+                        <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// SKILL MATRIX" data-effect="scramble"></span><span class="sv-panel-plus">+</span></div>
+                        <div class="sv-panel-skills">
+                            <div class="sv-skill-item"><div class="sv-skill-row"><span class="sv-skill-name" data-text="WEB DEVELOPMENT" data-effect="scramble"></span><span class="sv-skill-pct" data-text="95%" data-effect="type"></span></div><div class="sv-skill-bar"><div class="sv-skill-fill" style="--fill: 95%"></div></div></div>
+                            <div class="sv-skill-item"><div class="sv-skill-row"><span class="sv-skill-name" data-text="UI/UX DESIGN" data-effect="scramble"></span><span class="sv-skill-pct" data-text="90%" data-effect="type"></span></div><div class="sv-skill-bar"><div class="sv-skill-fill" style="--fill: 90%"></div></div></div>
+                            <div class="sv-skill-item"><div class="sv-skill-row"><span class="sv-skill-name" data-text="GAME DEVELOPMENT" data-effect="scramble"></span><span class="sv-skill-pct" data-text="75%" data-effect="type"></span></div><div class="sv-skill-bar"><div class="sv-skill-fill" style="--fill: 75%"></div></div></div>
+                            <div class="sv-skill-item"><div class="sv-skill-row"><span class="sv-skill-name" data-text="DIGITAL ART" data-effect="scramble"></span><span class="sv-skill-pct" data-text="85%" data-effect="type"></span></div><div class="sv-skill-bar"><div class="sv-skill-fill" style="--fill: 85%"></div></div></div>
+                            <div class="sv-skill-item"><div class="sv-skill-row"><span class="sv-skill-name" data-text="PIXEL ART" data-effect="scramble"></span><span class="sv-skill-pct" data-text="82%" data-effect="type"></span></div><div class="sv-skill-bar"><div class="sv-skill-fill" style="--fill: 82%"></div></div></div>
+                        </div>
+                        <div class="sv-panel-extra">
+                            <span data-text="++ CYBERSECURITY [KNOWLEDGE]" data-effect="type"></span>
+                            <span data-text="++ UI/UX SPECIALIST" data-effect="type"></span>
+                            <span data-text="++ LINUX LOVER (DEBIAN/ARCH)" data-effect="type"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- TECH SPECS -->
+                <div class="sv-scan-panel sv-panel-right" data-scan-group="skye">
+                    <div class="sv-panel-content">
+                        <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// TECH STACK" data-effect="scramble"></span></div>
+                        <div class="sv-tech-list">
+                            <span data-text="> HTML / CSS / JAVASCRIPT" data-effect="type"></span>
+                            <span data-text="> REACT / TAILWIND / VITE" data-effect="type"></span>
+                            <span data-text="> AFFINITY SUITE / FIGMA" data-effect="type"></span>
+                            <span data-text="> GODOT ENGINE" data-effect="type"></span>
+                            <span data-text="> GIT / VERSION CONTROL" data-effect="type"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- BIO -->
+                <div class="sv-scan-panel sv-panel-br" data-scan-group="skye">
+                    <div class="sv-panel-content">
+                        <div class="sv-panel-header"><span class="sv-panel-dot">■ ■ ■</span><span data-text="// PROFILE" data-effect="scramble"></span><span class="sv-panel-plus">+</span></div>
+                        <p class="sv-panel-bio" data-text="ART LOVER. PIXEL ARTIST. CAT PERSON. DRAGON ENTHUSIAST. CREATIVE DEV AT ECHO STUDIOS, STARVORTEX. PASSIONATE ABOUT CRAFTING BEAUTIFUL DIGITAL EXPERIENCES WITH ATTENTION TO DETAIL. ADVANCED MASTERY IN SHADERS AND CREATIVE CODING, ACHIEVING RESULTS WITH HIGH TECHNICAL PRECISION AND AESTHETIC QUALITY. EXPERIENCED IN INTERACTIVE DEVELOPMENT AND GAME DEVELOPMENT USING GODOT, INTEGRATING LOGIC, VISUALS, AND DESIGN. IN CYBERSECURITY, HAS LED TRAINING AND RIGOROUS TESTING IN CYBERWARFARE ENVIRONMENTS WITH STRATEGIC FOCUS. HANDLES OPERATING SYSTEMS AND NETWORKING AT ADVANCED LEVEL, SPECIALIZING IN ARCH LINUX AND BLACKARCH, AS WELL AS DEEP CONFIGURATION OF ENVIRONMENTS AND SHELLS. WORKS WITH PYTHON, RUST, AND SHELL SCRIPTING FOR TOOL DEVELOPMENT AND CONSOLE APPLICATIONS, ADAPTING TO CROSS-PLATFORM ENVIRONMENTS USING TECHNOLOGIES LIKE QML AND OBJECTIVE-C WHEN NECESSARY." data-effect="type"></p>
+                    </div>
+                </div>
+                
+                <!-- SKYE MEMBER PROFILE CARD -->
+                <div class="sv-scan-panel sv-panel-skye-profile" data-scan-group="skye">
+                    <div class="sv-panel-content sv-panel-svg-content">
+                        <svg class="sv-data-svg sv-member-profile-svg" viewBox="0 0 400 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            
+                            <!-- Corner brackets -->
+                            <path d="M10 40 L10 10 L40 10" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+                            <path d="M360 10 L390 10 L390 40" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+                            <path d="M10 330 L10 360 L40 360" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+                            <path d="M360 360 L390 360 L390 330" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+                            
+                            
+                            <!-- Profile image area -->
+                            <defs>
+                                <clipPath id="skyeAvatarClip">
+                                    <circle cx="85" cy="130" r="48"/>
+                                </clipPath>
+                            </defs>
+                            <circle cx="85" cy="130" r="50" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="rgba(255,255,255,0.02)"/>
+                            <circle cx="85" cy="130" r="42" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="6 3" fill="none"/>
+                            <image x="37" y="82" width="96" height="96" href="/src/starvortex_assets/skye-avatar.jpg" clip-path="url(#skyeAvatarClip)" preserveAspectRatio="xMidYMid slice"/>
+                            
+                            <!-- Crosshair on profile -->
+                            <line x1="85" y1="70" x2="85" y2="82" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+                            <line x1="85" y1="178" x2="85" y2="190" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+                            <line x1="25" y1="130" x2="37" y2="130" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+                            <line x1="133" y1="130" x2="145" y2="130" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+                            
+                            <!-- Four-pointed stars decoration (diamond shape) -->
+                            <g transform="translate(55, 185)">
+                                <path d="M10,0 L12,8 L10,16 L8,8 Z" fill="white"/>
+                                <path d="M30,0 L32,8 L30,16 L28,8 Z" fill="white"/>
+                                <path d="M50,0 L52,8 L50,16 L48,8 Z" fill="white"/>
+                                <path d="M70,0 L72,8 L70,16 L68,8 Z" fill="white"/>
+                            </g>
+                            
+                            <!-- Header data -->
+                            <text x="25" y="35" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="8" letter-spacing="0.15em">MEMBER SCAN // STARVORTEX</text>
+                            <text x="310" y="35" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">SV-MBR-001</text>
+                            
+                            <!-- Main data -->
+                            <text x="160" y="75" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">CODENAME</text>
+                            <text x="160" y="95" fill="white" font-family="monospace" font-size="16" letter-spacing="0.25em">SKYE</text>
+                            
+                            <text x="160" y="125" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">DIVISION</text>
+                            <text x="160" y="142" fill="white" font-family="monospace" font-size="11" letter-spacing="0.15em">ECHO STUDIOS</text>
+                            
+                            <text x="160" y="170" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">ROLE</text>
+                            <text x="160" y="187" fill="white" font-family="monospace" font-size="10" letter-spacing="0.1em">CREATIVE DEVELOPER</text>
+                            
+                            <!-- Status & Location -->
+                            <rect x="310" y="75" width="8" height="8" fill="#00ff88"/>
+                            <text x="323" y="82" fill="rgba(255,255,255,0.7)" font-family="monospace" font-size="8" letter-spacing="0.1em">ACTIVE</text>
+                            
+                            <text x="310" y="100" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">LOCATION</text>
+                            <text x="310" y="112" fill="rgba(255,255,255,0.7)" font-family="monospace" font-size="8" letter-spacing="0.08em">VENEZUELA</text>
+                            
+                            <text x="310" y="130" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">AGE</text>
+                            <text x="310" y="142" fill="rgba(255,255,255,0.7)" font-family="monospace" font-size="10" letter-spacing="0.08em">20</text>
+                            
+                            <text x="310" y="160" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">PRONOUNS</text>
+                            <text x="310" y="172" fill="rgba(255,255,255,0.7)" font-family="monospace" font-size="8" letter-spacing="0.08em">SHE/THEY</text>
+                            
+                            <!-- Skills bars -->
+                            <text x="25" y="220" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">WEB DEV</text>
+                            <rect x="80" y="214" width="90" height="4" fill="rgba(255,255,255,0.15)"/>
+                            <rect x="80" y="214" width="85" height="4" fill="white"/>
+                            <text x="175" y="219" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7">95%</text>
+                            
+                            <text x="200" y="220" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">UI/UX</text>
+                            <rect x="240" y="214" width="90" height="4" fill="rgba(255,255,255,0.15)"/>
+                            <rect x="240" y="214" width="81" height="4" fill="white"/>
+                            <text x="335" y="219" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7">90%</text>
+                            
+                            <text x="25" y="242" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">DIGITAL ART</text>
+                            <rect x="80" y="236" width="90" height="4" fill="rgba(255,255,255,0.15)"/>
+                            <rect x="80" y="236" width="76" height="4" fill="white"/>
+                            <text x="175" y="241" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7">85%</text>
+                            
+                            <text x="200" y="242" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">PIXEL ART</text>
+                            <rect x="240" y="236" width="90" height="4" fill="rgba(255,255,255,0.15)"/>
+                            <rect x="240" y="236" width="74" height="4" fill="white"/>
+                            <text x="335" y="241" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7">82%</text>
+                            
+                            <text x="25" y="264" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">GAME DEV</text>
+                            <rect x="80" y="258" width="90" height="4" fill="rgba(255,255,255,0.15)"/>
+                            <rect x="80" y="258" width="67" height="4" fill="rgba(255,200,0,0.8)"/>
+                            <text x="175" y="263" fill="rgba(255,200,0,0.9)" font-family="monospace" font-size="7">75%</text>
+                            
+                            <!-- Tech stack -->
+                            <text x="25" y="295" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">TECH STACK</text>
+                            <text x="25" y="310" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="7" letter-spacing="0.06em">> HTML / CSS / JS / REACT / TAILWIND / VITE</text>
+                            <text x="25" y="325" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7" letter-spacing="0.06em">> GODOT ENGINE / AFFINITY SUITE / FIGMA / GIT</text>
+                            
+                            <!-- Profile bio -->
+                            <text x="25" y="350" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="6" letter-spacing="0.06em">ART LOVER • PIXEL ARTIST • CAT PERSON • DRAGON ENTHUSIAST • LINUX LOVER</text>
+                            
+                            <!-- Scan animation -->
+                            <rect class="sv-scan-line" x="10" y="10" width="380" height="2" fill="rgba(255,255,255,0.2)">
+                                <animate attributeName="y" values="10;360;10" dur="4s" repeatCount="indefinite"/>
+                            </rect>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- SKILL RADAR -->
+                <div class="sv-scan-panel sv-panel-skill-radar" data-scan-group="skye">
+                    <div class="sv-panel-content sv-panel-svg-content">
+                        <svg class="sv-data-svg" viewBox="0 0 280 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <text x="140" y="20" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="10" text-anchor="middle" letter-spacing="0.15em">// SKILL RADAR</text>
+                            <g transform="translate(160, 185)">
+                                <g class="sv-radar-animate">
+                                    <polygon points="0,-80 69.3,-40 69.3,40 0,80 -69.3,40 -69.3,-40" stroke="rgba(255,255,255,0.1)" stroke-width="1" fill="none"/>
+                                    <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" stroke="rgba(255,255,255,0.12)" stroke-width="1" fill="none"/>
+                                    <polygon points="0,-40 34.6,-20 34.6,20 0,40 -34.6,20 -34.6,-20" stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none"/>
+                                    <polygon points="0,-20 17.3,-10 17.3,10 0,20 -17.3,10 -17.3,-10" stroke="rgba(255,255,255,0.18)" stroke-width="1" fill="none"/>
+                                    <line x1="0" y1="0" x2="0" y2="-80" stroke="rgba(255,255,255,0.2)"/>
+                                    <line x1="0" y1="0" x2="69.3" y2="-40" stroke="rgba(255,255,255,0.2)"/>
+                                    <line x1="0" y1="0" x2="69.3" y2="40" stroke="rgba(255,255,255,0.2)"/>
+                                    <line x1="0" y1="0" x2="0" y2="80" stroke="rgba(255,255,255,0.2)"/>
+                                    <line x1="0" y1="0" x2="-69.3" y2="40" stroke="rgba(255,255,255,0.2)"/>
+                                    <line x1="0" y1="0" x2="-69.3" y2="-40" stroke="rgba(255,255,255,0.2)"/>
+                                    <polygon points="0,-76 62.4,-36 58.9,34 0,72 -52,30 -48.5,-28" stroke="white" stroke-width="2" fill="rgba(255,255,255,0.1)"/>
+                                    <circle cx="0" cy="-76" r="4" fill="white"/>
+                                    <circle cx="62.4" cy="-36" r="4" fill="white"/>
+                                    <circle cx="58.9" cy="34" r="4" fill="white"/>
+                                    <circle cx="0" cy="72" r="4" fill="white"/>
+                                    <circle cx="-52" cy="30" r="4" fill="rgba(255,200,0,1)"/>
+                                    <circle cx="-48.5" cy="-28" r="4" fill="rgba(255,255,255,0.7)"/>
+                                    <circle cx="0" cy="0" r="3" fill="white"/>
+                                </g>
+                                <text x="0" y="-100" fill="white" font-family="monospace" font-size="9" text-anchor="middle" font-weight="bold">WEB 95%</text>
+                                <text x="90" y="-35" fill="white" font-family="monospace" font-size="9">CODE 90%</text>
+                                <text x="90" y="45" fill="white" font-family="monospace" font-size="9">ART 85%</text>
+                                <text x="0" y="115" fill="white" font-family="monospace" font-size="9" text-anchor="middle">UX 90%</text>
+                                <text x="-90" y="45" fill="rgba(255,200,0,1)" font-family="monospace" font-size="9" text-anchor="end">GAME 75%</text>
+                                <text x="-90" y="-35" fill="rgba(255,255,255,0.7)" font-family="monospace" font-size="9" text-anchor="end">SYS 70%</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- ANALYSIS REPORT -->
+                <div class="sv-scan-panel sv-panel-analysis-report" data-scan-group="skye">
+                    <div class="sv-panel-content sv-panel-svg-content">
+                        <svg class="sv-data-svg" viewBox="0 0 300 230" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <text x="15" y="22" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="10" letter-spacing="0.15em">// ANALYSIS REPORT</text>
+                            <line x1="15" y1="32" x2="285" y2="32" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                            <g class="sv-data-animate" style="--delay: 0.1s">
+                                <text x="15" y="58" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="9" letter-spacing="0.1em">CREATIVITY INDEX</text>
+                                <text x="15" y="82" fill="white" font-family="monospace" font-size="24" letter-spacing="0.05em">98.7%</text>
+                            </g>
+                            <g class="sv-data-animate" style="--delay: 0.2s">
+                                <text x="160" y="58" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="9" letter-spacing="0.1em">PROFICIENCY</text>
+                                <text x="160" y="82" fill="white" font-family="monospace" font-size="24" letter-spacing="0.05em">A+</text>
+                            </g>
+                            <g class="sv-data-animate" style="--delay: 0.3s">
+                                <text x="15" y="118" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="9" letter-spacing="0.1em">PROJECTS</text>
+                                <text x="15" y="142" fill="white" font-family="monospace" font-size="24" letter-spacing="0.05em">04</text>
+                            </g>
+                            <g class="sv-data-animate" style="--delay: 0.4s">
+                                <text x="160" y="118" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="9" letter-spacing="0.1em">HOURS CODED</text>
+                                <text x="160" y="142" fill="white" font-family="monospace" font-size="24" letter-spacing="0.05em">2.4K</text>
+                            </g>
+                            <text x="15" y="178" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="9" letter-spacing="0.1em">WEEKLY ACTIVITY</text>
+                            <line x1="15" y1="215" x2="180" y2="215" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                            <g class="sv-data-animate" style="--delay: 0.5s">
+                                <rect x="15" y="199" width="18" height="16" fill="rgba(255,255,255,0.6)"/>
+                                <rect x="39" y="203" width="18" height="12" fill="rgba(255,255,255,0.5)"/>
+                                <rect x="63" y="201" width="18" height="14" fill="rgba(255,255,255,0.7)"/>
+                                <rect x="87" y="206" width="18" height="9" fill="rgba(255,255,255,0.4)"/>
+                                <rect x="111" y="199" width="18" height="16" fill="white"/>
+                                <rect x="135" y="202" width="18" height="13" fill="rgba(255,255,255,0.6)"/>
+                                <rect x="159" y="204" width="18" height="11" fill="rgba(255,255,255,0.45)"/>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- SIGNAL WAVEFORM -->
+                <div class="sv-scan-panel sv-panel-signal-wave" data-scan-group="skye">
+                    <div class="sv-panel-content sv-panel-svg-content">
+                        <svg class="sv-data-svg" viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <text x="15" y="20" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="10" letter-spacing="0.1em">// CREATIVE SIGNAL</text>
+                            <text x="245" y="20" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="10" letter-spacing="0.1em">LIVE</text>
+                            <circle cx="280" cy="16" r="4" fill="#00ff88">
+                                <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>
+                            </circle>
+                            <line x1="15" y1="40" x2="305" y2="40" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                            <line x1="15" y1="62" x2="305" y2="62" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                            <line x1="15" y1="84" x2="305" y2="84" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                            <polyline class="sv-waveform-animate" points="15,62 40,42 60,78 85,48 110,70 140,32 170,85 200,55 230,62 260,38 290,72 305,58" stroke="white" stroke-width="2" fill="none"/>
+                            <circle cx="140" cy="32" r="3" fill="white"/>
+                            <circle cx="170" cy="85" r="3" fill="white"/>
+                            <circle cx="260" cy="38" r="3" fill="white"/>
+                            <text x="15" y="108" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="9" letter-spacing="0.1em">FREQ: 432.7 Hz</text>
+                            <text x="180" y="108" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="9" letter-spacing="0.1em">AMP: 0.847</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="sv-section sv-scan-section" id="sv-scan-projects" data-section-index="2">
+            <div class="sv-scan-area">
+                <!-- DOT PATTERN BACKGROUND -->
+                <div class="sv-dot-pattern" data-scan-group="projects"></div>
+                
+                <h2 class="sv-scan-title sv-scan-target sv-scroll-reveal" data-scan-id="projects" data-scroll-text="PERSONAL PROJECTS"></h2>
+                <p class="sv-scan-subtitle">CREATIVE WORKS • INDEPENDENT</p>
+                
+                <!-- VISUAL DATA ASSETS -->
+                <img class="sv-scan-asset sv-asset-geo sv-asset-geo-proj" src="/src/starvortex_assets/data_geo.webp" alt="" data-scan-group="projects">
+                <img class="sv-scan-asset sv-asset-scans sv-asset-scans-proj" src="/src/starvortex_assets/data_scans.webp" alt="" data-scan-group="projects">
+                
+                <!-- SKYE JOURNEY -->
+                <div class="sv-scan-panel sv-panel-project-1" data-scan-group="projects">
+                    <div class="sv-panel-content">
+                        <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// PROJECT ALPHA" data-effect="scramble"></span><span class="sv-panel-status" data-text="ACTIVE" data-effect="type"></span></div>
+                        <h3 class="sv-project-title" data-text="SKYE JOURNEY" data-effect="scramble"></h3>
+                        <div class="sv-project-meta"><span data-text="TYPE: PERSONAL WEBSITE" data-effect="type"></span><span data-text="STATUS: IN DEVELOPMENT" data-effect="type"></span></div>
+                        <p class="sv-project-desc" data-text="MY PERSONAL SAFE SPACE ON THE INTERNET. A COZY CORNER WHERE I SHARE BEAUTIFUL MOMENTS, THOUGHTS, AND PERSONAL THINGS FROM MY LIFE. DESIGNED TO FEEL WARM, INTIMATE, AND AUTHENTICALLY ME." data-effect="type"></p>
+                        <div class="sv-project-tags"><span data-text="#WEB" data-effect="scramble"></span><span data-text="#PERSONAL" data-effect="scramble"></span><span data-text="#CREATIVE" data-effect="scramble"></span></div>
+                    </div>
+                </div>
+                
+                <!-- OUR INNER WORLD -->
+              <div class="sv-scan-panel sv-panel-project-2" data-scan-group="projects">
+    <div class="sv-panel-content">
+        <div class="sv-panel-header"><span class="sv-panel-dot">■ ■</span><span data-text="// PROJECT BETA" data-effect="scramble"></span><span class="sv-panel-status sv-status-dev" data-text="DEV" data-effect="type"></span></div>
+        <h3 class="sv-project-title" data-text="OUR INNER WORLD" data-effect="scramble"></h3>
+        <p class="sv-project-subtitle" style="font-family: 'SV-Tech', monospace; font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 0.15em; margin: -5px 0 12px 0; text-transform: uppercase;" data-text="// DREAMERS JOURNEY" data-effect="scramble"></p>
+        <div class="sv-project-meta">
+            <span data-text="TYPE: INDIE VIDEO GAME" data-effect="type"></span>
+            <span data-text="ENGINE: GODOT" data-effect="type"></span>
+            <span data-text="GENRE: PSYCHOLOGICAL HORROR / RPG" data-effect="type"></span>
+            <span data-text="INSPIRED BY: OMORI" data-effect="type"></span>
+        </div>
+        <p class="sv-project-desc" data-text="OURINNERWORLD COULD BE CONSIDERED THE CLOSEST THING TO AN OMORI FANGAME, BLENDING FORMULAS FROM MY FAVORITE CHILDHOOD VIDEO GAMES WITH A TOUCH OF LOVE—A GIFT FOR THOSE I CARE ABOUT MOST." data-effect="type"></p>
+        <p class="sv-project-desc sv-project-desc-long" data-text="I AM DEVELOPING THIS PROJECT SOLO AS A PERSONAL ENDEAVOR, WITH HELP FROM FRIENDS. THE DREAMERS JOURNEY TELLS A STORY STILL UNDER CONSTRUCTION BUT BUILT ON SOLID FOUNDATIONS. OUR PROTAGONIST, RAINY, FACES AN UNKNOWN WORLD IN THE HEADSPACE—ADVENTURES BEYOND THE STARS WITH NEW MECHANICS AND SYSTEMS, ALONGSIDE NEW COMPANIONS." data-effect="type"></p>
+        <p class="sv-project-desc sv-project-desc-long" data-text="COLORFUL CHARACTERS AND ENEMIES AWAIT, BUT WHAT COULD BE HIDING BEHIND THIS DREAM COME TRUE? WHO KNOWS? PERHAPS DREAMS CAN BECOME DANGEROUS WHEN YOU'RE NO LONGER THE ONLY ONE IN CONTROL. THINGS CAN TURN DARK AND PERILOUS IF YOU LET YOUR GUARD DOWN." data-effect="type"></p>
+        <div class="sv-project-warning">
+            <span class="sv-warning-icon">!</span>
+            <span data-text="SENSITIVE TOPICS: SUICIDE, DEATH, MENTAL ILLNESS, PSYCHOLOGICAL HORROR" data-effect="type"></span>
+        </div>
+        <p class="sv-project-note" data-text="A GIFT FOR MY BOYFRIEND. A PERSONAL PROJECT TO TEACH MYSELF GAME DEV. WHO KNOWS IF IT WILL EVER GO PUBLIC? FOR NOW, YOU CAN TRY A SMALL BROWSER TEST. A MYSTERY? HMM..." data-effect="type"></p>
+        <a href="/src/work/ourinnerworld/index.html" class="sv-project-link" target="_blank">
+            <span>> PLAY DEMO</span>
+        </a>
+        <div class="sv-project-tags"><span data-text="#GAME" data-effect="scramble"></span><span data-text="#HORROR" data-effect="scramble"></span><span data-text="#INDIE" data-effect="scramble"></span><span data-text="#OMORI" data-effect="scramble"></span><span data-text="#GODOT" data-effect="scramble"></span><span data-text="#RPG" data-effect="scramble"></span><span data-text="#DREAMSCAPE" data-effect="scramble"></span></div>
+    </div>
+</div>
+                
+                <!-- STATS -->
+                <div class="sv-scan-panel sv-panel-project-stats" data-scan-group="projects">
+                    <div class="sv-panel-content">
+                        <div class="sv-panel-header"><span class="sv-panel-dot">■</span><span data-text="// STATS" data-effect="scramble"></span></div>
+                        <div class="sv-stats-grid"><div class="sv-stat"><span class="sv-stat-value" data-text="02" data-effect="scramble"></span><span class="sv-stat-label" data-text="ACTIVE" data-effect="type"></span></div><div class="sv-stat"><span class="sv-stat-value" data-text="∞" data-effect="scramble"></span><span class="sv-stat-label" data-text="PASSION" data-effect="type"></span></div></div>
+                    </div>
+                </div>
+                
+                <!-- PROJECT DATA - PROGRESS TRACKER -->
+                <div class="sv-scan-panel sv-panel-project-progress" data-scan-group="projects">
+                    <div class="sv-panel-content sv-panel-svg-content">
+                        <svg class="sv-data-svg" viewBox="0 0 260 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <text x="10" y="18" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="8" letter-spacing="0.15em">// DEV PROGRESS</text>
+                            <line x1="10" y="26" x2="250" y2="26" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                            
+                            <g class="sv-data-animate" style="--delay: 0.1s">
+                                <text x="10" y="48" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7">SKYE JOURNEY</text>
+                                <rect x="10" y="54" width="180" height="6" fill="rgba(255,255,255,0.1)"/>
+                                <rect x="10" y="54" width="126" height="6" fill="white"/>
+                                <text x="200" y="60" fill="white" font-family="monospace" font-size="9">70%</text>
+                            </g>
+                            
+                            <g class="sv-data-animate" style="--delay: 0.2s">
+                                <text x="10" y="82" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7">OUR INNER WORLD</text>
+                                <rect x="10" y="88" width="180" height="6" fill="rgba(255,255,255,0.1)"/>
+                                <rect x="10" y="88" width="54" height="6" fill="rgba(255,200,0,0.8)"/>
+                                <text x="200" y="94" fill="rgba(255,200,0,0.9)" font-family="monospace" font-size="9">30%</text>
+                            </g>
+                            
+                            <g class="sv-data-animate" style="--delay: 0.3s">
+                                <text x="10" y="116" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7">STARVORTEX WEB</text>
+                                <rect x="10" y="122" width="180" height="6" fill="rgba(255,255,255,0.1)"/>
+                                <rect x="10" y="122" width="162" height="6" fill="#00ff88"/>
+                                <text x="200" y="128" fill="#00ff88" font-family="monospace" font-size="9">90%</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- PROJECT DATA - TIMELINE -->
+                <div class="sv-scan-panel sv-panel-project-timeline" data-scan-group="projects">
+                    <div class="sv-panel-content sv-panel-svg-content">
+                        <svg class="sv-data-svg" viewBox="0 0 220 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <text x="10" y="18" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="8" letter-spacing="0.15em">// TIMELINE</text>
+                            
+                            <!-- Timeline line -->
+                            <line x1="30" y1="50" x2="190" y2="50" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                            
+                            <!-- Timeline points -->
+                            <g class="sv-data-animate" style="--delay: 0.1s">
+                                <circle cx="50" cy="50" r="6" fill="white"/>
+                                <text x="50" y="75" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="7" text-anchor="middle">2023</text>
+                                <text x="50" y="38" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="6" text-anchor="middle">START</text>
+                            </g>
+                            
+                            <g class="sv-data-animate" style="--delay: 0.2s">
+                                <circle cx="100" cy="50" r="6" fill="white"/>
+                                <text x="100" y="75" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="7" text-anchor="middle">2024</text>
+                                <text x="100" y="38" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="6" text-anchor="middle">DEV</text>
+                            </g>
+                            
+                            <g class="sv-data-animate" style="--delay: 0.3s">
+                                <circle cx="150" cy="50" r="8" stroke="white" stroke-width="2" fill="none">
+                                    <animate attributeName="r" values="6;10;6" dur="2s" repeatCount="indefinite"/>
+                                    <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+                                </circle>
+                                <circle cx="150" cy="50" r="3" fill="#00ff88"/>
+                                <text x="150" y="75" fill="white" font-family="monospace" font-size="7" text-anchor="middle">NOW</text>
+                                <text x="150" y="38" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="6" text-anchor="middle">ACTIVE</text>
+                            </g>
+                            
+                            <text x="10" y="100" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">NEXT MILESTONE</text>
+                            <text x="10" y="112" fill="white" font-family="monospace" font-size="9" letter-spacing="0.08em">V1.0 RELEASE</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ABOUT -->
+        <section class="sv-section sv-grid-section" id="sv-sec-1" data-section-index="3">
+            <div class="sv-content-grid sv-grid-3col">
+                <div class="sv-box sv-box-vid"><video class="sv-deco-vid" muted playsinline><source src="/src/starvortex_assets/exp_symbol_mark.webm" type="video/webm"></video></div>
+                <div class="sv-box sv-box-info"><div class="sv-box-header"><span class="sv-dot">■</span><span class="sv-ch" id="sv-ch1"></span></div><h2 class="sv-box-title" id="sv-title1"></h2><p class="sv-box-text" id="sv-text1"></p></div>
+                <div class="sv-box sv-box-vid"><video class="sv-deco-vid" muted playsinline><source src="/src/starvortex_assets/exp_symbol_focus.webm" type="video/webm"></video></div>
+            </div>
+        </section>
+        
+        <!-- DIVISIONS -->
+        <section class="sv-section sv-grid-section" id="sv-sec-2" data-section-index="4">
+            <div class="sv-content-grid sv-grid-3col">
+                <div class="sv-box sv-box-div"><div class="sv-box-header"><span class="sv-dot">■ ■</span><span class="sv-ch" id="sv-ch2"></span></div><h3 class="sv-box-subtitle" id="sv-sub1"></h3><p class="sv-box-text" id="sv-text2"></p></div>
+                <div class="sv-box sv-box-vid"><video class="sv-deco-vid" muted playsinline><source src="/src/starvortex_assets/exp_symbol_exposition.webm" type="video/webm"></video></div>
+                <div class="sv-box sv-box-div"><div class="sv-box-header"><span class="sv-dot">■ ■</span><span class="sv-ch" id="sv-ch3"></span></div><h3 class="sv-box-subtitle" id="sv-sub2"></h3><p class="sv-box-text" id="sv-text3"></p></div>
+            </div>
+        </section>
+        
+        <!-- MEMBERS SECTION -->
+        <section class="sv-section sv-members-section" id="sv-members" data-section-index="5">
+            <div class="sv-members-header">
+                <div class="sv-section-label"><span class="sv-dot">■ ■ ■</span><span id="sv-members-label"></span></div>
+                <h2 class="sv-members-title" id="sv-members-title"></h2>
+                <p class="sv-members-subtitle" id="sv-members-subtitle"></p>
+            </div>
+            
+            <div class="sv-members-grid">
+                <!-- REGREDANGER -->
+                <div class="sv-member-card" data-member="regredanger">
+                    <div class="sv-member-scan-frame">
+                        <svg class="sv-member-scan-svg" viewBox="0 0 400 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          
+                            
+                            <!-- Corner brackets -->
+                            <path d="M10 40 L10 10 L40 10" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+                            <path d="M360 10 L390 10 L390 40" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+                            <path d="M10 300 L10 330 L40 330" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+                            <path d="M360 330 L390 330 L390 300" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+                            
+                
+                            
+                            <!-- Profile image area with clipPath -->
+                            <defs>
+                                <clipPath id="regreAvatarClip">
+                                    <circle cx="85" cy="130" r="48"/>
+                                </clipPath>
+                            </defs>
+                            <circle cx="85" cy="130" r="50" stroke="rgba(255,255,255,0.25)" stroke-width="1" fill="rgba(255,255,255,0.02)"/>
+                            <circle cx="85" cy="130" r="42" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="4 4" fill="none"/>
+                            <!-- Image placeholder - replace href with actual image path -->
+                            <image x="37" y="82" width="96" height="96" href="/src/starvortex_assets/regre-avatar.png" clip-path="url(#regreAvatarClip)" preserveAspectRatio="xMidYMid slice"/>
+                
+                            
+                            <!-- Crosshair on profile -->
+                            <line x1="85" y1="70" x2="85" y2="82" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            <line x1="85" y1="178" x2="85" y2="190" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            <line x1="25" y1="130" x2="37" y2="130" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            <line x1="133" y1="130" x2="145" y2="130" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            
+                            <!-- Header data -->
+                            <text x="25" y="35" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="8" letter-spacing="0.15em">MEMBER SCAN // STARVORTEX</text>
+                            <text x="310" y="35" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">SV-MBR-002</text>
+                            
+                            <!-- Main data -->
+                            <text x="160" y="75" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">CODENAME</text>
+                            <text x="160" y="95" fill="white" font-family="monospace" font-size="14" letter-spacing="0.2em">REGREDANGER</text>
+                            
+                            <text x="160" y="125" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">DIVISION</text>
+                            <text x="160" y="142" fill="white" font-family="monospace" font-size="11" letter-spacing="0.15em">QUANTUM ANALYTICS</text>
+                            
+                            <text x="160" y="170" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">ROLE</text>
+                            <text x="160" y="187" fill="white" font-family="monospace" font-size="9" letter-spacing="0.08em">FOUNDER / BACKEND DEVELOPER</text>
+                            
+                            <!-- Status-->
+                            <rect x="310" y="75" width="8" height="8" fill="#00ff88"/>
+                            <text x="323" y="82" fill="rgba(255,255,255,0.7)" font-family="monospace" font-size="8" letter-spacing="0.1em">ACTIVE</text>
+                            
+        
+                            
+                            <!-- Skills bars with real data -->
+                            <text x="25" y="210" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">JAVA</text>
+                            <rect x="65" y="204" width="80" height="4" fill="rgba(255,255,255,0.15)"/>
+                            <rect x="65" y="204" width="72" height="4" fill="white"/>
+                            <text x="150" y="209" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7">90%</text>
+                            
+                            <text x="180" y="210" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">MYSQL</text>
+                            <rect x="220" y="204" width="80" height="4" fill="rgba(255,255,255,0.15)"/>
+                            <rect x="220" y="204" width="72" height="4" fill="white"/>
+                            <text x="305" y="209" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7">90%</text>
+                            
+                            <text x="25" y="230" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">PYTHON</text>
+                            <rect x="65" y="224" width="80" height="4" fill="rgba(255,255,255,0.15)"/>
+                            <rect x="65" y="224" width="60" height="4" fill="white"/>
+                            <text x="150" y="229" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7">75%</text>
+                            
+                            <text x="180" y="230" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">GIT</text>
+                            <rect x="220" y="224" width="80" height="4" fill="rgba(255,255,255,0.15)"/>
+                            <rect x="220" y="224" width="68" height="4" fill="white"/>
+                            <text x="305" y="229" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7">85%</text>
+                            
+                            <!-- Tech stack -->
+                            <text x="25" y="255" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">TECH STACK</text>
+                            <text x="25" y="270" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="7" letter-spacing="0.06em">> JAVA / PYTHON / VBA / KOTLIN / FASTAPI / SPRING BOOT</text>
+                            <text x="25" y="285" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7" letter-spacing="0.06em">> MYSQL / POSTGRESQL / SQLITE / JAVAFX / JAVALIN</text>
+                            
+                            <!-- Architecture knowledge -->
+                            <text x="25" y="305" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">ARCHITECTURE</text>
+                            <text x="25" y="318" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7" letter-spacing="0.06em">> CLEAN ARCH / DDD / HEXAGONAL / MVC / REST APIs</text>
+                            
+                            <!-- Scan animation -->
+                            <rect class="sv-scan-line" x="10" y="10" width="380" height="2" fill="rgba(255,255,255,0.2)">
+                                <animate attributeName="y" values="10;330;10" dur="4s" repeatCount="indefinite"/>
+                            </rect>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- TOPIKU -->
+                <div class="sv-member-card" data-member="topiku">
+                    <div class="sv-member-scan-frame">
+                        <svg class="sv-member-scan-svg" viewBox="0 0 400 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        
+                            
+                            <!-- Corner brackets -->
+                            <path d="M10 40 L10 10 L40 10" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+                            <path d="M360 10 L390 10 L390 40" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+                            <path d="M10 270 L10 300 L40 300" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+                            <path d="M360 300 L390 300 L390 270" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+                            
+                            
+                            <!-- Profile circle with art-themed decoration -->
+                            <circle cx="85" cy="130" r="50" stroke="rgba(255,255,255,0.25)" stroke-width="1" fill="rgba(255,255,255,0.03)"/>
+                            <circle cx="85" cy="130" r="40" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="8 4" fill="none"/>
+                          
+                            
+                            <!-- Decorative lines -->
+                            <line x1="85" y1="70" x2="85" y2="90" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            <line x1="85" y1="170" x2="85" y2="190" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            <line x1="25" y1="130" x2="45" y2="130" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            <line x1="125" y1="130" x2="145" y2="130" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            
+                            <!-- Header data -->
+                            <text x="25" y="35" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="8" letter-spacing="0.15em">MEMBER SCAN // STARVORTEX</text>
+                            <text x="310" y="35" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">SV-MBR-003</text>
+                            
+                            <!-- Main data -->
+                            <text x="160" y="75" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">CODENAME</text>
+                            <text x="160" y="95" fill="white" font-family="monospace" font-size="14" letter-spacing="0.2em">TOPIKU</text>
+                            
+                            <text x="160" y="125" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">DIVISION</text>
+                            <text x="160" y="142" fill="white" font-family="monospace" font-size="11" letter-spacing="0.15em">ECHO STUDIOS</text>
+                            
+                            <text x="160" y="170" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">ROLE</text>
+                            <text x="160" y="187" fill="white" font-family="monospace" font-size="11" letter-spacing="0.12em">VISUAL NARRATIVE ARTIST</text>
+                            
+                            <!-- Status -->
+                            <rect x="310" y="75" width="8" height="8" fill="#00ff88"/>
+                            <text x="323" y="82" fill="rgba(255,255,255,0.7)" font-family="monospace" font-size="8" letter-spacing="0.1em">ACTIVE</text>
+                            
+                            <!-- Bottom stats -->
+                            <text x="25" y="215" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">CLEARANCE</text>
+                            <text x="25" y="230" fill="white" font-family="monospace" font-size="16" letter-spacing="0.15em">A-2</text>
+                            
+                            <text x="100" y="215" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">CREATIVITY</text>
+                            <rect x="100" y="222" width="80" height="4" fill="rgba(255,255,255,0.15)"/>
+                            <rect x="100" y="222" width="76" height="4" fill="white"/>
+                            <text x="185" y="228" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="8">95%</text>
+                            
+                            <!-- Skills bars -->
+                            <text x="230" y="215" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">CHAR. DES</text>
+                            <rect x="230" y="222" width="60" height="3" fill="rgba(255,255,255,0.15)"/>
+                            <rect x="230" y="222" width="57" height="3" fill="white"/>
+                            
+                            <text x="310" y="215" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">MYTHOLOGY</text>
+                            <rect x="310" y="222" width="60" height="3" fill="rgba(255,255,255,0.15)"/>
+                            <rect x="310" y="222" width="52" height="3" fill="white"/>
+                            
+                            <!-- Specializations -->
+                            <text x="25" y="260" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">SPECIALIZATIONS</text>
+                            <text x="25" y="275" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="8" letter-spacing="0.08em">> VISUAL NARRATIVE / CHARACTER DESIGN / FANTASY ART</text>
+                            <text x="25" y="290" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="8" letter-spacing="0.08em">> DARK CONTEMPORARY AESTHETIC / MYTHOLOGY / GAME INSPIRED</text>
+                            
+                            <!-- Scan animation -->
+                            <rect class="sv-scan-line" x="10" y="10" width="380" height="2" fill="rgba(255,255,255,0.2)">
+                                <animate attributeName="y" values="10;300;10" dur="4s" repeatCount="indefinite"/>
+                            </rect>
+                        </svg>
+                    </div>
+                </div>
+
+
+                <!-- GRIM -->
+<div class="sv-member-card" data-member="grim">
+    <div class="sv-member-scan-frame">
+        <svg class="sv-member-scan-svg" viewBox="0 0 400 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+            
+            <!-- Corner brackets -->
+            <path d="M10 40 L10 10 L40 10" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+            <path d="M360 10 L390 10 L390 40" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+            <path d="M10 300 L10 330 L40 330" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+            <path d="M360 330 L390 330 L390 300" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+            
+            <!-- Profile image area with clipPath -->
+            <defs>
+                <clipPath id="grimAvatarClip">
+                    <circle cx="85" cy="130" r="48"/>
+                </clipPath>
+            </defs>
+            <circle cx="85" cy="130" r="50" stroke="rgba(255,255,255,0.25)" stroke-width="1" fill="rgba(255,255,255,0.02)"/>
+            <circle cx="85" cy="130" r="42" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="6 2" fill="none"/>
+     
+            <image x="37" y="82" width="96" height="96" href="/src/starvortex_assets/grim-avatar.JPG" clip-path="url(#grimAvatarClip)" preserveAspectRatio="xMidYMid slice"/> 
+
+            
+            <!-- Crosshair on profile -->
+            <line x1="85" y1="70" x2="85" y2="82" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <line x1="85" y1="178" x2="85" y2="190" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <line x1="25" y1="130" x2="37" y2="130" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <line x1="133" y1="130" x2="145" y2="130" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            
+            <!-- Header data -->
+            <text x="25" y="35" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="8" letter-spacing="0.15em">MEMBER SCAN // STARVORTEX</text>
+            <text x="310" y="35" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">SV-MBR-004</text>
+            
+            <!-- Main data -->
+            <text x="160" y="75" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">CODENAME</text>
+            <text x="160" y="95" fill="white" font-family="monospace" font-size="16" letter-spacing="0.25em">GRIM</text>
+            
+            <text x="160" y="125" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">DIVISION</text>
+            <text x="160" y="142" fill="white" font-family="monospace" font-size="11" letter-spacing="0.15em">ECHO STUDIOS</text>
+            
+            <text x="160" y="170" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">ROLE</text>
+            <text x="160" y="187" fill="white" font-family="monospace" font-size="9" letter-spacing="0.08em">CONCEPT ARTIST / SCI-FI DESIGNER</text>
+            
+            <!-- Status  -->
+            <rect x="310" y="75" width="8" height="8" fill="#00ff88"/>
+            <text x="323" y="82" fill="rgba(255,255,255,0.7)" font-family="monospace" font-size="8" letter-spacing="0.1em">ACTIVE</text>
+            
+            
+            <!-- Skills bars -->
+            <text x="25" y="210" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">VEHICLE DES.</text>
+            <rect x="85" y="204" width="80" height="4" fill="rgba(255,255,255,0.15)"/>
+            <rect x="85" y="204" width="76" height="4" fill="white"/>
+            <text x="170" y="209" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7">95%</text>
+            
+            <text x="200" y="210" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">PIXEL ART</text>
+            <rect x="260" y="204" width="80" height="4" fill="rgba(255,255,255,0.15)"/>
+            <rect x="260" y="204" width="68" height="4" fill="white"/>
+            <text x="345" y="209" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7">85%</text>
+            
+            <text x="25" y="230" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">CONCEPT ART</text>
+            <rect x="85" y="224" width="80" height="4" fill="rgba(255,255,255,0.15)"/>
+            <rect x="85" y="224" width="72" height="4" fill="white"/>
+            <text x="170" y="229" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7">90%</text>
+            
+            <text x="200" y="230" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">SCI-FI TECH</text>
+            <rect x="260" y="224" width="80" height="4" fill="rgba(255,255,255,0.15)"/>
+            <rect x="260" y="224" width="74" height="4" fill="white"/>
+            <text x="345" y="229" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7">92%</text>
+            
+            <!-- Specializations -->
+            <text x="25" y="260" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">SPECIALIZATIONS</text>
+            <text x="25" y="275" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="7" letter-spacing="0.06em">> SPACECRAFT DESIGN / VEHICLE CONCEPTS / TECH MACHINERY</text>
+            <text x="25" y="290" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7" letter-spacing="0.06em">> SCI-FI ENVIRONMENTS / PIXEL ART / CONCEPT ILLUSTRATION</text>
+            
+            <!-- Focus areas -->
+            <text x="25" y="310" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">FOCUS</text>
+            <text x="25" y="323" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="7" letter-spacing="0.06em">> FUTURISTIC TECHNOLOGY / SPACE EXPLORATION AESTHETICS</text>
+            
+            <!-- Scan animation -->
+            <rect class="sv-scan-line" x="10" y="10" width="380" height="2" fill="rgba(255,255,255,0.2)">
+                <animate attributeName="y" values="10;330;10" dur="4s" repeatCount="indefinite"/>
+            </rect>
+        </svg>
+    </div>
+</div>
+
+<!-- FOXY -->
+<div class="sv-member-card" data-member="foxy">
+    <div class="sv-member-scan-frame">
+        <svg class="sv-member-scan-svg" viewBox="0 0 400 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+            
+            <!-- Corner brackets -->
+            <path d="M10 40 L10 10 L40 10" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+            <path d="M360 10 L390 10 L390 40" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+            <path d="M10 270 L10 300 L40 300" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+            <path d="M360 300 L390 300 L390 270" stroke="rgba(255,255,255,0.8)" stroke-width="2" fill="none"/>
+            
+            <!-- Profile circle with code-themed decoration -->
+            <circle cx="85" cy="130" r="50" stroke="rgba(255,255,255,0.25)" stroke-width="1" fill="rgba(255,255,255,0.02)"/>
+            <circle cx="85" cy="130" r="42" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="3 5" fill="none"/>
+        
+            
+            <!-- Decorative lines -->
+            <line x1="85" y1="70" x2="85" y2="90" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <line x1="85" y1="170" x2="85" y2="190" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <line x1="25" y1="130" x2="45" y2="130" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <line x1="125" y1="130" x2="145" y2="130" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            
+            <!-- Header data -->
+            <text x="25" y="35" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="8" letter-spacing="0.15em">MEMBER SCAN // STARVORTEX</text>
+            <text x="310" y="35" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">SV-MBR-005</text>
+            
+            <!-- Main data -->
+            <text x="160" y="75" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">CODENAME</text>
+            <text x="160" y="95" fill="white" font-family="monospace" font-size="16" letter-spacing="0.25em">FOXY</text>
+            
+            <text x="160" y="125" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">DIVISION</text>
+            <text x="160" y="142" fill="white" font-family="monospace" font-size="11" letter-spacing="0.15em">QUANTUM ANALYTICS</text>
+            
+            <text x="160" y="170" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.1em">ROLE</text>
+            <text x="160" y="187" fill="white" font-family="monospace" font-size="11" letter-spacing="0.12em">FULL STACK DEVELOPER</text>
+            
+            <!-- Status -->
+            <rect x="310" y="75" width="8" height="8" fill="#00ff88"/>
+            <text x="323" y="82" fill="rgba(255,255,255,0.7)" font-family="monospace" font-size="8" letter-spacing="0.1em">ACTIVE</text>
+        
+            
+            <!-- Bottom stats with placeholders -->
+            <text x="25" y="215" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">CLEARANCE</text>
+            <text x="25" y="230" fill="white" font-family="monospace" font-size="16" letter-spacing="0.15em">—</text>
+            
+            <text x="100" y="215" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">FRONTEND</text>
+            <rect x="100" y="222" width="80" height="4" fill="rgba(255,255,255,0.15)"/>
+            <rect x="100" y="222" width="0" height="4" fill="white"/>
+            <text x="185" y="228" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="8">—%</text>
+            
+            <text x="220" y="215" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">BACKEND</text>
+            <rect x="220" y="222" width="80" height="4" fill="rgba(255,255,255,0.15)"/>
+            <rect x="220" y="222" width="0" height="4" fill="white"/>
+            <text x="305" y="228" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="8">—%</text>
+            
+            <!-- Specializations placeholder -->
+            <text x="25" y="260" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7" letter-spacing="0.1em">SPECIALIZATIONS</text>
+            <text x="25" y="275" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="8" letter-spacing="0.08em">> FULL STACK DEVELOPMENT / [DATA PENDING]</text>
+            <text x="25" y="290" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="8" letter-spacing="0.08em">> [AWAITING ADDITIONAL INTEL...]</text>
+            
+            <!-- Scan animation -->
+            <rect class="sv-scan-line" x="10" y="10" width="380" height="2" fill="rgba(255,255,255,0.2)">
+                <animate attributeName="y" values="10;300;10" dur="4s" repeatCount="indefinite"/>
+            </rect>
+        </svg>
+    </div>
+</div>
+
+            </div>
+            
+            <!-- DATA VISUALIZATION PANELS -->
+      
+<div class="sv-data-panel sv-data-panel-right">
+    <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Division distribution -->
+        <text x="10" y="20" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="8" letter-spacing="0.15em">DIVISION METRICS</text>
+        <line x1="10" y="28" x2="190" y2="28" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        
+        <!-- Mini hexagon chart -->
+        <g transform="translate(50, 90)">
+            <polygon points="0,-35 30.3,-17.5 30.3,17.5 0,35 -30.3,17.5 -30.3,-17.5" stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none"/>
+            <polygon points="0,-25 21.6,-12.5 21.6,12.5 0,25 -21.6,12.5 -21.6,-12.5" stroke="rgba(255,255,255,0.1)" stroke-width="1" fill="none"/>
+            <polygon points="0,-30 25,-10 22,15 -5,25 -28,10 -20,-15" stroke="white" stroke-width="1" fill="rgba(255,255,255,0.05)"/>
+            <circle cx="0" cy="0" r="2" fill="white"/>
+        </g>
+        
+        <!-- Updated counts: ECHO now has 3 (Skye, Topiku, Grim), QUANTUM has 2 (Regre, Foxy) -->
+        <text x="110" y="55" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7">ECHO</text>
+        <text x="110" y="68" fill="white" font-family="monospace" font-size="12">03</text>
+        
+        <text x="150" y="55" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7">QUANTUM</text>
+        <text x="150" y="68" fill="white" font-family="monospace" font-size="12">02</text>
+        
+        <text x="110" y="100" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7">PROJECTS</text>
+        <text x="110" y="113" fill="white" font-family="monospace" font-size="12">04</text>
+        
+        <text x="150" y="100" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7">STATUS</text>
+        <rect x="150" y="105" width="6" height="6" fill="#00ff88"/>
+        <text x="160" y="112" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="8">OK</text>
+        
+        <text x="10" y="145" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="7" letter-spacing="0.1em">MEMBERS ONLINE: 05</text>
+    </svg>
+</div>
+
+
+<!-- ==========================================
+     UPDATED LEFT DATA PANEL - Team sync for 5 members
+     ========================================== -->
+
+<div class="sv-data-panel sv-data-panel-left">
+    <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Team sync visualization -->
+        <text x="10" y="20" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="8" letter-spacing="0.15em">TEAM SYNC STATUS</text>
+        <line x1="10" y="28" x2="190" y2="28" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        
+        <text x="10" y="50" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7">COORDINATION</text>
+        <rect x="10" y="55" width="100" height="4" fill="rgba(255,255,255,0.15)"/>
+        <rect x="10" y="55" width="92" height="4" fill="white"/>
+        <text x="115" y="60" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="8">92%</text>
+        
+        <text x="10" y="80" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7">COMMUNICATION</text>
+        <rect x="10" y="85" width="100" height="4" fill="rgba(255,255,255,0.15)"/>
+        <rect x="10" y="85" width="88" height="4" fill="white"/>
+        <text x="115" y="90" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="8">88%</text>
+        
+        <text x="10" y="110" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="7">EFFICIENCY</text>
+        <rect x="10" y="115" width="100" height="4" fill="rgba(255,255,255,0.15)"/>
+        <rect x="10" y="115" width="95" height="4" fill="white"/>
+        <text x="115" y="120" fill="rgba(255,255,255,0.6)" font-family="monospace" font-size="8">95%</text>
+        
+        <text x="10" y="145" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="7" letter-spacing="0.1em">MEMBERS ONLINE: 05</text>
+    </svg>
+</div>
+        </section>
+
+
+<!-- VISIONS SECTION -->
+<section class="sv-section sv-scan-section" id="sv-scan-visions" data-section-index="6">
+    <div class="sv-scan-area">
+        <!-- DOT PATTERN BACKGROUND -->
+        <div class="sv-dot-pattern" data-scan-group="visions"></div>
+        
+        <h2 class="sv-scan-title sv-scan-target sv-scroll-reveal" data-scan-id="visions" data-scroll-text="OUR VISION">VISIONS</h2>
+        <p class="sv-scan-subtitle">BUILDING TOMORROW • TOGETHER</p>
+        
+        <!-- VISUAL DATA ASSETS -->
+        <img class="sv-scan-asset sv-asset-geo sv-asset-geo-visions" src="/src/starvortex_assets/data_geo.webp" alt="" data-scan-group="visions">
+        <img class="sv-scan-asset sv-asset-distance sv-asset-distance-visions" src="/src/starvortex_assets/data_distance.webp" alt="" data-scan-group="visions">
+        
+        <!-- LOGO VORTEX - FLOATING LEFT (NO PANEL) -->
+        <div class="sv-vortex-container" data-scan-group="visions">
+            <svg class="sv-vortex-logo" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <!-- Filtro de brillo intenso -->
+                    <filter id="sv-glow-intense" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="8" result="blur1"/>
+                        <feGaussianBlur stdDeviation="4" result="blur2"/>
+                        <feMerge>
+                            <feMergeNode in="blur1"/>
+                            <feMergeNode in="blur2"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                    
+                    <filter id="sv-core-glow" x="-100%" y="-100%" width="300%" height="300%">
+                        <feGaussianBlur stdDeviation="15" result="blur"/>
+                        <feMerge>
+                            <feMergeNode in="blur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                
+                <!-- RING / VORTEX - Anillo con segmentos BLANCOS -->
+                <g id="sv-ring" class="sv-vortex-ring">
+                    <path class="sv-ring-segment sv-seg-1" fill="white" d="M367.84,65.46l91.8,24.6c-27.04,15.57-50.48,38.25-67.21,67.21-15.02,26.02-22.94,54.17-24.37,82.25-2.82,1.62-5.59,3.32-8.32,5.09-25.79,16.74-47.09,39.79-61.76,66.95-14-25.91-21.94-55.57-21.94-87.09,0-33.45,8.94-64.81,24.58-91.81,16.12-27.86,39.36-51.09,67.22-67.19Z"/>
+                    <path class="sv-ring-segment sv-seg-2" fill="white" d="M513.41,74.6c27.89-16.07,59.62-24.57,91.8-24.6l67.22,67.19c-31.2-.04-62.84,7.89-91.81,24.62-25.6,14.78-46.3,34.79-61.51,57.91-1.89-.06-3.79-.09-5.7-.09s-3.81.03-5.7.09c-31.21.95-60.47,9.68-85.88,24.34,1.43-28.08,9.35-56.23,24.37-82.25,16.73-28.97,40.16-51.65,67.21-67.21Z"/>
+                    <path class="sv-ring-segment sv-seg-3" fill="white" d="M777.17,279.26c33.45,0,64.82,8.94,91.83,24.58,27.86,16.12,51.1,39.35,67.21,67.2l-24.6,91.78c-15.57-27.04-38.25-50.47-67.23-67.19-27.38-15.8-57.15-23.75-86.68-24.54-.8-1.6-1.62-3.18-2.47-4.74-14.67-27.16-35.98-50.2-61.76-66.95,25.1-12.89,53.56-20.15,83.7-20.15Z"/>
+                    <path class="sv-ring-segment sv-seg-4" fill="white" d="M771.49,424.8c29.53.79,59.29,8.74,86.68,24.54,28.97,16.72,51.66,40.15,67.23,67.19,16.07,27.88,24.58,59.6,24.6,91.78,0,1.78-.03,3.56-.08,5.34l-67.13,61.86c.04-31.2-7.89-62.82-24.62-91.79-16.72-28.95-40.14-51.63-67.17-67.19-.08-.06-.17-.11-.27-.16.16-3.06.23-6.13.23-9.22,0-29.62-7.01-57.59-19.47-82.36Z"/>
+                    <path class="sv-ring-segment sv-seg-5" fill="white" d="M774.91,744.62c0-33.43-8.93-64.76-24.55-91.75-.92-1.59-1.85-3.17-2.83-4.72,15.79-25.5,25.5-55.14,27.13-86.93.1-.05.19-.1.28-.17,27.04,15.57,50.45,38.25,67.17,67.19,16.73,28.97,24.66,60.59,24.62,91.79-.04,32.18-8.54,63.9-24.61,91.78l-91.8,24.61c15.64-27,24.58-58.36,24.58-91.81Z"/>
+                    <path class="sv-ring-segment sv-seg-6" fill="white" d="M605.22,844.75c16.72-28.95,24.65-60.56,24.62-91.74,0-3.09-.08-6.19-.25-9.27,24.8-14.3,45.95-34.23,61.69-58.03,1.01-1.52,2-3.07,2.96-4.63.97,1.55,1.91,3.13,2.83,4.72,15.62,26.99,24.55,58.33,24.55,91.75s-8.94,64.81-24.58,91.81c-16.12,27.86-39.36,51.09-67.22,67.19l-91.8-24.6c27.04-15.57,50.48-38.25,67.21-67.21Z"/>
+                    <path class="sv-ring-segment sv-seg-7" fill="white" d="M156.75,608.38c28.95,16.71,60.57,24.64,91.76,24.62,1.93,0,3.86-.04,5.78-.09,15.74,23.81,36.89,43.73,61.69,58.03,2.59,1.5,5.21,2.93,7.88,4.29-2.66,1.73-5.37,3.4-8.12,4.98-27,15.61-58.34,24.54-91.77,24.54s-64.82-8.94-91.83-24.58c-27.86-16.12-51.1-39.35-67.21-67.2l24.6-91.78c15.57,27.04,38.25,50.47,67.23,67.19Z"/>
+                    <path class="sv-ring-segment sv-seg-8" fill="white" d="M417.08,858.19c28.95-16.71,51.64-40.13,67.21-67.16,1.81-3.11,3.51-6.28,5.11-9.49,28.26-.77,54.92-7.92,78.59-20.07,2.66-1.36,5.29-2.79,7.88-4.29.17,3.08.25,6.18.25,9.27.03,31.18-7.9,62.79-24.62,91.74-16.73,28.97-40.16,51.65-67.21,67.21-27.89,16.07-59.62,24.57-91.8,24.6l-67.22-67.19c31.2.04,62.84-7.89,91.81-24.62Z"/>
+                    <path class="sv-ring-segment sv-seg-9" fill="white" d="M257.3,777.57c33.43,0,64.78-8.93,91.77-24.54,2.75-1.59,5.46-3.25,8.12-4.98,23.68,12.15,50.34,19.3,78.59,20.07,1.7.05,3.41.07,5.11.07s3.42-.03,5.11-.07c-1.61,3.21-3.3,6.38-5.11,9.49-15.57,27.03-38.25,50.44-67.21,67.16-28.97,16.72-60.61,24.65-91.81,24.62-32.19-.04-63.91-8.54-91.8-24.61l-24.61-91.78c27.01,15.64,58.38,24.58,91.83,24.58Z"/>
+                    <path class="sv-ring-segment sv-seg-10" fill="white" d="M117.21,328.49c-.04,31.2,7.89,62.82,24.62,91.79,16.72,28.95,40.14,51.63,67.17,67.19.09.06.18.12.28.17,1.62,31.78,11.34,61.43,27.13,86.93.95,1.56,1.95,3.1,2.96,4.63-1.93.06-3.86.09-5.78.09-31.19.03-62.8-7.9-91.76-24.62-28.97-16.72-51.66-40.15-67.23-67.19-16.07-27.88-24.58-59.6-24.6-91.78l67.21-67.2Z"/>
+                    <path class="sv-ring-segment sv-seg-11" fill="white" d="M626.26,158.28c28.97-16.72,60.61-24.65,91.81-24.62,32.19.04,63.91,8.54,91.8,24.61l24.61,91.78c-27.01-15.64-58.38-24.58-91.83-24.58-30.15,0-58.61,7.26-83.7,20.15-2.73-1.77-5.5-3.47-8.32-5.09-25.41-14.66-54.67-23.4-85.88-24.34,15.21-23.11,35.9-43.13,61.51-57.91Z"/>
+                    <path class="sv-ring-segment sv-seg-12" fill="white" d="M246.82,167.59c-15.64,27-24.58,58.36-24.58,91.81,0,31.52,7.94,61.18,21.94,87.09-.84,1.56-1.67,3.14-2.47,4.74-12.46,24.76-19.47,52.74-19.47,82.36,0,3.09.07,6.17.23,9.22-.09.05-.18.09-.27.16-27.04-15.57-50.45-38.25-67.17-67.19-16.73-28.97-24.66-60.59-24.62-91.79.04-32.18,8.54-63.9,24.61-91.78l91.8-24.61Z"/>
+                </g>
+                
+                <!-- HORIZONTAL BAR - Barra diagonal BLANCA -->
+                <g id="sv-horizontal-bar" class="sv-vortex-bar">
+                    <ellipse fill="rgba(255,255,255,0.9)" filter="url(#sv-glow-intense)" cx="500" cy="500" rx="620.77" ry="18.12" transform="rotate(-40.11 500 500)"/>
+                </g>
+                
+                <!-- CORE - Núcleo central BLANCO -->
+                <g id="sv-core" class="sv-vortex-core">
+                    <circle fill="white" filter="url(#sv-core-glow)" cx="500" cy="500" r="100"/>
+                </g>
+            </svg>
+        </div>
+        
+        <!-- MAIN MANIFESTO PANEL -->
+        <div class="sv-scan-panel sv-panel-manifesto" data-scan-group="visions">
+            <div class="sv-panel-content">
+                <div class="sv-panel-header">
+                    <span class="sv-panel-dot">■</span>
+                    <span data-text="// VISIONS" data-effect="scramble"></span>
+                </div>
+                <h3 class="sv-manifesto-headline" data-text="BUILDING TOMORROW'S SYSTEMS WITH TODAY'S PASSION" data-effect="type"></h3>
+                <div class="sv-manifesto-text">
+                    <p data-text="STARVORTEX ISN'T JUST A COLLECTIVE—IT'S A CONVERGENCE OF CREATIVE MINDS WHO REFUSE TO COMPROMISE BETWEEN AESTHETICS AND FUNCTIONALITY." data-effect="type"></p>
+                    <p data-text="WE BELIEVE TECHNOLOGY SHOULD FEEL ALIVE. EVERY LINE OF CODE, EVERY PIXEL, EVERY INTERACTION MATTERS. WE DON'T BUILD APPS—WE CRAFT EXPERIENCES THAT RESONATE." data-effect="type"></p>
+                    <p data-text="OUR DIVISIONS WORK INDEPENDENTLY BUT THINK AS ONE: DATA-DRIVEN PRECISION MEETS CREATIVE INNOVATION. QUANTUM ANALYTICS BRINGS THE LOGIC. ECHO STUDIOS BRINGS THE SOUL." data-effect="type"></p>
+                    <p class="sv-manifesto-final" data-text="THE FUTURE ISN'T CORPORATE. IT'S COLLABORATIVE. IT'S INDEPENDENT. IT'S US." data-effect="type"></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CORE VALUES PANEL -->
+        <div class="sv-scan-panel sv-panel-values" data-scan-group="visions">
+            <div class="sv-panel-content">
+                <div class="sv-panel-header">
+                    <span class="sv-panel-dot">■ ■</span>
+                    <span data-text="// CORE VALUES" data-effect="scramble"></span>
+                </div>
+                <div class="sv-values-grid">
+                    <div class="sv-value-item">
+                        <div class="sv-value-icon">◆</div>
+                        <span class="sv-value-label" data-text="INDEPENDENCE" data-effect="scramble"></span>
+                    </div>
+                    <div class="sv-value-item">
+                        <div class="sv-value-icon">▲</div>
+                        <span class="sv-value-label" data-text="INNOVATION" data-effect="scramble"></span>
+                    </div>
+                    <div class="sv-value-item">
+                        <div class="sv-value-icon">●</div>
+                        <span class="sv-value-label" data-text="INTEGRITY" data-effect="scramble"></span>
+                    </div>
+                    <div class="sv-value-item">
+                        <div class="sv-value-icon">✦</div>
+                        <span class="sv-value-label" data-text="EXCELLENCE" data-effect="scramble"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- PHILOSOPHY DATA VISUALIZATION -->
+        <div class="sv-scan-panel sv-panel-philosophy-data" data-scan-group="visions">
+            <div class="sv-panel-content sv-panel-svg-content">
+                <svg class="sv-data-svg" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <text x="15" y="22" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="10" letter-spacing="0.15em">// PHILOSOPHY METRICS</text>
+                    <line x1="15" y1="32" x2="285" y2="32" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                    
+                    <g class="sv-data-animate" style="--delay: 0.1s">
+                        <text x="15" y="58" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="9" letter-spacing="0.1em">PASSION INDEX</text>
+                        <text x="15" y="82" fill="white" font-family="monospace" font-size="24" letter-spacing="0.05em">100%</text>
+                    </g>
+                    
+                    <g class="sv-data-animate" style="--delay: 0.2s">
+                        <text x="160" y="58" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="9" letter-spacing="0.1em">COMPROMISE</text>
+                        <text x="160" y="82" fill="rgba(255,100,100,0.8)" font-family="monospace" font-size="24" letter-spacing="0.05em">0%</text>
+                    </g>
+                    
+                    <g class="sv-data-animate" style="--delay: 0.3s">
+                        <text x="15" y="118" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="9" letter-spacing="0.1em">TEAM SYNERGY</text>
+                        <text x="15" y="142" fill="white" font-family="monospace" font-size="24" letter-spacing="0.05em">98.7%</text>
+                    </g>
+                    
+                    <g class="sv-data-animate" style="--delay: 0.4s">
+                        <text x="160" y="118" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="9" letter-spacing="0.1em">VISION CLARITY</text>
+                        <text x="160" y="142" fill="#00ff88" font-family="monospace" font-size="24" letter-spacing="0.05em">A+</text>
+                    </g>
+                    
+                    <text x="15" y="175" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="9" letter-spacing="0.1em">IMPACT PROJECTION: 2025-2030</text>
+                    <line x1="15" y1="188" x2="215" y2="188" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                    <g class="sv-data-animate" style="--delay: 0.5s">
+                        <rect x="15" y="178" width="20" height="10" fill="rgba(255,255,255,0.6)"/>
+                        <rect x="40" y="174" width="20" height="14" fill="rgba(255,255,255,0.7)"/>
+                        <rect x="65" y="170" width="20" height="18" fill="white"/>
+                        <rect x="90" y="165" width="20" height="23" fill="white"/>
+                        <rect x="115" y="158" width="20" height="30" fill="#00ff88"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        
+    </div>
+</section>
+        
+    </div>
+</div>
+
+<!-- CURSOR PERSONALIZADO WORK MANAGER -->
+<div class="sv-cursor" id="sv-cursor">
+    <div class="sv-cursor-inner">
+        <svg class="sv-cursor-svg" viewBox="0 0 120 120" width="120" height="120">
+            <circle class="sv-cursor-ring" cx="60" cy="60" r="40" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+            <circle class="sv-cursor-ring-inner" cx="60" cy="60" r="32" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="4 4"/>
+            <circle class="sv-cursor-progress" cx="60" cy="60" r="40" fill="none" stroke="white" stroke-width="2.5" 
+                stroke-dasharray="251" stroke-dashoffset="251" transform="rotate(-90 60 60)"/>
+            <line x1="50" y1="60" x2="70" y2="60" stroke="white" stroke-width="1.5"/>
+            <line x1="60" y1="50" x2="60" y2="70" stroke="white" stroke-width="1.5"/>
+            <circle cx="60" cy="60" r="3" fill="white"/>
+        </svg>
+        <span class="sv-cursor-arrow sv-arrow-left">◄</span>
+        <span class="sv-cursor-arrow sv-arrow-right">►</span>
+        <span class="sv-cursor-hold-text"></span>
+    </div>
+    <span class="sv-cursor-label"></span>
+</div>
+       <!-- ========================================
+                    SISTEMA MODULAR JS
+         ======================================== -->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/MTLLoader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>
+
+    
+    <!-- Three.js Loaders extras-->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script> <!-- Opcional para modelos comprimidos -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/PLYLoader.js"></script> <!-- Para earthquakes.ply -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+        <script src="https://iframe.chat/scripts/main.min.js"></script>
+<script type="module">
+    import { VFX } from "https://esm.sh/@vfx-js/core@0.5.2";
+    window.VFX = VFX;
+    console.log('VFX loaded successfully');
+</script>
+    <script type="module" src="/src/index.js"></script>
+    <script>
+                        chattable.initialize({
+                            stylesheet: "/src/css/chattable.css"
+                        });
+                    </script>
+                    <script type="module" src="/src/sv-enhanced.js"></script>
+</body>
+</html>

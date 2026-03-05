@@ -1,0 +1,354 @@
+
+
+.phase-neural-network {
+    --nn-black: #000;
+    --nn-white: #fff;
+    --nn-w80: rgba(255,255,255,0.8);
+    --nn-w60: rgba(255,255,255,0.6);
+    --nn-w40: rgba(255,255,255,0.4);
+    --nn-w30: rgba(255,255,255,0.3);
+    --nn-w20: rgba(255,255,255,0.2);
+    --nn-w15: rgba(255,255,255,0.15);
+    --nn-w10: rgba(255,255,255,0.1);
+    --nn-w05: rgba(255,255,255,0.05);
+    --nn-red: rgb(255, 155, 155);
+}
+
+#phaseNeuralNetwork {
+    position: absolute;
+    inset: 0;
+    background: var(--nn-black);
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--nn-white);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+#phaseNeuralNetwork .cv-header {
+    height: 38px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--nn-w10);
+    flex-shrink: 0;
+}
+
+#phaseNeuralNetwork .cv-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+#phaseNeuralNetwork .cv-logo sub {
+    font-size: 8px;
+    color: var(--nn-w40);
+}
+
+#phaseNeuralNetwork .cv-header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+#phaseNeuralNetwork .cv-hbar {
+    width: 120px;
+    height: 2px;
+    background: var(--nn-w10);
+}
+
+#phaseNeuralNetwork .cv-hbar-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--nn-white);
+}
+
+#phaseNeuralNetwork .cv-header-right {
+    font-size: 9px;
+    color: var(--nn-w40);
+    letter-spacing: 1px;
+}
+
+/* Main */
+#phaseNeuralNetwork .cv-main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Left */
+#phaseNeuralNetwork .cv-left {
+    width: 120px;
+    padding: 12px;
+    border-right: 1px solid var(--nn-w10);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#phaseNeuralNetwork .cv-panel-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 7px;
+    color: var(--nn-w40);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--nn-w10);
+}
+
+#phaseNeuralNetwork .cv-nums {
+    font-size: 9px;
+    color: var(--nn-w60);
+    line-height: 1.7;
+}
+
+#phaseNeuralNetwork .cv-nums span { display: block; }
+
+#phaseNeuralNetwork .cv-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+#phaseNeuralNetwork .cv-bar-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 18px;
+}
+
+#phaseNeuralNetwork .cv-bar {
+    width: 3px;
+    background: var(--nn-w30);
+}
+
+#phaseNeuralNetwork .cv-bar.h100 { height: 100%; }
+#phaseNeuralNetwork .cv-bar.h80 { height: 80%; }
+#phaseNeuralNetwork .cv-bar.h60 { height: 60%; }
+#phaseNeuralNetwork .cv-bar.h40 { height: 40%; }
+#phaseNeuralNetwork .cv-bar.h20 { height: 20%; }
+#phaseNeuralNetwork .cv-bar.bright { background: var(--nn-w60); }
+
+/* Viewport */
+#phaseNeuralNetwork .cv-viewport {
+    flex: 1;
+    position: relative;
+    background: var(--nn-black);
+}
+
+#phaseNeuralNetwork .cv-grid {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--nn-w05) 1px, transparent 1px),
+                linear-gradient(var(--nn-w05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+#phaseNeuralNetwork .cv-scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 4px);
+    pointer-events: none;
+}
+
+/* Zoom */
+#phaseNeuralNetwork .cv-zoom {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    z-index: 50;
+}
+
+#phaseNeuralNetwork .cv-zoom-btn {
+    width: 24px;
+    height: 24px;
+    background: var(--nn-black);
+    border: 1px solid var(--nn-w20);
+    color: var(--nn-w60);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#phaseNeuralNetwork .cv-zoom-btn:hover {
+    border-color: var(--nn-white);
+    color: var(--nn-white);
+}
+
+#phaseNeuralNetwork .cv-zoom-lvl {
+    font-size: 7px;
+    color: var(--nn-w40);
+    text-align: center;
+    margin-top: 2px;
+}
+
+/* Stats */
+#phaseNeuralNetwork .cv-stats {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 50;
+}
+
+#phaseNeuralNetwork .cv-stat-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 4px;
+    font-size: 8px;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all 0.25s;
+}
+
+#phaseNeuralNetwork .cv-stat-row.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+#phaseNeuralNetwork .cv-stat-label { color: var(--nn-w40); min-width: 80px; }
+#phaseNeuralNetwork .cv-stat-value { color: var(--nn-white); }
+
+/* Popup */
+#phaseNeuralNetwork .cv-node-info {
+    position: absolute;
+    width: 160px;
+    background: var(--nn-black);
+    border: 1px solid var(--nn-w20);
+    padding: 8px;
+    z-index: 100;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.15s;
+    pointer-events: none;
+}
+
+#phaseNeuralNetwork .cv-node-info.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+#phaseNeuralNetwork .cv-node-info-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 9px;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--nn-w15);
+}
+
+#phaseNeuralNetwork .cv-node-info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2px;
+    font-size: 8px;
+}
+
+#phaseNeuralNetwork .cv-node-info-label { color: var(--nn-w40); }
+#phaseNeuralNetwork .cv-node-info-value { color: var(--nn-w80); }
+
+/* Right */
+#phaseNeuralNetwork .cv-right {
+    width: 160px;
+    padding: 12px;
+    border-left: 1px solid var(--nn-w10);
+    overflow-y: auto;
+}
+
+#phaseNeuralNetwork .cv-status-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 2px;
+    margin-bottom: 12px;
+}
+
+#phaseNeuralNetwork .cv-status-dot {
+    aspect-ratio: 1;
+    background: var(--nn-w15);
+}
+
+#phaseNeuralNetwork .cv-status-dot.active { background: var(--nn-w40); }
+#phaseNeuralNetwork .cv-status-dot.critical { background: var(--nn-red); }
+
+#phaseNeuralNetwork .cv-matrix {
+    font-size: 6px;
+    color: var(--nn-w30);
+    line-height: 1.4;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+}
+
+/* Footer */
+#phaseNeuralNetwork .cv-footer {
+    height: 28px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--nn-w10);
+    font-size: 8px;
+    color: var(--nn-w40);
+}
+
+#phaseNeuralNetwork .cv-footer-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#phaseNeuralNetwork .cv-time-bar {
+    width: 100px;
+    height: 2px;
+    background: var(--nn-w10);
+}
+
+#phaseNeuralNetwork .cv-time-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--nn-white);
+}
+
+/* Subtitle */
+#phaseNeuralNetwork .cv-subtitle-wrap {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60;
+}
+
+#phaseNeuralNetwork .cv-subtitle {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    color: var(--nn-w80);
+    letter-spacing: 1px;
+    line-height: 1.6;
+    max-width: 550px;
+    text-align: center;
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.95);
+    border: 1px solid var(--nn-w15);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.25s;
+}
+
+#phaseNeuralNetwork .cv-subtitle.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+    #phaseNeuralNetwork .cv-left { width: 90px; }
+    #phaseNeuralNetwork .cv-right { width: 120px; }
+}
+
+@media (max-width: 600px) {
+    #phaseNeuralNetwork .cv-left,
+    #phaseNeuralNetwork .cv-right { display: none; }
+}

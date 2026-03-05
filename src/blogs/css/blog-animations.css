@@ -1,0 +1,865 @@
+/* =============================================
+   BLOG: ANIMACIONES FLUIDAS - INTERACTIVE DEMOS
+   Apple-inspired glassmorphic interactive
+   components with fluid micro-interactions.
+   ============================================= */
+
+/* --- Shared Demo Container --- */
+
+.demo-container {
+    position: relative;
+    width: 100%;
+    margin: 32px 0;
+    padding: 28px;
+    background:
+        radial-gradient(ellipse at 30% 0%, rgba(122, 156, 255, 0.06), transparent 50%),
+        radial-gradient(ellipse at 70% 100%, rgba(180, 130, 255, 0.04), transparent 50%),
+        rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    backdrop-filter: blur(2px);
+    transition: border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.demo-container:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.demo-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(180, 205, 255, 0.2) 30%,
+        rgba(180, 205, 255, 0.3) 50%,
+        rgba(180, 205, 255, 0.2) 70%,
+        transparent
+    );
+    pointer-events: none;
+}
+
+.demo-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(180, 205, 255, 0.03),
+        transparent 40%
+    );
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.demo-container:hover::after {
+    opacity: 1;
+}
+
+.demo-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(180, 205, 255, 0.6);
+    margin-bottom: 20px;
+    padding: 5px 12px;
+    background: rgba(180, 205, 255, 0.06);
+    border: 1px solid rgba(180, 205, 255, 0.1);
+    border-radius: 20px;
+}
+
+.demo-label::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(180, 205, 255, 0.5);
+    animation: labelPulse 2s ease-in-out infinite;
+}
+
+@keyframes labelPulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.8); }
+    50%      { opacity: 1;   transform: scale(1); }
+}
+
+/* --- Timing Function Graph --- */
+
+.timing-graph {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.timing-graph__canvas {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background:
+        radial-gradient(ellipse at 50% 50%, rgba(10, 15, 30, 0.8), rgba(0, 0, 0, 0.4));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        0 4px 24px rgba(0, 0, 0, 0.3);
+    cursor: crosshair;
+}
+
+.timing-graph__controls {
+    display: flex;
+    gap: 6px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.timing-btn {
+    position: relative;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--text-tertiary);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+    overflow: hidden;
+    transition:
+        color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        background 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+}
+
+.timing-btn:hover {
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.07);
+    transform: translateY(-1px);
+}
+
+.timing-btn:active {
+    transform: translateY(0) scale(0.97);
+}
+
+.timing-btn--active {
+    color: var(--text-primary);
+    background: rgba(180, 205, 255, 0.12);
+    border-color: rgba(180, 205, 255, 0.25);
+    box-shadow: 0 0 20px rgba(180, 205, 255, 0.08);
+}
+
+.timing-btn--active::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(180, 205, 255, 0.15), transparent 60%);
+    pointer-events: none;
+}
+
+/* --- Ball Animation Preview --- */
+
+.timing-ball-track {
+    position: relative;
+    width: 100%;
+    height: 52px;
+    margin-top: 20px;
+    background:
+        linear-gradient(90deg, rgba(180, 205, 255, 0.03), rgba(180, 205, 255, 0.06), rgba(180, 205, 255, 0.03));
+    border-radius: 26px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+}
+
+.timing-ball-track::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(180, 205, 255, 0.2);
+    transform: translateY(-50%);
+}
+
+.timing-ball-track::after {
+    content: '';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(180, 205, 255, 0.2);
+    transform: translateY(-50%);
+}
+
+.timing-ball {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 35% 35%, rgba(220, 230, 255, 0.9), rgba(122, 156, 255, 0.6));
+    box-shadow:
+        0 2px 12px rgba(122, 156, 255, 0.4),
+        0 0 30px rgba(122, 156, 255, 0.15),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.15);
+    transform: translateY(-50%);
+    will-change: left;
+}
+
+.timing-ball--animating {
+    animation: ballSlide var(--ball-duration, 1.5s) var(--ball-timing, ease) forwards;
+}
+
+@keyframes ballSlide {
+    from { left: 12px; }
+    to   { left: calc(100% - 42px); }
+}
+
+/* --- Play Button --- */
+
+.timing-play-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 16px auto 0;
+    padding: 9px 24px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    color: var(--text-primary);
+    background:
+        linear-gradient(135deg, rgba(180, 205, 255, 0.12), rgba(130, 160, 255, 0.08));
+    border: 1px solid rgba(180, 205, 255, 0.18);
+    cursor: pointer;
+    transition:
+        background 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.timing-play-btn:hover {
+    background:
+        linear-gradient(135deg, rgba(180, 205, 255, 0.18), rgba(130, 160, 255, 0.12));
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 4px 20px rgba(122, 156, 255, 0.15);
+    border-color: rgba(180, 205, 255, 0.28);
+}
+
+.timing-play-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.timing-play-btn svg {
+    width: 12px;
+    height: 12px;
+    filter: drop-shadow(0 0 4px rgba(180, 205, 255, 0.4));
+}
+
+/* --- Timing Function Code Display --- */
+
+.timing-code {
+    display: block;
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: rgba(180, 205, 255, 0.8);
+    text-align: center;
+    user-select: all;
+    transition:
+        color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.3s ease;
+}
+
+.timing-code:hover {
+    border-color: rgba(180, 205, 255, 0.15);
+    color: rgba(200, 220, 255, 0.95);
+}
+
+/* --- Spring Playground --- */
+
+.spring-playground {
+    width: 100%;
+    max-width: 580px;
+    margin: 0 auto;
+}
+
+.spring-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.spring-control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    transition:
+        border-color 0.3s ease,
+        background 0.3s ease;
+}
+
+.spring-control:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.spring-control__label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.3px;
+}
+
+.spring-control__value {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(180, 205, 255, 0.9);
+    min-width: 40px;
+    text-align: right;
+    transition: color 0.3s ease;
+}
+
+.spring-control__slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    outline: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.spring-control:hover .spring-control__slider {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.spring-control__slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 40% 35%, #dce2ff, #7a9cff);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    box-shadow:
+        0 2px 8px rgba(122, 156, 255, 0.35),
+        0 0 16px rgba(122, 156, 255, 0.12);
+    cursor: grab;
+    transition:
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.3s ease;
+}
+
+.spring-control__slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow:
+        0 2px 12px rgba(122, 156, 255, 0.5),
+        0 0 24px rgba(122, 156, 255, 0.2);
+}
+
+.spring-control__slider::-webkit-slider-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.05);
+}
+
+.spring-control__slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #dce2ff, #7a9cff);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 2px 8px rgba(122, 156, 255, 0.35);
+    cursor: grab;
+}
+
+/* --- Spring Preview Canvas --- */
+
+.spring-canvas-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 7;
+    margin-bottom: 16px;
+}
+
+.spring-canvas {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-lg);
+    background:
+        radial-gradient(ellipse at 50% 50%, rgba(10, 15, 30, 0.8), rgba(0, 0, 0, 0.4));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Spring Animated Object --- */
+
+.spring-object-track {
+    position: relative;
+    width: 100%;
+    height: 90px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spring-object {
+    width: 68px;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: transform, opacity;
+    transition: box-shadow 0.5s ease;
+}
+
+.spring-object:hover {
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.25),
+        0 0 60px rgba(122, 156, 255, 0.12),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1);
+}
+
+.spring-object img {
+    width: 700px;
+    height: auto;
+    pointer-events: none;
+}
+/* --- Spring Equation Display --- */
+
+.spring-equation {
+    margin-top: 20px;
+    padding: 18px 20px;
+    background:
+        linear-gradient(135deg, rgba(0, 0, 0, 0.25), rgba(10, 15, 30, 0.2));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+}
+
+.spring-equation__title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: rgba(180, 205, 255, 0.5);
+    margin-bottom: 10px;
+}
+
+.spring-equation__formula {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: rgba(180, 205, 255, 0.75);
+    line-height: 1.8;
+    word-break: break-word;
+    transition: color 0.4s ease;
+}
+
+.spring-equation__params {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.spring-param {
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    text-align: center;
+    transition:
+        border-color 0.3s ease,
+        background 0.3s ease;
+}
+
+.spring-param:hover {
+    border-color: rgba(180, 205, 255, 0.12);
+    background: rgba(180, 205, 255, 0.04);
+}
+
+.spring-param__name {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.spring-param__value {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+/* --- Presets Table --- */
+
+.spring-presets-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+    font-size: 13px;
+}
+
+.spring-presets-table thead th {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.spring-presets-table tbody tr {
+    cursor: pointer;
+    transition:
+        background 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.spring-presets-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.spring-presets-table tbody tr:active {
+    transform: scale(0.995);
+}
+
+.spring-presets-table tbody tr.active {
+    background: rgba(180, 205, 255, 0.08);
+    box-shadow: inset 3px 0 0 rgba(180, 205, 255, 0.4);
+}
+
+.spring-presets-table tbody td {
+    padding: 11px 12px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    vertical-align: middle;
+    transition: color 0.3s ease;
+}
+
+.spring-presets-table tbody tr:hover td {
+    color: var(--text-primary);
+}
+
+.spring-presets-table tbody td:first-child {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.spring-presets-table tbody td:last-child {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-style: italic;
+}
+
+.preset-swatch {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+    box-shadow: 0 0 8px currentColor;
+}
+
+/* --- Interactive Example Boxes --- */
+
+.anim-example {
+    position: relative;
+    width: 100%;
+    padding: 36px 24px;
+    margin: 28px 0;
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(122, 156, 255, 0.04), transparent 60%),
+        rgba(255, 255, 255, 0.015);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.anim-example__title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+    letter-spacing: -0.2px;
+}
+
+.anim-example__description {
+    font-size: 14px;
+    color: var(--text-tertiary);
+    text-align: center;
+    max-width: 440px;
+    line-height: 1.6;
+}
+
+/* --- Hover Example Card --- */
+
+.hover-card-demo {
+    width: 180px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    will-change: transform, box-shadow;
+    position: relative;
+    overflow: hidden;
+}
+
+.hover-card-demo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.hover-card-demo:hover::before {
+    opacity: 1;
+}
+
+.hover-card-demo--linear {
+    transition:
+        transform 0.5s linear,
+        box-shadow 0.5s linear,
+        border-color 0.5s linear;
+}
+
+.hover-card-demo--spring {
+    transition:
+        transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-card-demo:hover {
+    transform: translateY(-8px) scale(1.03);
+    color: var(--text-primary);
+}
+
+/* --- Side-by-side comparison --- */
+
+.comparison-row {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.comparison-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.comparison-item__label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    padding: 3px 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+}
+
+.hover-card-demo img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+/* --- Steps() Animation Demo --- */
+
+.steps-demo-strip {
+    display: flex;
+    gap: 4px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    overflow-x: auto;
+}
+
+.steps-demo-frame {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    transition:
+        background 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.3s ease;
+}
+
+.steps-demo-frame--active {
+    background: rgba(180, 205, 255, 0.15);
+    border-color: rgba(180, 205, 255, 0.35);
+    color: var(--text-primary);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow:
+        0 4px 16px rgba(122, 156, 255, 0.2),
+        0 0 24px rgba(122, 156, 255, 0.08);
+}
+
+/* --- Exponential Decay Graph --- */
+
+.decay-graph-wrap {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.decay-canvas {
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    border-radius: var(--radius-lg);
+    background:
+        radial-gradient(ellipse at 50% 50%, rgba(10, 15, 30, 0.8), rgba(0, 0, 0, 0.4));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Responsive --- */
+
+@media (max-width: 768px) {
+    .demo-container {
+        padding: 20px 16px;
+        margin: 24px 0;
+    }
+
+    .spring-controls {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .spring-equation__params {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .comparison-row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .spring-presets-table {
+        font-size: 12px;
+    }
+
+    .spring-presets-table thead th,
+    .spring-presets-table tbody td {
+        padding: 8px 8px;
+    }
+
+    .spring-presets-table tbody td:last-child {
+        display: none;
+    }
+
+    .hover-card-demo {
+        width: 160px;
+        height: 96px;
+    }
+}
+
+@media (max-width: 480px) {
+    .timing-graph__controls {
+        gap: 4px;
+    }
+
+    .timing-btn {
+        padding: 5px 10px;
+        font-size: 11px;
+    }
+
+    .spring-equation__params {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .steps-demo-frame {
+        width: 42px;
+        height: 42px;
+        font-size: 12px;
+    }
+}
+
+  .info-box {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 16px 20px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 24px 0;
+        }
+
+        .info-box__title {
+            font-weight: bold;
+            color: #a5b4fc;
+            margin-bottom: 8px;
+        }

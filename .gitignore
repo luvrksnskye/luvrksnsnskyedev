@@ -1,0 +1,11 @@
+/.DS_Store
+/.gitmodules
+/.vscode/
+/node_modules/
+/dist/
+/.parcel-cache/
+/.env
+/.CNAME
+src/.DS_Store
+src/model_3d/.DS_Store
+src/sfx/.DS_Store

@@ -1,0 +1,495 @@
+/* ========================================
+   SURVIVOR MESSAGES PANEL - CHICAGO UI STYLE
+   Prefijo único: sp- (survivor-panel)
+   ======================================== */
+
+/* Custom Fonts */
+@font-face { 
+    font-family: 'SV-Tech'; 
+    src: url('/src/starvortex_assets/tech.ttf') format('truetype'); 
+}
+
+:root {
+    --sp-data-font: 'SV-Tech', 'Courier New', monospace;
+}
+
+.sp-survivor-messages-panel {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1300px;
+    height: 200px;
+    
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    
+    display: flex;
+    flex-direction: row;
+    
+    opacity: 0;
+    pointer-events: none;
+    
+    transition: all 0.3s ease;
+    
+    z-index: 999999999999;
+    
+    font-family: var(--sp-data-font);
+}
+
+.sp-survivor-messages-panel.sp-visible {
+    opacity: 1;
+    pointer-events: auto;
+    animation: sp-slideUpPanel 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes sp-slideUpPanel {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Panel Header - Left Side */
+.sp-panel-header {
+    width: 180px;
+    padding: 16px;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+.sp-header-top {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sp-panel-icon {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: left;
+}
+
+.sp-panel-title {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-family: var(--sp-data-font);
+    text-align: left;
+}
+
+.sp-panel-close-btn {
+    width: 100%;
+    height: 32px;
+    
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 11px;
+    font-weight: normal;
+    
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    font-family: var(--sp-data-font);
+    letter-spacing: 1px;
+}
+
+.sp-panel-close-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+.sp-panel-close-btn:active {
+    transform: scale(0.98);
+}
+
+.sp-header-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sp-status-indicator {
+    width: 6px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    animation: sp-blinkIndicator 1.5s ease-in-out infinite;
+}
+
+@keyframes sp-blinkIndicator {
+    0%, 50% {
+        opacity: 1;
+    }
+    51%, 100% {
+        opacity: 0.3;
+    }
+}
+
+.sp-status-text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 8px;
+    letter-spacing: 1px;
+    font-family: var(--sp-data-font);
+}
+
+/* Panel Content - Middle - Messages List */
+.sp-panel-content {
+    flex: 1;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.sp-panel-content::-webkit-scrollbar {
+    height: 6px;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.sp-panel-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.sp-panel-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    transition: background 0.2s ease;
+}
+
+.sp-panel-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Messages List - Horizontal */
+.sp-messages-list {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    min-width: min-content;
+}
+
+.sp-message-card {
+    width: 260px;
+    min-width: 260px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sp-message-card:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.sp-message-card.sp-active {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.sp-message-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sp-message-card.sp-active .sp-message-header {
+    border-bottom-color: rgba(255, 255, 255, 0.4);
+}
+
+.sp-message-icon {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.sp-message-type {
+    flex: 1;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 9px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    font-family: var(--sp-data-font);
+}
+
+.sp-message-status {
+    padding: 2px 6px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 7px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-family: var(--sp-data-font);
+}
+
+.sp-message-status.sp-priority-alert {
+    animation: sp-blinkPriority 0.8s ease-in-out infinite;
+}
+
+@keyframes sp-blinkPriority {
+    0%, 50% {
+        opacity: 1;
+    }
+    51%, 100% {
+        opacity: 0.5;
+    }
+}
+
+.sp-message-title {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-family: var(--sp-data-font);
+}
+
+.sp-message-subtitle {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 10px;
+    font-family: var(--sp-data-font);
+    font-style: italic;
+}
+
+.sp-message-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.sp-message-location,
+.sp-message-timestamp {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 8px;
+    font-family: var(--sp-data-font);
+    letter-spacing: 0.3px;
+}
+
+/* Panel Player - Right Side */
+.sp-panel-player {
+    width: 300px;
+    padding: 16px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+}
+
+.sp-player-info {
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.sp-player-title {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    font-family: var(--sp-data-font);
+}
+
+.sp-player-meta {
+    display: flex;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 8px;
+    font-family: var(--sp-data-font);
+    letter-spacing: 0.3px;
+}
+
+.sp-player-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sp-control-btn {
+    width: 32px;
+    height: 32px;
+    
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    
+    color: rgba(255, 255, 255, 0.8);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    flex-shrink: 0;
+}
+
+.sp-control-btn:hover {
+    border-color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sp-control-btn:active {
+    transform: scale(0.95);
+}
+
+.sp-player-progress {
+    flex: 1;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    position: relative;
+}
+
+.sp-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: rgba(255, 255, 255, 0.6);
+    transition: width 0.1s linear;
+}
+
+.sp-player-time {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 9px;
+    white-space: nowrap;
+    font-family: var(--sp-data-font);
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+.sp-player-transcript {
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 9px;
+    line-height: 1.4;
+    font-family: var(--sp-data-font);
+    letter-spacing: 0.2px;
+    
+    height: 70px;
+    overflow-y: auto;
+    
+    position: relative;
+}
+
+.sp-player-transcript::-webkit-scrollbar {
+    width: 4px;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.sp-player-transcript::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.sp-player-transcript::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .sp-survivor-messages-panel {
+        width: 95%;
+        height: 180px;
+    }
+    
+    .sp-panel-header {
+        width: 160px;
+    }
+    
+    .sp-panel-player {
+        width: 260px;
+    }
+    
+    .sp-message-card {
+        width: 240px;
+        min-width: 240px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sp-survivor-messages-panel {
+        flex-direction: column;
+        height: auto;
+        max-height: 80vh;
+        width: 95%;
+    }
+    
+    .sp-panel-header {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        flex-direction: row;
+        align-items: center;
+        padding: 12px;
+    }
+    
+    .sp-header-top {
+        flex-direction: row;
+        flex: 1;
+        align-items: center;
+    }
+    
+    .sp-panel-icon {
+        font-size: 16px;
+    }
+    
+    .sp-panel-title {
+        font-size: 10px;
+        text-align: left;
+    }
+    
+    .sp-panel-close-btn {
+        width: 70px;
+        height: 28px;
+    }
+    
+    .sp-panel-content {
+        max-height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    
+    .sp-messages-list {
+        flex-direction: column;
+    }
+    
+    .sp-message-card {
+        width: 100%;
+        min-width: 100%;
+    }
+    
+    .sp-panel-player {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+}

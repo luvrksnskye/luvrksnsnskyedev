@@ -1,0 +1,727 @@
+
+
+/* Reset y configuración base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'OMORI_GAME2', monospace;
+    background-color: #000000;
+    color: #ffffff;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+
+#app {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* SECCIÓN INTRO: Logo y Bienvenida */
+.title-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: -1vh;
+    background-color: #000000;
+    z-index: 10;
+}
+
+.logo-overlay {
+    position: relative;
+    width: 85%;
+    max-width: 1100px;
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-image {
+    width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.welcome-text {
+    font-size: 2rem;
+    letter-spacing: 0.3rem;
+    text-align: center;
+    font-weight: normal;
+    padding: 0 2rem;
+    line-height: 1.6;
+}
+
+/* SECCIÓN UNO: Contenido Principal */
+.main-content {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #000000;
+    z-index: 5;
+    padding: 6rem 2rem;
+}
+
+.content-section {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+}
+
+.splash-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    border: 3px solid #ffffff;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.game-description {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sv-project-desc {
+    font-size: 2rem;
+    line-height: 1.8;
+    letter-spacing: 0.1rem;
+    text-align: center;
+}
+
+.sv-project-desc-long {
+    font-size: 1.1rem;
+}
+
+/* TRANSICIÓN GRADUAL CON NUBES Y ESTRELLAS FLOTANTES */
+.gradient-transition {
+    position: relative;
+    width: 100%;
+    height: 150vh;
+    background: linear-gradient(
+        to bottom,
+        #000000 0%,
+        #000000 20%,
+        #0a0a15 35%,
+        #151530 50%,
+        #1a2040 65%,
+        #1f2a55 80%,
+        #26477d 100%
+    );
+    z-index: 5;
+    overflow: hidden;
+}
+
+/* Estrellas flotantes en la transición */
+.floating-stars-transition {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Primer overlay de nubes - aparece en gradient-transition */
+.floating-clouds-overlay-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 1;
+}
+
+.floating-clouds-overlay-gradient .cloud-right-1 {
+    position: absolute;
+    bottom: 0;
+    right: -15%;
+    width: 1500px;
+    height: 1100px;
+    background-image: url('../assets/3.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    animation: floatRight1 30s ease-in-out infinite;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.floating-clouds-overlay-gradient .cloud-right-2 {
+    position: absolute;
+    bottom: 0;
+    left: -15%;
+    width: 1400px;
+    height: 1050px;
+    background-image: url('../assets/2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    animation: floatRight2 35s ease-in-out infinite reverse;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.star-particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background-color: #ffffff;
+    opacity: 0;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.star-particle.large {
+    width: 3px;
+    height: 3px;
+}
+
+.star-particle.sparkle {
+    width: 4px;
+    height: 4px;
+}
+
+/* Nubes flotantes - OVERLAY sobre tren y transición */
+.floating-clouds {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 300vh;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.cloud-left {
+    display: none;
+}
+
+.cloud-right-1 {
+    position: absolute;
+    bottom: 0;
+    right: -15%;
+    width: 1500px;
+    z-index: -3;
+    height: 1100px;
+    background-image: url('../assets/3.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    animation: floatRight1 30s ease-in-out infinite;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.cloud-right-2 {
+    position: absolute;
+    bottom: 0;
+    left: -15%;
+    width: 1400px;
+    height: 1050px;
+    z-index: -1;
+    background-image: url('../assets/2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    animation: floatRight2 35s ease-in-out infinite reverse;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* SECCIÓN DOS: The Dreamers Journey */
+.section-two {
+    position: relative;
+    width: 100%;
+    min-height: 120vh;
+    height: 100%;
+    background-color: #26477d;
+    z-index: 5;
+    overflow: hidden;
+    opacity: 1;
+}
+
+
+.train-background {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/TRAIN-BG.png');
+    background-size: contain;
+    background-position: center top;
+    background-repeat: no-repeat;
+    z-index: 1;
+    image-rendering: pixelated;
+    
+    /* Escalar uniformemente */
+    transform: translateX(-50%) scale(1.40); 
+    transform-origin: top center;
+    
+    clip-path: inset(0 0 0 0);
+    
+    @media (min-width: 769px) {
+        transform: translateX(-50%) scale(1.40); 
+        clip-path: inset(0 0 8% 0); 
+    }
+}
+/* Ajuste exclusivo para 1366x768 */
+@media (width: 1366px) and (height: 768px) {
+    .train-background {
+        transform: translateX(-50%) scale(1.40); /* un poco menos de zoom */
+        clip-path: inset(0 0 4% 0); /* menos recorte abajo */
+    }
+}
+
+
+/* Estrellas con parallax infinito - más lento */
+.star-parallax {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 400%;
+    height: 100%;
+    background-image: url('../assets/star_a.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    z-index: 2;
+    animation: parallaxStarsInfinite 120s linear infinite;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* Nubes del fondo del tren */
+.train-clouds {
+    position: absolute;
+    top: -15vh;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/TRAIN-BG-CLOUDS.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 3;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* Exterior del tren */
+.train-outside {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/TRAIN-OUTSIDE.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 4;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* Segundo overlay de nubes - aparece sobre el tren */
+.floating-clouds-overlay-train {
+    position: absolute;
+    bottom: 240vh;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 180;
+    pointer-events: none;
+    opacity: 1;
+}
+
+.floating-clouds-overlay-train .cloud-right-1 {
+    position: absolute;
+    bottom: 0;
+    right: -15%;
+    width: 1500px;
+    height: 1100px;
+    background-image: url('../assets/3.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    animation: floatRight1 30s ease-in-out infinite;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.floating-clouds-overlay-train .cloud-right-2 {
+    position: absolute;
+    bottom: 0;
+    left: -15%;
+    width: 1400px;
+    height: 1050px;
+    background-image: url('../assets/2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    animation: floatRight2 35s ease-in-out infinite reverse;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* Contenido de la segunda sección */
+.section-content {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+    padding: 6rem 2rem;
+    z-index: 6;
+}
+
+.section-title {
+    font-size: 6rem;
+    letter-spacing: 0.3rem;
+    text-align: center;
+    font-weight: normal;
+    margin-bottom: 2rem;
+}
+
+.scene-container {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.section-description {
+    width: 100%;
+    max-width: 900px;
+}
+
+/* TRANSICIÓN GRADUAL A NEGRO */
+.gradient-transition-three {
+    position: relative;
+    width: 100%;
+    height: 190vh;
+    background: linear-gradient(
+        to bottom,
+        #aa88ba 0%,
+        #9577a8 15%,
+        #7d6693 30%,
+        #655580 45%,
+        #4d446d 60%,
+        #35335a 75%,
+        #1d2247 85%,
+        #0a0a15 95%,
+        #000000 100%
+    );
+    z-index: -5;
+    overflow: hidden;
+}
+
+/* Estrellas flotantes estáticas que disminuyen */
+.fading-stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.fading-star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background-color: #ffffff;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.fading-star.large {
+    width: 3px;
+    height: 3px;
+}
+
+.fading-star.sparkle {
+    width: 4px;
+    height: 4px;
+    box-shadow: 0 0 2px #ffffff;
+}
+
+/* Contenido de texto en la transición */
+.transition-content {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+    padding: 60vh 2rem 6rem 2rem;
+    z-index: 10;
+}
+
+/* SECCIÓN TRES: Próximo contenido */
+.section-three {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #000000;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    overflow: hidden;
+}
+
+/* Moving Scene - Parallax background */
+.moving-scene {
+    position: absolute;
+    top: -17vh;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background-image: url('../assets/traing_bg.png');
+    background-repeat: repeat-x;
+    background-size: auto auto;
+    background-position: 0 center;
+    z-index: 0;
+    animation: parallaxSceneInfinite 5s linear infinite;
+    transform: rotate(180deg);
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* Dust Particles Container */
+.dust-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Individual Dust Particle */
+.dust-particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background-color: #ffffff;
+    box-shadow: 0 0 4px #ffe4b3, 0 0 8px rgba(255, 228, 179, 0.4);
+    opacity: 0;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.dust-particle.medium {
+    width: 3px;
+    height: 3px;
+    box-shadow: 0 0 6px #ffe4b3, 0 0 10px rgba(255, 228, 179, 0.5);
+}
+
+@keyframes dustFloat {
+    0% {
+        opacity: 0;
+        transform: translate(0, 0);
+    }
+    15% {
+        opacity: 0.9;
+    }
+    50% {
+        opacity: 1;
+    }
+    85% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 0;
+        transform: translate(200px, -40px);
+    }
+}
+
+/* Inner Train Background */
+.inner-train-background {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/innertrain.gif');
+    background-size: contain;
+    background-position: center top;
+    background-repeat: no-repeat;
+    z-index: 1;
+    image-rendering: pixelated;
+    
+    /* Escalar uniformemente */
+    transform: translateX(-50%) scale(1.10); 
+    transform-origin: top center;
+    
+    clip-path: inset(0 0 0 0);
+    
+    @media (min-width: 769px) {
+        transform: translateX(-50%) scale(1.10); 
+        clip-path: inset(0 0 8% 0); 
+    }
+}
+
+/* Ajuste exclusivo para 1366x768 */
+@media (width: 1366px) and (height: 768px) {
+    .inner-train-background {
+        transform: translateX(-50%) scale(1.20);
+        clip-path: inset(0 0 4% 0);
+    }
+}
+
+/* Contenido de la tercera sección */
+.section-three-content {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+    padding: 6rem 2rem;
+    z-index: 6;
+}
+
+/* Animaciones */
+@keyframes parallaxStarsInfinite {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes parallaxSceneInfinite {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes floatLeft {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px);
+    }
+    25% {
+        transform: translateY(-20px) translateX(15px);
+    }
+    50% {
+        transform: translateY(-35px) translateX(-10px);
+    }
+    75% {
+        transform: translateY(-15px) translateX(18px);
+    }
+}
+
+@keyframes floatRight1 {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px);
+    }
+    20% {
+        transform: translateY(-25px) translateX(-20px);
+    }
+    40% {
+        transform: translateY(-45px) translateX(15px);
+    }
+    60% {
+        transform: translateY(-30px) translateX(-18px);
+    }
+    80% {
+        transform: translateY(-12px) translateX(25px);
+    }
+}
+
+@keyframes floatRight2 {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px);
+    }
+    30% {
+        transform: translateY(-30px) translateX(18px);
+    }
+    60% {
+        transform: translateY(-50px) translateX(-15px);
+    }
+    90% {
+        transform: translateY(-20px) translateX(22px);
+    }
+}
+
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333333;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555555;
+}
