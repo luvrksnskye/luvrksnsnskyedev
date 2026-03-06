@@ -670,6 +670,613 @@ export default musicManager;</code></pre>
         }
     ]
   },
+        {
+    id: 'Ourinnerworld',
+    title: 'Ourinnerworld: Dreamers Journey Devlog #Godot Engine',
+    subtitle: 'After a long time without posting, I am back with a new devlog about the game I am working on as gift for my boyfriend, Ourinnerworld. It is a personal project that I started a few months ago, and I wanted to share some of the progress and reflections about it. I am using Godot Engine for this project, and it has been a great experience so far. In this devlog, I will talk about the game concept, the development process, and some of the other things I have learned along the way.',
+    author: 'Skyedev',
+    date: 'March 05, 2026',
+    avatar: '/src/assets/pfp-photo.jpg',
+    cover: '/src/assets/blogs_assets/photos.jpg',
+    tags: ['personal', 'gamedev', 'godot', 'games'],
+    category: 'Dev',
+    pages: [
+        {
+            content: `
+<p><strong>Ourinnerworld</strong> have already... well, i dont know, maybe more than 5 months in the first phases of development, I suppose. Initially started as a simple short game inspired by <strong>OMORI</strong>, since that's the favorite game of my boyfriend, and I got the idea from another of my childhood games in the past. Along the way, I eventually realized that I have A LOT of ideas for unique and complex mechanics and visuals. Started with minimalistic pixel art, and now I am in the middle of redesigning each character sprite. A few months ago, I didn't know anything about Godot Engine, and I probably still don't know everything yet lol. I mean, there's for sure a whole world to learn about gamedev with this engine, like shaders, autoload scripts, and visual effects for art, tilemaps, or sprites. I went through so many drafts of the story until I finally decided on the main idea of the game. Studying in the meantime about settings, the vibe of the game experience, interiors, and exteriors in different worlds! If you asked me, this was quite unexpected... and fucky considering this was in the beginning something ‘simple’, but when I create or do a new thing, it isn’t hard to not go any further with all possibilities? Anyways, you may think that I have more than one map already created, but that's totally wrong. </p>
+
+<p> My gamedev process is slow mainly cause I want to create something very special for someone I love! And here is when we start with the mechanics and visuals developed so far. I spend more time writing the story of the game and drawing its assets than programming it, which is curious but definitely worth it. Being able to draw, test, and flip my canvas every time is very convenient when making the maps and designs of the game. Makes sense for me at least! The past months I focused on the <strong>story→foliage design→visuals→ambience→features</strong>. Of course theres other things like the inventory system, the menu UI, and other existing mechanics like the ‘tag’ on the party-like RPG system. Even so, I want to make an overview of the stuff we can visually appreciate as players! Without revealing so many details of the story tho. I am even thinking about using ‘Blender’ as a tool (alongside Aseprite) for the creation of complex structures, like schools, churches, and bigger houses! or the significant story-related dark cathedral/dreamers' sanctuary.</p>
+
+<p>Without getting too bogged down in details, in Ouinnerworld, many mechanics vary in type and purpose, divided into categories. Some gameplay mechanics are important to the story and play a significant role in it, while others are purely for the player's enjoyment. However, as you progress, these <strong>two categories merge until they become the same</strong>. The exception is certain mechanics, such as some items, that are exclusive to their respective worlds. This blog contains a list and map of the different mechanics in the Dreamers Project, as well as exploring their potential improvements as the game's development progresses. The Dreamer (player) will feature a party system with a limit of up to five characters on your team, each with their own stats, abilities, and emotions. Each character has up to six possible skill slots: four combat skills displayed in the skill menu and two action skills accessed from the main menu. (At least for now! Everything mentioned is subject to change.)</p>
+
+<p>
+
+OURINNERWORLD introduces a new type of skill to this system: the <strong>action skill</strong>, accessed from the party menu. These skills will help you actively overcome obstacles or solve puzzles in different worlds, while others will have a unique function within the story. At the beginning of the game, there are no options for violent combat. Instead, players have defense and abilities to confront or assist enemies. Violent combat skills are unlocked later in the story for certain characters. Many abilities can affect the emotions of team members and their enemies, as can the use of special items or story events. Examples include the Dreamer's and Hikiko's gameplay in the Dreamworlds during the story:</p>
+
+<div class="info-box">
+                        <div class="info-box__title">Action Skills Overview</div>
+                        <div class="info-box__content">The Dreamer's music can calm angry or sad enemies, while Hikiko's simple abilities, like using her hammer to smash things, can irritate and anger nearby enemies. They might also become annoyed if Hikiko intentionally throws things at them. Look at him! This is the old version animated sprite for the smash animation. I feel kinda sad to know that I will redo this one!! By the way, yes! It also has an animation for throwing various objects, which can range from balls of different sizes or rocks... to unexpected stuff. </div>
+                        <img src="/src/assets/ourinnerworlddev/$ACTION_HIKIKO_SMASH_DOWN.gif" id="Hikiko-Smash-Animation">
+                    </div> 
+
+                    <h2>Visuals and Worlds Environment</h2>
+                    <p>Initially, the art style of the game was quite minimalistic, with simple pixel art and basic animations. However, as the development progressed, I realized that I wanted to create a more immersive and visually appealing experience for the player. I started experimenting with different art styles and techniques, and eventually settled on a more detailed pixel art style that still retains a charming and nostalgic feel. The characters and environments are now more vibrant and expressive, which adds to the overall atmosphere of the game. I am currently in the process of redesigning each character sprite to better fit the new art style and to enhance their personalities.</p>
+
+                    <p>The process of creating tiles for each worlds can become quite tedious, especially if you are working solo like me. When you add several terrain types like grass, dirt, and paths, along with random variations, you can quickly end up managing hundreds of tiles. In theory, if each tile considers its eight neighboring tiles, <strong>creating a unique tile for every possible configuration would require 256 tiles</strong>. Fortunately, in practice we can usually work with far fewer. One common approach is the classic 15-piece tileset, which uses a small number of tiles but has a greater drawback: the edges are drawn through the center of each tile, so they don't align well with the world grid, creating ambiguous tiles and confusing placement. </p>
+
+<p>Another option is the 47-piece tileset, where edges are drawn closer to the grid borders, making them align better with the game world, but this increases the number of tiles significantly. Sometimes developers use a smaller 16-tile subset, which is quicker to produce and grid-aligned, although it can cause issues with detailed inner corners depending on the art style. Additionally, both approaches make it difficult to achieve equally rounded inner and outer corners, which some developers prefer visually, especially for paths. Because each of these systems involves trade-offs, many developers turn to the dual-grid system. As the name suggests, this method uses two grids: a hidden world grid that tracks tile placement and a second grid offset by half a tile that determines what is displayed. </p>
+
+<p>Each tile in the display grid depends on its four overlapping neighbors, which reduces the number of possible configurations to just 16 instead of 256. In this system, tile edges are intentionally drawn through the middle of each tile, and once the offset grid is applied they align perfectly with the game world. In engines like Godot, this can be implemented using two tilemaps, where the display tilemap is offset by half a tile and a custom script handles the logic for selecting the correct tile based on neighboring configurations.</p>
+
+<p>In the case of Ourinnerworld, I am using a dual-grid system for the tilemaps, which allows me to create more visually appealing environments while keeping the number of tiles manageable. This approach has been particularly helpful in creating the different worlds and their unique atmospheres. Each world has its own set of tiles that reflect its theme and mood, and the dual-grid system helps to ensure that they align properly with the game world, creating a cohesive and immersive experience for the player.</p>
+
+<p> The main reason of me doing this method is because this game and it story is very much focused on the environments and the vibe of the game, so I want to make sure that the visuals are as polished and immersive as possible. I am also using a lot of visual effects and shaders to enhance the atmosphere of each world, which adds another layer of depth to the game. Ourinnerworld story is very much focused on the idea of exploring different dreamworlds during a chapter of the story, and those worlds can get quite different from each other, so I want to make sure that the visuals reflect that diversity and uniqueness. From cute and colorful worlds to darker and more surreal ones, I want to create a wide range of environments that players can get lost in and enjoy exploring.</p>
+
+<p> The dual-grid system, as its name suggests, uses two grids instead of one. The first grid, often called the world grid, simply keeps track of where each tile is placed but does not display anything visually. The second grid is offset from the world grid by half a tile, and each tile in this display grid changes depending on its four overlapping neighbors. Because each tile only considers four neighbors instead of eight, the number of possible configurations drops to <strong>just 16 instead of 256</strong>. For this method, the tileset is designed with edges drawn halfway through each tile, which might initially seem incorrect, but once the half-tile offset is applied, everything appears perfectly aligned with the game’s world grid. To learn more about the dual-grid system, it is worth checking out a talk by <a href="https://www.youtube.com/watch?v=Uxeo9c-PX-w" target="_blank" rel="noopener noreferrer">Oskar Stålberg↗</a> or a devlog by <a href="https://www.youtube.com/watch?v=buKQjkad2I0&t" target="_blank" rel="noopener noreferrer">ThinMatrix↗</a>, both of which explain the concept in more depth. The system sounds powerful, but the next question is how it can actually be implemented in a game engine.</p>
+
+<p>
+In Godot, I also created a shader for the grass tilemaps that adds a pleasant texture while respecting the pixel art style of the game. Not only that, but I also added subtle cloud effects reflected on the ground. This shader generates shadows of moving clouds across the world using a noise texture. First, it calculates the position of each pixel in world space within the <code>vertex()</code> function so that the effect is independent from the camera. Then, in <code>fragment()</code>, it uses this position scaled by <code>cloud_scale</code> to sample a noise texture (<code>cloud_noise</code>) that represents the shape of the clouds. An offset is added to this position based on wind direction (<code>cloud_direction</code>), speed (<code>cloud_speed</code>), and time (<code>TIME</code>), causing the clouds to continuously shift. The resulting noise value is compared to a threshold (<code>cloud_threshold</code>) using <code>smoothstep</code>, which creates a smooth transition between light and shadowed areas according to the softness defined by <code>cloud_softness</code>. Finally, the shader calculates the amount of darkness to apply (<code>cloud_darkness</code>) and draws a shadow color (<code>shadow_color</code>) with proportional transparency, producing a layer of soft shadows that simulate clouds passing over the world.
+</p>
+            
+<div class="video-container">
+  <video autoplay loop muted playsinline>
+    <source src="/src/assets/ourinnerworlddev/worldtest.mp4" type="video/mp4">
+  </video>
+</div>
+
+<h2>Water Shader And Wind Shader</h2>
+
+<p>Another visual thing I spent a good amount of time on is the water shader. This one is a <code>canvas_item</code> visual shader inspired by the work of <a href="https://www.youtube.com/@jesscodes" target="_blank" rel="noopener noreferrer">jess::codes↗</a>, who originally built it in Unity for her pixel art game. I adapted and ported the approach to Godot, and honestly, understanding how the layers work together was the most fun part of the whole process.</p>
+
+<p>The core idea is that the water is not just one flat color. It is actually built from multiple visual layers stacked on top of each other, and each one does something different. Think of it like painting with transparencies: you start with a base and keep adding details on top until it looks alive. The shader reads the color channels of the source texture to decide what goes where. The <strong>red channel</strong> defines where the shore outline appears, <strong>green</strong> controls where the foam shows up, and <strong>blue</strong> determines water depth and transparency. So a single texture is doing triple duty as a visual data map, which is kind of elegant if you think about it.</p>
+
+<p>The first thing the shader does in the <code>fragment()</code> function is pixelize the UV coordinates. This is what keeps everything looking crispy and pixel-art-friendly instead of smooth and blurry. It floors the coordinates multiplied by a pixelization value and divides them back, essentially snapping every sample to a pixel grid. It also corrects the aspect ratio so the textures don't stretch weirdly on non-square surfaces.</p>
+
+<p>From there, the shader builds its layers one by one. The <strong>base layer</strong> is a depth-based water color. It samples a gradient texture using the blue channel of the source, so deeper water gets one color and shallower water gets another. Simple but effective for giving the water a sense of volume.</p>
+
+<p>On top of that comes the <strong>caustics layer</strong>, which is probably my favorite part visually. Caustics are those rippling light patterns you see at the bottom of a pool when sunlight hits the surface. The shader creates this by sampling a noise texture that scrolls over time (using <code>TIME * causticSpeed</code>), then using a subtract blend to distort the coordinates before sampling the actual caustic textures. There are two caustic textures involved: a base caustic and a highlight caustic, and they get interpolated together based on the highlight's alpha. A fade noise texture controls where the caustics are visible and where they disappear, which prevents the effect from looking too uniform across the whole water surface.</p>
+
+<p>Then there is the <strong>specular layer</strong>, which simulates the little bright sparkles on the water surface when light reflects off it. This one uses a clever trick: it takes two noise textures scrolling in opposite horizontal directions (left and right), blends them together with an overlay blend mode, and then subtracts a static noise pattern from the result. Finally, it applies a <code>step()</code> function with a threshold to turn the smooth noise into hard, pixel-perfect sparkle dots. That <code>step()</code> is what makes it look like actual pixel art instead of a soft gradient, and you can control how many sparkles appear by adjusting the threshold value.</p>
+
+<p>The <strong>foam layer</strong> handles the white frothy edges where water meets land. It samples a foam texture at a specific scale and then uses the green channel from the source texture to determine intensity. The foam only appears where the source tells it to, which means you can paint exactly where the shore foam goes by editing your tilemap colors. The foam intensity uniform lets you control how aggressively it shows up.</p>
+
+<p>Finally, the <strong>outline layer</strong> is extracted from the red channel multiplied by the alpha, and it gets tinted with an outline color. This creates a subtle defined edge around the water boundary that helps separate it visually from the terrain.</p>
+
+<p>All of these layers get composited together in the fragment function using <code>mix()</code> calls. The order matters: first the depth color gets mixed with caustics based on the caustic alpha, then specular gets mixed on top but only where caustics are visible (using <code>ceil(finalCaustics.a)</code> as a mask, which is a nice touch to avoid floating sparkles in empty areas), then foam goes over everything, and the outline gets blended last. The final alpha is driven by the blue channel multiplied by a general transparency uniform, so the depth also controls how see-through the water is.</p>
+
+<p>The shader also has a companion system for <strong>water trails</strong>, which uses a few C# scripts to paint trails that follow movement (like a character walking through water or a cursor). The noise textures are now generated using Godot's built-in <strong>FastNoiseLite</strong> instead of runtime generation, which should help with performance even though it can introduce some repetition if the textures are too small.</p>
+
+<p>I think what makes this shader feel so nice for a pixel art game is that every layer respects the pixelization grid. The UV snapping ensures that caustics, sparkles, and foam all move and render at the same pixel resolution as the rest of the game, so nothing feels out of place. And the fact that all the visual information (outline, foam, depth) is encoded into the RGB channels of a single texture makes the whole system surprisingly lightweight for how much visual complexity it produces.</p>
+
+<div class="video-container">
+  <img src="/src/assets/ourinnerworlddev/WaterShader.png" alt="Water Shader Demo" class="demo-water">
+</div>
+
+<div class="video-container">
+  <img src="/src/assets/ourinnerworlddev/WindShader.png" alt="Wind Shader Demo" class="demo-wind">
+</div>
+
+<p>Discussing visuals and bringing life to the game, I am considering adding a living ecosystem to some worlds, which means incorporating animals. I still have some ideas about how to implement this. I want to create simple AI behaviors for animals that can roam around, interact with the environment, and maybe even react to the player’s presence. For example, I have a very basic code idea for the behavior of butterflies and fireflies when close to the player or specific characters inside the party-system.</p>
+
+
+<h2>Living Ecosystem: Butterfly Behavior</h2>
+
+<p>On the topic of bringing life to the environments, one thing I really wanted was to make worlds feel inhabited. Not just by NPCs with scripted paths, but by small creatures doing their own thing around you. The first real test of this is butterflies. I wrote a base behavior script that gives each butterfly its own personality, and honestly it is still very early and rough, but the core idea is there and I think it is worth showing how the system works so far. Keep in mind this is a freshly made foundation that will probably change a lot as I test it more in the actual maps and iterate on the details!</p>
+
+<p>The personality system is the heart of the whole thing. When a butterfly spawns, it rolls a random value and gets assigned one of five personality types: <strong>VERY_SHY</strong>, <strong>SHY</strong>, <strong>NEUTRAL</strong>, <strong>BOLD</strong>, or <strong>VERY_BOLD</strong>. Each personality comes with its own config dictionary that defines how the butterfly reacts to the player. A very shy butterfly has a large detection radius of 80 pixels and will panic and flee the moment you get anywhere near it, while a very bold one only starts caring at 30 pixels and has a 90% chance of actually approaching you instead of running away. The distribution is weighted so that most butterflies land somewhere in the middle, with the extremes being rarer, which should make those encounters feel more special when they happen.</p>
+
+<div class="godot-code-block">
+    <div class="godot-code-block__header">
+        <div class="godot-code-block__lang">
+            <span class="godot-code-block__lang-dot"></span>
+            GDScript
+        </div>
+        <span class="godot-code-block__filename">butterfly-core.gd</span>
+        <button class="godot-code-block__copy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <span class="godot-code-block__copy-label">Copy</span>
+        </button>
+    </div>
+    <div class="godot-code-block__body">
+        <pre class="godot-code-block__pre"><code class="godot-code-block__code godot-code-block__lines"><span class="godot-code-block__line"><span class="syn-comment"># Personality types and their behavior configs</span></span>
+<span class="godot-code-block__line"><span class="syn-keyword">enum</span> <span class="syn-type">PersonalityType</span> { VERY_SHY, SHY, NEUTRAL, BOLD, VERY_BOLD }</span>
+<span class="godot-code-block__line"></span>
+<span class="godot-code-block__line"><span class="syn-keyword">const</span> <span class="syn-constant">PERSONALITY_CONFIG</span>: <span class="syn-type">Dictionary</span> <span class="syn-operator">=</span> {</span>
+<span class="godot-code-block__line">    <span class="syn-type">PersonalityType</span>.VERY_SHY: {</span>
+<span class="godot-code-block__line--highlight"><span class="godot-code-block__line">        <span class="syn-string">"detection_radius"</span>: <span class="syn-number">80.0</span>,</span></span>
+<span class="godot-code-block__line">        <span class="syn-string">"safe_distance"</span>: <span class="syn-number">90.0</span>,</span>
+<span class="godot-code-block__line">        <span class="syn-string">"approach_chance"</span>: <span class="syn-number">0.1</span>,</span>
+<span class="godot-code-block__line">        <span class="syn-string">"rest_chance"</span>: <span class="syn-number">0.95</span>,</span>
+<span class="godot-code-block__line">        <span class="syn-string">"flee_threshold"</span>: <span class="syn-number">30.0</span>,</span>
+<span class="godot-code-block__line">        <span class="syn-string">"approach_speed"</span>: <span class="syn-number">0.4</span></span>
+<span class="godot-code-block__line">    },</span>
+<span class="godot-code-block__line">    <span class="syn-comment"># ... SHY, NEUTRAL, BOLD ...</span></span>
+<span class="godot-code-block__line">    <span class="syn-type">PersonalityType</span>.VERY_BOLD: {</span>
+<span class="godot-code-block__line--highlight"><span class="godot-code-block__line">        <span class="syn-string">"detection_radius"</span>: <span class="syn-number">30.0</span>,</span></span>
+<span class="godot-code-block__line">        <span class="syn-string">"safe_distance"</span>: <span class="syn-number">50.0</span>,</span>
+<span class="godot-code-block__line">        <span class="syn-string">"approach_chance"</span>: <span class="syn-number">0.9</span>,</span>
+<span class="godot-code-block__line">        <span class="syn-string">"rest_chance"</span>: <span class="syn-number">0.5</span>,</span>
+<span class="godot-code-block__line">        <span class="syn-string">"flee_threshold"</span>: <span class="syn-number">110.0</span>,</span>
+<span class="godot-code-block__line">        <span class="syn-string">"approach_speed"</span>: <span class="syn-number">0.9</span></span>
+<span class="godot-code-block__line">    }</span>
+<span class="godot-code-block__line">}</span></code></pre>
+    </div>
+</div>
+
+<p>The butterfly runs through a state machine with five states: <strong>WANDERING</strong>, <strong>FLEEING</strong>, <strong>APPROACHING</strong>, <strong>WAITING_FOR_REST</strong>, and <strong>RESTING_ON_PLAYER</strong>. During wandering, it picks a random direction every couple of seconds and just floats around. But the moment the player enters its detection radius, or moves fast enough nearby, it switches to fleeing and darts away at triple speed until it reaches a safe distance. The interesting part is what happens when the player stays still. If the player is not moving and a butterfly is close enough, there is a chance it becomes curious and starts approaching. How likely that is depends entirely on the personality type. A bold butterfly will approach almost every time, while a shy one barely ever does.</p>
+
+<div class="godot-code-block">
+    <div class="godot-code-block__header">
+        <div class="godot-code-block__lang">
+            <span class="godot-code-block__lang-dot"></span>
+            GDScript
+        </div>
+        <span class="godot-code-block__filename">butterfly-core.gd</span>
+        <button class="godot-code-block__copy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <span class="godot-code-block__copy-label">Copy</span>
+        </button>
+    </div>
+    <div class="godot-code-block__body">
+        <pre class="godot-code-block__pre"><code class="godot-code-block__code godot-code-block__lines"><span class="godot-code-block__line"><span class="syn-comment"># State machine — main physics loop</span></span>
+<span class="godot-code-block__line"><span class="syn-keyword">enum</span> <span class="syn-type">State</span> { WANDERING, FLEEING, APPROACHING, WAITING_FOR_REST, RESTING_ON_PLAYER }</span>
+<span class="godot-code-block__line"><span class="syn-keyword">var</span> <span class="syn-property">current_state</span>: <span class="syn-type">State</span> <span class="syn-operator">=</span> <span class="syn-type">State</span>.WANDERING</span>
+<span class="godot-code-block__line"></span>
+<span class="godot-code-block__line"><span class="syn-keyword">func</span> <span class="syn-func">_physics_process</span>(<span class="syn-param">delta</span>: <span class="syn-type">float</span>) <span class="syn-operator">-></span> <span class="syn-type">void</span>:</span>
+<span class="godot-code-block__line">    <span class="syn-keyword">match</span> <span class="syn-property">current_state</span>:</span>
+<span class="godot-code-block__line">        <span class="syn-type">State</span>.WANDERING:</span>
+<span class="godot-code-block__line">            <span class="syn-func">_process_wandering</span>(<span class="syn-param">delta</span>)</span>
+<span class="godot-code-block__line">        <span class="syn-type">State</span>.FLEEING:</span>
+<span class="godot-code-block__line">            <span class="syn-func">_process_fleeing</span>(<span class="syn-param">delta</span>)</span>
+<span class="godot-code-block__line">        <span class="syn-type">State</span>.APPROACHING:</span>
+<span class="godot-code-block__line">            <span class="syn-func">_process_approaching</span>(<span class="syn-param">delta</span>)</span>
+<span class="godot-code-block__line">        <span class="syn-type">State</span>.WAITING_FOR_REST:</span>
+<span class="godot-code-block__line">            <span class="syn-func">_process_waiting_for_rest</span>(<span class="syn-param">delta</span>)</span>
+<span class="godot-code-block__line">        <span class="syn-type">State</span>.RESTING_ON_PLAYER:</span>
+<span class="godot-code-block__line">            <span class="syn-func">_process_resting</span>(<span class="syn-param">delta</span>)</span>
+<span class="godot-code-block__line"></span>
+<span class="godot-code-block__line--highlight"><span class="godot-code-block__line">    <span class="syn-func">_avoid_other_butterflies</span>()</span></span>
+<span class="godot-code-block__line">    <span class="syn-func">move_and_slide</span>()</span></code></pre>
+    </div>
+</div>
+
+<p>The resting mechanic is probably the most charming part, even in this early state. When a butterfly decides it wants to rest, it checks whether the current party leader is in the right condition. For Rainy, the player character, the butterfly will only land on his if he is in his <code>idle_sleep</code> animation. For Hikiko, it requires him to be in <code>idle_down</code> and to have been the leader for more than 50 seconds. Only one butterfly can rest on the player at a time, so if the spot is taken, the butterfly enters a waiting state where it orbits around the player in a little circle using <code>cos</code> and <code>sin</code> on a timer, which looks pretty cute. If it waits for more than 20 seconds without getting a chance, it gives up and goes back to wandering. When a butterfly does land, it sits on top of the character's head and notifies the party member through a callback, which could trigger a small reaction animation or something later.</p>
+
+<div class="godot-code-block">
+    <div class="godot-code-block__header">
+        <div class="godot-code-block__lang">
+            <span class="godot-code-block__lang-dot"></span>
+            GDScript
+        </div>
+        <span class="godot-code-block__filename">butterfly-core.gd</span>
+        <button class="godot-code-block__copy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <span class="godot-code-block__copy-label">Copy</span>
+        </button>
+    </div>
+    <div class="godot-code-block__body">
+        <pre class="godot-code-block__pre"><code class="godot-code-block__code godot-code-block__lines"><span class="godot-code-block__line"><span class="syn-comment"># Resting on the player's head</span></span>
+<span class="godot-code-block__line"><span class="syn-keyword">func</span> <span class="syn-func">_process_resting</span>(<span class="syn-param">delta</span>: <span class="syn-type">float</span>) <span class="syn-operator">-></span> <span class="syn-type">void</span>:</span>
+<span class="godot-code-block__line--highlight"><span class="godot-code-block__line">    <span class="syn-builtin">global_position</span> <span class="syn-operator">=</span> <span class="syn-property">player</span>.<span class="syn-builtin">global_position</span> <span class="syn-operator">+</span> <span class="syn-type">Vector2</span>(<span class="syn-number">0</span>, <span class="syn-number">-20</span>)</span></span>
+<span class="godot-code-block__line">    <span class="syn-property">velocity</span> <span class="syn-operator">=</span> <span class="syn-type">Vector2</span>.ZERO</span>
+<span class="godot-code-block__line">    <span class="syn-property">animations</span>.<span class="syn-func">play</span>(<span class="syn-string">"iddle_front"</span>)</span>
+<span class="godot-code-block__line"></span>
+<span class="godot-code-block__line">    <span class="syn-keyword">if not</span> <span class="syn-func">_check_can_rest_on_player</span>():</span>
+<span class="godot-code-block__line">        <span class="syn-func">_release_resting_spot</span>()</span>
+<span class="godot-code-block__line">        <span class="syn-func">_start_fleeing</span>()</span>
+<span class="godot-code-block__line"></span>
+<span class="godot-code-block__line"><span class="syn-comment"># Orbiting while waiting for the resting spot</span></span>
+<span class="godot-code-block__line"><span class="syn-keyword">func</span> <span class="syn-func">_process_waiting_for_rest</span>(<span class="syn-param">delta</span>: <span class="syn-type">float</span>) <span class="syn-operator">-></span> <span class="syn-type">void</span>:</span>
+<span class="godot-code-block__line">    <span class="syn-property">waiting_timer</span> <span class="syn-operator">+=</span> <span class="syn-param">delta</span></span>
+<span class="godot-code-block__line">    <span class="syn-keyword">var</span> <span class="syn-property">orbit_angle</span>: <span class="syn-type">float</span> <span class="syn-operator">=</span> <span class="syn-property">waiting_timer</span> <span class="syn-operator">*</span> <span class="syn-number">0.5</span></span>
+<span class="godot-code-block__line--highlight"><span class="godot-code-block__line">    <span class="syn-keyword">var</span> <span class="syn-property">orbit_offset</span>: <span class="syn-type">Vector2</span> <span class="syn-operator">=</span> <span class="syn-type">Vector2</span>(<span class="syn-func">cos</span>(<span class="syn-property">orbit_angle</span>), <span class="syn-func">sin</span>(<span class="syn-property">orbit_angle</span>)) <span class="syn-operator">*</span> <span class="syn-property">orbit_radius</span></span></span>
+<span class="godot-code-block__line">    <span class="syn-keyword">var</span> <span class="syn-property">target_pos</span>: <span class="syn-type">Vector2</span> <span class="syn-operator">=</span> <span class="syn-property">player</span>.<span class="syn-builtin">global_position</span> <span class="syn-operator">+</span> <span class="syn-property">orbit_offset</span></span>
+<span class="godot-code-block__line">    <span class="syn-property">velocity</span> <span class="syn-operator">=</span> (<span class="syn-property">target_pos</span> <span class="syn-operator">-</span> <span class="syn-builtin">global_position</span>).<span class="syn-func">normalized</span>() <span class="syn-operator">*</span> (<span class="syn-property">fly_speed</span> <span class="syn-operator">*</span> <span class="syn-number">0.5</span>)</span></code></pre>
+    </div>
+</div>
+
+<p>There is also a simple flocking mechanism where butterflies push each other away if they get too close, using a <code>personal_space_radius</code> of 25 pixels. Each butterfly checks its distance to nearby ones from a static array that tracks all active instances, and if another butterfly is inside that radius, it adds a push force in the opposite direction. It caps the check at 3 nearby butterflies to avoid performance issues since the system supports up to 190 butterflies at once. This whole script is really just the starting point!</p>
+
+<p> Now, well, I should clarify that no, Ourinnerworld isn't an open-world game or anything close to it, however, I like the idea of ​​giving it unique and explorable mechanics. I'm even considering adding frogs to rainy and humid maps! Which I'll probably do in the coming months while I continue writing the game's story and its chapters.</p>
+
+<p>As for the <strong>wind shader</strong>, it is a simple vertex shader that creates a waving effect on foliage sprites. It uses a sine wave function to offset the vertices of the sprite based on time and a wind strength uniform. The shader also takes into account the vertex position to create a more natural variation in the movement, so different parts of the sprite move slightly differently, simulating the effect of wind blowing through leaves or grass. The result is a subtle but effective animation that brings the environment to life without needing complex animations for each sprite. I did this mostly for some big and medium trees in the game, but is also usable for piles of leaves!</p>
+
+<div class="video-container">
+  <video autoplay loop muted playsinline>
+    <source src="/src/assets/ourinnerworlddev/shadertest.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div class="shader-graph" data-connections='[
+    {"from":"vertex1","fromPort":"out","to":"decomp1","toPort":"in","type":"vec2"},
+    {"from":"decomp1","fromPort":"x","to":"add1","toPort":"a","type":"float"},
+    {"from":"decomp1","fromPort":"y","to":"compose1","toPort":"y","type":"float"},
+    {"from":"uv1","fromPort":"out","to":"decomp2","toPort":"in","type":"vec2"},
+    {"from":"decomp2","fromPort":"y","to":"oneminus","toPort":"in","type":"float"},
+    {"from":"wind","fromPort":"out","to":"mul1","toPort":"a","type":"float"},
+    {"from":"oneminus","fromPort":"out","to":"mul1","toPort":"b","type":"float","animated":true},
+    {"from":"vertex2","fromPort":"out","to":"decomp3","toPort":"in","type":"vec2"},
+    {"from":"decomp3","fromPort":"x","to":"addtime","toPort":"a","type":"float"},
+    {"from":"time1","fromPort":"out","to":"addtime","toPort":"b","type":"float","animated":true},
+    {"from":"addtime","fromPort":"out","to":"sin1","toPort":"in","type":"float","animated":true},
+    {"from":"sin1","fromPort":"out","to":"mul2","toPort":"b","type":"float","animated":true},
+    {"from":"mul1","fromPort":"out","to":"mul2","toPort":"a","type":"float"},
+    {"from":"mul2","fromPort":"out","to":"add1","toPort":"b","type":"float","animated":true},
+    {"from":"add1","fromPort":"out","to":"compose1","toPort":"x","type":"float"},
+    {"from":"compose1","fromPort":"out","to":"output","toPort":"vertex","type":"vec2","animated":true}
+]'>
+    <div class="shader-graph__label">Visual Shader</div>
+    <div class="shader-graph__title">Tree Wind Sway</div>
+    <div class="shader-graph__desc">Vertex shader for foliage. Decomposes the UV to create a height mask with OneMinus (base stays, top sways), then feeds vertex.x + TIME through a Sin function and multiplies it by WindStrength and the mask. The displaced X gets recomposed with the original Y and sent to the Vertex output.</div>
+
+    <div class="shader-graph__canvas" style="min-height: 580px;">
+
+        <!-- Input: vertex (top-left) -->
+        <div class="shader-node shader-node--input" data-node-id="vertex1" style="left: 20px; top: 10px;">
+            <div class="shader-node__header">Input</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port shader-node__port--output" data-port-id="out" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--vec2"></span>
+                    vertex
+                </div>
+            </div>
+            <div class="shader-node__tooltip">VERTEX position of the sprite</div>
+        </div>
+
+        <!-- VectorDecompose 1 -->
+        <div class="shader-node shader-node--compose" data-node-id="decomp1" style="left: 200px; top: 10px;">
+            <div class="shader-node__header">VectorDecompose</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port" data-port-id="in" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--vec2"></span>
+                    vec
+                </div>
+                <div class="shader-node__port shader-node__port--output" data-port-id="x" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    x
+                </div>
+                <div class="shader-node__port shader-node__port--output" data-port-id="y" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    y
+                </div>
+            </div>
+        </div>
+
+        <!-- FloatParameter: WindStrength -->
+        <div class="shader-node shader-node--param" data-node-id="wind" style="left: 20px; top: 130px;">
+            <div class="shader-node__header">FloatParameter</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port shader-node__port--output" data-port-id="out" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    WindStrength
+                </div>
+                <div class="shader-node__param-row">
+                    <span>Hint</span>
+                    <span class="shader-node__param-value">Range</span>
+                </div>
+                <div class="shader-node__param-row">
+                    <span>Min / Max</span>
+                    <span class="shader-node__param-value">2.0 — 10.0</span>
+                </div>
+            </div>
+            <div class="shader-node__tooltip">Uniform: WindStrength (2.0 to 10.0)</div>
+        </div>
+
+        <!-- Input: UV -->
+        <div class="shader-node shader-node--input" data-node-id="uv1" style="left: 20px; top: 290px;">
+            <div class="shader-node__header">Input</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port shader-node__port--output" data-port-id="out" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--vec2"></span>
+                    uv
+                </div>
+            </div>
+        </div>
+
+        <!-- VectorDecompose 2 (UV) -->
+        <div class="shader-node shader-node--compose" data-node-id="decomp2" style="left: 180px; top: 290px;">
+            <div class="shader-node__header">VectorDecompose</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port" data-port-id="in" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--vec2"></span>
+                    vec
+                </div>
+                <div class="shader-node__port shader-node__port--output" data-port-id="x" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    x
+                </div>
+                <div class="shader-node__port shader-node__port--output" data-port-id="y" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    y
+                </div>
+            </div>
+        </div>
+
+        <!-- FloatFunc: OneMinus -->
+        <div class="shader-node shader-node--function" data-node-id="oneminus" style="left: 370px; top: 310px;">
+            <div class="shader-node__header">FloatFunc</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port" data-port-id="in" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    in
+                </div>
+                <div class="shader-node__port shader-node__port--output" data-port-id="out" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    OneMinus
+                </div>
+                <div class="shader-node__preview">
+                    <canvas data-preview-type="oneminus"></canvas>
+                </div>
+            </div>
+            <div class="shader-node__tooltip">1.0 - UV.y (top = 1, base = 0)</div>
+        </div>
+
+        <!-- FloatOp: Multiply (WindStrength * OneMinus) -->
+        <div class="shader-node shader-node--operation" data-node-id="mul1" style="left: 520px; top: 190px;">
+            <div class="shader-node__header">FloatOp</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port" data-port-id="a" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    a
+                </div>
+                <div class="shader-node__port" data-port-id="b" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    b
+                </div>
+                <div class="shader-node__port shader-node__port--output" data-port-id="out" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    Multiply
+                </div>
+            </div>
+            <div class="shader-node__tooltip">WindStrength * UV height mask</div>
+        </div>
+
+        <!-- Input: TIME -->
+        <div class="shader-node shader-node--input" data-node-id="time1" style="left: 20px; top: 440px;">
+            <div class="shader-node__header">Input</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port shader-node__port--output" data-port-id="out" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    time
+                </div>
+            </div>
+        </div>
+
+        <!-- Input: vertex (bottom) -->
+        <div class="shader-node shader-node--input" data-node-id="vertex2" style="left: 20px; top: 520px;">
+            <div class="shader-node__header">Input</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port shader-node__port--output" data-port-id="out" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--vec2"></span>
+                    vertex
+                </div>
+            </div>
+        </div>
+
+        <!-- VectorDecompose 3 (vertex for sin) -->
+        <div class="shader-node shader-node--compose" data-node-id="decomp3" style="left: 200px; top: 520px;">
+            <div class="shader-node__header">VectorDecompose</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port" data-port-id="in" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--vec2"></span>
+                    vec
+                </div>
+                <div class="shader-node__port shader-node__port--output" data-port-id="x" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    x
+                </div>
+                <div class="shader-node__port shader-node__port--output" data-port-id="y" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    y
+                </div>
+            </div>
+        </div>
+
+        <!-- FloatOp: Add (vertex.x + TIME) -->
+        <div class="shader-node shader-node--operation" data-node-id="addtime" style="left: 370px; top: 480px;">
+            <div class="shader-node__header">FloatOp</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port" data-port-id="a" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    a
+                </div>
+                <div class="shader-node__port" data-port-id="b" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    b
+                </div>
+                <div class="shader-node__port shader-node__port--output" data-port-id="out" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    Add
+                </div>
+            </div>
+            <div class="shader-node__tooltip">vertex.x + TIME (phase offset per vertex)</div>
+        </div>
+
+        <!-- FloatFunc: Sin -->
+        <div class="shader-node shader-node--function" data-node-id="sin1" style="left: 520px; top: 480px;">
+            <div class="shader-node__header">FloatFunc</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port" data-port-id="in" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    in
+                </div>
+                <div class="shader-node__port shader-node__port--output" data-port-id="out" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    Sin
+                </div>
+                <div class="shader-node__preview">
+                    <canvas data-preview-type="sine"></canvas>
+                </div>
+            </div>
+            <div class="shader-node__tooltip">sin(vertex.x + TIME) — oscillation</div>
+        </div>
+
+        <!-- FloatOp: Multiply (mask * sin) -->
+        <div class="shader-node shader-node--operation" data-node-id="mul2" style="left: 660px; top: 330px;">
+            <div class="shader-node__header">FloatOp</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port" data-port-id="a" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    a
+                </div>
+                <div class="shader-node__port" data-port-id="b" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    b
+                </div>
+                <div class="shader-node__port shader-node__port--output" data-port-id="out" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    Multiply
+                </div>
+            </div>
+            <div class="shader-node__tooltip">(wind * mask) * sin() = final sway</div>
+        </div>
+
+        <!-- FloatOp: Add (original.x + displacement) -->
+        <div class="shader-node shader-node--operation" data-node-id="add1" style="left: 810px; top: 100px;">
+            <div class="shader-node__header">FloatOp</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port" data-port-id="a" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    a
+                </div>
+                <div class="shader-node__port" data-port-id="b" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    b
+                </div>
+                <div class="shader-node__port shader-node__port--output" data-port-id="out" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    Add
+                </div>
+            </div>
+            <div class="shader-node__tooltip">vertex.x + wind displacement</div>
+        </div>
+
+        <!-- VectorCompose -->
+        <div class="shader-node shader-node--compose" data-node-id="compose1" style="left: 960px; top: 80px;">
+            <div class="shader-node__header">VectorCompose</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port" data-port-id="x" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    x
+                </div>
+                <div class="shader-node__port" data-port-id="y" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    y
+                </div>
+                <div class="shader-node__port shader-node__port--output" data-port-id="out" data-port-type="output">
+                    <span class="shader-node__port-dot shader-node__port-dot--vec2"></span>
+                    vec
+                </div>
+            </div>
+            <div class="shader-node__tooltip">Vector2(displaced_x, original_y)</div>
+        </div>
+
+        <!-- Output -->
+        <div class="shader-node shader-node--output" data-node-id="output" style="left: 1120px; top: 60px;">
+            <div class="shader-node__header">Output</div>
+            <div class="shader-node__body">
+                <div class="shader-node__port" data-port-id="vertex" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--vec2"></span>
+                    Vertex
+                </div>
+                <div class="shader-node__port" data-port-id="uv" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--vec2"></span>
+                    <span style="opacity:0.3">UV</span>
+                </div>
+                <div class="shader-node__port" data-port-id="color" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--color"></span>
+                    <span style="opacity:0.3">Color</span>
+                </div>
+                <div class="shader-node__port" data-port-id="alpha" data-port-type="input">
+                    <span class="shader-node__port-dot shader-node__port-dot--float"></span>
+                    <span style="opacity:0.3">Alpha</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<h2>2D Lighting with Normal Maps</h2>
+
+<p>Something I have been thinking about a lot lately is lighting. Most 2D pixel art games get away with baked lighting in the sprites themselves, and that is totally fine, but I want Ourinnerworld to have a sense of atmosphere that changes depending on where you are and what time it is in the story. The idea is to use Godot's <code>Light2D</code> nodes combined with normal maps on sprites and tilemaps, following the approach explained by <a href="https://www.gdquest.com/tutorial/godot/2d/lighting-with-normal-maps/" target="_blank" rel="noopener noreferrer">GDQuest↗</a> and also explored in <a href="https://www.youtube.com/watch?v=UavoVWHrebM" target="_blank" rel="noopener noreferrer">this devlog↗</a> that goes deeper into using them with animated sprites and tilemaps.</p>
+
+<div class="info-box">
+    <div class="info-box__title">What is a Normal Map?</div>
+    <div class="info-box__content">A normal map is a special texture where each pixel's RGB values encode the direction a surface is facing at that point, instead of a color. The red channel represents the horizontal direction (left/right), green represents the vertical direction (up/down), and blue represents depth (toward or away from the camera). When a 2D light source hits a sprite that has a normal map assigned, the engine uses this directional information to calculate how much light each pixel should receive, creating the illusion of depth and volume on a flat sprite. In Godot, you can assign a normal map directly to a Sprite2D node through its material, or through a small shader for AnimatedSprite2D nodes. Tools like Laigter or even Aseprite with the right workflow can help generate normal maps from existing pixel art. The result is that your flat sprites react to lights in a way that feels genuinely three-dimensional, with highlights where the surface faces the light and shadows where it faces away.</div>
+</div>
+
+<p>The basic setup is not too complicated. You create a normal map version of your sprite (usually with an <code>_n</code> suffix), assign it to the sprite's material in the inspector, drop a <code>Light2D</code> into the scene with a soft texture, and the engine handles the rest. The light's <code>Height</code> property controls how far above the sprite the light appears to be, which changes how dramatic the shading looks. A <code>CanvasModulate</code> node lets you set the ambient darkness of the scene, so the lighting actually has something to contrast against. Without it, everything stays bright and the normal map effect is barely visible.</p>
+
+<p>Where things get more interesting for Ourinnerworld is applying this to animated characters and tilemaps. For animated sprites in Godot, you need a small shader that reads the normal map and assigns it to the <code>NORMAL</code> built-in, since AnimatedSprite2D does not have a native normal map property. The shader itself is literally a few lines: sample the normal texture at the current UV, convert the color values from the 0-1 range to the -1 to 1 range that normals use, and assign it. For tilemaps, each tile in the tileset can have its own normal map assigned, which means the entire ground and walls of a world can react to lights moving through the scene. I am still experimenting with how subtle or dramatic I want the lighting to be for each world, since some dreamworlds are supposed to feel warm and soft while others should have harsher, more directional light. It is one of those things where the settings will probably be different per world, and I am okay with that.</p>
+
+<h2>Gameplay Mechanics on the Horizon</h2>
+
+<p>Beyond the visual and technical side of things, I have been brainstorming a bunch of gameplay mechanics that I want to incorporate into different worlds. None of these are implemented yet, but they are sitting in my notes and I think about them way too often, so here is a quick rundown. I want a <strong>swimming mechanic</strong> where the player can enter bodies of water and move differently, with a slower pace and maybe some particle effects for ripples. There is also <strong>fishing</strong>, which I imagine as a calm minigame you can do in certain spots, maybe with different catches depending on the world you are in. <strong>Watering plants</strong> is another one, where the player can interact with gardens or flowerbeds and watch them grow over time, which ties into the idea of worlds that feel alive and reactive to your actions.</p>
+
+<p>For more puzzle-oriented gameplay, I have been sketching out <strong>button puzzles</strong> where you step on pressure plates or interact with switches in a specific order to open paths or reveal hidden areas. Some of these could involve using the party system, where different characters need to stand on different buttons at the same time. And on the chill side of things, I really want to have <strong>coffee shops</strong> and small stores in certain worlds where you can buy items. Not every mechanic needs to be complex. Sometimes the most memorable moments in games are the quiet ones where you just exist in a space for a bit.</p>
+
+<h2>Art Progress Preview</h2>
+
+<p>Here is a look at some of the art assets I have been working on in Aseprite. Most of this is still work in progress, but it gives an idea of the direction the visual style is heading. I am trying to keep a balance between detail and readability, since everything needs to look clear at the game's actual resolution while still having personality and charm. Drawing tiles, characters, and props one pixel at a time is definitely a slow process, but the control you get over every single detail makes it worth it.</p>
+
+<div class="video-container">
+    <video autoplay loop muted playsinline>
+        <source src="/src/assets/ourinnerworlddev/artpreview.mp4" type="video/mp4">
+    </video>
+</div>
+
+<div class="video-container">
+    <img src="/src/assets/ourinnerworlddev/gamescreenshoot.png" alt="Art preview showing various pixel art assets including characters, tiles, and props">
+</div>
+<div class="video-container">
+    <video autoplay loop muted playsinline>
+        <source src="/src/assets/ourinnerworlddev/gameplaytest.mp4" type="video/mp4">
+    </video>
+</div>
+
+<h2>Rendering Thoughts</h2>
+
+<p>I have been watching a lot of rendering breakdowns lately and one that really stuck with me is <a href="https://www.youtube.com/watch?v=au9pce-xg5s" target="_blank" rel="noopener noreferrer">aarthificial's video↗</a> about pixel art rendering techniques. The core idea he explores is how to keep pixel art clean and stable when rendered in a game engine, avoiding common artifacts like pixel swimming, subpixel jitter, and inconsistent pixel sizes when the camera moves. His approach involves snapping the camera to a texel-aligned grid and then shifting the render output back by the snap error in screen space, so movement stays smooth while the pixels remain perfectly crisp. It is a surprisingly elegant solution to a problem that honestly drove me a little crazy when I first started moving the camera around in Godot.</p>
+
+<p>For Ourinnerworld specifically, I am still deciding how deep to go with these techniques. The game uses a fixed pixel resolution and I already have the camera configured to avoid most jitter issues, but there are edge cases with sprite movement and tilemap scrolling where things can still look slightly off. I am also curious about the idea of separating animation from appearance using lookup textures, where the spritesheet encodes coordinates instead of colors and a shader resolves the final pixels from a separate palette image. It would make creating character variations much cheaper since you would only need new palette images instead of redrawing entire animation sheets. That said, I do not want to over-engineer the rendering pipeline for a game that is fundamentally about its story and atmosphere. There is a balance between technical polish and just shipping the thing, and I think for now the priority is getting the worlds built and the narrative in place. But it is fun to think about, and I will probably revisit some of these ideas once I have more of the game playable.</p>
+
+<h2>OST Preview</h2>
+
+<p>Before wrapping up this blog, I want to share something special. A friend and fellow music producer has been working on the original soundtrack for Ourinnerworld, and while it is still very much in progress, we have a preview track that captures the mood we are going for the Dark Worlds OST. The music is meant to feel dramatic and intimate, something that sits in the background of your experience without being intrusive but that you will definitely notice if it stops. Give it a listen! If the blog's background music is playing, it will pause automatically so you can hear this properly.</p>
+
+<div class="ost-preview" data-ost-src="/src/assets/ourinnerworlddev/ostpreview.mp3">
+    <div class="ost-preview__header">
+        <div class="ost-preview__badge">Original Soundtrack</div>
+        <span class="ost-preview__title">OURINNERWORLD — Preview Track</span>
+        <span class="ost-preview__artist">EDDIE</span>
+    </div>
+    <div class="ost-preview__controls">
+        <button class="ost-preview__play" id="ostPlayBtn" aria-label="Play OST preview">
+            <svg class="ost-preview__icon-play" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="ost-preview__icon-pause" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6zm8-14v14h4V5z"/></svg>
+        </button>
+        <div class="ost-preview__progress-wrap" id="ostProgressWrap">
+            <div class="ost-preview__progress-track">
+                <div class="ost-preview__progress-fill" id="ostProgressFill"></div>
+            </div>
+        </div>
+        <span class="ost-preview__time" id="ostTime">0:00</span>
+    </div>
+</div>
+            `
+        }
+    ]
+  },
   
 ];
 

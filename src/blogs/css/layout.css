@@ -184,7 +184,8 @@
 
 .blog-body strong {
     font-weight: 700;
-    color: var(--accent-blue-bright);
+    color: white;
+    background-color:  var(--accent-blue-bright);
 }
 
 .blog-body a {

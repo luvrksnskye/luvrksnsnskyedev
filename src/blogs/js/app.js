@@ -13,6 +13,7 @@ import glassCanvas from './glass-canvas.js';
 import soundManager from './sound-manager.js';
 import musicPlayer from './music-player.js';
 import initBlogAnimationDemos from './blog-animations-demos.js';
+import initOuinnerworldDev from './ourinnerworld-dev.js';
 
 class BlogApp {
     constructor() {
@@ -95,6 +96,7 @@ class BlogApp {
                 */
                 setTimeout(() => {
                     initBlogAnimationDemos();
+                    initOuinnerworldDev();
                     this.bindDiagramSounds();
                 }, 450);
             }
@@ -133,6 +135,7 @@ class BlogApp {
         } else {
             this.populateBlog(blog);
             initBlogAnimationDemos();
+            initOuinnerworldDev();
         }
     }
 
@@ -176,6 +179,7 @@ class BlogApp {
 
             /* Init interactive demos in new content */
             initBlogAnimationDemos();
+            initOuinnerworldDev();
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }, 420);
