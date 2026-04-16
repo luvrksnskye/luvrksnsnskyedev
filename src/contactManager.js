@@ -502,12 +502,12 @@ class ContactManager {
                 await this.addSkyeMessage("Message sent successfully! ✨ I'll get back to you soon!");
                 soundManager?.play('imessageSent', 0.6);
             } else {
-                await this.addSkyeMessage(`Oops! ${data.error || 'Something went wrong.'} Could you try again or email me directly at luvrksnskyejourney@icloud.com? 💙`);
+                await this.addSkyeMessage(`Oops! ${data.error || 'Something went wrong.'} Could you try again or email me directly at luvrksnskyedev@icloud.com? 💙`);
                 soundManager?.play('knock', 0.4);
             }
         } catch (error) {
             console.error('Error sending email:', error);
-            await this.addSkyeMessage("Hmm, there was a connection issue. Please email me directly at luvrksnskyejourney@icloud.com! 💌");
+            await this.addSkyeMessage("Hmm, there was a connection issue. Please email me directly at luvrksnskyedev@icloud.com! 💌");
             soundManager?.play('knock', 0.4);
         }
 

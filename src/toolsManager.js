@@ -13,6 +13,7 @@ class ToolsManager {
         this.initialized = false;
         this.tools = [
             { name: 'Figma', image: '/src/assets/figma-icon.png', description: 'My primary design tool for creating interfaces, prototypes, and collaborative design work. Perfect for UI/UX design and design systems.' },
+            { name: 'Clip Studio Paint', image: '/src/assets/csp_icon.png', description: 'Digital painting software for creating illustrations, concept art, and animations with a focus on a user-friendly interface.' },
             { name: 'Github', image: '/src/assets/github-icon.png', description: 'Organization and documentation hub for all my projects, ideas, and workflows. Keeping everything structured and accessible.' },
             { name: 'VS Code', image: '/src/assets/vscode-icon.png', description: 'The code editor where I bring designs to life with HTML, CSS, and JavaScript. My daily development environment.' },
             { name: 'Firealpaca', image: '/src/assets/firealpaca-icon.png', description: 'Digital painting software for creating illustrations, concept art, and animations with a focus on a user-friendly interface.' },
